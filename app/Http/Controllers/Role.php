@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role as ModelsRole;
 use Spatie\Permission\Models\Permission as ModelsPermission;
 use DataTables;
+use Illuminate\Support\Facades\DB;
+
 class Role extends Controller
 {
     public function role(Request $request){
@@ -83,5 +85,38 @@ class Role extends Controller
 
         $permissions = ModelsPermission::all();
         return view('admin.role_in_per.add_role_permi',compact('permissions'));
+     }
+     public function storeRolePermission(Request $request){
+        $data = array();
+        $permissions = $request->permission;
+       foreach($permissions as $key => $item){
+        $data['role_id'] = $request->role;
+        $data['permission_id'] = $item;
+        DB::table('role_has_permissions')->insert($data);
+
+       }
+       return redirect()->back();
+
+     }
+     public function allRolePermission(Request $request){
+        if ($request->ajax()) {
+            $data = ModelsRole::all();
+            return  Datatables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('action', function($row){
+                        $id = $row->id;
+                        $edit = route('editrolepermission',$id);
+                        $delete = route('delete_role',$id);
+                        return view('admin.action.action', compact('edit','delete'));
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+        return view('admin.role_in_per.all_role_permi');
+     }
+     public function editRolePermission($id){
+        $role = ModelsRole::findOrFail($id);
+        $permissions = ModelsPermission::all();
+        return view('admin.role_in_per.edit_role_per',compact('role','permissions'));
      }
 }

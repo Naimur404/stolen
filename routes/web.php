@@ -66,8 +66,9 @@ Route::middleware('auth')->group(function () {
     //add role in permission
 
     Route::get('/add/role/permission', [Role::class,'addRolePermission'])->name('rolepermission');
-
-
+    Route::post('/store/role/permission', [Role::class,'storeRolePermission'])->name('add_role_permission');
+    Route::get('/all/role/permission', [Role::class,'allRolePermission'])->name('allrolepermission');
+    Route::get('/edit/role/permission/{id}', [Role::class,'editRolePermission'])->name('editrolepermission');
 });
 
 require __DIR__.'/auth.php';

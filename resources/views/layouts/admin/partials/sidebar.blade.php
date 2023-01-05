@@ -68,6 +68,12 @@
                                 </a>
 
                             </li>
+                            <li>
+                                <a class="submenu-title {{routeActive('allrolepermission')}}" href="{{ route('allrolepermission') }}">
+                                   All Role In Permission <span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
+                                </a>
+
+                            </li>
                         </ul>
                     </li>
                 </ul>

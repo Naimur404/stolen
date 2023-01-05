@@ -2,7 +2,7 @@
 
 
 
-@section('title')Add Role In Permission
+@section('title')Edit Role In Permission
  {{ $title }}
 @endsection
 
@@ -14,7 +14,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-5">
-			<h3>Add Role In Permission</h3>
+			<h3>Edit Role In Permission</h3>
         </div>
         <div class="col-sm-7">
             <a href="{{ route('user') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
@@ -23,7 +23,7 @@
 
 		@endslot
 		<li class="breadcrumb-item">DashBoard</li>
-		<li class="breadcrumb-item">Add Role In Permission</li>
+		<li class="breadcrumb-item">Edit Role In Permission</li>
 
 	@endcomponent
 
@@ -32,7 +32,7 @@
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-header pb-0">
-						<h5>Add Role In Permission</h5>
+						<h5>Edit Role In Permission</h5>
 					</div>
 					<form class="form theme-form" method="POST" action="{{ route('add_role_permission') }}">
                         @csrf
@@ -46,9 +46,8 @@
 								<div class="col">
 									<div class="mb-3 mt-2">
 
-										<select id="sel_emp" style="width: 1600px;" name="role">
-                                            <option value="0">-- Select Role --</option>
-                                         </select>
+										<label class="form-label" for="exampleFormControlInput1">Role Name</label>
+										<input class="form-control" id="exampleFormControlInput1" type="text"  name="name" value="{{ $role->name }}" />
 									</div>
 								</div>
 							</div>
@@ -56,17 +55,18 @@
               <div class="row">
 								<div class="col">
               <div class="col-sm-12 pb-0 mt-2">
-                <h5>Add Permission</h5>
+                <h5>Edit Permission</h5>
                 </div>
                 <div class="checkbox checkbox-primary">
                     <input id="checkbox-primary-1-All" type="checkbox" value="" >
                     <label for="checkbox-primary-1-All" >All Permission</label>
                     </div>
                     <hr>
+                    {{App\Models\User::roleHasPermissions($role,$permissions)  }}
                 @foreach ($permissions as $data)
 
               <div class="checkbox checkbox-primary">
-                <input id="checkbox-primary-1{{ $data->id }}" type="checkbox" value="{{ $data->id }}" name="permission[]">
+                <input id="checkbox-primary-1{{ $data->id }}" type="checkbox" value="{{ $data->id }}" name="permission[]" {{ $role->hasPermissionTo($data->name) ? 'checked' : '' }}>
                 <label for="checkbox-primary-1{{ $data->id }}" >{{ $data->name }}</label>
                 </div>
                 @endforeach
@@ -135,3 +135,4 @@ $('#checkbox-primary-1-All').click(function(){
 	@endpush
 
 @endsection
+
