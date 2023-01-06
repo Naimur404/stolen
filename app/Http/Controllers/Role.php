@@ -42,7 +42,7 @@ class Role extends Controller
             'guard_name' => $request->guard_name
         ]);
 
-        return redirect()->route('role');
+        return redirect()->route('role')->with('success','Role Add Sucessfully');
     }
     public function editRole($id){
         $role = ModelsRole::findOrFail($id);
@@ -95,7 +95,7 @@ class Role extends Controller
         DB::table('role_has_permissions')->insert($data);
 
        }
-       return redirect()->back();
+       return redirect()->route('allrolepermission')->with('success','Role in permission add successfully');
 
      }
      public function allRolePermission(Request $request){
@@ -103,12 +103,18 @@ class Role extends Controller
             $data = ModelsRole::all();
             return  Datatables::of($data)
                     ->addIndexColumn()
+                    ->addColumn('permission', function($row){
+
+                        return view('admin.action.permission', compact('row'));
+                    })
+
                     ->addColumn('action', function($row){
                         $id = $row->id;
                         $edit = route('editrolepermission',$id);
-                        $delete = route('delete_role',$id);
+                        $delete = route('deleterolepermission',$id);
                         return view('admin.action.action', compact('edit','delete'));
                     })
+                    ->rawColumns(['action'])
                     ->rawColumns(['action'])
                     ->make(true);
         }
@@ -118,5 +124,23 @@ class Role extends Controller
         $role = ModelsRole::findOrFail($id);
         $permissions = ModelsPermission::all();
         return view('admin.role_in_per.edit_role_per',compact('role','permissions'));
+     }
+     public function updateRolePermission(Request  $request, $id){
+        $role = ModelsRole::findOrFail($id);
+        $permission = $request->permission;
+        if(!empty($permission)){
+            $role->syncPermissions($permission);
+
+        }
+        return redirect()->route('allrolepermission')->with('success','Update successfully');
+
+
+     }
+     public function deleteRolePermission($id){
+        $role = ModelsRole::findOrFail($id);
+        if(!is_null($role)){
+            $role->delete();
+        }
+        return redirect()->route('allrolepermission')->with('error','Delete successfully');
      }
 }

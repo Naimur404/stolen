@@ -13,12 +13,7 @@ class Setting extends Controller
 
     }
     public function updateSetting(Request $request){
-        // $request->validate([
 
-        //     'website' =>'url',
-        //     'phone_no' =>'numeric|max:12',
-
-        // ]);
 
 
         $data = Settings::where('id',1)->first();
@@ -70,7 +65,7 @@ class Setting extends Controller
 
               $data->update();
 
-              return redirect()->back()->with('success','Update Successfully');
+              return redirect()->back()->with('success','Update successfully');
 
     }
 }

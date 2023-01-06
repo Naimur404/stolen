@@ -34,7 +34,7 @@
 					<div class="card-header pb-0">
 						<h5>Edit Role In Permission</h5>
 					</div>
-					<form class="form theme-form" method="POST" action="{{ route('add_role_permission') }}">
+					<form class="form theme-form" method="POST" action="{{ route('update_role_permission',$role->id) }}">
                         @csrf
 						<div class="card-body">
 
@@ -53,7 +53,7 @@
 							</div>
               <hr>
               <div class="row">
-								<div class="col">
+			<div class="col">
               <div class="col-sm-12 pb-0 mt-2">
                 <h5>Edit Permission</h5>
                 </div>
@@ -93,7 +93,7 @@
 
 	@push('scripts')
 
-
+    <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
     <script type="text/javascript">
         // CSRF Token
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -131,7 +131,8 @@ $('#checkbox-primary-1-All').click(function(){
   }
 })
 
-        </script>
+</script>
+
 	@endpush
 
 @endsection

@@ -38,7 +38,8 @@
 	                            <thead>
 	                                <tr>
 	                                    <th>Name</th>
-	                                    <th>Guard</th>
+                                        <th>Permission</th>
+
 
 	                                    <th>Action</th>
 
@@ -77,7 +78,7 @@
 
 	@push('scripts')
 	<script src="{{asset('assets/js/datatable/datatables/jquery.dataTables.min.js')}}"></script>
-
+    <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
 
     <script type="text/javascript">
     $(function () {
@@ -92,13 +93,41 @@
         ajax: "{{ route('allrolepermission') }}",
         columns: [
             {data: 'name', name: 'name'},
-            {data: 'guard_name', name: 'guard'},
+
+            {data: 'permission', name: 'permission', orderable: false, searchable: false},
 
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
 });
    </script>
+
+@if (Session()->get('success'))
+
+<script>
+$.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('success') }}</strong>', {
+type: 'theme',
+allow_dismiss: true,
+delay: 2000,
+showProgressbar: true,
+timer: 300
+});
+</script>
+
+@endif
+@if (Session()->get('error'))
+
+<script>
+$.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('error') }}</strong>', {
+type: 'theme',
+allow_dismiss: true,
+delay: 2000,
+showProgressbar: true,
+timer: 300
+});
+</script>
+
+@endif
     {{-- <script src="{{asset('assets/js/ecommerce.js')}}"></script> --}}
     {{-- <script src="{{asset('assets/js/product-list-custom.js')}}"></script> --}}
 	@endpush

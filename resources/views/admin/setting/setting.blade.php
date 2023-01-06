@@ -48,6 +48,12 @@
 										<label class="col-sm-3 col-form-label">Change Logo</label>
 										<div class="col-sm-9">
 											<input class="form-control btn-pill" type="file"  name="logo"/>
+                                            @error('logo')
+                                            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                                                {{ $message }}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                              </div>
+                                            @enderror
 
 										</div>
 									</div>
@@ -69,7 +75,13 @@
 										<label class="col-sm-3 col-form-label">Change Favicon</label>
 										<div class="col-sm-9">
 											<input class="form-control btn-pill" type="file" name="favicon"/>
-                                            <x-input-error :messages="$errors->get('favicon')" class="mt-2" />
+                                            @error('favicon')
+                                            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                                                {{ $message }}
+                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                              </div>
+                                            @enderror
+
 										</div>
 									</div>
 								</div>
@@ -98,7 +110,7 @@
 									<div class="mb-3">
 										<label class="form-label" for="exampleInputPassword6">Phone Number</label>
 										<input class="form-control btn-pill" id="exampleInputPassword6" type="phone" value="{{ $data->phone_no }}" name="phone_no"/>
-
+                                        <x-input-error :messages="$errors->get('phone_no')" class="mt-2" />
 									</div>
 
 								</div>
@@ -153,7 +165,7 @@
     @if (Session()->get('success'))
 
     <script>
-    $.notify('<i class="fa fa-bell-o"></i><strong>Update Sucessfully</strong>', {
+    $.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('success') }}</strong>', {
     type: 'theme',
     allow_dismiss: true,
     delay: 2000,

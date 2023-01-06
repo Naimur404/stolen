@@ -41,7 +41,7 @@ class Permission extends Controller
             'guard_name' => $request->guard_name
         ]);
 
-        return redirect()->route('permission');
+        return redirect()->route('permission')->with('success','Permission Add successfully');
     }
     public function editPermission($id){
         $permission = ModelsPermission::findOrFail($id);

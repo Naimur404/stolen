@@ -70,6 +70,8 @@ Route::prefix('administrativearea')->group(function () {
     Route::post('/store/role/permission', [Role::class,'storeRolePermission'])->name('add_role_permission');
     Route::get('/all/role/permission', [Role::class,'allRolePermission'])->name('allrolepermission');
     Route::get('/edit/role/permission/{id}', [Role::class,'editRolePermission'])->name('editrolepermission');
+    Route::post('/update/role/permission/{id}', [Role::class,'updateRolePermission'])->name('update_role_permission');
+    Route::get('/delete/role/permission/{id}', [Role::class,'deleteRolePermission'])->name('deleterolepermission');
 
     //setting route
 

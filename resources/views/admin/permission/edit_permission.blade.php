@@ -77,6 +77,18 @@
 
 
 	@push('scripts')
+    {{-- <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
+    @if (Session()->get('success'))
+
+    <script>
+    $.notify('<i class="fa fa-bell-o"></i><strong>Update Sucessfully</strong>', {
+    type: 'theme',
+    allow_dismiss: true,
+    delay: 2000,
+    showProgressbar: true,
+    timer: 300
+});
+    </script> --}}
 	@endpush
 
 @endsection

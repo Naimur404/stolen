@@ -58,7 +58,7 @@ class UserRole extends Controller
            $user->save();
            $user = User::findOrFail($user_id);
            $user->assignRole($request->role);
-           return redirect()->back();
+           return redirect()->route('user')->with('success','Add New User successfully');
 
     }
 }

@@ -19,7 +19,7 @@
         </div>
         </div>
 		@endslot
-		<li class="breadcrumb-item">DashBoard</li>
+	>
 		<li class="breadcrumb-item">Add Permission</li>
 
 	@endcomponent
@@ -29,7 +29,7 @@
 			<div class="col-sm-12">
 				<div class="card">
 					<div class="card-header pb-0">
-						<h5>Add User</h5>
+						<h5>Add Permission</h5>
 					</div>
 					<form class="form theme-form" method="POST" action="{{ route('store_permission') }}">
                         @csrf
