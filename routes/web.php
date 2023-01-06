@@ -3,6 +3,7 @@
 use App\Http\Controllers\Permission;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Role;
+use App\Http\Controllers\Setting;
 use App\Http\Controllers\UserRole;
 use Illuminate\Support\Facades\Route;
 
@@ -21,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/dashboard', 'admin.color-version.index')->middleware(['auth'])->name('index');
 
-Route::middleware('auth')->group(function () {
+Route::prefix('administrativearea')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -69,6 +70,11 @@ Route::middleware('auth')->group(function () {
     Route::post('/store/role/permission', [Role::class,'storeRolePermission'])->name('add_role_permission');
     Route::get('/all/role/permission', [Role::class,'allRolePermission'])->name('allrolepermission');
     Route::get('/edit/role/permission/{id}', [Role::class,'editRolePermission'])->name('editrolepermission');
-});
+
+    //setting route
+
+    Route::get('/site/setting', [Setting::class,'setting'])->name('setting');
+    Route::post('/update/setting', [Setting::class,'updateSetting'])->name('updatesetting');
+})->middleware(['auth']);
 
 require __DIR__.'/auth.php';
