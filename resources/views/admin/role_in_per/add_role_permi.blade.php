@@ -77,7 +77,6 @@
 						<div class="card-footer text-end">
                             {!!  Form::submit('Create',['class'=> 'btn btn-primary']); !!}
 						
-
 						</div>
                         {!! Form::close() !!}
 				</div>

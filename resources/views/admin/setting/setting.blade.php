@@ -152,7 +152,7 @@
 						</div>
 						<div class="card-footer text-end">
                             {!!  Form::submit('Update',['class'=> 'btn btn-primary']); !!}
-							
+
 
 						</div>
                         {!! Form::close() !!}

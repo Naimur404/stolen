@@ -59,6 +59,6 @@ class PermissionController extends Controller
 
         ModelsPermission::findOrFail($id)->delete();
 
-         return redirect()->route('permission');
+         return redirect()->route('permission')->with('success','Permission Delete successfully');
      }
 }
