@@ -32,7 +32,7 @@ class SettingController extends Controller
 
                 'logo' =>'mimes:png,jpg,jpeg,gif'
              ]);
-            //  unlink(public_path('uploads/'.$data->logo));
+             unlink(public_path('uploads/'.$data->logo));
 
             $ext = $request->file('logo')->extension();
             $final_name = 'logo'.'.'.$ext;
@@ -50,7 +50,7 @@ class SettingController extends Controller
                     'favicon' =>'mimes:png,jpg,jpeg,gif'
                     ]);
 
-                // unlink(public_path('uploads/'.$data->favicon));
+                unlink(public_path('uploads/'.$data->favicon));
 
                 $ext = $request->file('favicon')->extension();
                 $final_name = 'favicon'.'.'.$ext;
