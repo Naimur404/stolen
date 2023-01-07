@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('app_name')->nullable();
             $table->string('address')->nullable();
             $table->string('phone_no')->nullable();
+            $table->longText('description')->nullable();
             $table->string('website')->nullable();
             $table->text('footer_text')->nullable();
             $table->timestamps();
