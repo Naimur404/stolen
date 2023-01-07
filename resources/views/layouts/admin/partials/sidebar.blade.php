@@ -32,7 +32,7 @@
                     <li class="dropdown">
                         <a class="nav-link menu-title {{ prefixActive('/administrativearea') }}" href="javascript:void(0)"><i data-feather="anchor"></i><span>Administrative Area</span></a>
                         <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/administrativearea') }};">
-                            <li>
+                            {{-- <li>
                                 <a class="submenu-title {{routeActive('datatable-AJAX')}} " href="{{ route('datatable-AJAX') }}">
                                     AJAX Data Table <span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
                                 </a>
@@ -43,13 +43,7 @@
                                     Collective Form<span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
                                 </a>
 
-                            </li>
-                            <li>
-                                <a class="submenu-title {{routeActive('permission')}}" href="{{ route('permission') }}">
-                                    Permission<span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
-                                </a>
-
-                            </li>
+                            </li> --}}
                             <li>
                                 <a class="submenu-title {{routeActive('user')}}" href="{{ route('user') }}">
                                     User<span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
@@ -62,6 +56,14 @@
                                 </a>
 
                             </li>
+                            <li>
+                                <a class="submenu-title {{routeActive('permission')}}" href="{{ route('permission') }}">
+                                    Permission<span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
+                                </a>
+
+                            </li>
+
+
                                <li>
                                 <a class="submenu-title {{routeActive('rolepermission')}}" href="{{ route('rolepermission') }}">
                                     Role In Permission <span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>

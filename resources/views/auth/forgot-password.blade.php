@@ -38,20 +38,23 @@
     <section>
 	    <div class="container-fluid p-0">
 	        <div class="row m-0">
-         
+
 	            <div class="col-12 p-0">
 	                <div class="login-card">
 	                    <div class="login-main">
-	                        <form class="theme-form login-form" method="post" action="{{ route('password.email') }}">
-                                @csrf
+                            {!! Form::open(['route'=>'password.email', 'method'=>'POST','role' => 'form','class' => 'theme-form login-form']) !!}
+                            {!! Form::token(); !!}
+
 	                            <h4>Reset Password</h4>
 	                            <div class="form-group">
-	                                <label class="col-form-label">Email</label>
+                                    {!! Form::label('', 'Email address',array('class' => 'col-form-label')) !!}
+
 
 
 	                                    <div class="input-group">
                                             <span class="input-group-text"><i class="icon-email"></i></span>
-                                            <input class="form-control" type="email" required="" placeholder="Test@gmail.com" name="email" />
+                                            {!! Form::email('email',null,['class'=>'form-control', 'placeholder'=>'name@example.com' ]) !!}
+
 
                                         </div>
                                         <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -59,10 +62,11 @@
 	                            </div>
 
 	                            <div class="form-group">
-	                                <button class="btn btn-primary btn-block" type="submit">Sent</button>
+                                    {!!  Form::submit('Sent',['class'=> 'btn btn-primary btn-block']); !!}
+
 	                            </div>
 	                            <p>Already have an account?<a class="ms-2" href="{{ route('login') }}">Sign in </a></p>
-	                        </form>
+	                        {!! Form::close(); !!}
 	                    </div>
 	                </div>
 	            </div>

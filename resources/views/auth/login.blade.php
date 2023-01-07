@@ -66,24 +66,31 @@
         <div class="row">
             <div class="col-12">
                 <div class="login-card">
-                    <form class="theme-form login-form" action=" {{ route('login') }}" method="POST">
-                        @csrf
+                    {!! Form::open(['route'=>'login', 'method'=>'POST','role' => 'form','class' => 'theme-form login-form']) !!}
+                    {!! Form::token(); !!}
+
                         <h4>Login</h4>
                         <h6>Welcome back! Log in to your account.</h6>
                         <div class="form-group">
+                            {!! Form::label('', 'Email address') !!}
                             <label>Email Address</label>
                             <div class="input-group">
+
                                 <span class="input-group-text"><i class="icon-email"></i></span>
-                                <input class="form-control" type="email" required="" placeholder="Test@gmail.com" name="email" />
+                                {!! Form::email('email',null,['class'=>'form-control', 'placeholder'=>'name@example.com', 'id' => 'exampleFormControlInput1' ]) !!}
+
                             </div>
+                            <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
                         <div class="form-group">
                             <label>Password</label>
                             <div class="input-group">
                                 <span class="input-group-text"><i class="icon-lock"></i></span>
-                                <input class="form-control" type="password" name="password" required="" placeholder="*********" />
+                                {!! Form::password('password',['class'=>'form-control', 'placeholder'=>'*********', 'id' => 'exampleInputPassword2',  'required']) !!}
+
                                 <div class="show-hide"><span class="show"> </span></div>
                             </div>
+                            <x-input-error :messages="$errors->get('password')" class="mt-2" />
                         </div>
                         <div class="form-group">
                             <div class="checkbox">
@@ -93,7 +100,8 @@
                             <a class="link" href="{{ route('password.request') }}">Forgot password?</a>
                         </div>
                         <div class="form-group">
-                            <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+                            {!!  Form::submit('Sign in',['class'=> 'btn btn-primary btn-block']); !!}
+
                         </div>
                         <div class="login-social-title">
                             <h5>Sign in with</h5>
@@ -114,8 +122,8 @@
                                 </li>
                             </ul>
                         </div>
-                        <p>Don't have account?<a class="ms-2" href="{{ route('register') }}">Create Account</a></p>
-                    </form>
+                        {{-- <p>Don't have account?<a class="ms-2" href="{{ route('register') }}">Create Account</a></p> --}}
+                    {!! Form::close(); !!}
                 </div>
             </div>
         </div>

@@ -55,17 +55,18 @@
 	            <div class="col-12 p-0">
 	                <div class="login-card">
 	                    <div class="login-main">
-	                        <form class="theme-form login-form" method="POST" action="{{ route('password.store') }}">
-                                @csrf
-                                <input type="hidden" name="token" value="{{ $request->route('token') }}">
+                            {!! Form::open(['route'=>'password.store', 'method'=>'POST','role' => 'form','class' => 'theme-form login-form']) !!}
+                            {!! Form::token(); !!}
+
+                            {!! Form::hidden('token',$request->route('token')) !!}
+
 	                            <h4 class="mb-3">Reset Your Password</h4>
 
-
                                 <div class="form-group">
-                                    <label>Email Address</label>
+                                    {!! Form::label('', 'Email address') !!}
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="icon-email"></i></span>
-                                        <input class="form-control" type="email" required="" name="email"  value="{{ old('email', $request->email)  }}"/>
+                                        {!! Form::email('email',$request->email),['class'=>'form-control', 'placeholder'=>'name@example.com', 'id' => 'exampleFormControlInput1' ]) !!}
 
                                     </div>
                                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
@@ -73,10 +74,11 @@
 
 	                            <h6>Create Your Password</h6>
 	                            <div class="form-group">
-	                                <label>New Password</label>
+                                    {!! Form::label('', 'New Password') !!}
+
 	                                <div class="input-group">
 	                                    <span class="input-group-text"><i class="icon-lock"></i></span>
-	                                    <input class="form-control" type="password" name="password" required="" placeholder="*********"  />
+                                        {!! Form::password('password',['class'=>'form-control', 'placeholder'=>'*********', ]) !!}
 
 	                                    <div class="show-hide"><span class="show"></span></div>
 
@@ -84,10 +86,11 @@
                                     <x-input-error :messages="$errors->get('password')" class="mt-2" />
 	                            </div>
 	                            <div class="form-group">
-	                                <label>Retype Password</label>
+                                    {!! Form::label('', 'Retype Password') !!}
+
 	                                <div class="input-group">
 	                                    <span class="input-group-text"><i class="icon-lock"></i></span>
-	                                    <input class="form-control" type="password" name="password_confirmation" required="" placeholder="*********" />
+                                        {!! Form::password('password_confirmation',['class'=>'form-control', 'placeholder'=>'*********' ]) !!}
 
 	                                </div>
                                     <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
@@ -99,10 +102,11 @@
 	                                </div>
 	                            </div>
 	                            <div class="form-group">
-	                                <button class="btn btn-primary btn-block" type="submit">Reset Password</button>
+                                    {!!  Form::submit('Reset Password',['class'=> 'btn btn-primary btn-block']); !!}
+
 	                            </div>
 	                            <p>Already have an password?<a class="ms-2" href="{{ route('login') }}">Sign in</a></p>
-	                        </form>
+	                        {!! Form::close(); !!}
 	                    </div>
 	                </div>
 	            </div>
@@ -111,7 +115,7 @@
 	</section>
 
     @push('scripts')
-    <script src="{{ asset('assets/js/sweet-alert/sweetalert.min.js') }}"></script>
+
     @endpush
 
 @endsection
