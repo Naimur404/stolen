@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title')User
+@section('title')All Role Permission
  {{ $title }}
 @endsection
 
@@ -14,14 +14,12 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-4">
-			<h3>Add User</h3>
+			<h3>All Role Permission</h3>
         </div>
-        <div class="col-sm-8">
-            <a href="{{ route('add_user') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Add User</a>
-        </div>
+
         </div>
 		@endslot
-		<li class="breadcrumb-item">User</li>
+		<li class="breadcrumb-item">All Role Permission</li>
 
 	@endcomponent
 
@@ -31,24 +29,24 @@
 	        <div class="col-sm-12">
 	            <div class="card">
 	                <div class="card-header pb-0">
-	                    <h5>User</h5>
+	                    <h5>All Role Permission</h5>
 
 	                </div>
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
-	                        <table class="display data-table">
+	                        <table class="display data-table" id="basic-1">
 	                            <thead>
 	                                <tr>
 	                                    <th>Name</th>
-	                                    <th>email</th>
-                                        <th>Type</th>
+                                        <th>Permission</th>
+
 
 	                                    <th>Action</th>
 
 	                                </tr>
 	                            </thead>
 	                            <tbody>
-
+               
 	                            </tbody>
 	                        </table>
 	                    </div>
@@ -73,18 +71,17 @@
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('user') }}",
+        ajax: "{{ route('allrolepermission') }}",
         columns: [
             {data: 'name', name: 'name'},
-            {data: 'email', name: 'email'},
-            {data: 'type', name: 'type', orderable: false, searchable: false},
+
+            {data: 'permission', name: 'permission', orderable: false, searchable: false},
 
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
 });
    </script>
-
 
 @if (Session()->get('success'))
 

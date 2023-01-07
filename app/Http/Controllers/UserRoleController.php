@@ -11,7 +11,7 @@ use Spatie\Permission\Contracts\Role;
 use Spatie\Permission\Models\Role as ModelsRole;
 use DataTables;
 
-class UserRole extends Controller
+class UserRoleController extends Controller
 {
     public function users(Request $request){
         $users = User::get();
@@ -58,7 +58,7 @@ class UserRole extends Controller
            $user->save();
            $user = User::findOrFail($user_id);
            $user->assignRole($request->role);
-           return redirect()->back();
+           return redirect()->route('user')->with('success','Add New User successfully');
 
     }
 }
