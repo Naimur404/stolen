@@ -19,10 +19,11 @@ class SettingSeeder extends Seeder
             'logo'  => '8584498899.png',
             'favicon' => '7895656.png',
             'app_name' => 'Pigeon Soft',
-            'address'  => 'Halishahar, Chittagong',
-            'phone_no' => '0156486246',
-            'website' => 'www.facebook.com',
-            'footer_text' => 'Copyright 2022 Pigeon Soft'
+            'address'  => 'House #16, Road #22, Sector #14,
+            Uttara Model Town, Dhaka-1230',
+            'phone_no' => '+88 01737-569833',
+            'website' => 'https://pigeon-soft.com/',
+            'footer_text' => '© 2016 - 2023 Copyright Pigeon Soft. All Rights Reserved'
         ];
         Settings::create($setting);
     }

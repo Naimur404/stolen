@@ -31,49 +31,33 @@
 					<div class="card-header pb-0">
 						<h5>Add Role</h5>
 					</div>
-					<form class="form theme-form" method="POST" action="{{ route('store_role') }}">
-                        @csrf
+
+                    {!! Form::open(['route'=>'store_role', 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
+                    {!! Form::token(); !!}
+
 						<div class="card-body">
                             <div class="row">
 
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleFormControlInput1">Name</label>
-										<input class="form-control" id="exampleFormControlInput1" type="text"  name="name" />
+                                        {!! Form::label('exampleFormControlInput1', 'Role', array('class' => 'form-label')) !!}
+                                        {!! Form::text('name',null,['class'=>'form-control', 'placeholder'=>'Role', 'id' => 'exampleFormControlInput1' ]) !!}
+
 									</div>
 								</div>
 							</div>
-							<div class="row">
-
-								<div class="col">
-									<div class="mb-3">
-										<label class="form-label" for="exampleFormControlInput1">Guard Name</label>
-										<input class="form-control" id="exampleFormControlInput1" type="text" placeholder="Web"  name="guard_name"/>
-									</div>
-								</div>
-							</div>
-
-
-
 
 						</div>
 						<div class="card-footer text-end">
-							<button class="btn btn-primary" type="submit">Submit</button>
+                            {!!  Form::submit('Submit',['class'=> 'btn btn-primary']); !!}
 
 						</div>
-					</form>
+					{!! Form::close() !!}
 				</div>
-
-
-
-
-
-
 
 			</div>
 		</div>
 	</div>
-
 
 	@push('scripts')
 	@endpush

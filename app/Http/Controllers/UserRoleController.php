@@ -11,7 +11,7 @@ use Spatie\Permission\Contracts\Role;
 use Spatie\Permission\Models\Role as ModelsRole;
 use DataTables;
 
-class UserRole extends Controller
+class UserRoleController extends Controller
 {
     public function users(Request $request){
         $users = User::get();

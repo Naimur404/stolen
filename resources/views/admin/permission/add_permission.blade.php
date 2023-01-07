@@ -31,15 +31,17 @@
 					<div class="card-header pb-0">
 						<h5>Add Permission</h5>
 					</div>
-					<form class="form theme-form" method="POST" action="{{ route('store_permission') }}">
-                        @csrf
+
+                        {!! Form::open(['route'=>'store_permission', 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
+                        {!! Form::token(); !!}
 						<div class="card-body">
                             <div class="row">
 
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleFormControlInput1">Name</label>
-										<input class="form-control" id="exampleFormControlInput1" type="text"  name="name" />
+                                        {!! Form::label('exampleFormControlInput1', 'Permission Name', array('class' => 'form-label')) !!}
+                                        {!! Form::text('name',null,['class'=>'form-control', 'placeholder'=>'Permission', 'id' => 'exampleFormControlInput1' ]) !!}
+
 									</div>
 								</div>
 							</div>
@@ -47,28 +49,19 @@
 
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleFormControlInput1">Guard Name</label>
-										<input class="form-control" id="exampleFormControlInput1" type="text" placeholder="Web"  name="guard_name"/>
+                                        {!! Form::label('exampleFormControlInput1', 'Permission Name', array('class' => 'form-label')) !!}
+                                        {!! Form::text('guard_name',null,['class'=>'form-control', 'placeholder'=>'Web', 'id' => 'exampleFormControlInput1' ]) !!}
+
 									</div>
 								</div>
 							</div>
 
-
-
-
 						</div>
 						<div class="card-footer text-end">
-							<button class="btn btn-primary" type="submit">Submit</button>
-
+                            {!!  Form::submit('Submit',['class'=> 'btn btn-primary']); !!}
 						</div>
-					</form>
+					{{ Form::close(); }}
 				</div>
-
-
-
-
-
-
 
 			</div>
 		</div>

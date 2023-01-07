@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission as ModelsPermission;
 use DataTables;
 
-class Permission extends Controller
+class PermissionController extends Controller
 {
     public function permission(Request $request){
         $permissions = ModelsPermission::all();
@@ -53,7 +53,7 @@ class Permission extends Controller
         'name' => $request->name,
         'guard_name' => $request->guard_name,
        ]);
-        return redirect()->route('permission');
+        return redirect()->route('permission')->with('success','Permission Update successfully');
     }
     public function deletePermission($id){
 

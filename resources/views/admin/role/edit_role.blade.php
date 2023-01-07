@@ -31,45 +31,31 @@
 					<div class="card-header pb-0">
 						<h5>Edit Role</h5>
 					</div>
-					<form class="form theme-form" method="POST" action="{{ route('update_role') }}">
-                        @csrf
-                        <input type="hidden" value="{{ $role->id }}" name="id"/>
+
+                        {!! Form::open(['route'=>['update_role'], 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
+                        {!! Form::token(); !!}
+                        {!! Form::hidden('id',$role->id) !!}
+
 						<div class="card-body">
                             <div class="row">
 
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleFormControlInput1">Name</label>
-										<input class="form-control" id="exampleFormControlInput1" type="text"  name="name"  value="{{ $role->name }}"/>
+                                        {!! Form::label('exampleFormControlInput1', 'Name', array('class' => 'form-label')) !!}
+                                        {!! Form::text('name',$role->name,['class'=>'form-control', 'id' => 'exampleFormControlInput' ]) !!}
+
 									</div>
 								</div>
 							</div>
-							<div class="row">
-
-								<div class="col">
-									<div class="mb-3">
-										<label class="form-label" for="exampleFormControlInput1">Guard Name</label>
-										<input class="form-control" id="exampleFormControlInput1" type="text" placeholder="Web"  name="guard_name" value="{{ $role->guard_name }}"/>
-									</div>
-								</div>
-							</div>
-
-
-
 
 						</div>
 						<div class="card-footer text-end">
-							<button class="btn btn-primary" type="submit">Save Changes</button>
+                            {!!  Form::submit('Save Changes',['class'=> 'btn btn-primary']); !!}
+
 
 						</div>
-					</form>
+				{!! Form::close(); !!}
 				</div>
-
-
-
-
-
-
 
 			</div>
 		</div>

@@ -34,13 +34,10 @@
 					<div class="card-header pb-0">
 						<h5>Add Role In Permission</h5>
 					</div>
-					<form class="form theme-form" method="POST" action="{{ route('add_role_permission') }}">
-                        @csrf
+                    {!! Form::open(['route'=>'add_role_permission', 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
+                      {!! Form::token(); !!}
+
 						<div class="card-body">
-
-
-
-
 
 							<div class="row">
 								<div class="col">
@@ -59,33 +56,31 @@
                 <h5>Add Permission</h5>
                 </div>
                 <div class="checkbox checkbox-primary">
-                    <input id="checkbox-primary-1-All" type="checkbox" value="" >
+                    {{-- <input id="checkbox-primary-1-All" type="checkbox" value="" > --}}
+                    {!! Form::checkbox(null, null,false,['id'=>'checkbox-primary-1-All' ]) !!}
+
                     <label for="checkbox-primary-1-All" >All Permission</label>
                     </div>
                     <hr>
                 @foreach ($permissions as $data)
 
               <div class="checkbox checkbox-primary">
-                <input id="checkbox-primary-1{{ $data->id }}" type="checkbox" value="{{ $data->id }}" name="permission[]">
-                <label for="checkbox-primary-1{{ $data->id }}" >{{ $data->name }}</label>
+                {!! Form::checkbox('permission[]',$data->id,false,['id'=>'checkbox-primary-1'.$data->id ]) !!}
+                {{-- <input id="checkbox-primary-1{{ $data->id }}" type="checkbox" value="{{ $data->id }}" name="permission[]"> --}}
+                {!! Form::label('checkbox-primary-1'.$data->id,$data->name) !!}
+                {{-- <label for="checkbox-primary-1{{ $data->id }}" >{{ $data->name }}</label> --}}
                 </div>
                 @endforeach
                 </div>
               </div>
 						</div>
 						<div class="card-footer text-end">
-							<button class="btn btn-primary" type="submit">Save Changes</button>
-							
+                            {!!  Form::submit('Create',['class'=> 'btn btn-primary']); !!}
+						
+
 						</div>
-					</form>
+                        {!! Form::close() !!}
 				</div>
-
-
-
-
-
-
-
 			</div>
 		</div>
 	</div>

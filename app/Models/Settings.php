@@ -15,11 +15,11 @@ class Settings extends Model
     protected $fillable = [
           'logo',
           'favicon',
-           'app_name',
-            'address',
-            'phone_no',
-            'website',
-            'footer_text'
+          'app_name',
+          'address',
+          'phone_no',
+          'website',
+          'footer_text'
 
 
     ];

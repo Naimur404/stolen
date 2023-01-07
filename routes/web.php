@@ -1,10 +1,11 @@
 <?php
 
-use App\Http\Controllers\Permission;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Role;
-use App\Http\Controllers\Setting;
-use App\Http\Controllers\UserRole;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SettingController;
+
+use App\Http\Controllers\UserRoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -40,43 +41,43 @@ Route::prefix('administrativearea')->group(function () {
     Route::view('/datatable-AJAX', 'admin.tables.datatable-AJAX')->name('datatable-AJAX');
     Route::view('/base-input', 'admin.forms.base-input')->name('form');
     Route::view('/role', 'admin.role.role')->name('role');
-    Route::get('/user', [UserRole::class,'users'])->name('user');
-    Route::get('/add_user', [UserRole::class,'addUsers'])->name('add_user');
-    Route::post('/add_user_store', [UserRole::class,'addUsersStore'])->name('add_user_store');
+    Route::get('/user', [UserRoleController::class,'users'])->name('user');
+    Route::get('/add_user', [UserRoleController::class,'addUsers'])->name('add_user');
+    Route::post('/add_user_store', [UserRoleController::class,'addUsersStore'])->name('add_user_store');
 
 //permission route
 
-    Route::get('/permission', [Permission::class,'permission'])->name('permission');
-    Route::get('/add_permission', [Permission::class,'addPermission'])->name('add_permission');
-    Route::post('/store_permission', [Permission::class,'storePermission'])->name('store_permission');
-    Route::post('/update_permission', [Permission::class,'updatePermission'])->name('update_permission');
-    Route::get('/edit_permission/{id}', [Permission::class,'editPermission'])->name('edit_permission');
-    Route::get('/delete_permission/{id}', [Permission::class,'deletePermission'])->name('delete_permission');
+    Route::get('/permission', [PermissionController::class,'permission'])->name('permission');
+    Route::get('/add_permission', [PermissionController::class,'addPermission'])->name('add_permission');
+    Route::post('/store_permission', [PermissionController::class,'storePermission'])->name('store_permission');
+    Route::post('/update_permission', [PermissionController::class,'updatePermission'])->name('update_permission');
+    Route::get('/edit_permission/{id}', [PermissionController::class,'editPermission'])->name('edit_permission');
+    Route::get('/delete_permission/{id}', [PermissionController::class,'deletePermission'])->name('delete_permission');
 
     //role route
 
-    Route::get('/role', [Role::class,'role'])->name('role');
-    Route::get('/add_role', [Role::class,'addRole'])->name('add_role');
-    Route::post('/store_role', [Role::class,'storeRole'])->name('store_role');
-    Route::post('/update_role', [Role::class,'updateRole'])->name('update_role');
-    Route::get('/edit_role/{id}', [Role::class,'editRole'])->name('edit_role');
-    Route::get('/delete_role/{id}', [Role::class,'deleteRole'])->name('delete_role');
+    Route::get('/role', [RoleController::class,'role'])->name('role');
+    Route::get('/add_role', [RoleController::class,'addRole'])->name('add_role');
+    Route::post('/store_role', [RoleController::class,'storeRole'])->name('store_role');
+    Route::post('/update_role', [RoleController::class,'updateRole'])->name('update_role');
+    Route::get('/edit_role/{id}', [RoleController::class,'editRole'])->name('edit_role');
+    Route::get('/delete_role/{id}', [RoleController::class,'deleteRole'])->name('delete_role');
 
-    Route::post('/get_role', [Role::class,'getRole'])->name('get_role');
+    Route::post('/get_role', [RoleController::class,'getRole'])->name('get_role');
 
     //add role in permission
 
-    Route::get('/add/role/permission', [Role::class,'addRolePermission'])->name('rolepermission');
-    Route::post('/store/role/permission', [Role::class,'storeRolePermission'])->name('add_role_permission');
-    Route::get('/all/role/permission', [Role::class,'allRolePermission'])->name('allrolepermission');
-    Route::get('/edit/role/permission/{id}', [Role::class,'editRolePermission'])->name('editrolepermission');
-    Route::post('/update/role/permission/{id}', [Role::class,'updateRolePermission'])->name('update_role_permission');
-    Route::get('/delete/role/permission/{id}', [Role::class,'deleteRolePermission'])->name('deleterolepermission');
+    Route::get('/add/role/permission', [RoleController::class,'addRolePermission'])->name('rolepermission');
+    Route::post('/store/role/permission', [RoleController::class,'storeRolePermission'])->name('add_role_permission');
+    Route::get('/all/role/permission', [RoleController::class,'allRolePermission'])->name('allrolepermission');
+    Route::get('/edit/role/permission/{id}', [RoleController::class,'editRolePermission'])->name('editrolepermission');
+    Route::post('/update/role/permission/{id}', [RoleController::class,'updateRolePermission'])->name('update_role_permission');
+    Route::get('/delete/role/permission/{id}', [RoleController::class,'deleteRolePermission'])->name('deleterolepermission');
 
     //setting route
 
-    Route::get('/site/setting', [Setting::class,'setting'])->name('setting');
-    Route::post('/update/setting', [Setting::class,'updateSetting'])->name('updatesetting');
+    Route::get('/site/setting', [SettingController::class,'setting'])->name('setting');
+    Route::post('/update/setting', [SettingController::class,'updateSetting'])->name('updatesetting');
 })->middleware(['auth']);
 
 require __DIR__.'/auth.php';

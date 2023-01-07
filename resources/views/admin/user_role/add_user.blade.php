@@ -34,15 +34,17 @@
 					<div class="card-header pb-0">
 						<h5>Add User</h5>
 					</div>
-					<form class="form theme-form" method="POST" action="{{ route('add_user_store') }}">
-                        @csrf
+
+                        {!! Form::open(['route'=>'add_user_store', 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
+                        {!! Form::token(); !!}
 						<div class="card-body">
                             <div class="row">
 
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleFormControlInput1">Name</label>
-										<input class="form-control" id="exampleFormControlInput1" type="text" placeholder="name@example.com" name="name" />
+                                        {!! Form::label('exampleFormControlInput1', 'Name', array('class' => 'form-label')) !!}
+                                        {!! Form::text('name',null,['class'=>'form-control', 'id' => 'exampleFormControlInput1' ]) !!}
+
 									</div>
 								</div>
 							</div>
@@ -50,24 +52,27 @@
 
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleFormControlInput1">Email address</label>
-										<input class="form-control" id="exampleFormControlInput1" type="email" placeholder="name@example.com"  name="email"/>
+                                        {!! Form::label('exampleFormControlInput1', 'Email address', array('class' => 'form-label')) !!}
+                                        {!! Form::email('email',null,['class'=>'form-control', 'placeholder'=>'name@example.com', 'id' => 'exampleFormControlInput1' ]) !!}
+
 									</div>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleInputPassword2">Password</label>
-										<input class="form-control" id="exampleInputPassword2" type="password" placeholder="Password"  name="password"/>
+                                        {!! Form::label('exampleInputPassword2', 'Password', array('class' => 'form-label')) !!}
+                                        {!! Form::password('password',['class'=>'form-control', 'placeholder'=>'Password', 'id' => 'exampleInputPassword2' ]) !!}
+
 									</div>
 								</div>
 							</div>
                             <div class="row">
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleInputPassword2">Confirm Password</label>
-										<input class="form-control" id="exampleInputPassword2" type="password" placeholder="Password" name="password_confirmation" />
+                                        {!! Form::label('exampleInputPassword2', 'Confirm Password', array('class' => 'form-label')) !!}
+                                        {!! Form::password('password_confirmation',['class'=>'form-control', 'placeholder'=>'Password', 'id' => 'exampleInputPassword2' ]) !!}
+
 									</div>
 								</div>
 							</div>
@@ -85,17 +90,12 @@
 
 						</div>
 						<div class="card-footer text-end">
-							<button class="btn btn-primary" type="submit">Submit</button>
-							<input class="btn btn-light" type="reset" value="Cancel" />
+                            {!!  Form::submit('Create',['class'=> 'btn btn-primary']); !!}
+
+
 						</div>
-					</form>
+					{{ Form::close(); }}
 				</div>
-
-
-
-
-
-
 
 			</div>
 		</div>

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Settings;
 use Illuminate\Http\Request;
 
-class Setting extends Controller
+class SettingController extends Controller
 {
     public function setting(){
         $data = Settings::where('id',1)->first();
@@ -31,11 +31,11 @@ class Setting extends Controller
 
                 'logo' =>'mimes:png,jpg,jpeg,gif'
              ]);
-             unlink(public_path('font_asset/uploads/'.$data->logo));
+             unlink(public_path('uploads/'.$data->logo));
 
             $ext = $request->file('logo')->extension();
             $final_name = 'logo'.'.'.$ext;
-            $request->file('logo')->move(public_path('font_asset/uploads'),$final_name);
+            $request->file('logo')->move(public_path('uploads'),$final_name);
             $data->logo = $final_name;
 
             }
@@ -47,22 +47,17 @@ class Setting extends Controller
                 $request->validate([
 
                     'favicon' =>'mimes:png,jpg,jpeg,gif'
-
-
-
-                ]);
-                 unlink(public_path('font_asset/uploads/'.$data->favicon));
+                    ]);
+                    
+                unlink(public_path('uploads/'.$data->favicon));
 
                 $ext = $request->file('favicon')->extension();
                 $final_name = 'favicon'.'.'.$ext;
-                $request->file('favicon')->move(public_path('font_asset/uploads'),$final_name);
+                $request->file('favicon')->move(public_path('uploads'),$final_name);
                 $data->favicon = $final_name;
 
 
               }
-
-
-
               $data->update();
 
               return redirect()->back()->with('success','Update successfully');

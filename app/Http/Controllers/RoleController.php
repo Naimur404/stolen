@@ -8,7 +8,7 @@ use Spatie\Permission\Models\Permission as ModelsPermission;
 use DataTables;
 use Illuminate\Support\Facades\DB;
 
-class Role extends Controller
+class RoleController extends Controller
 {
     public function role(Request $request){
         $roles = ModelsRole::all();
@@ -39,7 +39,7 @@ class Role extends Controller
     public function storeRole(Request $request){
          ModelsRole::create([
             'name' => $request->name,
-            'guard_name' => $request->guard_name
+            'guard_name' => 'web',
         ]);
 
         return redirect()->route('role')->with('success','Role Add Sucessfully');
@@ -52,7 +52,7 @@ class Role extends Controller
        $per_id = $request->id;
        ModelsRole::findOrFail($per_id)->update([
         'name' => $request->name,
-        'guard_name' => $request->guard_name,
+        'guard_name' => 'web',
        ]);
         return redirect()->route('role');
     }
@@ -88,13 +88,20 @@ class Role extends Controller
      }
      public function storeRolePermission(Request $request){
         $data = array();
+        $role = ModelsRole::findOrFail($request->role);
         $permissions = $request->permission;
-       foreach($permissions as $key => $item){
-        $data['role_id'] = $request->role;
-        $data['permission_id'] = $item;
-        DB::table('role_has_permissions')->insert($data);
+        if(!empty($role)){
+        $role->syncPermissions($permissions);
 
-       }
+        }else{
+            foreach($permissions as $key => $item){
+                $data['role_id'] = $request->role;
+                $data['permission_id'] = $item;
+                DB::table('role_has_permissions')->insert($data);
+
+               }
+        }
+
        return redirect()->route('allrolepermission')->with('success','Role in permission add successfully');
 
      }

@@ -17,13 +17,7 @@
 	@endcomponent
 
 	<div class="container-fluid">
-        {{-- @if (session()->get('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session()->get('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
 
-        @endif --}}
 		<div class="row">
 			<div class="col-sm-12">
 
@@ -31,23 +25,26 @@
 					<div class="card-header pb-0">
 						<h5>Logo & Favicon</h5>
 					</div>
-					<form class="form theme-form" method="POST" action="{{ route('updatesetting') }}" enctype="multipart/form-data">
-                        @csrf
+                    {!! Form::open(['route'=>'updatesetting', 'method'=>'POST', 'files' => true, 'role' => 'form']) !!}
+                      {!! Form::token(); !!}
+
 						<div class="card-body">
 							<div class="row">
 								<div class="col">
                                     <div class="mb-3 row">
-										<label class="col-sm-3 col-form-label">Existing Logo</label>
+                                        {!! Form::label('logo', 'Existing Logo', array('class' => 'col-sm-3 col-form-label')) !!}
+										{{-- <label class="col-sm-3 col-form-label">Existing Logo</label> --}}
 										<div class="col-sm-9">
                                             <div>
-                                                <img src="{{ asset('font_asset/uploads/'.$data->logo) }}" alt="" class="w_300" width="200" height="200" >
+                                                <img src="{{ asset('uploads/'.$data->logo) }}" alt="" class="w_300" width="200" height="200" >
                                             </div>
 										</div>
 									</div>
 									<div class="mb-3 row">
 										<label class="col-sm-3 col-form-label">Change Logo</label>
 										<div class="col-sm-9">
-											<input class="form-control btn-pill" type="file"  name="logo"/>
+                                            {!! Form::file('logo',['class'=>'form-control btn-pill' ]) !!}
+											{{-- <input class="form-control btn-pill" type="file"  name="logo"/> --}}
                                             @error('logo')
                                             <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
                                                 {{ $message }}
@@ -64,17 +61,19 @@
                             <div class="row">
 								<div class="col">
                                     <div class="mb-3 row">
-										<label class="col-sm-3 col-form-label">Existing Favicon</label>
+                                        {!! Form::label('favicon', 'Existing Favicon', array('class' => 'col-sm-3 col-form-label')) !!}
+
 										<div class="col-sm-9">
                                             <div>
-                                                <img src="{{ asset('font_asset/uploads/'.$data->favicon) }}" alt="" class="w_300" width="200" height="200">
+                                                <img src="{{ asset('uploads/'.$data->favicon) }}" alt="" class="w_300" width="200" height="200">
                                             </div>
 										</div>
 									</div>
 									<div class="mb-3 row">
 										<label class="col-sm-3 col-form-label">Change Favicon</label>
 										<div class="col-sm-9">
-											<input class="form-control btn-pill" type="file" name="favicon"/>
+                                            {!! Form::file('favicon',['class'=>'form-control btn-pill' ]) !!}
+
                                             @error('favicon')
                                             <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
                                                 {{ $message }}
@@ -100,16 +99,20 @@
 							<div class="row">
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleFormControlInput5">App Name</label>
-										<input class="form-control btn-pill" id="exampleFormControlInput5" type="text" value="{{ $data->app_name }}" name="app_name" />
+{{--
+										<input class="form-control btn-pill" id="exampleFormControlInput5" type="text" value="{{ $data->app_name }}" name="app_name" /> --}}
+                                        {!! Form::label('app_name', 'App Name:', array('class' => 'form-label','for' => 'exampleFormControlInput5')) !!}
+                                        {!! Form::text('app_name',$data->app_name,['class'=>'form-control btn-pill', 'placeholder'=>'App Name', 'id' => 'exampleFormControlInput5' ]) !!}
 									</div>
 								</div>
 							</div>
 							<div class="row">
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleInputPassword6">Phone Number</label>
-										<input class="form-control btn-pill" id="exampleInputPassword6" type="phone" value="{{ $data->phone_no }}" name="phone_no"/>
+
+                                        {!! Form::label('phone_no', 'Phone Number:', array('class' => 'form-label','for' => 'exampleInputPassword6')) !!}
+                                        {!! Form::text('phone_no',$data->phone_no,['class'=>'form-control btn-pill', 'placeholder'=>'Phone Number', 'id' => 'exampleInputPassword6' ]) !!}
+
                                         <x-input-error :messages="$errors->get('phone_no')" class="mt-2" />
 									</div>
 
@@ -118,8 +121,9 @@
                             <div class="row">
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleInputPassword6">Address</label>
-										<input class="form-control btn-pill" id="exampleInputPassword6" type="text" value="{{ $data->address }}" name="address" />
+
+                                        {!! Form::label('address', 'Address:', array('class' => 'form-label','for' => 'exampleInputPassword6')) !!}
+                                        {!! Form::text('address',$data->address,['class'=>'form-control btn-pill', 'placeholder'=>'Address', 'id' => 'exampleInputPassword6' ]) !!}
 									</div>
 								</div>
 							</div>
@@ -127,8 +131,9 @@
                             <div class="row">
 								<div class="col">
 									<div class="mb-3">
-										<label class="form-label" for="exampleInputPassword6">Website</label>
-										<input class="form-control btn-pill" id="exampleInputPassword6" type="text" value="{{ $data->website }}" name="website" />
+
+                                        {!! Form::label('website', 'Website:', array('class' => 'form-label','for' => 'exampleInputPassword6')) !!}
+                                        {!! Form::text('website',$data->website,['class'=>'form-control btn-pill', 'placeholder'=>'Website', 'id' => 'exampleInputPassword6' ]) !!}
                                         <x-input-error :messages="$errors->get('website')" class="mt-2" />
 									</div>
 								</div>
@@ -138,27 +143,24 @@
 							<div class="row">
 								<div class="col">
 									<div>
-										<label class="form-label" for="exampleFormControlTextarea9">Footer Text</label>
-										<textarea class="form-control btn-pill" id="exampleFormControlTextarea9" rows="2" name="footer_text">{{ $data->footer_text }}</textarea>
+
+                                        {!! Form::label('footer_text', 'Footer Text:', array('class' => 'form-label','for' => 'exampleInputPassword6')) !!}
+                                        {!! Form::textarea('footer_text',$data->footer_text,['class'=>'form-control btn-pill', 'placeholder'=>'Website', 'id' => 'exampleInputPassword6', 'rows' =>'2' ]) !!}
 									</div>
 								</div>
 							</div>
 						</div>
 						<div class="card-footer text-end">
-							<button class="btn btn-primary" type="submit">Update</button>
+                            {!!  Form::submit('Update',['class'=> 'btn btn-primary']); !!}
+							
 
 						</div>
-					</form>
+                        {!! Form::close() !!}
 				</div>
-
-
-
-
 
 			</div>
 		</div>
 	</div>
-
 
 	@push('scripts')
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>

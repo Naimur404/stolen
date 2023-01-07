@@ -34,20 +34,18 @@
 					<div class="card-header pb-0">
 						<h5>Edit Role In Permission</h5>
 					</div>
-					<form class="form theme-form" method="POST" action="{{ route('update_role_permission',$role->id) }}">
-                        @csrf
+                    {!! Form::open(['route'=>['update_role_permission',$role->id], 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
+                      {!! Form::token(); !!}
+
 						<div class="card-body">
 
-
-
-
-
-							<div class="row">
+			 			<div class="row">
 								<div class="col">
 									<div class="mb-3 mt-2">
+                                        {!! Form::label('exampleFormControlInput1', 'Role Name', array('class' => 'form-label')) !!}
+                                        {!! Form::text('name',$role->name,['class'=>'form-control', 'id' => 'exampleFormControlInput' ]) !!}
 
-										<label class="form-label" for="exampleFormControlInput1">Role Name</label>
-										<input class="form-control" id="exampleFormControlInput1" type="text"  name="name" value="{{ $role->name }}" />
+
 									</div>
 								</div>
 							</div>
@@ -58,33 +56,37 @@
                 <h5>Edit Permission</h5>
                 </div>
                 <div class="checkbox checkbox-primary">
-                    <input id="checkbox-primary-1-All" type="checkbox" value="" >
-                    <label for="checkbox-primary-1-All" >All Permission</label>
+                    {!! Form::checkbox(null, null,false,['id'=>'checkbox-primary-1-All' ]) !!}
+                    {!! Form::label('checkbox-primary-1-All','All Permissions') !!}
+
                     </div>
                     <hr>
                     {{App\Models\User::roleHasPermissions($role,$permissions)  }}
                 @foreach ($permissions as $data)
 
               <div class="checkbox checkbox-primary">
-                <input id="checkbox-primary-1{{ $data->id }}" type="checkbox" value="{{ $data->id }}" name="permission[]" {{ $role->hasPermissionTo($data->name) ? 'checked' : '' }}>
-                <label for="checkbox-primary-1{{ $data->id }}" >{{ $data->name }}</label>
+                @php
+                $ans =  $role->hasPermissionTo($data->name) ? true : false;
+
+                @endphp
+                {!! Form::checkbox('permission[]',$data->id,$ans,['id'=>'checkbox-primary-1'.$data->id ]) !!}
+                {{-- <input id="checkbox-primary-1{{ $data->id }}" type="checkbox" value="{{ $data->id }}" name="permission[]"> --}}
+                {!! Form::label('checkbox-primary-1'.$data->id,$data->name) !!}
+                {{-- <input id="checkbox-primary-1{{ $data->id }}" type="checkbox" value="{{ $data->id }}" name="permission[]" {{ $role->hasPermissionTo($data->name) ? 'checked' : '' }}>
+                <label for="checkbox-primary-1{{ $data->id }}" >{{ $data->name }}</label> --}}
                 </div>
                 @endforeach
                 </div>
               </div>
 						</div>
 						<div class="card-footer text-end">
-							<button class="btn btn-primary" type="submit">Save Changes</button>
-							<input class="btn btn-light" type="reset" value="Cancel" />
+                        {!!  Form::submit('Save Changes',['class'=> 'btn btn-primary']); !!}
+
+							{{-- <button class="btn btn-primary" type="submit">Save Changes</button> --}}
+
 						</div>
-					</form>
+                        {!! Form::close() !!}
 				</div>
-
-
-
-
-
-
 
 			</div>
 		</div>

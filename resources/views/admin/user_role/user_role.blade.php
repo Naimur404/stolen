@@ -48,25 +48,6 @@
 	                                </tr>
 	                            </thead>
 	                            <tbody>
-                                    {{-- @foreach ($permissions as $permission)
-
-
-	                                <tr>
-
-
-	                                    <td>{{ $permission->name }}</td>
-	                                    <td class="font-success">{{ $permission->guard_name }}</td>
-
-	                                    <td>
-	                                        <a class="btn btn-danger btn-xs"  data-original-title="btn btn-danger btn" title="" href="{{ route('delete_permission',$permission->id) }}">Delete</a>
-	                                        <a href="{{ route('edit_permission', $permission->id) }}" class="btn btn-primary btn-xs" data-original-title="btn btn-danger btn" title="">Edit</a>
-	                                    </td>
-	                                </tr>
-                                    @endforeach --}}
-
-
-
-
 
 	                            </tbody>
 	                        </table>
