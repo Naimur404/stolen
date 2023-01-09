@@ -16,8 +16,8 @@ class SettingSeeder extends Seeder
     public function run()
     {
         $setting = [
-            'logo'  => '8584498899.png',
-            'favicon' => '7895656.png',
+            'logo'  => 'logo.png',
+            'favicon' => 'favicon.png',
             'app_name' => 'Pigeon Soft',
             'address'  => 'House #16, Road #22, Sector #14,
             Uttara Model Town, Dhaka-1230',
