@@ -20,6 +20,7 @@ class SettingController extends Controller
           $data->app_name = $request->app_name;
           $data->address = $request->address;
           $data->phone_no = $request->phone_no;
+          $data->description = $request->description;
           $data->website = $request->website;
           $data->footer_text = $request->footer_text;
 
@@ -48,7 +49,7 @@ class SettingController extends Controller
 
                     'favicon' =>'mimes:png,jpg,jpeg,gif'
                     ]);
-                    
+
                 unlink(public_path('uploads/'.$data->favicon));
 
                 $ext = $request->file('favicon')->extension();

@@ -5,6 +5,7 @@
 @endsection
 
 @push('css')
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/summernote.css')}}">
 @endpush
 
 @section('content')
@@ -127,7 +128,6 @@
 									</div>
 								</div>
 							</div>
-
                             <div class="row">
 								<div class="col">
 									<div class="mb-3">
@@ -135,6 +135,17 @@
                                         {!! Form::label('website', 'Website:', array('class' => 'form-label','for' => 'exampleInputPassword6')) !!}
                                         {!! Form::text('website',$data->website,['class'=>'form-control btn-pill', 'placeholder'=>'Website', 'id' => 'exampleInputPassword6' ]) !!}
                                         <x-input-error :messages="$errors->get('website')" class="mt-2" />
+									</div>
+								</div>
+							</div>
+
+                            <div class="row">
+								<div class="col">
+									<div class="mb-3">
+
+                                        {!! Form::label('description', 'Description', array('class' => 'form-label')) !!}
+                                        {!! Form::textarea('description',$data->description,['class'=>'form-control summernote', 'placeholder'=>'Description',  ]) !!}
+                                        <x-input-error :messages="$errors->get('description')" class="mt-2" />
 									</div>
 								</div>
 							</div>
@@ -163,7 +174,11 @@
 	</div>
 
 	@push('scripts')
+    <script src="{{asset('assets/js/jquery.ui.min.js')}}"></script>
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
+    <script src="{{asset('assets/js/summernote/summernote.js')}}"></script>
+    <script src="{{asset('assets/js/tooltip-init.js')}}"></script>
+    <script src="{{asset('assets/js/summernote/summernote.custom.js')}}"></script>
     @if (Session()->get('success'))
 
     <script>

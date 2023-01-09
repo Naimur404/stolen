@@ -10,14 +10,13 @@ class Settings extends Model
     use HasFactory;
     protected $table = 'settings';
 
-
-
     protected $fillable = [
           'logo',
           'favicon',
           'app_name',
           'address',
           'phone_no',
+          'description',
           'website',
           'footer_text'
 
