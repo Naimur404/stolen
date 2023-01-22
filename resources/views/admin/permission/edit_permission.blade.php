@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')Edit Permission
- {{ $title }}
+
 @endsection
 
 @push('css')
@@ -11,16 +11,17 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
 			<h3>Edit Permission</h3>
         </div>
-        <div class="col-sm-8">
-            <a href="{{ route('permission') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
-        </div>
+
         </div>
 		@endslot
 		<li class="breadcrumb-item">DashBoard</li>
 		<li class="breadcrumb-item">Edit Permission</li>
+        @slot('button')
+        <a href="{{ route('permission') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
+        @endslot
 
 	@endcomponent
 
@@ -53,7 +54,7 @@
 								<div class="col">
 									<div class="mb-3">
                                         {!! Form::label('exampleFormControlInput1', 'Guard Name', array('class' => 'form-label')) !!}
-                                        {!! Form::text('guard_name',$permission->name,['class'=>'form-control', 'id' => 'exampleFormControlInput' ]) !!}
+                                        {!! Form::text('guard_name',$permission->guard_name,['class'=>'form-control', 'id' => 'exampleFormControlInput' ]) !!}
 
 									</div>
 								</div>

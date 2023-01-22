@@ -54,10 +54,11 @@
 @extends('auth.master')
 
 @section('title')login
- {{ $title }}
+
 @endsection
 
 @push('css')
+
 @endpush
 
 @section('content')
@@ -73,7 +74,7 @@
                         <h6>Welcome back! Log in to your account.</h6>
                         <div class="form-group">
                             {!! Form::label('', 'Email address') !!}
-                            <label>Email Address</label>
+
                             <div class="input-group">
 
                                 <span class="input-group-text"><i class="icon-email"></i></span>
@@ -83,16 +84,16 @@
                             <x-input-error :messages="$errors->get('email')" class="mt-2" />
                         </div>
                         <div class="form-group">
-                            <label>Password</label>
+                            {!! Form::label('', 'Password') !!}
+
                             <div class="input-group">
                                 <span class="input-group-text"><i class="icon-lock"></i></span>
-                                {!! Form::password('password',['class'=>'form-control', 'placeholder'=>'*********', 'id' => 'exampleInputPassword2',  'required']) !!}
 
-                                <div class="show-hide"><span class="show"> </span></div>
-                            </div>
+                                {!! Form::password('password',['class'=>'form-control', 'placeholder'=>'*********', 'required','id' => 'myInput']) !!}
+
                             <x-input-error :messages="$errors->get('password')" class="mt-2" />
                         </div>
-                        <div class="form-group">
+                        <div class="form-group mt-3">
                             <div class="checkbox">
                                 <input id="checkbox1" type="checkbox" />
                                 <label for="checkbox1">Remember password</label>
@@ -132,6 +133,7 @@
 
 
     @push('scripts')
+
     @endpush
 
 @endsection

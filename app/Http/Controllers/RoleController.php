@@ -5,24 +5,29 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role as ModelsRole;
 use Spatie\Permission\Models\Permission as ModelsPermission;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Facades\DB;
 
 class RoleController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(['role:Super Admin']);
+    }
+
     public function role(Request $request){
         $roles = ModelsRole::all();
 
 
         if ($request->ajax()) {
-            $data = ModelsRole::all();
+            $data = ModelsRole::orderBy("id","desc")->get();
             return  Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
                         $id = $row->id;
                         $edit = route('edit_role',$id);
                         $delete = route('delete_role',$id);
-                        return view('admin.action.action', compact('edit','delete'));
+                        return view('admin.action.action', compact('id','edit','delete'));
                     })
                     ->rawColumns(['action'])
                     ->make(true);
@@ -54,13 +59,13 @@ class RoleController extends Controller
         'name' => $request->name,
         'guard_name' => 'web',
        ]);
-        return redirect()->route('role');
+        return redirect()->route('role')->with('success','Role Update Sucessfully');
     }
     public function deleteRole($id){
 
         ModelsRole::findOrFail($id)->delete();
 
-         return redirect()->route('role');
+         return redirect()->route('role')->with('success','Role Delete Sucessfully');
      }
      public function getRole(Request $request){
         $search = $request->search;
@@ -119,7 +124,7 @@ class RoleController extends Controller
                         $id = $row->id;
                         $edit = route('editrolepermission',$id);
                         $delete = route('deleterolepermission',$id);
-                        return view('admin.action.action', compact('edit','delete'));
+                        return view('admin.action.action', compact('id','edit','delete'));
                     })
                     ->rawColumns(['action'])
                     ->rawColumns(['action'])
@@ -150,4 +155,6 @@ class RoleController extends Controller
         }
         return redirect()->route('allrolepermission')->with('error','Delete successfully');
      }
+
+
 }

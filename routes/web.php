@@ -1,11 +1,16 @@
 <?php
 
+
+use App\Http\Controllers\DashBoardController;
+
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
+
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 
 use App\Http\Controllers\UserRoleController;
+
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,12 +23,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+require __DIR__.'/auth.php';
+Route::get('/', [SettingController::class, 'index']);
 
+Route::get('/dashboard', [DashBoardController::class,'index'])->middleware(['auth'])->name('index');
 
-
-Route::view('/dashboard', 'admin.color-version.index')->middleware(['auth'])->name('index');
-
-Route::prefix('administrativearea')->group(function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'administrativearea'],function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -44,6 +49,12 @@ Route::prefix('administrativearea')->group(function () {
     Route::get('/user', [UserRoleController::class,'users'])->name('user');
     Route::get('/add_user', [UserRoleController::class,'addUsers'])->name('add_user');
     Route::post('/add_user_store', [UserRoleController::class,'addUsersStore'])->name('add_user_store');
+    Route::get('/delete_user/{id}', [UserRoleController::class,'deleteUser'])->name('delete_user');
+    Route::get('/edit_user/{id}', [UserRoleController::class,'editUser'])->name('edit_user');
+    Route::post('/update/user', [UserRoleController::class,'updateUser'])->name('updateuser');
+    Route::get('/add/user/org/{id}', [UserRoleController::class,'addUserOrg'])->name('adduserorg');
+
+    Route::post('/store/user/org', [UserRoleController::class,'storeUserOrg'])->name('storeuserorg');
 
 //permission route
 
@@ -78,6 +89,9 @@ Route::prefix('administrativearea')->group(function () {
 
     Route::get('/site/setting', [SettingController::class,'setting'])->name('setting');
     Route::post('/update/setting', [SettingController::class,'updateSetting'])->name('updatesetting');
-})->middleware(['auth']);
 
-require __DIR__.'/auth.php';
+
+});
+
+// php
+

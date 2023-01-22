@@ -3,7 +3,7 @@
 
 
 @section('title')Add User
- {{ $title }}
+
 @endsection
 
 @push('css')
@@ -13,17 +13,18 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-3">
+            <div class="col-sm-5">
 			<h3>Add User</h3>
         </div>
-        <div class="col-sm-9">
-            <a href="{{ route('user') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
-        </div>
+
         </div>
 
 		@endslot
 		<li class="breadcrumb-item">DashBoard</li>
 		<li class="breadcrumb-item">Add User</li>
+        @slot('button')
+        <a href="{{ route('user') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
+          @endslot
 
 	@endcomponent
 
@@ -36,7 +37,7 @@
 					</div>
 
                         {!! Form::open(['route'=>'add_user_store', 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
-                        {!! Form::token(); !!}
+
 						<div class="card-body">
                             <div class="row">
 
@@ -80,6 +81,7 @@
 							<div class="row">
 								<div class="col">
 									<div class="mb-3 mt-2">
+
 
 										<select id="sel_emp" style="width: 1600px;" name="role">
                                             <option value="0">-- Select Role --</option>

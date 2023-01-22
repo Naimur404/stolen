@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')Add Role
- {{ $title }}
+
 @endsection
 
 @push('css')
@@ -11,16 +11,17 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
 			<h3>Add Role</h3>
         </div>
-        <div class="col-sm-8">
-            <a href="{{ route('role') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
-        </div>
+
         </div>
 		@endslot
 		<li class="breadcrumb-item">DashBoard</li>
 		<li class="breadcrumb-item">Add Role</li>
+        @slot('button')
+        <a href="{{ route('role') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
+        @endslot
 
 	@endcomponent
 

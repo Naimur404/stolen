@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')User
- {{ $title }}
+
 @endsection
 
 @push('css')
@@ -13,16 +13,16 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-4">
-			<h3>Add User</h3>
+            <div class="col-sm-6">
+			<h3>All User</h3>
         </div>
-        <div class="col-sm-8">
-            <a href="{{ route('add_user') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Add User</a>
-        </div>
+
         </div>
 		@endslot
 		<li class="breadcrumb-item">User</li>
-
+        @slot('button')
+        <a href="{{ route('add_user') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Add User</a>
+          @endslot
 	@endcomponent
 
 	<div class="container-fluid list-products">
@@ -31,7 +31,7 @@
 	        <div class="col-sm-12">
 	            <div class="card">
 	                <div class="card-header pb-0">
-	                    <h5>User</h5>
+	                    <h5>All User</h5>
 
 	                </div>
 	                <div class="card-body">
@@ -40,7 +40,7 @@
 	                            <thead>
 	                                <tr>
 	                                    <th>Name</th>
-	                                    <th>email</th>
+	                                    <th>Email</th>
                                         <th>Type</th>
 
 	                                    <th>Action</th>

@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')Settings
- {{ $title }}
+
 @endsection
 
 @push('css')
@@ -25,33 +25,40 @@
                 <div class="card">
 					<div class="card-header pb-0">
 						<h5>Logo & Favicon</h5>
+                        @if ($errors->any())
+
+                        @foreach ($errors->all() as $error)
+                        <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                            {{ $error }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                          </div>
+                        @endforeach
+
+                      @endif
 					</div>
                     {!! Form::open(['route'=>'updatesetting', 'method'=>'POST', 'files' => true, 'role' => 'form']) !!}
-                      {!! Form::token(); !!}
+
 
 						<div class="card-body">
 							<div class="row">
 								<div class="col">
+                                    @if (file_exists(('uploads/'.$data->logo)) && !is_null($data->logo))
                                     <div class="mb-3 row">
                                         {!! Form::label('logo', 'Existing Logo', array('class' => 'col-sm-3 col-form-label')) !!}
 										{{-- <label class="col-sm-3 col-form-label">Existing Logo</label> --}}
 										<div class="col-sm-9">
                                             <div>
-                                                <img src="{{ asset('uploads/'.$data->logo) }}" alt="" class="w_300" width="200" height="200" >
+                                                <img src="{{ asset('uploads/'.$data->logo) }}" alt="" width="200" height="200" >
                                             </div>
 										</div>
 									</div>
+                                    @endif
+
 									<div class="mb-3 row">
 										<label class="col-sm-3 col-form-label">Change Logo</label>
 										<div class="col-sm-9">
                                             {!! Form::file('logo',['class'=>'form-control btn-pill' ]) !!}
-											{{-- <input class="form-control btn-pill" type="file"  name="logo"/> --}}
-                                            @error('logo')
-                                            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-                                                {{ $message }}
-                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                              </div>
-                                            @enderror
+
 
 										</div>
 									</div>
@@ -61,26 +68,24 @@
 							</div>
                             <div class="row">
 								<div class="col">
+                                    @if (file_exists(('uploads/'.$data->favicon)) && !is_null($data->favicon))
                                     <div class="mb-3 row">
                                         {!! Form::label('favicon', 'Existing Favicon', array('class' => 'col-sm-3 col-form-label')) !!}
 
 										<div class="col-sm-9">
                                             <div>
-                                                <img src="{{ asset('uploads/'.$data->favicon) }}" alt="" class="w_300" width="200" height="200">
+                                                <img src="{{ asset('uploads/'.$data->favicon) }}" alt="" width="200" height="200">
                                             </div>
 										</div>
 									</div>
+                                    @endif
+
 									<div class="mb-3 row">
 										<label class="col-sm-3 col-form-label">Change Favicon</label>
 										<div class="col-sm-9">
                                             {!! Form::file('favicon',['class'=>'form-control btn-pill' ]) !!}
 
-                                            @error('favicon')
-                                            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-                                                {{ $message }}
-                                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                              </div>
-                                            @enderror
+
 
 										</div>
 									</div>

@@ -3,7 +3,7 @@
 
 
 @section('title')Edit Role In Permission
- {{ $title }}
+
 @endsection
 
 @push('css')
@@ -13,17 +13,20 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-5">
+            <div class="col-sm-7">
 			<h3>Edit Role In Permission</h3>
         </div>
         <div class="col-sm-7">
-            <a href="{{ route('user') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
+
         </div>
         </div>
 
 		@endslot
 		<li class="breadcrumb-item">DashBoard</li>
 		<li class="breadcrumb-item">Edit Role In Permission</li>
+        @slot('button')
+        <a href="{{ route('user') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
+          @endslot
 
 	@endcomponent
 
@@ -35,7 +38,7 @@
 						<h5>Edit Role In Permission</h5>
 					</div>
                     {!! Form::open(['route'=>['update_role_permission',$role->id], 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
-                      {!! Form::token(); !!}
+
 
 						<div class="card-body">
 
@@ -61,14 +64,15 @@
 
                     </div>
                     <hr>
-                    {{App\Models\User::roleHasPermissions($role,$permissions)  }}
-                @foreach ($permissions as $data)
 
-              <div class="checkbox checkbox-primary">
+               {{App\Models\User::roleHasPermissions($role,$permissions)}}
+
+                @foreach ($permissions as $data)
                 @php
                 $ans =  $role->hasPermissionTo($data->name) ? true : false;
-
                 @endphp
+              <div class="checkbox checkbox-primary">
+
                 {!! Form::checkbox('permission[]',$data->id,$ans,['id'=>'checkbox-primary-1'.$data->id ]) !!}
                 {{-- <input id="checkbox-primary-1{{ $data->id }}" type="checkbox" value="{{ $data->id }}" name="permission[]"> --}}
                 {!! Form::label('checkbox-primary-1'.$data->id,$data->name) !!}

@@ -3,7 +3,7 @@
 
 
 @section('title')Add Role In Permission
- {{ $title }}
+
 @endsection
 
 @push('css')
@@ -13,17 +13,16 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-5">
+            <div class="col-sm-6">
 			<h3>Add Role In Permission</h3>
         </div>
-        <div class="col-sm-7">
-            <a href="{{ route('user') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
-        </div>
+
         </div>
 
 		@endslot
 		<li class="breadcrumb-item">DashBoard</li>
 		<li class="breadcrumb-item">Add Role In Permission</li>
+
 
 	@endcomponent
 
@@ -35,7 +34,7 @@
 						<h5>Add Role In Permission</h5>
 					</div>
                     {!! Form::open(['route'=>'add_role_permission', 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
-                      {!! Form::token(); !!}
+
 
 						<div class="card-body">
 
@@ -76,7 +75,7 @@
 						</div>
 						<div class="card-footer text-end">
                             {!!  Form::submit('Create',['class'=> 'btn btn-primary']); !!}
-						
+
 						</div>
                         {!! Form::close() !!}
 				</div>

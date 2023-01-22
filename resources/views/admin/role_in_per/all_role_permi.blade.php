@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 @section('title')All Role Permission
- {{ $title }}
+
 @endsection
 
 @push('css')
@@ -13,7 +13,7 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
 			<h3>All Role Permission</h3>
         </div>
 

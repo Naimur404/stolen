@@ -5,23 +5,28 @@ namespace App\Http\Controllers;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Permission as ModelsPermission;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 
 class PermissionController extends Controller
 {
+    public function __construct()
+{
+    $this->middleware(['role:Super Admin']);
+}
+
     public function permission(Request $request){
         $permissions = ModelsPermission::all();
 
 
         if ($request->ajax()) {
-            $data = ModelsPermission::all();
+            $data = ModelsPermission::orderBy("id","desc")->get();
             return  Datatables::of($data)
                     ->addIndexColumn()
                     ->addColumn('action', function($row){
                         $id = $row->id;
                         $edit = route('edit_permission',$id);
                         $delete = route('delete_permission',$id);
-                        return view('admin.action.action', compact('edit','delete'));
+                        return view('admin.action.action', compact('id','edit','delete'));
                     })
                     ->rawColumns(['action'])
                     ->make(true);

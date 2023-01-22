@@ -10810,7 +10810,7 @@ strong {
 /**=====================
     25. Authentication CSS Start
 ==========================**/
-.show-hide {
+.show12 {
   position: absolute;
   top: 18px;
   right: 30px;
@@ -10818,14 +10818,26 @@ strong {
           transform: translateY(-50%);
   text-transform: capitalize;
   z-index: 2; }
-  .show-hide span {
+  .field-icon {
+    float: right;
+    margin-left: -25px;
+    margin-top: -25px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .container{
+    padding-top:50px;
+    margin: auto;
+  }
+  /* .show-hide span {
     cursor: pointer;
     font-size: 13px;
     color: #24695c; }
-    .show-hide span .show-hide span:before {
+    /* .show-hide span .show-hide span:before {
       content: "hide"; }
     .show-hide span.show:before {
-      content: "show"; }
+      content: "show"; } */ */
 
 .needs-validation label {
   opacity: 0.7;
@@ -15906,9 +15918,9 @@ p.data-attributes svg {
 * {
   -webkit-box-sizing: border-box;
           box-sizing: border-box; }
-  *:after, *:before {
+  /* *:after, *:before {
     -webkit-box-sizing: border-box;
-            box-sizing: border-box; }
+            box-sizing: border-box; } */
 
 .grid {
   position: relative; }

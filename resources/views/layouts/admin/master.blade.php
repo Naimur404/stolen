@@ -4,13 +4,19 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="viho admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities. laravel/framework: ^8.40">
-    <meta name="keywords" content="admin template, viho admin template, dashboard template, flat admin template, responsive admin template, web app">
+    <meta name="description" content="{!! $app_setting->description !!}">
+    <meta name="keywords" content="">
     <meta name="author" content="pixelstrap">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="icon" href="{{asset('uploads/'.$app_setting->favicon)}}" type="image/x-icon">
     <link rel="shortcut icon" href="{{asset('uploads/'.$app_setting->favicon)}}" type="image/x-icon">
-    <title>@yield('title')</title>
+    <title>
+        @if(View::hasSection('title'))
+        @yield('title')
+    @else
+ {{ $app_setting->app_name }}
+    @endif
+</title>
     <!-- Google font-->
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&amp;display=swap" rel="stylesheet">
@@ -45,10 +51,10 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-md-6 footer-copyright">
-                <p class="mb-0">Copyright {{date('Y')}}-{{date('y', strtotime('+1 year'))}} © viho All rights reserved.</p>
+                <p class="mb-0">{{ $app_setting->footer_text }}</p>
               </div>
               <div class="col-md-6">
-                <p class="pull-right mb-0">Hand crafted & made with <i class="fa fa-heart font-secondary"></i></p>
+                <p class="pull-right mb-0">{{ env('VERSION') }} <i class="fa fa-heart font-secondary"></i></p>
               </div>
             </div>
           </div>

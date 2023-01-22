@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class SettingController extends Controller
 {
+
+    function __construct()
+    {
+        $this->middleware('permission:settings.management', ['only' => ['setting','updateSetting']]);
+
+    }
     public function setting(){
         $data = Settings::where('id',1)->first();
         return view('admin.setting.setting', compact('data'));
@@ -14,9 +20,17 @@ class SettingController extends Controller
     }
     public function updateSetting(Request $request){
 
+        $request->validate([
+            'app_name' => 'required',
+            'phone_no' => 'required|numeric',
+            'address' => 'required|string',
 
 
-        $data = Settings::where('id',1)->first();
+            'website' => 'required',
+
+           ]);
+
+          $data = Settings::latest()->first();
           $data->app_name = $request->app_name;
           $data->address = $request->address;
           $data->phone_no = $request->phone_no;
@@ -32,13 +46,10 @@ class SettingController extends Controller
 
                 'logo' =>'mimes:png,jpg,jpeg,gif'
              ]);
-             unlink(public_path('uploads/'.$data->logo));
-
-            $ext = $request->file('logo')->extension();
-            $final_name = 'logo'.'.'.$ext;
-            $request->file('logo')->move(public_path('uploads'),$final_name);
-            $data->logo = $final_name;
-
+             if(file_exists(public_path('uploads/'.$data->logo))){
+                unlink(public_path('uploads/'.$data->logo));
+             }
+             $data->logo =  imageUp($request->logo);
             }
 
             //upload file for favicon
@@ -49,19 +60,20 @@ class SettingController extends Controller
 
                     'favicon' =>'mimes:png,jpg,jpeg,gif'
                     ]);
-
-                unlink(public_path('uploads/'.$data->favicon));
-
-                $ext = $request->file('favicon')->extension();
-                $final_name = 'favicon'.'.'.$ext;
-                $request->file('favicon')->move(public_path('uploads'),$final_name);
-                $data->favicon = $final_name;
-
+                    if(file_exists(public_path('uploads/'.$data->favicon))){
+                        unlink(public_path('uploads/'.$data->favicon));
+                    }
+                    $favicon = imageUp($request->favicon);
+                  $data->favicon =  $favicon;
 
               }
-              $data->update();
+            $data->update();
 
               return redirect()->back()->with('success','Update successfully');
 
+    }
+
+    public function index(){
+        return redirect()->route('login');
     }
 }

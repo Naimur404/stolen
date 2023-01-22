@@ -1,9 +1,11 @@
 <header class="main-nav">
     <div class="sidebar-user text-center">
         <a class="setting-primary" href="javascript:void(0)"><i data-feather="settings"></i></a><img class="img-90 rounded-circle" src="{{asset('assets/images/dashboard/1.png')}}" alt="" />
-        <div class="badge-bottom"><span class="badge badge-primary">New</span></div>
+        <div class="badge-bottom"><span class="badge badge-primary">New</span></div>@if (Auth::check())
         <a href="user-profile"> <h6 class="mt-3 f-14 f-w-600">{{ Auth::user()->name }}</h6></a>
         <p class="mb-0 font-roboto">{{ Auth::user()->email }}</p>
+        @endif
+
         <ul>
             <li>
                 <span><span class="counter">19.8</span>k</span>
@@ -29,6 +31,12 @@
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('index')}}" href="{{route('index')}}"><i data-feather="home"></i><span>Dashboard</span></a>
                     </li>
+
+
+
+                      @hasrole('Super Admin')
+
+
                     <li class="dropdown">
                         <a class="nav-link menu-title {{ prefixActive('/administrativearea') }}" href="javascript:void(0)"><i data-feather="anchor"></i><span>Administrative Area</span></a>
                         <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/administrativearea') }};">
@@ -50,6 +58,7 @@
                                 </a>
 
                             </li>
+
                             <li>
                                 <a class="submenu-title {{routeActive('role')}}" href="{{ route('role') }}">
                                     Role<span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
@@ -84,6 +93,7 @@
                             </li>
                         </ul>
                     </li>
+                   @endrole
                 </ul>
             </div>
         </div>
