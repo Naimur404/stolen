@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Settings;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\View;
 
@@ -28,7 +29,10 @@ class AppServiceProvider extends ServiceProvider
         $project_title = '| Viho - Premium Admin Template';
         View::share('title', $project_title);
 
-        $app_setting = Settings::first();
-        View::share('app_setting', $app_setting);
+        if (Schema::hasTable('settings')) {
+            $app_setting = Settings::first();
+            View::share('app_setting', $app_setting);
+        }
+
     }
 }
