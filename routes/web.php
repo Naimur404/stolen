@@ -1,14 +1,14 @@
 <?php
 
-
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashBoardController;
-
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
-
+use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserRoleController;
 
 use Illuminate\Support\Facades\Route;
@@ -93,5 +93,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'administrativearea'],functi
 
 });
 
+Route::group(['middleware' => ['auth']],function () {
+    //route for HealthOrganization
+
+Route::resource('category',CategoryController::class);
+
+});
 // php
 
