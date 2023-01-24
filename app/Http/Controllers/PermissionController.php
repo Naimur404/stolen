@@ -26,6 +26,7 @@ class PermissionController extends Controller
                         $id = $row->id;
                         $edit = route('edit_permission',$id);
                         $delete = route('delete_permission',$id);
+
                         return view('admin.action.action', compact('id','edit','delete'));
                     })
                     ->rawColumns(['action'])

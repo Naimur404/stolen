@@ -10,7 +10,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserRoleController;
-
+use Database\Seeders\PaymentMethodSeeder;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -97,6 +97,9 @@ Route::group(['middleware' => ['auth']],function () {
     //route for HealthOrganization
 
 Route::resource('category',CategoryController::class);
+
+Route::resource('unit',UnitController::class);
+Route::resource('payment-method',PaymentMethodController::class);
 
 });
 // php
