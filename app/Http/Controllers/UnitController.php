@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class UnitController extends Controller
 {
@@ -12,9 +13,26 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $data = Unit::all();
+        if ($request->ajax()) {
+            $data = Unit::orderBy("id","desc")->get();
+            return  DataTables::of($data)
+                    ->addIndexColumn()
+                        ->addColumn('action', function($row){
+                        $id = $row->id;
+
+                        $edit = route('unit.edit',$id);
+                        $delete = route('unit.destroy',$id);
+                        $permission = 'unit.edit';
+                        $permissiondelete = 'unit.delete';
+                        return view('admin.action.action', compact('id','edit','delete','permission','permissiondelete'));
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+        return view('admin.unit.unit',compact('data'));
     }
 
     /**
@@ -35,7 +53,17 @@ class UnitController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $request->validate([
+            'unit_name' => 'required|string',
+
+
+        ]);
+
+
+        $unit_name = Unit::create($request->all());
+         return response()->json($unit_name);
+
     }
 
     /**
@@ -57,7 +85,8 @@ class UnitController extends Controller
      */
     public function edit(Unit $unit)
     {
-        //
+        $unit_name = Unit::find($unit->id);
+        return response()->json($unit_name);
     }
 
     /**
@@ -69,7 +98,17 @@ class UnitController extends Controller
      */
     public function update(Request $request, Unit $unit)
     {
-        //
+        $request->validate([
+            'unit_name' => 'required|string',
+
+
+        ]);
+        $input = $request->all();
+            $unit_name =$unit->update($input);
+
+
+
+            return response()->json($unit_name);
     }
 
     /**
@@ -80,6 +119,7 @@ class UnitController extends Controller
      */
     public function destroy(Unit $unit)
     {
-        //
+        $unit->delete();
+        return redirect()->route('unit.index')->with('success','Delete successfully');
     }
 }
