@@ -16,16 +16,19 @@ class SettingSeeder extends Seeder
     public function run()
     {
         $setting = [
-            'logo'  => 'logo.png',
+            'logo' => 'logo.png',
             'favicon' => 'favicon.png',
             'app_name' => 'Pigeon Soft',
-            'address'  => 'House #16, Road #22, Sector #14,
-            Uttara Model Town, Dhaka-1230',
+            'address' => 'Dhaka, Bangladesh',
             'phone_no' => '+88 01737-569833',
-            'description' => 'Pigeon Soft is a full-service visual communications and information technology company located in Bangladesh and serving clients worldwide. We provide Website Design & Development, Software Development, Android and iOS Apps Development, Online Marketing, Technical Support and Consultancy Service.',
+            'description' => 'Pigeon Soft is a full-service visual communications and information technology company located in Bangladesh',
             'website' => 'https://pigeon-soft.com/',
             'footer_text' => '© 2016 - 2023 Copyright Pigeon Soft. All Rights Reserved'
         ];
-        Settings::create($setting);
+        $settings = Settings::all();
+        if (empty($settings)) {
+            Settings::create($setting);
+        }
+
     }
 }
