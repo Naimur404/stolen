@@ -24,7 +24,7 @@ class CategoryController extends Controller
      }
     public function index(Request $request)
     {
-        $data = Category::all();
+       
         if ($request->ajax()) {
             $data = Category::orderBy("id","desc")->get();
             return  DataTables::of($data)
@@ -41,7 +41,7 @@ class CategoryController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         }
-        return view('admin.category.category',compact('data'));
+        return view('admin.category.category');
     }
 
     /**

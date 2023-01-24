@@ -22,7 +22,7 @@ class PaymentMethodController extends Controller
     }
     public function index(Request $request)
     {
-        $data = PaymentMethod::all();
+
         if ($request->ajax()) {
             $data = PaymentMethod::orderBy("id","desc")->get();
             return  DataTables::of($data)
@@ -39,7 +39,7 @@ class PaymentMethodController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         }
-        return view('admin.payment.payment',compact('data'));
+        return view('admin.payment.payment');
     }
 
     /**

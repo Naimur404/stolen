@@ -22,7 +22,7 @@ class UnitController extends Controller
     }
     public function index(Request $request)
     {
-        $data = Unit::all();
+      
         if ($request->ajax()) {
             $data = Unit::orderBy("id","desc")->get();
             return  DataTables::of($data)
@@ -39,7 +39,7 @@ class UnitController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         }
-        return view('admin.unit.unit',compact('data'));
+        return view('admin.unit.unit');
     }
 
     /**
