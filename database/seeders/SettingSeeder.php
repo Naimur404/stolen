@@ -25,8 +25,8 @@ class SettingSeeder extends Seeder
             'website' => 'https://pigeon-soft.com/',
             'footer_text' => '© 2016 - 2023 Copyright Pigeon Soft. All Rights Reserved'
         ];
-        $settings = Settings::all();
-        if (empty($settings)) {
+        $settings = Settings::all()->first();
+        if (is_null($settings)) {
             Settings::create($setting);
         }
 

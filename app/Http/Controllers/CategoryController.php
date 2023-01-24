@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class CategoryController extends Controller
 {
@@ -11,10 +12,36 @@ class CategoryController extends Controller
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
+     *
      */
-    public function index()
+
+     function __construct()
+     {
+         $this->middleware('permission:category.management|category.create|category.edit|category.delete', ['only' => ['index','store']]);
+         $this->middleware('permission:category.create', ['only' => ['create','store']]);
+         $this->middleware('permission:category.edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:category.delete', ['only' => ['destroy']]);
+     }
+    public function index(Request $request)
     {
-        //
+        $data = Category::all();
+        if ($request->ajax()) {
+            $data = Category::orderBy("id","desc")->get();
+            return  DataTables::of($data)
+                    ->addIndexColumn()
+                        ->addColumn('action', function($row){
+                        $id = $row->id;
+
+                        $edit = route('category.edit',$id);
+                        $delete = route('category.destroy',$id);
+                        $permission = 'category.edit';
+                        $permissiondelete = 'category.delete';
+                        return view('admin.action.action', compact('id','edit','delete','permission','permissiondelete'));
+                    })
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+        return view('admin.category.category',compact('data'));
     }
 
     /**
@@ -35,7 +62,15 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'category_name' => 'required|string',
+
+
+        ]);
+
+
+        $category_name = Category::create($request->all());
+         return response()->json($category_name);
     }
 
     /**
@@ -55,9 +90,10 @@ class CategoryController extends Controller
      * @param  \App\Models\Category  $category
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category)
+    public function edit($id)
     {
-        //
+        $category_name = Category::find($id);
+        return response()->json($category_name);
     }
 
     /**
@@ -69,7 +105,17 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        //
+        $request->validate([
+            'category_name' => 'required|string',
+
+
+        ]);
+        $input = $request->all();
+            $category_name =$category->update($input);
+
+
+
+            return response()->json($category_name);
     }
 
     /**
@@ -80,6 +126,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-        //
+      $category->delete();
+        return redirect()->route('category.index')->with('success','Delete successfully');
     }
 }

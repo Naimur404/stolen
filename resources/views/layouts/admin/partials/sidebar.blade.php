@@ -31,8 +31,15 @@
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('index')}}" href="{{route('index')}}"><i data-feather="home"></i><span>Dashboard</span></a>
                     </li>
-
-
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('category.index')}}" href="{{route('category.index')}}"><i data-feather="align-justify"></i><span>Category</span></a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('payment-method.index')}}" href="{{route('payment-method.index')}}"><i data-feather="dollar-sign"></i><span>Payment Method</span></a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('unit.index')}}" href="{{route('unit.index')}}"><i data-feather="database"></i><span>Unit</span></a>
+                    </li>
 
                       @hasrole('Super Admin')
 
