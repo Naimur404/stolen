@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
             SettingSeeder::class,
             PermissionSeeder::class,
             UserSeeder::class,
+            UnitSeeder::class,
+            MedicineCategorySeeder::class,
+            PaymentMethodSeeder::class,
+            ManufactureSeeder::class,
         ]);
     }
 }
