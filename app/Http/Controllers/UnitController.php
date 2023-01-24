@@ -13,9 +13,16 @@ class UnitController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:unit.management|unit.create|unit.edit|unit.delete', ['only' => ['index','store']]);
+        $this->middleware('permission:unit.create', ['only' => ['create','store']]);
+        $this->middleware('permission:unit.edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:unit.delete', ['only' => ['destroy']]);
+    }
     public function index(Request $request)
     {
-        $data = Unit::all();
+      
         if ($request->ajax()) {
             $data = Unit::orderBy("id","desc")->get();
             return  DataTables::of($data)
@@ -32,7 +39,7 @@ class UnitController extends Controller
                     ->rawColumns(['action'])
                     ->make(true);
         }
-        return view('admin.unit.unit',compact('data'));
+        return view('admin.unit.unit');
     }
 
     /**
