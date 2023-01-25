@@ -41,6 +41,10 @@
                         <a class="nav-link menu-title {{routeActive('unit.index')}}" href="{{route('unit.index')}}"><i data-feather="database"></i><span>Unit</span></a>
                     </li>
 
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('manufacturer.index')}}" href="{{route('manufacturer.index')}}"><i data-feather="filter"></i><span>Manufacturer</span></a>
+                    </li>
+
                       @hasrole('Super Admin')
 
 

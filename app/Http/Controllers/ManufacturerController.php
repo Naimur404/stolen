@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Manufacturer;
+use Exception;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class ManufacturerController extends Controller
 {
@@ -12,9 +14,39 @@ class ManufacturerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+
+     function __construct()
+     {
+         $this->middleware('permission:manufacturer.management|manufacturer.create|manufacturer.edit|manufacturer.delete', ['only' => ['index','store']]);
+         $this->middleware('permission:manufacturer.create', ['only' => ['create','store']]);
+         $this->middleware('permission:manufacturer.edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:manufacturer.delete', ['only' => ['destroy']]);
+     }
+    public function index(Request $request)
     {
-        //
+
+        if ($request->ajax()) {
+            $data = Manufacturer::orderBy("id","desc")->get();
+            return  DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('active', function($row){
+                        $active = route('manufacturer.status',[$row->id,0]);
+                        $inactive = route('manufacturer.status',[$row->id,1]);
+                        return view('admin.action.active',compact('active','inactive','row'));
+                    })
+
+                    ->addColumn('action', function($row){
+                        $id = $row->id;
+                        $edit = route('manufacturer.edit',$id);
+                        $delete = route('manufacturer.destroy',$id);
+                        return view('admin.action.action', compact('id','edit','delete'));
+                    })
+                    ->rawColumns(['active'])
+
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+        return view('admin.manufacturer.index');
     }
 
     /**
@@ -24,7 +56,7 @@ class ManufacturerController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.manufacturer.create');
     }
 
     /**
@@ -35,7 +67,22 @@ class ManufacturerController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'manufacturer_name' => 'required|string',
+            'mobile' => 'required|min:11',
+
+
+           ]);
+           $input = $request->all();
+           try{
+            Manufacturer::create($input);
+
+            return redirect()->route('manufacturer.index')->with('success', ' Successfully Added.');
+         }catch(Exception $e){
+            return redirect()->route('manufacturer.index')->with('success', $e->getMessage());
+         }
+
+
     }
 
     /**
@@ -57,7 +104,7 @@ class ManufacturerController extends Controller
      */
     public function edit(Manufacturer $manufacturer)
     {
-        //
+        return view('admin.manufacturer.edit',compact('manufacturer'));
     }
 
     /**
@@ -69,7 +116,22 @@ class ManufacturerController extends Controller
      */
     public function update(Request $request, Manufacturer $manufacturer)
     {
-        //
+        $request->validate([
+            'manufacturer_name' => 'required|string',
+            'mobile' => 'required|min:11',
+
+
+           ]);
+           $input = $request->all();
+
+           try{
+            $manufacturer->update($input);
+
+            return redirect()->route('manufacturer.index')->with('success', ' Successfully Added.');
+         }catch(Exception $e){
+            return redirect()->route('manufacturer.index')->with('success', $e->getMessage());
+         }
+
     }
 
     /**
@@ -80,6 +142,22 @@ class ManufacturerController extends Controller
      */
     public function destroy(Manufacturer $manufacturer)
     {
-        //
+
+        try{
+            $manufacturer->delete();
+
+            return redirect()->route('manufacturer.index')->with('success', ' Successfully Added.');
+         }catch(Exception $e){
+            return redirect()->route('manufacturer.index')->with('success', $e->getMessage());
+         }
+     
+    }
+    public function active($id,$status){
+
+        $data = Manufacturer::find($id);
+        $data->is_active = $status;
+        $data->save();
+        return redirect()->route('manufacturer.index')->with('success','Active Status Updated');
+
     }
 }
