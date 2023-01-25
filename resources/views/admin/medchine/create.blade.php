@@ -52,7 +52,7 @@
 
 
 @push('scripts')
-
+<script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
     <script type="text/javascript">
 
 

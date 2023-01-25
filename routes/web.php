@@ -10,6 +10,7 @@ use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserRoleController;
@@ -106,10 +107,12 @@ Route::resource('payment-method',PaymentMethodController::class);
 Route::resource('manufacturer',ManufacturerController::class);
 Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class,'active'])->name('manufacturer.status');
 Route::resource('medicine',MedicineController::class);
+Route::resource('supplier',SupplierController::class);
 Route::post('/get-category',[CategoryController::class,'getCategory'])->name('get-category');
 Route::post('/get-unit',[UnitController::class,'getUnit'])->name('get-unit');
 Route::post('/get_type',[TypeController::class,'getType'])->name('get-type');
 Route::post('/get-manufacturer',[ManufacturerController::class,'getManufacturer'])->name('get-manufacturer');
+Route::get('/status-supplier/{id}/{status}', [SupplierController::class,'active'])->name('supplier.status');
 });
 // php
 
