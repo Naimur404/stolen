@@ -3,12 +3,14 @@
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\ManufacturerController;
+use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserRoleController;
 use Database\Seeders\PaymentMethodSeeder;
@@ -103,7 +105,11 @@ Route::resource('unit',UnitController::class);
 Route::resource('payment-method',PaymentMethodController::class);
 Route::resource('manufacturer',ManufacturerController::class);
 Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class,'active'])->name('manufacturer.status');
-
+Route::resource('medicine',MedicineController::class);
+Route::post('/get-category',[CategoryController::class,'getCategory'])->name('get-category');
+Route::post('/get-unit',[UnitController::class,'getUnit'])->name('get-unit');
+Route::post('/get_type',[TypeController::class,'getType'])->name('get-type');
+Route::post('/get-manufacturer',[ManufacturerController::class,'getManufacturer'])->name('get-manufacturer');
 });
 // php
 

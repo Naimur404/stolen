@@ -150,7 +150,7 @@ class ManufacturerController extends Controller
          }catch(Exception $e){
             return redirect()->route('manufacturer.index')->with('success', $e->getMessage());
          }
-     
+
     }
     public function active($id,$status){
 
@@ -160,4 +160,22 @@ class ManufacturerController extends Controller
         return redirect()->route('manufacturer.index')->with('success','Active Status Updated');
 
     }
+    public function getManufacturer(Request $request){
+        $search = $request->search;
+
+        if($search == ''){
+            $Manufacturers = Manufacturer::orderby('manufacturer_name','asc')->select('id','manufacturer_name')->limit(5)->get();
+        }else{
+           $Manufacturers = Manufacturer::orderby('manufacturer_name','asc')->select('id','manufacturer_name')->where('manufacturer_name', 'like', '%' .$search . '%')->limit(5)->get();
+        }
+
+        $response = array();
+        foreach($Manufacturers as $Manufacturer){
+           $response[] = array(
+                "id"=>$Manufacturer->id,
+                "text"=>$Manufacturer->manufacturer_name
+           );
+        }
+        return response()->json($response);
+     }
 }
