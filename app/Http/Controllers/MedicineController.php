@@ -14,6 +14,13 @@ class MedicineController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:medicine.management|medicine.create|medicine.edit|medicine.delete', ['only' => ['index','store']]);
+        $this->middleware('permission:medicine.create', ['only' => ['create','store']]);
+        $this->middleware('permission:medicine.edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:medicine.delete', ['only' => ['destroy']]);
+    }
     public function index(Request $request)
     {
         if ($request->ajax()) {
