@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashBoardController;
+use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
@@ -100,6 +101,8 @@ Route::resource('category',CategoryController::class);
 
 Route::resource('unit',UnitController::class);
 Route::resource('payment-method',PaymentMethodController::class);
+Route::resource('manufacturer',ManufacturerController::class);
+Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class,'active'])->name('manufacturer.status');
 
 });
 // php
