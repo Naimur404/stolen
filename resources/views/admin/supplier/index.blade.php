@@ -1,6 +1,8 @@
 @extends('layouts.admin.master')
 
-@section('title',' All Medicine')
+@section('title')All Role Permission
+
+@endsection
 
 @push('css')
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
@@ -11,15 +13,15 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-4">
-			<h3>All Medicine</h3>
+            <div class="col-sm-6">
+			<h3>All Role Permission</h3>
         </div>
 
         </div>
 		@endslot
 
         @slot('button')
-        <a href="{{ route('medicine.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title=""> Add Medicine</a>
+        <a href="{{ route('supplier.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title=""> Add Supplier</a>
         @endslot
 	@endcomponent
 
@@ -29,22 +31,20 @@
 	        <div class="col-sm-12">
 	            <div class="card">
 	                <div class="card-header pb-0">
-	                    <h5> All Medicine</h5>
+	                    <h5>All Role Permission</h5>
 
 	                </div>
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
-	                        <table class="display data-table">
+	                        <table class="display data-table" id="basic-1">
 	                            <thead>
 	                                <tr>
-	                                    <th>Medicine Name</th>
-                                        <th>Generic Name</th>
-                                        <th>Manufacture Name</th>
-                                        <th>Category</th>
-                                        <th>Price</th>
-
-                                        <th>Image</th>
-
+	                                    <th>Supplier Name</th>
+                                        <th>Manufacturer Name</th>
+                                        <th>Mobile</th>
+                                        <th>Address</th>
+                                        <th>Details</th>
+                                        <th>Is Active</th>
 
 
 	                                    <th>Action</th>
@@ -77,22 +77,21 @@
     var table = $('.data-table').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('medicine.index') }}",
+        ajax: "{{ route('supplier.index') }}",
         columns: [
-            {data: 'medicine_name', name: 'medicine name',orderable: false},
-            {data: 'generic_name', name: 'generic name'},
-            {data: 'manufacturer', name: 'manufacture name'},
-            {data: 'category', name: 'category'},
-            {data: 'price', name: 'price'},
-            {data: 'image', name: 'image', orderable: false, searchable: false},
+            {data: 'supplier_name', name: 'Supplier Name'},
 
+            {data: 'manufacturer', name: 'Manufacturer Name', orderable: false, searchable: false},
+            {data: 'mobile', name: 'mobile'},
+            {data: 'address', name: 'address'},
+            {data: 'details', name: 'details'},
+            {data: 'active', name: 'is Active', orderable: false, searchable: false},
 
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
 });
    </script>
-
 
 @if (Session()->get('success'))
 

@@ -46,7 +46,10 @@
                     </li>
 
                     <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('medicine.index')}}" href="{{route('medicine.index')}}"><i data-feather="filter"></i><span>Medicine</span></a>
+                        <a class="nav-link menu-title {{routeActive('medicine.index')}}" href="{{route('medicine.index')}}"><i data-feather="droplet"></i><span>Medicine</span></a>
+                    </li>
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('supplier.index')}}" href="{{route('supplier.index')}}"><i data-feather="truck"></i><span>Supplier</span></a>
                     </li>
 
                       @hasrole('Super Admin')
