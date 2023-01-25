@@ -26,6 +26,12 @@ class PermissionSeeder extends Seeder
             'unit.delete',
             'administrativearea.management',
             'settings.management',
+            
+            'medicine.management',
+            'medicine.create',
+            'medicine.edit',
+            'medicine.delete',
+
             'payment-method.management',
             'payment-method.create',
             'payment-method.edit',

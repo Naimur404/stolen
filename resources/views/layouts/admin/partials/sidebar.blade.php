@@ -45,6 +45,10 @@
                         <a class="nav-link menu-title {{routeActive('manufacturer.index')}}" href="{{route('manufacturer.index')}}"><i data-feather="filter"></i><span>Manufacturer</span></a>
                     </li>
 
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('medicine.index')}}" href="{{route('medicine.index')}}"><i data-feather="filter"></i><span>Medicine</span></a>
+                    </li>
+
                       @hasrole('Super Admin')
 
 

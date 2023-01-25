@@ -100,7 +100,7 @@
         </div> --}}
         <div class="modal-footer">
           <button type="button" class="btn btn-primary btn-xs" data-bs-dismiss="modal">Close</button>
-          @if (request()->routeIs('category.index') || request()->routeIs('payment-method.index') || request()->routeIs('unit.index') || request()->routeIs('manufacturer.index') || request()->routeIs('health-service-log.index'))
+          @if (request()->routeIs('category.index') || request()->routeIs('payment-method.index') || request()->routeIs('unit.index') || request()->routeIs('manufacturer.index') || request()->routeIs('medicine.index'))
 
             <form action="{{ $delete }}" method="POST">
                 {{ csrf_field() }}
