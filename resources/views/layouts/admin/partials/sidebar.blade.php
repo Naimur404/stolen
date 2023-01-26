@@ -32,22 +32,29 @@
                         <a class="nav-link menu-title {{routeActive('index')}}" href="{{route('index')}}"><i data-feather="home"></i><span>Dashboard</span></a>
                     </li>
                     <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('category.index')}}" href="{{route('category.index')}}"><i data-feather="align-justify"></i><span>Category</span></a>
+                        <a class="nav-link menu-title " href="javascript:void(0)"><i data-feather="anchor"></i><span>Medicine Settings</span></a>
+                        <ul class="nav-submenu menu-content" style="display:;">
+                            <li>
+
+                        <a class="submenu-title {{routeActive('category.index')}}" href="{{route('category.index')}}"><i data-feather="align-justify"></i><span>Category</span></a>
+                            </li>
+                            <li class="">
+                                <a class="submenu-title {{routeActive('unit.index')}}" href="{{route('unit.index')}}"><i data-feather="database"></i><span>Unit</span></a>
+                            </li>
+
+                            <li class="">
+                                <a class="submenu-title {{routeActive('manufacturer.index')}}" href="{{route('manufacturer.index')}}"><i data-feather="filter"></i><span>Manufacturer</span></a>
+                            </li>
+
+                            <li class="">
+                                <a class="submenu-title {{routeActive('medicine.index')}}" href="{{route('medicine.index')}}"><i data-feather="droplet"></i><span>Medicine</span></a>
+                            </li>
+                        </ul>
                     </li>
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('payment-method.index')}}" href="{{route('payment-method.index')}}"><i data-feather="dollar-sign"></i><span>Payment Method</span></a>
                     </li>
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('unit.index')}}" href="{{route('unit.index')}}"><i data-feather="database"></i><span>Unit</span></a>
-                    </li>
 
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('manufacturer.index')}}" href="{{route('manufacturer.index')}}"><i data-feather="filter"></i><span>Manufacturer</span></a>
-                    </li>
-
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('medicine.index')}}" href="{{route('medicine.index')}}"><i data-feather="droplet"></i><span>Medicine</span></a>
-                    </li>
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('supplier.index')}}" href="{{route('supplier.index')}}"><i data-feather="truck"></i><span>Supplier</span></a>
                     </li>
