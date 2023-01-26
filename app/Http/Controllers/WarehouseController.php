@@ -14,6 +14,13 @@ class WarehouseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware('permission:warehouse.management|warehouse.create|warehouse.edit|warehouse.delete', ['only' => ['index','store']]);
+        $this->middleware('permission:warehouse.create', ['only' => ['create','store']]);
+        $this->middleware('permission:warehouse.edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:warehouse.delete', ['only' => ['destroy']]);
+    }
     public function index(Request $request)
     {
 
@@ -133,7 +140,7 @@ class WarehouseController extends Controller
         try{
             $warehouse->delete();
 
-            return redirect()->route('warehouse.index')->with('success', ' Successfully Added.');
+            return redirect()->route('warehouse.index')->with('success', ' Successfully Deleted.');
          }catch(Exception $e){
             return redirect()->route('warehouse.index')->with('success', $e->getMessage());
          }

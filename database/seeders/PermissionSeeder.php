@@ -36,6 +36,16 @@ class PermissionSeeder extends Seeder
             'supplier.edit',
             'supplier.delete',
 
+            'outlet.management',
+            'outlet.create',
+            'outlet.edit',
+            'outlet.delete',
+
+            'warehouse.management',
+            'warehouse.create',
+            'warehouse.edit',
+            'warehouse.delete',
+
             'payment-method.management',
             'payment-method.create',
             'payment-method.edit',
