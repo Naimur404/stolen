@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\OutletController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
@@ -116,6 +117,8 @@ Route::post('/get-manufacturer',[ManufacturerController::class,'getManufacturer'
 Route::get('/status-supplier/{id}/{status}', [SupplierController::class,'active'])->name('supplier.status');
 Route::resource('warehouse',WarehouseController::class);
 Route::get('/status-warehouse/{id}/{status}', [WarehouseController::class,'active'])->name('warehouse.status');
+Route::resource('outlet',OutletController::class);
+Route::get('/status-outlet/{id}/{status}', [OutletController::class,'active'])->name('outlet.status');
 });
 // php
 
