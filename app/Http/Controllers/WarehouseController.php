@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Warehouse;
+use Exception;
 use Illuminate\Http\Request;
+use Yajra\DataTables\Facades\DataTables;
 
 class WarehouseController extends Controller
 {
@@ -12,9 +14,31 @@ class WarehouseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+
+        if ($request->ajax()) {
+            $data = Warehouse::orderBy("id","desc")->get();
+            return  DataTables::of($data)
+                    ->addIndexColumn()
+                    ->addColumn('active', function($row){
+                        $active = route('warehouse.status',[$row->id,0]);
+                        $inactive = route('warehouse.status',[$row->id,1]);
+                        return view('admin.action.active',compact('active','inactive','row'));
+                    })
+
+                    ->addColumn('action', function($row){
+                        $id = $row->id;
+                        $edit = route('warehouse.edit',$id);
+                        $delete = route('warehouse.destroy',$id);
+                        return view('admin.action.action', compact('id','edit','delete'));
+                    })
+                    ->rawColumns(['active'])
+
+                    ->rawColumns(['action'])
+                    ->make(true);
+        }
+        return view('admin.warehouse.index');
     }
 
     /**
@@ -24,7 +48,7 @@ class WarehouseController extends Controller
      */
     public function create()
     {
-        //
+        return view('admin.warehouse.create');
     }
 
     /**
@@ -35,7 +59,20 @@ class WarehouseController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'warehouse_name' => 'required|string',
+            'mobile' => 'required|min:11',
+
+
+           ]);
+           $input = $request->all();
+           try{
+            Warehouse::create($input);
+
+            return redirect()->route('warehouse.index')->with('success', ' Successfully Added.');
+         }catch(Exception $e){
+            return redirect()->route('warehouse.index')->with('success', $e->getMessage());
+         }
     }
 
     /**
@@ -46,7 +83,7 @@ class WarehouseController extends Controller
      */
     public function show(Warehouse $warehouse)
     {
-        //
+
     }
 
     /**
@@ -57,7 +94,7 @@ class WarehouseController extends Controller
      */
     public function edit(Warehouse $warehouse)
     {
-        //
+        return view('admin.warehouse.edit',compact('warehouse'));
     }
 
     /**
@@ -69,7 +106,20 @@ class WarehouseController extends Controller
      */
     public function update(Request $request, Warehouse $warehouse)
     {
-        //
+        $request->validate([
+            'warehouse_name' => 'required|string',
+            'mobile' => 'required|min:11',
+
+
+           ]);
+           $input = $request->all();
+           try{
+               $warehouse->update($input);
+
+            return redirect()->route('warehouse.index')->with('success', ' Successfully Added.');
+         }catch(Exception $e){
+            return redirect()->route('warehouse.index')->with('success', $e->getMessage());
+         }
     }
 
     /**
@@ -80,6 +130,20 @@ class WarehouseController extends Controller
      */
     public function destroy(Warehouse $warehouse)
     {
-        //
+        try{
+            $warehouse->delete();
+
+            return redirect()->route('warehouse.index')->with('success', ' Successfully Added.');
+         }catch(Exception $e){
+            return redirect()->route('warehouse.index')->with('success', $e->getMessage());
+         }
+    }
+    public function active($id,$status){
+
+        $data = Warehouse::find($id);
+        $data->is_active = $status;
+        $data->save();
+        return redirect()->route('warehouse.index')->with('success','Active Status Updated');
+
     }
 }
