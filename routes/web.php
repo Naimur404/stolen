@@ -14,6 +14,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserRoleController;
+use App\Http\Controllers\WarehouseController;
 use Database\Seeders\PaymentMethodSeeder;
 use Illuminate\Support\Facades\Route;
 
@@ -113,6 +114,8 @@ Route::post('/get-unit',[UnitController::class,'getUnit'])->name('get-unit');
 Route::post('/get_type',[TypeController::class,'getType'])->name('get-type');
 Route::post('/get-manufacturer',[ManufacturerController::class,'getManufacturer'])->name('get-manufacturer');
 Route::get('/status-supplier/{id}/{status}', [SupplierController::class,'active'])->name('supplier.status');
+Route::resource('warehouse',WarehouseController::class);
+Route::get('/status-warehouse/{id}/{status}', [WarehouseController::class,'active'])->name('warehouse.status');
 });
 // php
 

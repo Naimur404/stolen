@@ -38,7 +38,7 @@ class UserRoleController extends Controller
                            $btn = '<a href="'.$edit.'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editBook">Edit</a>';
 
                            $btn = $btn.' <a href="'.$delete.'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook">Delete</a>';
-                        
+
 
 
                             return $btn;
@@ -123,43 +123,6 @@ public function updateUser(Request $request){
         return redirect()->route('user')->with('success','Delete User successfully');
 
     }
-    public function addUserOrg($id){
-        $id = $id;
-        $role = UserHasOrganization::where('user_id',$id)->get();
-        $data = HealthOrganization::all();
-
-        if(isNull($role)){
-            $bol = false;
-            return view('admin.organization.add_user_org',compact('role','data','id','bol'));
-        }else{
-            return view('admin.organization.add_user_org',compact('role','data','id'));
-        }
 
 
-     }
-     public function storeUserOrg(Request $request){
-
-        $data = array();
-        $roles = UserHasOrganization::where('user_id',$request->id)->get();
-
-        $permissions = $request->org;
-
-        if(!empty($roles)){
-            foreach( $roles as $item){
-                 UserHasOrganization::where('user_id',$request->id)->delete();
-
-            }
-            foreach($permissions as $key => $item){
-                $data['user_id'] = $request->id;
-                $data['organization_id'] = $item;
-                DB::table('user_has_organizations')->insert($data);
-            }
-
-
-
-        }
-
-       return redirect()->route('allrolepermission')->with('success','Role in permission added successfully');
-
-     }
 }
