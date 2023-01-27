@@ -18,4 +18,28 @@ class Outlet extends Model
         'details',
         'is_active',
     ];
-}
+    public static function userHasoutlet($role,$permissions,$id){
+        $hasPermisison = true;
+
+               foreach($role as $roles){
+                if(($roles->outlet_id == $id && $permissions->id == $roles->user_id) ){
+
+                    $hasPermisison = true;
+                    return $hasPermisison;
+                }
+               }
+
+                    // $hasPermisison = false;
+                    // return $hasPermisison;
+
+                # code...
+
+            }
+
+
+
+
+
+    }
+
+

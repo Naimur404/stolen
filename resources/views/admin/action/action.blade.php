@@ -120,7 +120,10 @@
       </div>
     </div>
   </div>
+  @if (request()->routeIs('outlet.index'))
+    <a href="{{ $url }}" data-toggle="tooltip"  data-id="{{$id }}" data-original-title="Delete" class="btn btn-secondary btn-xs deleteBook">Add Users</a>
 
+@endif
 </div>
  {{-- <a href="{{ $delete }}" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-pill btn-danger btn-sm">Delete</a> --}}
  @endif

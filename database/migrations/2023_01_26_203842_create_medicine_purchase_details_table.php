@@ -18,7 +18,7 @@ return new class extends Migration
             $table->bigInteger('warehouse_id')->unsigned();
             $table->foreign('warehouse_id')->references('id')->on('warehouses');
             $table->bigInteger('medicine_purchase_id')->unsigned();
-            $table->foreign('medicine_purchase_id')->references('id')->on('warehouses');
+            $table->foreign('medicine_purchase_id')->references('id')->on('medicine_purchases');
             $table->bigInteger('medicine_id')->unsigned();
             $table->foreign('medicine_id')->references('id')->on('medicines');
             $table->string('medicine_name')->nullable();

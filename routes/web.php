@@ -4,6 +4,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\MedicineController;
+use App\Http\Controllers\MedicinePurchaseController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PermissionController;
@@ -16,6 +17,7 @@ use App\Http\Controllers\TypeController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\WarehouseController;
+use App\Models\Outlet;
 use Database\Seeders\PaymentMethodSeeder;
 use Illuminate\Support\Facades\Route;
 
@@ -119,6 +121,26 @@ Route::resource('warehouse',WarehouseController::class);
 Route::get('/status-warehouse/{id}/{status}', [WarehouseController::class,'active'])->name('warehouse.status');
 Route::resource('outlet',OutletController::class);
 Route::get('/status-outlet/{id}/{status}', [OutletController::class,'active'])->name('outlet.status');
+Route::get('/add-user-outlet/{id}', [OutletController::class,'addUser'])->name('addusers');
+
+Route::post('/store-user-outlet', [OutletController::class,'storeUser'])->name('storeuser');
+Route::resource('medicine-purchase',MedicinePurchaseController::class);
+
+Route::get('get-medicine-details-for-purchase/{id}',[MedicineController::class,'get_medicine_details_for_purchase']);
+
+
+
+Route::get('get-manufacture-wise-medicine',[MedicineController::class,'get_manufacturer_wise_medicine']);
+
+
+
+Route::get('get-product-for-sale', [SupplierController::class,'get_product_for_sale']);
+
+Route::get('get-medicine',[MedicineController::class,'get_medicine']);
+
+
+
+Route::get('get-supplier', [SupplierController::class,'get_supplier']);
 });
-// php
+
 
