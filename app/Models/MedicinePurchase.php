@@ -27,4 +27,21 @@ class MedicinePurchase extends Model
         'payment_method_id',
         'added_by',
     ];
+    public function getInvoiceImageAttribute($value){
+        if($value){
+             return asset('uploads/'.$value);
+        }else{
+             return asset('backend/dist/img/default.png');
+        }
+   }
+
+    public function supplier(){
+           return $this->belongsTo(Supplier::class, 'supplier_id', 'id');
+    }
+    public function manufacturer(){
+           return $this->belongsTo(Manufacturer::class, 'manufacturer_id', 'id');
+    }
+    public function purchase_details(){
+           return $this->belongsTo(MedicinePurchaseDetails::class);
+    }
 }

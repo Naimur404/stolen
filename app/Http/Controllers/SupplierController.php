@@ -174,4 +174,27 @@ class SupplierController extends Controller
         return redirect()->route('supplier.index')->with('success','Active Status Updated');
 
     }
+    public function get_supplier(Request $request){
+
+        $search = $request->search;
+
+          if($search == ''){
+             $suppliers = Supplier::orderby('id','asc')->select('id','supplier_name')
+             ->get();
+          }else{
+             $suppliers = Supplier::orderby('id','asc')->select('id','supplier_name')
+             ->where('supplier_name', 'like', '%' .$search . '%')
+             ->get();
+          }
+
+          $response = array();
+          foreach($suppliers as $supplier){
+             $response[] = array(
+                  "id"=>$supplier->id,
+                  "text"=>$supplier->supplier_name
+             );
+          }
+
+          return response()->json($response);
+      }
 }

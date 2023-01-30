@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\Outlet;
+use App\Models\OutletHasUser;
+use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class OutletController extends Controller
@@ -37,7 +41,8 @@ class OutletController extends Controller
                         $id = $row->id;
                         $edit = route('outlet.edit',$id);
                         $delete = route('outlet.destroy',$id);
-                        return view('admin.action.action', compact('id','edit','delete'));
+                        $url = route('addusers',$id);
+                        return view('admin.action.action', compact('id','edit','delete','url'));
                     })
                     ->rawColumns(['active'])
 
@@ -152,4 +157,42 @@ class OutletController extends Controller
         return redirect()->route('outlet.index')->with('success','Active Status Updated');
 
     }
+    public function addUser($id){
+        $id = $id;
+        $outlet = OutletHasUser::where('outlet_id',$id)->get();
+        $data = User::all();
+
+        if(is_null($outlet)){
+            $bol = false;
+            return view('admin.outlet.add_user',compact('data','id','bol','outlet'));
+        }else{
+            return view('admin.outlet.add_user',compact('data','id','outlet'));
+        }
+    }
+    public function storeUser(Request $request){
+
+        $data = array();
+        $outlet = OutletHasUser::where('outlet_id',$request->id)->get();
+
+        $users = $request->user;
+
+        if(!empty($outlet)){
+            foreach( $outlet as $item){
+                 OutletHasUser::where('outlet_id',$request->id)->delete();
+
+            }
+            foreach($users as $key => $item){
+                $data['outlet_id'] = $request->id;
+                $data['user_id'] = $item;
+                $data['added_by'] = Auth::user()->id;
+                DB::table('outlet_has_users')->insert($data);
+            }
+
+
+
+        }
+
+       return redirect()->route('outlet.index')->with('success','User in outlet added successfully');
+
+     }
 }

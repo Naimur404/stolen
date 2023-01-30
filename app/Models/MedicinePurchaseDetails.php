@@ -26,4 +26,13 @@ class MedicinePurchaseDetails extends Model
         'total_discount',
         'total_amount',
     ];
+
+
+
+
+
+     public function medicine(){
+          return $this->belongsTo(Medicine::class, 'medicine_id', 'id');
+     }
+
 }

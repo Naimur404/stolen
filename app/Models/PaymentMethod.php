@@ -14,4 +14,5 @@ class PaymentMethod extends Model
     protected $fillable = [
         'method_name',
     ];
+  
 }

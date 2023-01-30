@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Medicine;
+use App\Models\MedicinePurchaseDetails;
+use App\Models\SupplierHasManufacturer;
 use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
@@ -188,4 +190,47 @@ class MedicineController extends Controller
             return redirect()->route('medicine.index')->with('success', $e->getMessage());
          }
     }
+   
+
+      // get product details for purchase
+      public function get_medicine_details_for_purchase($id){
+            $product_details = Medicine::where('id', $id)->select('id','medicine_name','price','manufacturer_price')->first();
+            return json_encode($product_details);
+      }
+
+
+    // select product for sale
+
+
+
+      public function get_manufacturer_wise_medicine(Request $request){
+
+        $search = $request->search;
+          if($search == ''){
+            $manufacturer_ids = SupplierHasManufacturer::whereIn('supplier_id', [$request->supplier])
+            ->pluck('manufacturer_id');
+             $medicines = Medicine::orderby('id','asc')
+             ->whereIn('manufacturer_id', $manufacturer_ids)
+             ->select('id','medicine_name')
+             ->get();
+          }else{
+            $manufacturer_ids = SupplierHasManufacturer::whereIn('supplier_id', [$request->supplier])
+            ->pluck('manufacturer_id');
+             $medicines = Medicine::orderby('id','asc')
+             ->whereIn('manufacturer_id', $manufacturer_ids)
+             ->select('id','medicine_name')
+             ->where('medicine_name', 'like', '%' .$search . '%')
+             ->get();
+          }
+
+          $response = array();
+          foreach($medicines as $medicine){
+             $response[] = array(
+                  "id"=>$medicine->id,
+                  "text"=>$medicine->medicine_name
+             );
+          }
+
+          return response()->json($response);
+      }
 }

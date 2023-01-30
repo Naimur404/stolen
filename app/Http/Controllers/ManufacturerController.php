@@ -178,4 +178,24 @@ class ManufacturerController extends Controller
         }
         return response()->json($response);
      }
+     public function select_manufacturer(Request $request){
+
+        $search = $request->search;
+
+          if($search == ''){
+             $categories = Manufacturer::orderby('id','asc')->select('id','manufacturer_name')->get();
+          }else{
+             $categories = Manufacturer::orderby('id','asc')->select('id','manufacturer_name')->where('manufacturer_name', 'like', '%' .$search . '%')->get();
+          }
+
+          $response = array();
+          foreach($categories as $category){
+             $response[] = array(
+                  "id"=>$category->id,
+                  "text"=>$category->manufacturer_name
+             );
+          }
+
+          return response()->json($response);
+      }
 }
