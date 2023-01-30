@@ -45,7 +45,7 @@
                     @endif
 					</div>
 
-                        {!! Form::open(['route'=>'manufacturer.store', 'method'=>'POST', 'role' => 'form','class' => 'form theme-form']) !!}
+                        {!! Form::open(['route'=>'manufacturer.store', 'method'=>'POST', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '']) !!}
 
                         @include('admin.manufacturer.fields')
 

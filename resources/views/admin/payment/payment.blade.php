@@ -61,13 +61,13 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="modalFormData" name="modalFormData" class="form-horizontal" novalidate="">
+                                            <form id="modalFormData" name="modalFormData" class="needs-validation" novalidate="">
 
                                                 <div class="form-group">
                                                     <label for="inputLink" class="col-sm-4 control-label">Payment Method</label>
                                                     <div class="col-sm-10">
-                                                        <input type="text" class="form-control" id="method_name" name="method_name"
-                                                               placeholder="Enter Payment Name" value="" required>
+                                                        {{ Form::text('method_name', null, array('class' => 'form-control','required','placeholder' => 'Enter Payment Name' ,'id' =>'method_name')) }}
+
                                                     </div>
                                                 </div>
 

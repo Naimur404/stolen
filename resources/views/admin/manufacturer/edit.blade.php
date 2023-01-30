@@ -45,7 +45,7 @@
                     @endif
 					</div>
 
-                        {!! Form::model($manufacturer, ['route'=>['manufacturer.update', $manufacturer->id], 'method'=>'PUT', 'role' => 'form','class' => 'form theme-form']) !!}
+                        {!! Form::model($manufacturer, ['route'=>['manufacturer.update', $manufacturer->id], 'method'=>'PUT', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '']) !!}
 
                         @include('admin.manufacturer.fields')
 

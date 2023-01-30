@@ -69,6 +69,10 @@
                                                     <div class="col-sm-10">
                                                         <input type="text" class="form-control" id="unit_name" name="unit_name"
                                                                placeholder="Enter unit" value="" required>
+                                                               @error('unit_name')
+                                                               <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                                           @enderror
                                                     </div>
                                                 </div>
 

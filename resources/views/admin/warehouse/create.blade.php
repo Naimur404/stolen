@@ -44,7 +44,7 @@
                     @endif
 					</div>
 
-                        {!! Form::open(['route'=>'warehouse.store', 'method'=>'POST', 'role' => 'form','class' => 'form theme-form']) !!}
+                        {!! Form::open(['route'=>'warehouse.store', 'method'=>'POST', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '']) !!}
 
                         @include('admin.warehouse.fields')
 

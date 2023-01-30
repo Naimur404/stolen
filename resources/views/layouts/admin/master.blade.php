@@ -47,7 +47,7 @@
           <!-- Container-fluid Ends-->
         </div>
         <!-- footer start-->
-        <footer class="footer @if(url()->current() == route('footer-dark')) footer-dark @elseif(url()->current() == route('footer-fixed')) footer-fix @endif">
+        <footer class="footer">
           <div class="container-fluid">
             <div class="row">
               <div class="col-md-6 footer-copyright">

@@ -12,10 +12,16 @@
                     {{ $manufacturer->manufacturer_name }}</option>
             @endforeach
             <select name="manufacturer_id[]" multiple="multiple" id="manufacturer_id">
+                @error('manufacturer_id')
+                <div class="invalid-feedback2"> {{ $message }}</div>
+
+            @enderror
             @else
 
 
                 {{ Form::select('manufacturer_id[]', [''], null,['class' => 'form-control', 'id' => 'sel_emp2','multiple'=>'multiple']) }}
+
+
           @endif
             </div>
         </div>
@@ -23,8 +29,14 @@
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                {!! Form::label('manufacturer_name', 'Supplier Name *', array('class' => 'form-label')) !!}
-                {!! Form::text('supplier_name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Supplier Name' ]) !!}
+                {!! Form::label('validationCustomUsername', 'Supplier Name *', array('class' => 'form-label')) !!}
+                {!! Form::text('supplier_name',null,['class'=>'form-control', 'id' => 'validationCustomUsername' ,'required','placeholder'=>'Supplier Name' ]) !!}
+                @error('supplier_name')
+                <div class="invalid-feedback2"> {{ $message }}</div>
+
+            @enderror
+
+
 
             </div>
         </div>
@@ -35,6 +47,18 @@
             <div class="mb-3">
                 {!! Form::label('mobile', 'Phone *', array('class' => 'form-label')) !!}
                 {{ Form::number('mobile', null, array('class' => 'form-control','required','placeholder' => 'Enter Supplier Phone Number')) }}
+
+                    @error('mobile')
+                    <div class="invalid-feedback2"> {{ $message }}</div>
+
+                @enderror
+
+
+
+
+
+
+
 
             </div>
         </div>

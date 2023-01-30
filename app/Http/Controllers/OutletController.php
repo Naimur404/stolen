@@ -32,8 +32,8 @@ class OutletController extends Controller
             return  DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('active', function($row){
-                        $active = route('outlet.status',[$row->id,0]);
-                        $inactive = route('outlet.status',[$row->id,1]);
+                        $active = route('outlet.active',[$row->id,0]);
+                        $inactive = route('outlet.active',[$row->id,1]);
                         return view('admin.action.active',compact('active','inactive','row'));
                     })
 

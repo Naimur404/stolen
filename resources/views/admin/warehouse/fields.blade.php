@@ -5,8 +5,11 @@
         <div class="col">
             <div class="mb-3">
                 {!! Form::label('warehouse_name', 'Warehouse Name *', array('class' => 'form-label')) !!}
-                {!! Form::text('warehouse_name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Warehouse Name' ]) !!}
+                {!! Form::text('warehouse_name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Warehouse Name' ,'required']) !!}
+                @error('warehouse_name')
+                <div class="invalid-feedback2"> {{ $message }}</div>
 
+            @enderror
             </div>
         </div>
     </div>
@@ -15,8 +18,10 @@
         <div class="col">
             <div class="mb-3">
                 {!! Form::label('mobile', 'Phone *', array('class' => 'form-label')) !!}
-                {!! Form::number('mobile',null,['class'=>'form-control', 'placeholder'=>'Ex: 01712345678' ]) !!}
-
+                {!! Form::number('mobile',null,['class'=>'form-control', 'placeholder'=>'Ex: 01712345678' ,'required']) !!}
+                @error('mobile')
+                <div class="invalid-feedback2"> {{ $message }}</div>
+            @enderror
             </div>
         </div>
     </div>

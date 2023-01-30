@@ -39,7 +39,7 @@
         @endforeach
 
 @endif
-{!! Form::open(['route'=>'medicine.index', 'method'=>'POST', 'role' => 'form','class' => 'form theme-form','files' => true]) !!}
+{!! Form::open(['route'=>'medicine.index', 'method'=>'POST', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '','files' => true]) !!}
 @include('admin.medchine.fields')
 
 <div class="card-footer text-end">

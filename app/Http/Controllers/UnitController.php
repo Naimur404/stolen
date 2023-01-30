@@ -129,22 +129,5 @@ class UnitController extends Controller
         $unit->delete();
         return redirect()->route('unit.index')->with('success','Delete successfully');
     }
-    public function getUnit(Request $request){
-        $search = $request->search;
 
-        if($search == ''){
-           $units = Unit::orderby('unit_name','asc')->select('id','unit_name')->limit(5)->get();
-        }else{
-           $units = Unit::orderby('unit_name','asc')->select('id','unit_name')->where('unit_name', 'like', '%' .$search . '%')->limit(5)->get();
-        }
-
-        $response = array();
-        foreach($units as $unit){
-           $response[] = array(
-                "id"=>$unit->id,
-                "text"=>$unit->unit_name
-           );
-        }
-        return response()->json($response);
-     }
 }

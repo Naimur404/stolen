@@ -15,7 +15,11 @@
 	                            <div class="col-sm-12 col-md-12">
 	                                <div class="mb-3">
                                         {!! Form::label('name', 'Medicine Name *', array('class' => 'form-label')) !!}
-                                        {!! Form::text('medicine_name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Medicine Name' ]) !!}
+                                        {!! Form::text('medicine_name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Medicine Name','required' ]) !!}
+                                        @error('medicine_name')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                    @enderror
 
 	                                </div>
 	                            </div>
@@ -37,9 +41,17 @@
                                          @endphp
 	                               {{ Form::label('unit_id', 'Unit *') }}
                                   {{ Form::select('unit_id',[$data=>$name] , null, ['class' => 'form-control', 'placeholder' => '--please select--', 'required', 'id' => 'sel_emp2']) }}
+                                  @error('unit_id')
+                                  <div class="invalid-feedback2"> {{ $message }}</div>
+
+                              @enderror
                                   @else
                                   {{ Form::label('unit_id', 'Unit *') }}
                                   {{ Form::select('unit_id',[''] , null, ['class' => 'form-control', 'placeholder' => '--please select--', 'required', 'id' => 'sel_emp2']) }}
+                                  @error('unit_id')
+                                  <div class="invalid-feedback2"> {{ $message }}</div>
+
+                              @enderror
                                   @endif
 	                                </div>
 	                            </div>
@@ -53,17 +65,29 @@
                                          @endphp
                                          {{ Form::label('category_id', 'Category *') }}
                                         {{ Form::select('category_id',[$data=>$name] , null, ['class' => 'form-control', 'placeholder' => '--please select--', 'required', 'id' => 'sel_emp4']) }}
+                                        @error('category_id')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                    @enderror
 
                                       @else
                                       {{ Form::label('category_id', 'Category *') }}
                                       {{ Form::select('category_id',[''] , null, ['class' => 'form-control', 'placeholder' => '--please select--', 'required', 'id' => 'sel_emp4']) }}
+                                      @error('category_id')
+                                      <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                  @enderror
                                     @endif
 	                            </div>
                                 </div>
                                 <div class="col-sm-12 col-md-12">
 	                                <div class="mb-3">
                                         {!! Form::label('price', 'Price *', array('class' => 'form-label')) !!}
-                                        {!! Form::number('price',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Guardian Name','step' => '0.1' ]) !!}
+                                        {!! Form::number('price',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Medicine Price','step' => '0.1' ,'required']) !!}
+                                        @error('price')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                    @enderror
 	                                </div>
 	                            </div>
 
@@ -77,9 +101,17 @@
                                          @endphp
                                         {{ Form::label('manufacturer_id', 'Manufacturer Name *') }}
                                         {{ Form::select('manufacturer_id', [$data=>$name], null,['class' => 'form-control', 'placeholder' => '--please select--', 'required' , 'id' => 'sel_emp1']) }}
+                                        @error('manufacturer_id')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                    @enderror
                                         @else
                                         {{ Form::label('manufacturer_id', 'Manufacturer Name *') }}
                                         {{ Form::select('manufacturer_id', [''], null,['class' => 'form-control', 'placeholder' => '--please select--', 'required' , 'id' => 'sel_emp1']) }}
+                                        @error('manufacturer_id')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                    @enderror
                                      @endif
 	                                </div>
 	                            </div>
@@ -105,8 +137,11 @@
                             <div class="col-sm-12 col-md-12">
                                 <div class="mb-3">
                                     {!! Form::label('generic_name', 'Generic Name *', array('class' => 'form-label')) !!}
-                                    {!! Form::text('generic_name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Generic Name' ]) !!}
+                                    {!! Form::text('generic_name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Generic Name','required' ]) !!}
+                                    @error('generic_name')
+                                    <div class="invalid-feedback2"> {{ $message }}</div>
 
+                                @enderror
                                 </div>
                             </div>
                             <div class="col-sm-12 col-md-12">
@@ -138,11 +173,18 @@
       @endif
                                     {{ Form::label('type_id', 'Medicine Type *') }}
                                     {{ Form::select('type_id', [$data=>$name], null,['class' => 'form-control', 'placeholder' => '--please select--', 'id' => 'sel_emp3']) }}
+                                    @error('type_id')
+                                    <div class="invalid-feedback2"> {{ $message }}</div>
 
+                                @enderror
 
                                     @else
                                     {{ Form::label('type_id', 'Medicine Type *') }}
                                     {{ Form::select('type_id', [''], null,['class' => 'form-control', 'placeholder' => '--please select--', 'id' => 'sel_emp3']) }}
+                                    @error('type_id')
+                                    <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                @enderror
                                     @endif
                                 </div>
                             </div>
@@ -165,6 +207,10 @@
 
 
                                     {!! Form::file('image',['class'=>'form-control' ]) !!}
+                                    @error('image')
+                                    <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                @enderror
                                 </div>
                                 @else
                                 <div class="mb-3">
@@ -172,6 +218,10 @@
 
 
                                 {!! Form::file('image',['class'=>'form-control' ]) !!}
+                                @error('image')
+                                <div class="invalid-feedback2"> {{ $message }}</div>
+
+                            @enderror
                                 </div>
                                 @endif
 
@@ -180,7 +230,11 @@
                             <div class="col-sm-12 col-md-12">
                                 <div class="mb-3">
                                     {!! Form::label('manufacturer_price', 'Manufacturer Price', array('class' => 'form-label')) !!}
-                                    {!! Form::number('manufacturer_price',null,['class'=>'form-control', 'id' => 'age','placeholder'=>'0.00' ,'step' => '0.1']) !!}
+                                    {!! Form::number('manufacturer_price',null,['class'=>'form-control', 'id' => 'age','placeholder'=>'0.00' ,'step' => '0.1','requried']) !!}
+                                    @error('manufacturer_price')
+                                    <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                @enderror
 
                                 </div>
                             </div>
@@ -192,4 +246,3 @@
             </div>
             </div>
         </div>
- 

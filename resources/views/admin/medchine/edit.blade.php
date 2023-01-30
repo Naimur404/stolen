@@ -39,7 +39,7 @@
         @endforeach
 
 @endif
-{!! Form::model($medicine,['route'=>['medicine.update',$medicine->id], 'method'=>'PUT', 'role' => 'form','class' => 'form theme-form','files' => true]) !!}
+{!! Form::model($medicine,['route'=>['medicine.update',$medicine->id], 'method'=>'PUT', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '','files' => true]) !!}
 @include('admin.medchine.fields')
 
 <div class="card-footer text-end">
