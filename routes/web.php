@@ -106,9 +106,12 @@ Route::get('/status-warehouse/{id}/{status}', [WarehouseController::class,'activ
 Route::get('/status-outlet/{id}/{status}', [OutletController::class,'active'])->name('outlet.active');
 Route::resource('medicine-purchase',MedicinePurchaseController::class);
 
-
+//assing outlet to user
 Route::get('/add-user-outlet/{id}', [OutletController::class,'addUser'])->name('addusers');
 Route::post('/store-user-outlet', [OutletController::class,'storeUser'])->name('storeuser');
+
+//medicine purchase
+
 Route::get('get-medicine-details-for-purchase/{id}',[MedicineController::class,'get_medicine_details_for_purchase']);
 Route::get('get-manufacture-wise-medicine',[MedicineController::class,'get_manufacturer_wise_medicine']);
 Route::get('get-product-for-sale', [SupplierController::class,'get_product_for_sale']);

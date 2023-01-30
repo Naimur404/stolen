@@ -63,7 +63,7 @@
                 </div>
                 <label for="invoicePhoto" class="col-md-2 text-right">Warehouse Name * :</label>
                 <div class="col-md-4">
-                    {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required','placeholder' => 'Select medicine'] ) }}
+                    {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required'] ) }}
                     @error('warehouse_id')
                     <div class="invalid-feedback2"> {{ $message }}</div>
 
