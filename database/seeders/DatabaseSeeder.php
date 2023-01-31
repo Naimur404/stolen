@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             MedicineCategorySeeder::class,
             PaymentMethodSeeder::class,
             ManufactureSeeder::class,
+            MedicineTypeSeeder::class,
         ]);
     }
 }
