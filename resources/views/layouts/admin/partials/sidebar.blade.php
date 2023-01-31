@@ -60,14 +60,14 @@
                     </li>
 
                     <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('warehouse.index')}}" href="{{route('warehouse.index')}}"><i data-feather="truck"></i><span>Warehouse</span></a>
+                        <a class="nav-link menu-title {{routeActive('warehouse.index')}}" href="{{route('warehouse.index')}}"><i data-feather="database"></i><span>Warehouse</span></a>
                     </li>
 
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('outlet.index')}}" href="{{route('outlet.index')}}"><i data-feather="home"></i><span>Outlet</span></a>
                     </li>
                     <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('medicine-purchase.index')}}" href="{{route('medicine-purchase.index')}}"><i data-feather="home"></i><span>Purchase</span></a>
+                        <a class="nav-link menu-title {{routeActive('medicine-purchase.index')}}" href="{{route('medicine-purchase.index')}}"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
                     </li>
                       @hasrole('Super Admin')
 
