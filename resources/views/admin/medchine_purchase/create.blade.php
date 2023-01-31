@@ -27,23 +27,16 @@
 		@endslot
 
         @slot('button')
-        <a href="{{ route('medicine-purchase.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
+        <a href="{{ route('medicine-purchase.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
         @endslot
 	@endcomponent
 
 
 <div class="col-md-12 col-lg-12">
-    <div class="card">
-        <div class="card-header py-2">
-            <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="fs-17 font-weight-600 mb-0 mt-3"> Medchine Purchase</h6>
-                </div>
+    <div class="card ">
 
-            </div>
-        </div>
 
-        <div class="card-body">
+        <div class="card-body mt-3">
 
             {!! Form::open(['route' => 'medicine-purchase.store', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'id' => 'product_purchase', 'files' => true]) !!}
 

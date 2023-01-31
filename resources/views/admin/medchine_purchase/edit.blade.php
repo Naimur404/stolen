@@ -35,13 +35,11 @@
     <div class="card">
         <div class="card-header py-2">
             <div class="d-flex justify-content-between align-items-center">
-                <div>
-                    <h6 class="fs-17 font-weight-600 mb-0 mt-3">Purchase Payment</h6>
-                </div>
+
                 <div class="text-right">
                     @can('product_purchase.list')
                         <a href="{{ route('medicine-purchase.index') }}" class="btn btn-success btn-sm mr-1"><i
-                                class="fas fa-align-justify mr-1"></i>Purchase_list</a>
+                                class="fas fa-align-justify mr-1"></i>Purchase list</a>
                     @endcan
                 </div>
             </div>

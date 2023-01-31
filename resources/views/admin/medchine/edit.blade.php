@@ -2,7 +2,7 @@
 
 
 
-@section('title','Add Medicine')
+@section('title','Edit Medicine')
 
 @push('css')
 
@@ -13,7 +13,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-5">
-			<h3>Add Medicine</h3>
+			<h3>Edit Medicine</h3>
         </div>
 
         </div>
@@ -21,7 +21,7 @@
 		@endslot
 
         @slot('button')
-        <a href="{{ route('medicine.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
+        <a href="{{ route('medicine.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
 
         @endslot
 

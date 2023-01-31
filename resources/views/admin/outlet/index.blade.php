@@ -11,13 +11,13 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
 			<h3>All Outlet</h3>
         </div>
 
         </div>
 		@endslot
-		<li class="breadcrumb-item">All Outlet</li>
+
         @slot('button')
         <a href="{{ route('outlet.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title=""> Add Outlet</a>
         @endslot
@@ -28,10 +28,7 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	                <div class="card-header pb-0">
-	                    <h5> All Outlet</h5>
-
-	                </div>
+	               
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table">

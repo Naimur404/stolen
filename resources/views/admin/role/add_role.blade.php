@@ -29,9 +29,7 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="card">
-					<div class="card-header pb-0">
-						<h5>Add Role</h5>
-					</div>
+					
 
                     {!! Form::open(['route'=>'store_role', 'method'=>'POST', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '']) !!}
                     {!! Form::token(); !!}

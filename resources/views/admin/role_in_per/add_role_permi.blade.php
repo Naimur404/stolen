@@ -20,8 +20,7 @@
         </div>
 
 		@endslot
-		<li class="breadcrumb-item">DashBoard</li>
-		<li class="breadcrumb-item">Add Role In Permission</li>
+	
 
 
 	@endcomponent
@@ -30,9 +29,7 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="card">
-					<div class="card-header pb-0">
-						<h5>Add Role In Permission</h5>
-					</div>
+
                     {!! Form::open(['route'=>'add_role_permission', 'method'=>'POST', 'role' => 'form', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
 
 

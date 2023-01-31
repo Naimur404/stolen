@@ -11,7 +11,7 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
 			<h3>All Medicine</h3>
         </div>
 
@@ -28,10 +28,7 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	                <div class="card-header pb-0">
-	                    <h5> All Medicine</h5>
-
-	                </div>
+	              
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table">

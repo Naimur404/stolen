@@ -21,7 +21,7 @@
 
 
 		@endslot
-		<li class="breadcrumb-item">All Payment Method</li>
+	
         @slot('button')
         @can('payment-method.create')
         <button id="btn-add" name="btn-add" class="btn btn-primary ">Add New Payment Method</button>
@@ -34,10 +34,7 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	                <div class="card-header pb-0">
-	                    <h5> All Payment Method</h5>
 
-	                </div>
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table" id="basic-1">

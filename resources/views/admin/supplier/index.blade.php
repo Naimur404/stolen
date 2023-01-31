@@ -14,7 +14,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-6">
-			<h3>All Role Permission</h3>
+			<h3>All Supplier</h3>
         </div>
 
         </div>
@@ -30,10 +30,7 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	                <div class="card-header pb-0">
-	                    <h5>All Role Permission</h5>
 
-	                </div>
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table" id="basic-1">

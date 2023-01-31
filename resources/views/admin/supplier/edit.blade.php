@@ -12,7 +12,7 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-5">
+            <div class="col-sm-6">
 			<h3>Edit Supplier</h3>
             @if ($errors->any())
 
@@ -31,7 +31,7 @@
 		@endslot
 
         @slot('button')
-        <a href="{{ route('supplier.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
+        <a href="{{ route('supplier.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
         @endslot
 
 	@endcomponent
@@ -40,12 +40,9 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="card">
-					<div class="card-header pb-0">
-						<h5>Edit Supplier</h5>
-                  
-					</div>
 
-                        {!! Form::model($supplier,['route'=>['supplier.update',$supplier->id], 'method'=>'PUT', 'role' => 'form','class' => 'form theme-form''class' => 'needs-validation', 'novalidate'=> '']) !!}
+
+                        {!! Form::model($supplier,['route'=>['supplier.update',$supplier->id], 'method'=>'PUT', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '']) !!}
 
                         @include('admin.supplier.fields')
 

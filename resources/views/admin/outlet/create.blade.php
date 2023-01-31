@@ -12,7 +12,7 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-5">
+            <div class="col-sm-6">
 			<h3>Add Outlet</h3>
         </div>
 
@@ -21,7 +21,7 @@
 		@endslot
 
         @slot('button')
-        <a href="{{ route('outlet.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
+        <a href="{{ route('outlet.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
         @endslot
 
 	@endcomponent
@@ -30,10 +30,7 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="card">
-					<div class="card-header pb-0">
-						<h5>Add Outlet</h5>
-                 
-					</div>
+
 
                         {!! Form::open(['route'=>'outlet.store', 'method'=>'POST', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '']) !!}
 
