@@ -109,7 +109,9 @@ Route::post('/store-user-outlet', [OutletController::class,'storeUser'])->name('
 
 //medicine purchase
 
-
+Route::get('get-medicine',[MedicineController::class,'get_medicine']);
+Route::get('get-medicine-details-for-purchase/{id}',[MedicineController::class,'get_medicine_details_for_purchase']);
+Route::get('get-manufacture-wise-medicine',[MedicineController::class,'get_manufacturer_wise_medicine']);
 Route::get('get-product-for-sale', [SupplierController::class,'get_product_for_sale']);
 
 
@@ -130,8 +132,5 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function
     Route::resource('unit',UnitController::class);
     Route::resource('manufacturer',ManufacturerController::class);
     Route::resource('medicine',MedicineController::class);
-    Route::get('get-medicine',[MedicineController::class,'get_medicine']);
-    Route::get('get-medicine-details-for-purchase/{id}',[MedicineController::class,'get_medicine_details_for_purchase']);
-    Route::get('get-manufacture-wise-medicine',[MedicineController::class,'get_manufacturer_wise_medicine']);
     Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class,'active'])->name('manufacturer.active');
 });
