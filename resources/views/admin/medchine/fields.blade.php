@@ -4,12 +4,7 @@
 	        <div class="row">
                 <div class="col-xl-6 card">
 
-	                    <div class="card-header pb-0">
-	                        <h4 class="card-title mb-3">Add Medicine</h4>
-	                        <div class="card-options">
-	                            <a class="card-options-collapse" href="#" data-bs-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a><a class="card-options-remove" href="#" data-bs-toggle="card-remove"><i class="fe fe-x"></i></a>
-	                        </div>
-	                    </div>
+                    
 	                    <div class="card-body card">
 	                        <div class="row">
 	                            <div class="col-sm-12 col-md-12">
@@ -107,7 +102,7 @@
                                     @enderror
                                         @else
                                         {{ Form::label('manufacturer_id', 'Manufacturer Name *') }}
-                                        {{ Form::select('manufacturer_id', [''], null,['class' => 'form-control', 'placeholder' => '--please select--', 'required' , 'id' => 'sel_emp1']) }}
+                                        {{ Form::select('manufacturer_id', [ ], null,['class' => 'form-control', 'placeholder' => '--please select--', 'required' , 'id' => 'sel_emp1']) }}
                                         @error('manufacturer_id')
                                         <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -180,7 +175,7 @@
 
                                     @else
                                     {{ Form::label('type_id', 'Medicine Type *') }}
-                                    {{ Form::select('type_id', [''], null,['class' => 'form-control', 'placeholder' => '--please select--', 'id' => 'sel_emp3']) }}
+                                    {{ Form::select('type_id', [ ], null,['class' => 'form-control', 'placeholder' => '--please select--', 'id' => 'sel_emp3','required']) }}
                                     @error('type_id')
                                     <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -230,7 +225,7 @@
                             <div class="col-sm-12 col-md-12">
                                 <div class="mb-3">
                                     {!! Form::label('manufacturer_price', 'Manufacturer Price', array('class' => 'form-label')) !!}
-                                    {!! Form::number('manufacturer_price',null,['class'=>'form-control', 'id' => 'age','placeholder'=>'0.00' ,'step' => '0.1','requried']) !!}
+                                    {!! Form::number('manufacturer_price',null,['class'=>'form-control', 'id' => 'age','placeholder'=>'0.00' ,'step' => '0.1','required' ]) !!}
                                     @error('manufacturer_price')
                                     <div class="invalid-feedback2"> {{ $message }}</div>
 

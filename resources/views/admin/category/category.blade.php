@@ -21,7 +21,7 @@
 
 
 		@endslot
-		<li class="breadcrumb-item">All Category</li>
+
         @slot('button')
         @can('category.create')
         <button id="btn-add" name="btn-add" class="btn btn-primary ">Add New Category</button>
@@ -34,10 +34,7 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	                <div class="card-header pb-0">
-	                    <h5> All Category</h5>
-
-	                </div>
+	            
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table" id="basic-1">
@@ -65,7 +62,7 @@
                                             <form id="modalFormData" name="modalFormData" class="form-horizontal" novalidate="" class="needs-validation was-validated">
 
                                                 <div class="form-group">
-                                                    <label for="inputLink" class="col-sm-4 control-label">Category</label>
+                                                    <label for="inputLink" class="col-sm-4 control-label">Category *</label>
                                                     <div class="col-sm-10">
                                                         <input type="text" class="form-control" id="category_name" name="category_name"
                                                                placeholder="Enter Category" value="" required>

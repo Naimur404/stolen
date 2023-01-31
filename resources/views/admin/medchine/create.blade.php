@@ -21,7 +21,7 @@
 		@endslot
 
         @slot('button')
-        <a href="{{ route('medicine.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
+        <a href="{{ route('medicine.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
 
         @endslot
 
@@ -29,16 +29,9 @@
 
 
 	<div class="container-fluid">
-        @if ($errors->any())
 
-        @foreach ($errors->all() as $error)
-        <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-            {{ $error }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        @endforeach
 
-@endif
+
 {!! Form::open(['route'=>'medicine.index', 'method'=>'POST', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '','files' => true]) !!}
 @include('admin.medchine.fields')
 

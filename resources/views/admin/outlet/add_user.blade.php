@@ -16,7 +16,7 @@
 		@endslot
 
         @slot('button')
-        <a href="{{ route('outlet.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
+        <a href="{{ route('outlet.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
         @endslot
 	@endcomponent
 

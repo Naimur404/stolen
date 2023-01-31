@@ -90,17 +90,14 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'],function () {
 
 Route::group(['middleware' => ['auth']],function () {
 
-Route::resource('category',CategoryController::class);
-Route::resource('unit',UnitController::class);
 Route::resource('payment-method',PaymentMethodController::class);
-Route::resource('manufacturer',ManufacturerController::class);
-Route::resource('medicine',MedicineController::class);
+
 Route::resource('supplier',SupplierController::class);
 Route::resource('warehouse',WarehouseController::class);
 Route::resource('outlet',OutletController::class);
 
 //active status route
-Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class,'active'])->name('manufacturer.active');
+
 Route::get('/status-supplier/{id}/{status}', [SupplierController::class,'active'])->name('supplier.active');
 Route::get('/status-warehouse/{id}/{status}', [WarehouseController::class,'active'])->name('warehouse.active');
 Route::get('/status-outlet/{id}/{status}', [OutletController::class,'active'])->name('outlet.active');
@@ -112,10 +109,11 @@ Route::post('/store-user-outlet', [OutletController::class,'storeUser'])->name('
 
 //medicine purchase
 
+Route::get('get-medicine',[MedicineController::class,'get_medicine']);
 Route::get('get-medicine-details-for-purchase/{id}',[MedicineController::class,'get_medicine_details_for_purchase']);
 Route::get('get-manufacture-wise-medicine',[MedicineController::class,'get_manufacturer_wise_medicine']);
 Route::get('get-product-for-sale', [SupplierController::class,'get_product_for_sale']);
-Route::get('get-medicine',[MedicineController::class,'get_medicine']);
+
 
 //select2 route
 
@@ -126,4 +124,13 @@ Route::post('/get-manufacturer',[Select2Controller::class,'getManufacturer'])->n
 Route::get('get-supplier', [Select2Controller::class,'get_supplier']);
 });
 
+Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {
 
+
+
+    Route::resource('category',CategoryController::class);
+    Route::resource('unit',UnitController::class);
+    Route::resource('manufacturer',ManufacturerController::class);
+    Route::resource('medicine',MedicineController::class);
+    Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class,'active'])->name('manufacturer.active');
+});

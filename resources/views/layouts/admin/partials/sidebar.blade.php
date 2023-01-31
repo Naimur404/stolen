@@ -32,8 +32,8 @@
                         <a class="nav-link menu-title {{routeActive('index')}}" href="{{route('index')}}"><i data-feather="home"></i><span>Dashboard</span></a>
                     </li>
                     <li class="dropdown">
-                        <a class="nav-link menu-title " href="javascript:void(0)"><i data-feather="anchor"></i><span>Medicine Settings</span></a>
-                        <ul class="nav-submenu menu-content" style="display:;">
+                        <a class="nav-link menu-title {{ prefixActive('/medicine-setting') }} " href="javascript:void(0)"><i data-feather="anchor"></i><span>Medicine Settings</span></a>
+                        <ul class="nav-submenu menu-content" style="display:{{ prefixBlock('/medicine-setting') }};">
                             <li>
 
                         <a class="submenu-title {{routeActive('category.index')}}" href="{{route('category.index')}}"><i data-feather="align-justify"></i><span>Category</span></a>
@@ -60,14 +60,14 @@
                     </li>
 
                     <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('warehouse.index')}}" href="{{route('warehouse.index')}}"><i data-feather="truck"></i><span>Warehouse</span></a>
+                        <a class="nav-link menu-title {{routeActive('warehouse.index')}}" href="{{route('warehouse.index')}}"><i data-feather="database"></i><span>Warehouse</span></a>
                     </li>
 
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('outlet.index')}}" href="{{route('outlet.index')}}"><i data-feather="home"></i><span>Outlet</span></a>
                     </li>
                     <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('medicine-purchase.index')}}" href="{{route('medicine-purchase.index')}}"><i data-feather="home"></i><span>Purchase</span></a>
+                        <a class="nav-link menu-title {{routeActive('medicine-purchase.index')}}" href="{{route('medicine-purchase.index')}}"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
                     </li>
                       @hasrole('Super Admin')
 

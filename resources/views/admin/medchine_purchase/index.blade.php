@@ -14,7 +14,7 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-4">
+            <div class="col-sm-6">
 			<h3>All Purchase</h3>
         </div>
 

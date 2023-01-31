@@ -4,8 +4,13 @@
  * Copyright 2011-2020 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+ .class2{
+    height: 70%;
+    width: 60%;
+    margin: auto;
+ }
  .invalid-feedback2 {
-   
+
     width: 100%;
     margin-top: 0.25rem;
     font-size: 0.875em;

@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title',' All Manufacturer')
+@section('title',' All Warehouse')
 
 @push('css')
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
@@ -12,14 +12,14 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-4">
-			<h3>All Manufacturer</h3>
+			<h3>All Warehouse</h3>
         </div>
 
         </div>
 		@endslot
-		<li class="breadcrumb-item">All Manufacturer</li>
+		<li class="breadcrumb-item">All Warehouse</li>
         @slot('button')
-        <a href="{{ route('warehouse.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title=""> Add Manufacturer</a>
+        <a href="{{ route('warehouse.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title=""> Add Warehouse</a>
         @endslot
 	@endcomponent
 
@@ -28,10 +28,7 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	                <div class="card-header pb-0">
-	                    <h5> All Manufacturer</h5>
 
-	                </div>
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table">

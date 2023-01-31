@@ -20,10 +20,9 @@
         </div>
 
 		@endslot
-		<li class="breadcrumb-item">DashBoard</li>
-		<li class="breadcrumb-item">Add User</li>
+
         @slot('button')
-        <a href="{{ route('user') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">back</a>
+        <a href="{{ route('user') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
           @endslot
 
 	@endcomponent
@@ -32,9 +31,7 @@
 		<div class="row">
 			<div class="col-sm-12">
 				<div class="card">
-					<div class="card-header pb-0">
-						<h5>Add User</h5>
-					</div>
+
 
                         {!! Form::open(['route'=>'add_user_store', 'method'=>'POST', 'role' => 'form', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
 

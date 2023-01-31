@@ -21,7 +21,7 @@
 
 
 		@endslot
-		<li class="breadcrumb-item">All Payment Method</li>
+	
         @slot('button')
         @can('payment-method.create')
         <button id="btn-add" name="btn-add" class="btn btn-primary ">Add New Payment Method</button>
@@ -34,10 +34,7 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	                <div class="card-header pb-0">
-	                    <h5> All Payment Method</h5>
 
-	                </div>
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table" id="basic-1">
@@ -64,7 +61,7 @@
                                             <form id="modalFormData" name="modalFormData" class="needs-validation" novalidate="">
 
                                                 <div class="form-group">
-                                                    <label for="inputLink" class="col-sm-4 control-label">Payment Method</label>
+                                                    <label for="inputLink" class="col-sm-4 control-label">Payment Method *</label>
                                                     <div class="col-sm-10">
                                                         {{ Form::text('method_name', null, array('class' => 'form-control','required','placeholder' => 'Enter Payment Name' ,'id' =>'method_name')) }}
 

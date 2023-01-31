@@ -30,10 +30,7 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	                <div class="card-header pb-0">
-	                    <h5>All User</h5>
-
-	                </div>
+	             
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table">

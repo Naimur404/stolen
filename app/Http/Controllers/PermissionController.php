@@ -42,6 +42,11 @@ class PermissionController extends Controller
     }
 
     public function storePermission(Request $request){
+        $request->validate([
+            'name' => 'required|string',
+
+
+        ]);
         $permission = ModelsPermission::create([
             'name' => $request->name,
             'guard_name' => $request->guard_name
@@ -54,6 +59,11 @@ class PermissionController extends Controller
         return view('admin.permission.edit_permission', compact('permission'));
     }
     public function updatePermission(Request $request){
+        $request->validate([
+            'name' => 'required|string',
+
+
+        ]);
        $per_id = $request->id;
        ModelsPermission::findOrFail($per_id)->update([
         'name' => $request->name,
