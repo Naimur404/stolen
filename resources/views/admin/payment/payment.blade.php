@@ -21,7 +21,7 @@
 
 
 		@endslot
-	
+
         @slot('button')
         @can('payment-method.create')
         <button id="btn-add" name="btn-add" class="btn btn-primary ">Add New Payment Method</button>
@@ -52,31 +52,33 @@
 	                        </table>
                             <div class="modal fade" id="linkEditorModal" aria-hidden="true">
                                 <div class="modal-dialog">
+                                    <form id="modalFormData" name="modalFormData"  novalidate="" class="needs-validation">
                                     <div class="modal-content">
                                         <div class="modal-header">
                                             <h4 class="modal-title" id="linkEditorModalLabel">Payment Method</h4>
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="modalFormData" name="modalFormData" class="needs-validation" novalidate="">
+
 
                                                 <div class="form-group">
                                                     <label for="inputLink" class="col-sm-4 control-label">Payment Method *</label>
                                                     <div class="col-sm-10">
                                                         {{ Form::text('method_name', null, array('class' => 'form-control','required','placeholder' => 'Enter Payment Name' ,'id' =>'method_name')) }}
-
+                                                        <div class="invalid-feedback">Please Type Payment Name</div>
                                                     </div>
                                                 </div>
 
 
-                                            </form>
+
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" id="btn-save" value="add">Submit
+                                            <button type="submit" class="btn btn-primary" id="btn-save" value="add">Submit
                                             </button>
                                             <input type="hidden" id="link_id" name="link_id" value="0">
                                         </div>
                                     </div>
+                                </form>
                                 </div>
                             </div>
 
@@ -90,7 +92,7 @@
 	</div>
 
 	@push('scripts')
-
+    <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
     <script type="text/javascript">
     $(function () {
       $.ajaxSetup({
@@ -132,7 +134,7 @@ $(document).ready(function($){
 
 
 
-    $("#btn-save").click(function (e) {
+    $("#modalFormData").on("submit", function (e) {
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')

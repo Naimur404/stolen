@@ -4,8 +4,8 @@
 	        <div class="row">
                 <div class="col-xl-6 card">
 
-                    
-	                    <div class="card-body card">
+
+	                    <div class="card-body">
 	                        <div class="row">
 	                            <div class="col-sm-12 col-md-12">
 	                                <div class="mb-3">
@@ -121,7 +121,7 @@
 	            </div>
                 <div class="col-xl-6 card">
 
-                    <div class="card-body card">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-sm-12 col-md-12">
                                 <div class="mb-3">
