@@ -122,7 +122,7 @@ Route::post('/get-manufacturer',[Select2Controller::class,'getManufacturer'])->n
 Route::get('get-supplier', [Select2Controller::class,'get_supplier']);
 });
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'medi-setting'],function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {
 
 
 
