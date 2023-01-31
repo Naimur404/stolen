@@ -62,7 +62,7 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="modalFormData" name="modalFormData" class="form-horizontal" novalidate="">
+                                            <form id="modalFormData" name="modalFormData" class="form-horizontal" novalidate="" class="needs-validation was-validated">
 
                                                 <div class="form-group">
                                                     <label for="inputLink" class="col-sm-4 control-label">Category</label>

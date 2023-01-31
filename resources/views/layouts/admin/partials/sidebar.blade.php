@@ -73,8 +73,8 @@
 
 
                     <li class="dropdown">
-                        <a class="nav-link menu-title {{ prefixActive('/administrativearea') }}" href="javascript:void(0)"><i data-feather="anchor"></i><span>Administrative Area</span></a>
-                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/administrativearea') }};">
+                        <a class="nav-link menu-title {{ prefixActive('/admin') }}" href="javascript:void(0)"><i data-feather="anchor"></i><span>Administrative Area</span></a>
+                        <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/admin') }};">
                             {{-- <li>
                                 <a class="submenu-title {{routeActive('datatable-AJAX')}} " href="{{ route('datatable-AJAX') }}">
                                     AJAX Data Table <span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>

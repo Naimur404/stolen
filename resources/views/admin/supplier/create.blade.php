@@ -14,16 +14,6 @@
         <div class="row">
             <div class="col-sm-5">
 			<h3>Add Supplier</h3>
-            @if ($errors->any())
-
-            @foreach ($errors->all() as $error)
-            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-                {{ $error }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-              </div>
-            @endforeach
-
-@endif
         </div>
 
         </div>
@@ -42,19 +32,10 @@
 				<div class="card">
 					<div class="card-header pb-0">
 						<h5>Add Supplier</h5>
-                        @if ($errors->any())
 
-                                @foreach ($errors->all() as $error)
-                                <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-                                    {{ $error }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                  </div>
-                                @endforeach
-
-                    @endif
 					</div>
 
-                        {!! Form::open(['route'=>'supplier.store', 'method'=>'POST', 'role' => 'form','class' => 'form theme-form']) !!}
+                        {!! Form::open(['route'=>'supplier.store', 'method'=>'POST', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '']) !!}
 
                         @include('admin.supplier.fields')
 
@@ -73,6 +54,7 @@
 
 	@push('scripts')
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
+
     <script type="text/javascript">
 
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
@@ -83,7 +65,7 @@
                url: "{{route('get-manufacturer')}}",
                type: "post",
                dataType: 'json',
-            
+
                data: function (params) {
                  return {
                     _token: CSRF_TOKEN,

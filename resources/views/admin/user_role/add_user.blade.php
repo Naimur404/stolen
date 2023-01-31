@@ -36,7 +36,7 @@
 						<h5>Add User</h5>
 					</div>
 
-                        {!! Form::open(['route'=>'add_user_store', 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
+                        {!! Form::open(['route'=>'add_user_store', 'method'=>'POST', 'role' => 'form', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
 
 						<div class="card-body">
                             <div class="row">
@@ -44,8 +44,11 @@
 								<div class="col">
 									<div class="mb-3">
                                         {!! Form::label('exampleFormControlInput1', 'Name', array('class' => 'form-label')) !!}
-                                        {!! Form::text('name',null,['class'=>'form-control', 'id' => 'exampleFormControlInput1' ]) !!}
+                                        {!! Form::text('name',null,['class'=>'form-control', 'id' => 'exampleFormControlInput1','required' ]) !!}
+                                        @error('name')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
 
+                                    @enderror
 									</div>
 								</div>
 							</div>
@@ -54,8 +57,11 @@
 								<div class="col">
 									<div class="mb-3">
                                         {!! Form::label('exampleFormControlInput1', 'Email address', array('class' => 'form-label')) !!}
-                                        {!! Form::email('email',null,['class'=>'form-control', 'placeholder'=>'name@example.com', 'id' => 'exampleFormControlInput1' ]) !!}
+                                        {!! Form::email('email',null,['class'=>'form-control', 'placeholder'=>'name@example.com', 'id' => 'exampleFormControlInput1','required' ]) !!}
+                                        @error('email')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
 
+                                    @enderror
 									</div>
 								</div>
 							</div>
@@ -63,8 +69,11 @@
 								<div class="col">
 									<div class="mb-3">
                                         {!! Form::label('exampleInputPassword2', 'Password', array('class' => 'form-label')) !!}
-                                        {!! Form::password('password',['class'=>'form-control', 'placeholder'=>'Password', 'id' => 'exampleInputPassword2' ]) !!}
+                                        {!! Form::password('password',['class'=>'form-control', 'placeholder'=>'Password', 'id' => 'exampleInputPassword2','required' ]) !!}
+                                        @error('password')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
 
+                                    @enderror
 									</div>
 								</div>
 							</div>
@@ -72,7 +81,7 @@
 								<div class="col">
 									<div class="mb-3">
                                         {!! Form::label('exampleInputPassword2', 'Confirm Password', array('class' => 'form-label')) !!}
-                                        {!! Form::password('password_confirmation',['class'=>'form-control', 'placeholder'=>'Password', 'id' => 'exampleInputPassword2' ]) !!}
+                                        {!! Form::password('password_confirmation',['class'=>'form-control', 'placeholder'=>'Password', 'id' => 'exampleInputPassword2','required' ]) !!}
 
 									</div>
 								</div>
@@ -86,6 +95,10 @@
 										<select id="sel_emp" style="width: 1600px;" name="role">
                                             <option value="0">-- Select Role --</option>
                                          </select>
+                                         @error('role')
+                                         <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                     @enderror
 									</div>
 								</div>
 							</div>

@@ -82,22 +82,5 @@ class TypeController extends Controller
     {
         //
     }
-    public function getType(Request $request){
-        $search = $request->search;
 
-        if($search == ''){
-            $types = Type::orderby('type_name','asc')->select('id','type_name')->limit(5)->get();
-        }else{
-           $types = Type::orderby('type_name','asc')->select('id','type_name')->where('type_name', 'like', '%' .$search . '%')->limit(5)->get();
-        }
-
-        $response = array();
-        foreach($types as $type){
-           $response[] = array(
-                "id"=>$type->id,
-                "text"=>$type->type_name
-           );
-        }
-        return response()->json($response);
-     }
 }

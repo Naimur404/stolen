@@ -129,22 +129,5 @@ class CategoryController extends Controller
       $category->delete();
         return redirect()->route('category.index')->with('success','Delete successfully');
     }
-    public function getCategory(Request $request){
-        $search = $request->search;
-
-        if($search == ''){
-           $categorys = Category::orderby('category_name','asc')->select('id','category_name')->limit(5)->get();
-        }else{
-           $categorys = Category::orderby('category_name','asc')->select('id','category_name')->where('category_name', 'like', '%' .$search . '%')->limit(5)->get();
-        }
-
-        $response = array();
-        foreach($categorys as $category){
-           $response[] = array(
-                "id"=>$category->id,
-                "text"=>$category->category_name
-           );
-        }
-        return response()->json($response);
-     }
+ 
 }

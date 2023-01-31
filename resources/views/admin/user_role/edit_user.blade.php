@@ -33,7 +33,7 @@
 						<h5>Add User</h5>
 					</div>
 
-                        {!! Form::open(['route'=>'updateuser', 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
+                        {!! Form::open(['route'=>'updateuser', 'method'=>'POST', 'role' => 'form', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
                         {!! Form::hidden('id',$data->id) !!}
 						<div class="card-body">
                             <div class="row">
@@ -41,8 +41,11 @@
 								<div class="col">
 									<div class="mb-3">
                                         {!! Form::label('exampleFormControlInput1', 'Name', array('class' => 'form-label')) !!}
-                                        {!! Form::text('name',$data->name,['class'=>'form-control', 'id' => 'exampleFormControlInput1' ]) !!}
+                                        {!! Form::text('name',$data->name,['class'=>'form-control', 'id' => 'exampleFormControlInput1','requried'  ]) !!}
+                                        @error('name')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
 
+                                    @enderror
 									</div>
 								</div>
 							</div>
@@ -51,8 +54,11 @@
 								<div class="col">
 									<div class="mb-3">
                                         {!! Form::label('exampleFormControlInput1', 'Email address', array('class' => 'form-label')) !!}
-                                        {!! Form::email('email',$data->email,['class'=>'form-control', 'placeholder'=>'name@example.com', 'id' => 'exampleFormControlInput1' ]) !!}
+                                        {!! Form::email('email',$data->email,['class'=>'form-control', 'placeholder'=>'name@example.com', 'id' => 'exampleFormControlInput1' ,'requried' ]) !!}
+                                        @error('email')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
 
+                                    @enderror
 									</div>
 								</div>
 							</div>

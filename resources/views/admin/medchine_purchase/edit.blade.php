@@ -48,7 +48,7 @@
         </div>
 
         <div class="card-body">
-            {!! Form::open(['route' => ['medicine-purchase.update', $productPurchase->id], 'method' => 'PUT', 'class' => 'form-horizontal']) !!}
+            {!! Form::open(['route' => ['medicine-purchase.update', $productPurchase->id], 'method' => 'PUT', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
 
             <div class="service_invoice_header">
                 <div class="row">
@@ -130,6 +130,10 @@
                             <tr>
                                 <th>Pay Now</th>
                                 <td>{{ Form::number('paid_amount', $productPurchase->due_amount, ['class' => 'form-control', 'required']) }}
+                                    @error('paid_amount')
+                                    <div class="invalid-feedback2"> {{ $message }}</div>
+
+                                @enderror
                                 </td>
                             </tr>
 

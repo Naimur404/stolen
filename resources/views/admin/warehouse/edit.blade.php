@@ -44,7 +44,7 @@
                     @endif
 					</div>
 
-                        {!! Form::model($warehouse, ['route'=>['warehouse.update', $warehouse->id], 'method'=>'PUT', 'role' => 'form','class' => 'form theme-form']) !!}
+                        {!! Form::model($warehouse, ['route'=>['warehouse.update', $warehouse->id], 'method'=>'PUT', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '']) !!}
 
                         @include('admin.warehouse.fields')
 

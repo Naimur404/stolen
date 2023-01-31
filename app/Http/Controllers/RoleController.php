@@ -155,6 +155,7 @@ class RoleController extends Controller
         }
         return redirect()->route('allrolepermission')->with('error','Delete successfully');
      }
+     
 
 
 }

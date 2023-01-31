@@ -33,8 +33,8 @@ class SupplierController extends Controller
                         return view('admin.action.manufacturer', compact('row'));
                     })
                     ->addColumn('active', function($row){
-                        $active = route('supplier.status',[$row->id,0]);
-                        $inactive = route('supplier.status',[$row->id,1]);
+                        $active = route('supplier.active',[$row->id,0]);
+                        $inactive = route('supplier.active',[$row->id,1]);
                         return view('admin.action.active',compact('active','inactive','row'));
                     })
                     ->addColumn('action', function($row){
@@ -73,7 +73,7 @@ class SupplierController extends Controller
         $request->validate([
             'manufacturer_id' => 'required',
             'supplier_name' => 'required|string',
-            'mobile' => 'required',
+            'mobile' => 'required|min:11',
             'address' => 'required'
 
 
@@ -174,27 +174,5 @@ class SupplierController extends Controller
         return redirect()->route('supplier.index')->with('success','Active Status Updated');
 
     }
-    public function get_supplier(Request $request){
 
-        $search = $request->search;
-
-          if($search == ''){
-             $suppliers = Supplier::orderby('id','asc')->select('id','supplier_name')
-             ->get();
-          }else{
-             $suppliers = Supplier::orderby('id','asc')->select('id','supplier_name')
-             ->where('supplier_name', 'like', '%' .$search . '%')
-             ->get();
-          }
-
-          $response = array();
-          foreach($suppliers as $supplier){
-             $response[] = array(
-                  "id"=>$supplier->id,
-                  "text"=>$supplier->supplier_name
-             );
-          }
-
-          return response()->json($response);
-      }
 }

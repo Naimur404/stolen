@@ -37,7 +37,7 @@
         <div class="card-header py-2">
             <div class="d-flex justify-content-between align-items-center">
                 <div>
-                    <h6 class="fs-17 font-weight-600 mb-0"> Medchine Purchase</h6>
+                    <h6 class="fs-17 font-weight-600 mb-0 mt-3"> Medchine Purchase</h6>
                 </div>
 
             </div>
@@ -45,7 +45,7 @@
 
         <div class="card-body">
 
-            {!! Form::open(['route' => 'medicine-purchase.store', 'class' => 'form-horizontal', 'autocomplete' => 'off', 'id' => 'product_purchase', 'files' => true]) !!}
+            {!! Form::open(['route' => 'medicine-purchase.store', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'id' => 'product_purchase', 'files' => true]) !!}
 
             <div class="form-group row">
                 {{-- <label for="manufacturer" class="col-md-2 text-right col-form-label">{{ __('purchase.manufacturer') }}:</label>
@@ -56,14 +56,21 @@
                 <label for="supplier" class="col-md-2 text-right col-form-label">Supplier:</label>
                 <div class="col-md-4">
                     {{ Form::select('supplier_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Supplier', 'id' => 'supplier_id']) }}
+                    @error('supplier_id')
+                    <div class="invalid-feedback2"> {{ $message }}</div>
+
+                @enderror
                 </div>
-            </div>
-            <div class="row form-group">
-                <label for="invoicePhoto" class="col-md-2 text-right">Warehouse Name* :</label>
+                <label for="invoicePhoto" class="col-md-2 text-right">Warehouse Name * :</label>
                 <div class="col-md-4">
-                    {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required','placeholder' => 'Select medicine'] ) }}
+                    {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required'] ) }}
+                    @error('warehouse_id')
+                    <div class="invalid-feedback2"> {{ $message }}</div>
+
+                @enderror
                 </div>
             </div>
+
 
             <div class="form-group row">
 
@@ -72,6 +79,10 @@
                 <div class="col-md-4">
                     <div class="">
                         <input type="text" class="form-control valid_number" name="invoice_no" id="invoice_no" placeholder="Invoice No" value="" tabindex="3" required>
+                        @error('invoice_no')
+                        <div class="invalid-feedback2"> {{ $message }}</div>
+
+                    @enderror
                     </div>
                 </div>
 
@@ -88,7 +99,13 @@
                             class="text-danger"> * </i>:</label>
                 <div class="col-md-4">
                     {{ Form::select( 'payment_method_id', $payment_methods, null, ['class' => 'form-control', 'required'], ) }}
+                    @error('payment_method_id')
+                    <div class="invalid-feedback2"> {{ $message }}</div>
+
+                @enderror
                 </div>
+
+
 
                 <label for="details" class="col-md-2 text-right col-form-label">Purchase Details :</label>
                 <div class="col-md-4">
@@ -111,7 +128,7 @@
             <div class="card">
 
                 <div class="card-header bg-secondary">
-                    <i class="fa fa-table"></i> Make Invoice
+                    <i class="fa fa-table"></i> Make Purchase
                 </div>
 
                 <div class="card-body">
@@ -124,6 +141,8 @@
 
                         <div class="col-md-4">
                             {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
+
+
                         </div>
 
                         {{--
@@ -201,6 +220,8 @@
                                     <td>
                                         <input type="number" id="vat" class="text-right form-control clearVat" name="vat" value="0" step="any" placeholder="Tk"/>
                                     </td>
+                                    <td>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <td class="text-right" colspan="6"><b>Discount :</b></td>
@@ -209,6 +230,8 @@
                                     </td>
                                     <td>
                                         <input type="number" id="discount" class="text-right form-control" name="total_discount" value="0" tabindex="17" step="any" placeholder="Tk" />
+                                    </td>
+                                    <td>
                                     </td>
                                 </tr>
                                 <tr>

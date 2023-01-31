@@ -29,8 +29,8 @@ class WarehouseController extends Controller
             return  DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('active', function($row){
-                        $active = route('warehouse.status',[$row->id,0]);
-                        $inactive = route('warehouse.status',[$row->id,1]);
+                        $active = route('warehouse.active',[$row->id,0]);
+                        $inactive = route('warehouse.active',[$row->id,1]);
                         return view('admin.action.active',compact('active','inactive','row'));
                     })
 

@@ -54,7 +54,7 @@
                     @endif
 					</div>
 
-                        {!! Form::model($supplier,['route'=>['supplier.update',$supplier->id], 'method'=>'PUT', 'role' => 'form','class' => 'form theme-form']) !!}
+                        {!! Form::model($supplier,['route'=>['supplier.update',$supplier->id], 'method'=>'PUT', 'role' => 'form','class' => 'form theme-form''class' => 'needs-validation', 'novalidate'=> '']) !!}
 
                         @include('admin.supplier.fields')
 

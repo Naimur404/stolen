@@ -30,8 +30,8 @@ class ManufacturerController extends Controller
             return  DataTables::of($data)
                     ->addIndexColumn()
                     ->addColumn('active', function($row){
-                        $active = route('manufacturer.status',[$row->id,0]);
-                        $inactive = route('manufacturer.status',[$row->id,1]);
+                        $active = route('manufacturer.active',[$row->id,0]);
+                        $inactive = route('manufacturer.active',[$row->id,1]);
                         return view('admin.action.active',compact('active','inactive','row'));
                     })
 
