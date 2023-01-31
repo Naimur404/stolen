@@ -33,7 +33,7 @@
 						<h5>Add Permission</h5>
 					</div>
 
-                        {!! Form::open(['route'=>'store_permission', 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
+                        {!! Form::open(['route'=>'store_permission', 'method'=>'POST', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
                         {!! Form::token(); !!}
 						<div class="card-body">
                             <div class="row">
@@ -42,7 +42,9 @@
 									<div class="mb-3">
                                         {!! Form::label('exampleFormControlInput1', 'Permission Name', array('class' => 'form-label')) !!}
                                         {!! Form::text('name',null,['class'=>'form-control', 'placeholder'=>'Permission', 'id' => 'exampleFormControlInput1','required' ]) !!}
-
+                                        @error('name')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
+                                    @enderror
 									</div>
 								</div>
 							</div>

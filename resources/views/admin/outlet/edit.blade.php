@@ -32,19 +32,10 @@
 				<div class="card">
 					<div class="card-header pb-0">
 						<h5>Edit Outlet</h5>
-                        @if ($errors->any())
-
-                                @foreach ($errors->all() as $error)
-                                <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-                                    {{ $error }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                  </div>
-                                @endforeach
-
-                    @endif
+                 
 					</div>
 
-                        {!! Form::model($outlet, ['route'=>['outlet.update', $outlet->id], 'method'=>'PUT', 'role' => 'form','class' => 'form theme-form']) !!}
+                        {!! Form::model($outlet, ['route'=>['outlet.update', $outlet->id], 'method'=>'PUT','class' => 'needs-validation', 'novalidate'=> '']) !!}
 
                         @include('admin.outlet.fields')
 

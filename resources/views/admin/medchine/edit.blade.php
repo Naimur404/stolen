@@ -29,16 +29,9 @@
 
 
 	<div class="container-fluid">
-        @if ($errors->any())
 
-        @foreach ($errors->all() as $error)
-        <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-            {{ $error }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-          </div>
-        @endforeach
 
-@endif
+
 {!! Form::model($medicine,['route'=>['medicine.update',$medicine->id], 'method'=>'PUT', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '','files' => true]) !!}
 @include('admin.medchine.fields')
 

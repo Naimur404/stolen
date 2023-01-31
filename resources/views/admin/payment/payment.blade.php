@@ -64,7 +64,7 @@
                                             <form id="modalFormData" name="modalFormData" class="needs-validation" novalidate="">
 
                                                 <div class="form-group">
-                                                    <label for="inputLink" class="col-sm-4 control-label">Payment Method</label>
+                                                    <label for="inputLink" class="col-sm-4 control-label">Payment Method *</label>
                                                     <div class="col-sm-10">
                                                         {{ Form::text('method_name', null, array('class' => 'form-control','required','placeholder' => 'Enter Payment Name' ,'id' =>'method_name')) }}
 

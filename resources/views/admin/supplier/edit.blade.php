@@ -42,16 +42,7 @@
 				<div class="card">
 					<div class="card-header pb-0">
 						<h5>Edit Supplier</h5>
-                        @if ($errors->any())
-
-                                @foreach ($errors->all() as $error)
-                                <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-                                    {{ $error }}
-                                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                  </div>
-                                @endforeach
-
-                    @endif
+                  
 					</div>
 
                         {!! Form::model($supplier,['route'=>['supplier.update',$supplier->id], 'method'=>'PUT', 'role' => 'form','class' => 'form theme-form''class' => 'needs-validation', 'novalidate'=> '']) !!}

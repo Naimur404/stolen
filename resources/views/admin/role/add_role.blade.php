@@ -33,7 +33,7 @@
 						<h5>Add Role</h5>
 					</div>
 
-                    {!! Form::open(['route'=>'store_role', 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
+                    {!! Form::open(['route'=>'store_role', 'method'=>'POST', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '']) !!}
                     {!! Form::token(); !!}
 
 						<div class="card-body">
@@ -42,8 +42,10 @@
 								<div class="col">
 									<div class="mb-3">
                                         {!! Form::label('exampleFormControlInput1', 'Role', array('class' => 'form-label')) !!}
-                                        {!! Form::text('name',null,['class'=>'form-control', 'placeholder'=>'Role', 'id' => 'exampleFormControlInput1' ]) !!}
-
+                                        {!! Form::text('name',null,['class'=>'form-control', 'placeholder'=>'Role', 'id' => 'exampleFormControlInput1','required' ]) !!}
+                                        @error('name')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
+                                    @enderror
 									</div>
 								</div>
 							</div>

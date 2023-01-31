@@ -65,7 +65,7 @@
                                             <form id="modalFormData" name="modalFormData" class="form-horizontal" novalidate="" class="needs-validation was-validated">
 
                                                 <div class="form-group">
-                                                    <label for="inputLink" class="col-sm-4 control-label">Category</label>
+                                                    <label for="inputLink" class="col-sm-4 control-label">Category *</label>
                                                     <div class="col-sm-10">
                                                         <input type="text" class="form-control" id="category_name" name="category_name"
                                                                placeholder="Enter Category" value="" required>

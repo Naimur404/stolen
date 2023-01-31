@@ -33,7 +33,7 @@
 						<h5>Edit Permission</h5>
 					</div>
 
-                        {!! Form::open(['route'=>['update_permission'], 'method'=>'POST', 'role' => 'form', 'class' => 'form theme-form']) !!}
+                        {!! Form::open(['route'=>['update_permission'], 'method'=>'POST', 'role' => 'form','class' => 'needs-validation', 'novalidate'=> '']) !!}
                         {!! Form::token(); !!}
                         {!! Form::hidden('id',$permission->id) !!}
 
@@ -45,7 +45,9 @@
 									<div class="mb-3">
                                         {!! Form::label('exampleFormControlInput1', 'Permission Name', array('class' => 'form-label')) !!}
                                         {!! Form::text('name',$permission->name,['class'=>'form-control', 'id' => 'exampleFormControlInput' ]) !!}
-
+                                        @error('name')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
+                                    @enderror
 									</div>
 								</div>
 							</div>

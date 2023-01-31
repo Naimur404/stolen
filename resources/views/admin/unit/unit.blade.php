@@ -65,7 +65,7 @@
                                             <form id="modalFormData" name="modalFormData" class="form-horizontal" novalidate="">
 
                                                 <div class="form-group">
-                                                    <label for="inputLink" class="col-sm-4 control-label">Unit</label>
+                                                    <label for="inputLink" class="col-sm-4 control-label">Unit *</label>
                                                     <div class="col-sm-10">
                                                         <input type="text" class="form-control" id="unit_name" name="unit_name"
                                                                placeholder="Enter unit" value="" required>
