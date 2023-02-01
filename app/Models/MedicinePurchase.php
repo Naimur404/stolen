@@ -25,6 +25,7 @@ class MedicinePurchase extends Model
         'purchase_date',
         'purchase_details',
         'payment_method_id',
+        'status',
         'added_by',
     ];
     public function getInvoiceImageAttribute($value){
