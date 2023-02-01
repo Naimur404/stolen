@@ -28,14 +28,14 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	               
+
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table">
 	                            <thead>
 	                                <tr>
 	                                    <th>Name</th>
-                                        <th>Phone</th>
+                                        <th>Mobile</th>
 
                                         <th>Address</th>
 
@@ -70,11 +70,11 @@
     });
     var table = $('.data-table').DataTable({
         processing: true,
-        serverSide: true,
+        
         ajax: "{{ route('manufacturer.index') }}",
         columns: [
-            {data: 'manufacturer_name', name: 'name',orderable: false},
-            {data: 'mobile', name: 'phone'},
+            {data: 'manufacturer_name', name: 'name'},
+            {data: 'mobile', name: 'mobile'},
             {data: 'address', name: 'address'},
             {data: 'active', name: 'is active', orderable: false, searchable: false},
 

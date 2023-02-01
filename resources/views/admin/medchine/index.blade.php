@@ -28,7 +28,7 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	              
+
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table">
@@ -73,7 +73,7 @@
     });
     var table = $('.data-table').DataTable({
         processing: true,
-        serverSide: true,
+       
         ajax: "{{ route('medicine.index') }}",
         columns: [
             {data: 'medicine_name', name: 'medicine name',orderable: false},

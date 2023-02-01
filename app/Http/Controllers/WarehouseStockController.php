@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Warehouse;
+use App\Models\WarehouseCheckIn;
 use App\Models\WarehouseStock;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class WarehouseStockController extends Controller
 {
@@ -35,7 +39,28 @@ class WarehouseStockController extends Controller
      */
     public function store(Request $request)
     {
-        //
+
+        $input = $request->all();
+      $stock =  WarehouseStock::create($input);
+        try{
+          $data = array(
+            'warehouse_id'    => $stock->warehouse_id,
+            'purchase_id'    => $request->purchase_id,
+            'medicine_id'    => $stock->medicine_id,
+            'expiry_date'    => $stock->expiry_date,
+            'quantity'    => $stock->quantity,
+             'checked_by' => Auth::user()->id,
+             'remarks'    => 'added',
+
+          );
+            WarehouseCheckIn::create($data);
+
+         return redirect()->back()->with('success', ' Successfully Added.');
+      }catch(Exception $e){
+         return redirect()->route('medicine-purchase.index')->with('success', $e->getMessage());
+      }
+
+
     }
 
     /**

@@ -18,6 +18,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\WarehouseStockController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -95,13 +96,15 @@ Route::resource('payment-method',PaymentMethodController::class);
 Route::resource('supplier',SupplierController::class);
 Route::resource('warehouse',WarehouseController::class);
 Route::resource('outlet',OutletController::class);
-
+Route::resource('medicine-purchase',MedicinePurchaseController::class);
+Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
+Route::resource('warehouse-stock',WarehouseStockController::class);
 //active status route
 
 Route::get('/status-supplier/{id}/{status}', [SupplierController::class,'active'])->name('supplier.active');
 Route::get('/status-warehouse/{id}/{status}', [WarehouseController::class,'active'])->name('warehouse.active');
 Route::get('/status-outlet/{id}/{status}', [OutletController::class,'active'])->name('outlet.active');
-Route::resource('medicine-purchase',MedicinePurchaseController::class);
+
 
 //assing outlet to user
 Route::get('/add-user-outlet/{id}', [OutletController::class,'addUser'])->name('addusers');
