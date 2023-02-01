@@ -6,6 +6,7 @@ use App\Models\MedicinePurchase;
 use App\Models\MedicinePurchaseDetails;
 use App\Models\PaymentMethod;
 use App\Models\Warehouse;
+use App\Models\WarehouseCheckIn;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -235,4 +236,15 @@ class MedicinePurchaseController extends Controller
                                         ->sum('stock_quantity');
         return json_encode($medicine_details);
     }
+    public function checkIn($id)
+    {
+
+        $productPurchase = MedicinePurchase::findOrFail($id);
+        $productPurchaseDetails = MedicinePurchaseDetails::where('medicine_purchase_id', $productPurchase->id)->get();
+       
+
+        return view('admin.medchine_purchase.checkin', compact('productPurchase', 'productPurchaseDetails'));
+    }
+
+
 }

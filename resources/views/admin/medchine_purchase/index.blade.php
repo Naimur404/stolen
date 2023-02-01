@@ -102,6 +102,10 @@
                                                 {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
                                                 {!! Form::close() !!}
                                             @endcan
+
+                                            <a href="{{ route('medicine-purchase.checkIn', $productPurchase->id) }}"
+                                                class="btn btn-info btn-xs " title="Pay Now" style="margin-left:3px"><i class="fa-light fa-money-bill"></i>Check In</a>
+
                                         </td>
                                         @endif
                                     </tr>

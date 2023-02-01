@@ -36,12 +36,7 @@
         <div class="card-header py-2">
             <div class="d-flex justify-content-between align-items-center">
 
-                <div class="text-right">
-                    @can('product_purchase.list')
-                        <a href="{{ route('medicine-purchase.index') }}" class="btn btn-success btn-sm mr-1"><i
-                                class="fas fa-align-justify mr-1"></i>Purchase list</a>
-                    @endcan
-                </div>
+              
             </div>
         </div>
 
