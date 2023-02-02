@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Manufacturer;
+use App\Models\Outlet;
 use App\Models\Supplier;
 use App\Models\Type;
 use App\Models\Unit;
@@ -126,6 +127,24 @@ class Select2Controller extends Controller
            $response[] = array(
                 "id"=>$Manufacturer->id,
                 "text"=>$Manufacturer->manufacturer_name
+           );
+        }
+        return response()->json($response);
+     }
+     public function getOutlet(Request $request){
+        $search = $request->search;
+
+        if($search == ''){
+            $outlets = Outlet::where('is_active',1)->orderby('outlet_name','asc')->select('id','outlet_name')->limit(5)->get();
+        }else{
+           $outlets = Outlet::where('is_active',1)->orderby('outlet_name','asc')->select('id','outlet_name')->where('outlet_name', 'like', '%' .$search . '%')->limit(5)->get();
+        }
+
+        $response = array();
+        foreach($outlets as $outlet){
+           $response[] = array(
+                "id"=>$outlet->id,
+                "text"=>$outlet->outlet_name
            );
         }
         return response()->json($response);

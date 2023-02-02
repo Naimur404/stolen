@@ -46,6 +46,12 @@ class PermissionSeeder extends Seeder
             'medchine_purchase.edit',
             'medchine_purchase.delete',
 
+            'distribute-medicine.management',
+            'distribute-medicine.create',
+            'distribute-medicine.edit',
+            'distribute-medicine.delete',
+
+
             'warehouse.management',
             'warehouse.create',
             'warehouse.edit',
