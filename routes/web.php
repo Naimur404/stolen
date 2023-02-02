@@ -119,7 +119,6 @@ Route::post('/store-user-outlet', [OutletController::class,'storeUser'])->name('
 Route::get('get-medicine',[MedicineController::class,'get_medicine']);
 Route::get('get-medicine-details-for-purchase/{id}',[MedicineController::class,'get_medicine_details_for_purchase']);
 Route::get('get-manufacture-wise-medicine',[MedicineController::class,'get_manufacturer_wise_medicine']);
-Route::get('get-all-medicine',[MedicineController::class,'get_all_medicine']);
 Route::get('get-product-for-sale', [SupplierController::class,'get_product_for_sale']);
 
 
@@ -131,6 +130,7 @@ Route::post('/get_type',[Select2Controller::class,'getType'])->name('get-type');
 Route::post('/get-manufacturer',[Select2Controller::class,'getManufacturer'])->name('get-manufacturer');
 Route::get('get-supplier', [Select2Controller::class,'get_supplier']);
 Route::get('/get-outlet',[Select2Controller::class,'getOutlet'])->name('get-outlet');
+Route::get('get-all-medicine',[Select2Controller::class,'get_all_medicine']);
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {

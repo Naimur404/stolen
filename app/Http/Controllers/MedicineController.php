@@ -233,33 +233,6 @@ class MedicineController extends Controller
 
           return response()->json($response);
       }
-      public function get_all_medicine(Request $request){
-
-        $search = $request->search;
-          if($search == ''){
-
-             $medicines = Medicine::orderby('id','asc')
-
-             ->select('id','medicine_name')
-             ->get();
-          }else{
-
-             $medicines = Medicine::orderby('id','asc')
-            
-             ->select('id','medicine_name')
-             ->where('medicine_name', 'like', '%' .$search . '%')
-             ->get();
-          }
-
-          $response = array();
-          foreach($medicines as $medicine){
-             $response[] = array(
-                  "id"=>$medicine->id,
-                  "text"=>$medicine->medicine_name
-             );
-          }
-
-          return response()->json($response);
-      }
+    
 
 }
