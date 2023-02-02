@@ -69,6 +69,9 @@
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('medicine-purchase.index')}}" href="{{route('medicine-purchase.index')}}"><i data-feather="shopping-bag"></i><span>Purchase</span></a>
                     </li>
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('distribute-medicine.index')}}" href="{{route('distribute-medicine.index')}}"><i data-feather="shopping-bag"></i><span>Distribute Medicine</span></a>
+                    </li>
                       @hasrole('Super Admin')
 
 

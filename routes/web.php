@@ -7,6 +7,7 @@ use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\MedicineDistributeController;
 use App\Http\Controllers\MedicinePurchaseController;
 use App\Http\Controllers\OutletController;
+use App\Http\Controllers\OutletStockController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
@@ -92,15 +93,20 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'],function () {
 });
 
 Route::group(['middleware' => ['auth']],function () {
-
+//resource route
 Route::resource('payment-method',PaymentMethodController::class);
 Route::resource('supplier',SupplierController::class);
 Route::resource('warehouse',WarehouseController::class);
 Route::resource('outlet',OutletController::class);
 Route::resource('medicine-purchase',MedicinePurchaseController::class);
-Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
 Route::resource('warehouse-stock',WarehouseStockController::class);
+Route::resource('outlet-stock',OutletStockController::class);
 Route::resource('distribute-medicine',MedicineDistributeController::class);
+
+//checkin route
+Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
+Route::get('distribute-medicine/{id}/check-in',[MedicineDistributeController::class,'checkIn'])->name('distribute-medicine.checkIn');
+
 
 
 //active status route

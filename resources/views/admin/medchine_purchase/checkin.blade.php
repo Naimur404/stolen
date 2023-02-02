@@ -103,7 +103,7 @@
                                 Receive
                             </button>
                             @else
-                            <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase" disabled >
+                            <button type="submit" class="btn btn-danger" tabindex="19" id="save_purchase" disabled >
                               Already  Receive
                             </button>
                             @endif

@@ -18,10 +18,19 @@ class MedicineDistributeController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     function __construct()
+     {
+         $this->middleware('permission:distribute-medicine.management|distribute-medicine.create|distribute-medicine.edit|distribute-medicine.delete', ['only' => ['index','store']]);
+         $this->middleware('permission:distribute-medicine.create', ['only' => ['create','store']]);
+         $this->middleware('permission:distribute-medicine.edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:distribute-medicine.delete', ['only' => ['destroy']]);
+     }
+
     public function index()
     {
         $medicinedistributes = MedicineDistribute::get();
-       
+
         return view('admin.DistributeMedicine.index', compact('medicinedistributes'));
     }
 
@@ -224,5 +233,14 @@ class MedicineDistributeController extends Controller
 
 
         return redirect()->back()->with('success', 'Data has been Deleted.');
+    }
+    public function checkIn($id)
+    {
+
+        $productPurchase = MedicineDistribute::findOrFail($id);
+        $productPurchaseDetails = MedicineDistributeDetail::where('medicine_distribute_id', $productPurchase->id)->get();
+
+
+        return view('admin.DistributeMedicine.checkin', compact('productPurchase', 'productPurchaseDetails'));
     }
 }

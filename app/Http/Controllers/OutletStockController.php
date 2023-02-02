@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OutletCheckIn;
 use App\Models\OutletStock;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Symfony\Component\Console\Output\Output;
 
 class OutletStockController extends Controller
 {
@@ -35,7 +39,25 @@ class OutletStockController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $input = $request->all();
+        $stock =  OutletStock::create($input);
+          try{
+            $data = array(
+              'outlet_id'    => $stock->outlet_id,
+              'medicine_distribute_id'    => $request->medicine_distribute_id,
+              'medicine_id'    => $stock->medicine_id,
+              'expiry_date'    => $stock->expiry_date,
+              'quantity'    => $stock->quantity,
+               'checked_by' => Auth::user()->id,
+               'remarks'    => 'added',
+
+            );
+              OutletCheckIn::create($data);
+
+           return redirect()->back()->with('success', ' Successfully Added.');
+        }catch(Exception $e){
+           return redirect()->route('distribute-medicine.index')->with('success', $e->getMessage());
+        }
     }
 
     /**
