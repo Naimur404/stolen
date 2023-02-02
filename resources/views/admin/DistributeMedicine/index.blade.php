@@ -102,7 +102,7 @@
                                                 {!! Form::close() !!}
                                             @endcan
 
-                                            <a href="{{ route('distribute-medicine.index', $productPurchase->id) }}"
+                                            <a href="{{ route('distribute-medicine.checkIn', $productPurchase->id) }}"
                                                 class="btn btn-info btn-xs mt-2" title="Pay Now" style="margin-left:3px"><i class="fa-light fa-money-bill"></i>Check In</a>
 
                                         </td>
