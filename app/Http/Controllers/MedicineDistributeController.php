@@ -3,7 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\MedicineDistribute;
+use App\Models\MedicineDistributeDetail;
+use App\Models\Warehouse;
+use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Spatie\LaravelIgnition\Recorders\DumpRecorder\Dump;
 
 class MedicineDistributeController extends Controller
 {
@@ -14,7 +20,9 @@ class MedicineDistributeController extends Controller
      */
     public function index()
     {
-        //
+        $medicinedistributes = MedicineDistribute::get();
+       
+        return view('admin.DistributeMedicine.index', compact('medicinedistributes'));
     }
 
     /**
@@ -24,7 +32,8 @@ class MedicineDistributeController extends Controller
      */
     public function create()
     {
-        //
+        $warehouse = Warehouse::pluck('warehouse_name', 'id');
+        return view('admin.DistributeMedicine.create',compact('warehouse'));
     }
 
     /**
@@ -35,7 +44,64 @@ class MedicineDistributeController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'outlet_id' => 'required',
+            'warehouse_id' => 'required'
+        ]);
+
+
+
+        $input=$request->all();
+
+        // return $input;
+
+
+
+        $purchase_input = [
+            'warehouse_id' => $input['warehouse_id'],
+            'outlet_id' => $input['outlet_id'],
+            'date' => $input['purchase_date'],
+
+            'added_by' => Auth::user()->id,
+
+            'remarks' => 'hello',
+
+
+        ];
+        try {
+
+            $medicinedistribute = MedicineDistribute::create($purchase_input);
+
+            $medicines = $input['product_name'];
+
+            for ($i = 0; $i < sizeof($medicines); $i++) {
+                $purchase_details = array(
+
+                    'medicine_distribute_id' => $medicinedistribute->id,
+                    'medicine_id' => $input['product_id'][$i],
+                    'medicine_name' => $input['product_name'][$i],
+
+                    'quantity' => $input['quantity'][$i],
+                    'rack_no' => $input['rack_no'][$i],
+                    'expiry_date' => $input['expiry_date'][$i],
+
+
+                    'rate' => $input['total_price'][$i] / $input['quantity'][$i],
+
+
+
+                );
+
+
+                MedicineDistributeDetail::create($purchase_details);
+            }
+
+
+            return redirect()->back()->with('success', 'Data has been added.');
+        } catch (Exception $e) {
+
+             return redirect()->back()->with('error', $e->getMessage());
+         }
     }
 
     /**
@@ -55,10 +121,16 @@ class MedicineDistributeController extends Controller
      * @param  \App\Models\MedicineDistribute  $medicineDistribute
      * @return \Illuminate\Http\Response
      */
-    public function edit(MedicineDistribute $medicineDistribute)
+    public function edit($id)
     {
-        //
+        $data = MedicineDistribute::find($id);
+
+        $medicinedetails = MedicineDistributeDetail::where('medicine_distribute_id',$data->id)->get();
+        $warehouse = Warehouse::pluck('warehouse_name', 'id');
+        return view('admin.DistributeMedicine.edit',compact('data','medicinedetails','warehouse'));
     }
+
+
 
     /**
      * Update the specified resource in storage.
@@ -67,9 +139,69 @@ class MedicineDistributeController extends Controller
      * @param  \App\Models\MedicineDistribute  $medicineDistribute
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, MedicineDistribute $medicineDistribute)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'outlet_id' => 'required',
+            'warehouse_id' => 'required'
+        ]);
+        $input=$request->all();
+
+        // return $input;
+
+
+
+        $purchase_input = [
+            'warehouse_id' => $input['warehouse_id'],
+            'outlet_id' => $input['outlet_id'],
+            'date' => $input['purchase_date'],
+        ];
+        try{
+          $data =  MedicineDistribute::where('id',$id)->update($purchase_input);
+            $medicines = $input['product_name'];
+
+            for ($i = 0; $i < sizeof($medicines); $i++) {
+
+                $purchase_details = array(
+
+                    'medicine_distribute_id' => $id,
+                    'medicine_id' => $input['product_id'][$i],
+                    'medicine_name' => $input['product_name'][$i],
+
+                    'quantity' => $input['quantity'][$i],
+                    'rack_no' => $input['rack_no'][$i],
+                    'expiry_date' => $input['expiry_date'][$i],
+
+
+                    'rate' => $input['total_price'][$i] / $input['quantity'][$i],
+
+
+
+                );
+                $check = MedicineDistributeDetail::where('medicine_distribute_id',$id)->where('medicine_id',$input['product_id'][$i])->first();
+
+
+                 if($check != null){
+
+
+                    MedicineDistributeDetail::where('medicine_distribute_id',$id)->where('medicine_id',$input['product_id'][$i])->update($purchase_details);
+
+                 }else{
+
+                    MedicineDistributeDetail::create($purchase_details);
+
+
+                 }
+
+
+            }
+
+
+            return redirect()->back()->with('success', 'Data has been Updated.');
+        } catch (Exception $e) {
+
+             return redirect()->back()->with('error', $e->getMessage());
+         }
     }
 
     /**
@@ -78,8 +210,19 @@ class MedicineDistributeController extends Controller
      * @param  \App\Models\MedicineDistribute  $medicineDistribute
      * @return \Illuminate\Http\Response
      */
-    public function destroy(MedicineDistribute $medicineDistribute)
+    public function destroy($id)
+
     {
-        //
+        MedicineDistribute::where('id',$id)->delete();
+        MedicineDistributeDetail::where('medicine_distribute_id',$id)->delete();
+        return redirect()->back()->with('success', 'Data has been deleted');
+
+    }
+    public function medicineDistributeDetailDelete($medicine_id,$distribute_id)
+    {
+      $data =  MedicineDistributeDetail::where('medicine_id',$medicine_id)->where('medicine_distribute_id',$distribute_id)->delete();
+
+
+        return redirect()->back()->with('success', 'Data has been Deleted.');
     }
 }

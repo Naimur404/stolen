@@ -190,7 +190,7 @@ class MedicineController extends Controller
             return redirect()->route('medicine.index')->with('success', $e->getMessage());
          }
     }
-   
+
 
       // get product details for purchase
       public function get_medicine_details_for_purchase($id){
@@ -233,4 +233,6 @@ class MedicineController extends Controller
 
           return response()->json($response);
       }
+    
+
 }

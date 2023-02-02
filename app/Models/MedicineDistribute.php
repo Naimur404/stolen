@@ -18,4 +18,10 @@ class MedicineDistribute extends Model
         'added_by',
         'remarks',
     ];
+    public function outlet(){
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'id');
+ }
+ public function warehouse(){
+    return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
+}
 }

@@ -3,7 +3,7 @@
 
 @extends('layouts.admin.master')
 
-@section('title',' All Purchase')
+@section('title',' All Distribute Medicine to Outlet')
 
 @push('css')
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
@@ -14,15 +14,15 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-6">
-			<h3>All Purchase</h3>
+            <div class="col-sm-8">
+			<h3>All Distribute Medicine to Outlet</h3>
         </div>
 
         </div>
 		@endslot
 
         @slot('button')
-        <a href="{{ route('medicine-purchase.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Purchase</a>
+        <a href="{{ route('distribute-medicine.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Distribute Medicine</a>
         @endslot
 	@endcomponent
 
@@ -31,77 +31,79 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	            
+
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table">
 	                            <thead>
 	                                <tr>
                                         <th>SL</th>
+                                        <th>Outlet Name</th>
+                                        <th>Warehouse Name</th>
 
-                                        <th>Supplier</th>
-                                        <th>Purchase Date</th>
                                         {{-- <th>Product Type</th> --}}
-                                        <th>Payment Method</th>
-                                        <th>Total</th>
-                                        <th>Pay</th>
-                                        <th>Due</th>
+                                        <th>Added By</th>
+                                        <th>Remarks</th>
 
 
-                                        @if (auth()->user()->can('medchine_purchase.edit') || auth()->user()->can('medchine_purchase.delete'))
+
+                                        @if (auth()->user()->can('distribute-medicine.edit') || auth()->user()->can('distribute-medicine.delete'))
                                         <th>Action</th>
                                         @endif
                                     </tr>
 	                            </thead>
 	                            <tbody>
-                                    @foreach ($productPurchases as $productPurchase)
+                                    @foreach ($medicinedistributes as $productPurchase)
+                                    {{-- @php
+                                        $data = App\Models\MedicineDistributeDetail::where('medicine_distribute_id',$productPurchase->id)->get();
+                                    @endphp --}}
                                     <tr>
                                         <td>{{ $loop->index + 1 }}</td>
-                                        @if ( $productPurchase->supplier_id == null)
+                                        @if ( $productPurchase->outlet_id == null)
 
                                             <td> N/A </td>
-                                        @elseif ( $productPurchase->supplier_id
+                                        @elseif ( $productPurchase->outlet_id
                                             != null)
 
-                                            <td>{{ $productPurchase->supplier->supplier_name }}</td>
+                                            <td>{{ $productPurchase->outlet->outlet_name }}</td>
                                         @endif
 
-                                        <td>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y')}}
-                                        </td>
-                                        <td>@php
-                                           $data = App\Models\PaymentMethod::where('id',$productPurchase->payment_method_id)->first();
-                                        @endphp
-                                            {{ $data->method_name }}</td>
+                                          @if ( $productPurchase->warehouse_id == null)
 
-                                        <td>{{ $productPurchase->grand_total }}</td>
-                                        <td>{{ $productPurchase->paid_amount }}</td>
-                                        @if ($productPurchase->due_amount > 0)
-                                            <td> {{ $productPurchase->due_amount }} </td>
-                                        @else
-                                            <td>Paid</td>
+                                            <td> N/A </td>
+                                        @elseif ( $productPurchase->warehouse_id
+                                            != null)
+
+                                            <td>{{ $productPurchase->warehouse->warehouse_name }}</td>
                                         @endif
 
 
+                                        <td>{{ Auth::user()->name }}</td>
+                                        <td>{{ $productPurchase->remarks }}</td>
 
-                                        @if (auth()->user()->can('medchine_purchase.edit') || auth()->user()->can('medchine_purchase.delete'))
-                                        <td class="form-inline">
+
+
+
+
+                                        @if (auth()->user()->can('distribute-medicine.edit') || auth()->user()->can('distribute-medicine.delete'))
+                                        <td class="">
                                             @can('medchine_purchase.edit')
-                                                <a href="{{ route('medicine-purchase.edit', $productPurchase->id) }}"
-                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa-light fa-money-bill"></i>Edit</a>
+                                                <a href="{{ route('distribute-medicine.edit', $productPurchase->id) }}"
+                                                    class="btn btn-success btn-xs mt-2" title="Pay Now" style="margin-right:3px"><i class="fa-light fa-money-bill"></i>Edit</a>
                                             @endcan
 
                                             {{-- @can('product_purchase.print')
                                             <a href="{{ route('medicine-purchase.show', $productPurchase->id) }}" class="btn btn-info btn-xs"  title="Print Invoice" target="__blank" style="margin-right:3px"><i class="fas fa-print"></i></a>
                                             @endcan --}}
 
-                                            @can('medchine_purchase.delete')
-                                                {!! Form::open(['method' => 'DELETE', 'route' => ['medicine-purchase.destroy', $productPurchase->id]]) !!}
-                                                {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
+                                            @can('distribute-medicine.delete')
+                                                {!! Form::open(['method' => 'DELETE', 'route' => ['distribute-medicine.destroy', $productPurchase->id]]) !!}
+                                                {{ Form::button('Delete', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs mt-2', 'id' => 'delete', 'title' => 'Delete']) }}
                                                 {!! Form::close() !!}
                                             @endcan
 
-                                            <a href="{{ route('medicine-purchase.checkIn', $productPurchase->id) }}"
-                                                class="btn btn-info btn-xs " title="Pay Now" style="margin-left:3px"><i class="fa-light fa-money-bill"></i>Check In</a>
+                                            <a href="{{ route('distribute-medicine.index', $productPurchase->id) }}"
+                                                class="btn btn-info btn-xs mt-2" title="Pay Now" style="margin-left:3px"><i class="fa-light fa-money-bill"></i>Check In</a>
 
                                         </td>
                                         @endif
@@ -122,12 +124,12 @@
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
 
     <script type="text/javascript">
-       $(document).ready(function() {
-            $('.data-table').DataTable();
-        });
+        $(document).ready(function() {
+             $('.data-table').DataTable();
+         });
 
 
-   </script>
+    </script>
 
 
 @if (Session()->get('success'))
