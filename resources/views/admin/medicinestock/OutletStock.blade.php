@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title')All Supplier
+@section('title')Outlet Medicine Stock
 
 @endsection
 
@@ -13,15 +13,21 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-6">
-			<h3>All Supplier</h3>
+            <div class="col-sm-8">
+			<h3>Outlet Medicine Stock</h3>
         </div>
 
         </div>
 		@endslot
 
         @slot('button')
-        <a href="{{ route('supplier.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title=""> Add Supplier</a>
+<div class="row">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-4">
+            {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'id' => 'supplier_id']) }}
+        </div>
+</div>
         @endslot
 	@endcomponent
 
@@ -36,15 +42,19 @@
 	                        <table class="display data-table" id="basic-1">
 	                            <thead>
 	                                <tr>
-	                                    <th>Supplier Name</th>
+                                        <th>SI</th>
+	                                    <th>Medicine Name</th>
+                                        <th>Category</th>
                                         <th>Manufacturer Name</th>
-                                        <th>Mobile</th>
-                                        <th>Address</th>
-                                        <th>Details</th>
-                                        <th>Is Active</th>
+                                        <th>Expiry Date</th>
+                                        <th>Unit</th>
+                                        <th>Manufacture Price</th>
+                                        <th>Sale Price</th>
+
+                                        <th>Stock</th>
 
 
-	                                    <th>Action</th>
+
 
 	                                </tr>
 	                            </thead>
@@ -71,26 +81,73 @@
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
     });
+    let outlet_id = $('#supplier_id').val();
     var table = $('.data-table').DataTable({
+        responsive: true,
+        
         processing: true,
         serverSide: true,
-        ajax: "{{ route('supplier.index') }}",
+        ajax: "/get-outlet-stock/" + outlet_id,
         columns: [
-            {data: 'supplier_name', name: 'Supplier Name'},
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'medicine_name', name: 'medicine Name'},
+            {data: 'category', name: 'category'},
+            {data: 'manufacturer_name', name: 'Manufacturer Name'},
+            {data: 'expiry_date', name: 'Expiry Date'},
+            {data: 'unit', name: 'unit'},
+            {data: 'manufacturer_price', name: 'Manufacturer price'},
+            {data: 'sale_price', name: 'sale price'},
+            {data: 'quantity', name: 'stock'},
 
-            {data: 'manufacturer', name: 'Manufacturer Name', orderable: false, searchable: false},
-            {data: 'mobile', name: 'mobile'},
-            {data: 'address', name: 'address'},
-            {data: 'details', name: 'details'},
-            {data: 'active', name: 'is Active', orderable: false, searchable: false},
-
-            {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
+    $('#supplier_id').on('change', function(){
+    outlet_id = $(this).val();
+    table.ajax.url("/get-outlet-stock/" + outlet_id).load();
 });
+});
+
    </script>
+{{-- <script>
+
+  var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $(document).ready(function(){
+
+          $( "#supplier_id" ).select2({
+             ajax: {
+               url: "{{route('get-outlet')}}",
+               type: "GET",
+               dataType: 'json',
+               delay: 250,
+               data: function (params) {
+                 return {
+                    _token: CSRF_TOKEN,
+                    search: params.term // search term
+                 };
+               },
+               processResults: function (response) {
+                 return {
+                   results: response
+                 };
+               },
+               cache: true
+             }
+
+          });
+
+
+
+
+
+
+
+        });
+
+
+</script> --}}
 
 @if (Session()->get('success'))
+
 
 <script>
 $.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('success') }}</strong>', {
