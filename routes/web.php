@@ -22,6 +22,7 @@ use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\WarehouseStockController;
 use App\Models\MedicineDistribute;
+use App\Models\OutletStock;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -137,6 +138,10 @@ Route::post('/get-manufacturer',[Select2Controller::class,'getManufacturer'])->n
 Route::get('get-supplier', [Select2Controller::class,'get_supplier']);
 Route::get('/get-outlet',[Select2Controller::class,'getOutlet'])->name('get-outlet');
 Route::get('get-all-medicine',[Select2Controller::class,'get_all_medicine']);
+
+//stock route
+Route::get('/get-outlet-stock/{id}',[OutletStockController::class,'outletStock'])->name('outletstock');
+Route::get('/get-warehouse-stock/{id}',[WarehouseStockController::class,'warehouseStock'])->name('warehouseStock');
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {

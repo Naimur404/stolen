@@ -2,12 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Manufacturer;
+use App\Models\Medicine;
+use App\Models\Outlet;
 use App\Models\OutletCheckIn;
 use App\Models\OutletStock;
+use App\Models\Unit;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Symfony\Component\Console\Output\Output;
+
+use Yajra\DataTables\Facades\DataTables;
 
 class OutletStockController extends Controller
 {
@@ -16,9 +23,15 @@ class OutletStockController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     function __construct()
+     {
+         $this->middleware('permission:outletStock', ['only' => ['outletStock']]);
+
+     }
     public function index()
     {
-        //
+
     }
 
     /**
@@ -66,9 +79,10 @@ class OutletStockController extends Controller
      * @param  \App\Models\OutletStock  $outletStock
      * @return \Illuminate\Http\Response
      */
-    public function show(OutletStock $outletStock)
+    public function show(Request $request, $id)
+
     {
-        //
+
     }
 
     /**
@@ -103,5 +117,109 @@ class OutletStockController extends Controller
     public function destroy(OutletStock $outletStock)
     {
         //
+    }
+    public function outletStock(Request $request, $id )
+
+    {
+        if($id != 'all'){
+            if ($request->ajax()) {
+                $data = OutletStock::where("outlet_id",$id)->get();
+                return  DataTables::of($data)
+                        ->addIndexColumn()
+                        ->addColumn('medicine_name', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('medicine_name');
+                          return $data;
+                      })
+
+                        ->addColumn('category', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('category_id');
+                            $cat = Category::where('id',$data)->implode('category_name');
+                            return $cat;
+                        })
+                        ->addColumn('manufacturer_name', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_id');
+                            $manu = Manufacturer::where('id',$data)->implode('manufacturer_name');
+                            return $manu;
+                        })
+                        ->addColumn('unit', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('unit_id');
+                            $unit = Unit::where('id',$data)->implode('unit_name');
+                            return $unit;
+                        })
+                        ->addColumn('manufacturer_price', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_price');
+
+                            return $data;
+                        })
+                        ->addColumn('sale_price', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('price');
+
+                            return $data;
+                        })
+
+                        ->rawColumns(['medicine_name'])
+                        ->rawColumns(['category'])
+                        ->rawColumns(['manufacturer_name'])
+                        ->rawColumns(['unit'])
+
+                        ->rawColumns(['manufacturer_price'])
+                        ->rawColumns(['sale_price'])
+                        ->make(true);
+            }
+        }else{
+            if ($request->ajax()) {
+                $data = OutletStock::all();
+                return  DataTables::of($data)
+                        ->addIndexColumn()
+                        ->addColumn('medicine_name', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('medicine_name');
+                          return $data;
+                      })
+
+                        ->addColumn('category', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('category_id');
+                            $cat = Category::where('id',$data)->implode('category_name');
+                            return $cat;
+                        })
+                        ->addColumn('manufacturer_name', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_id');
+                            $manu = Manufacturer::where('id',$data)->implode('manufacturer_name');
+                            return $manu;
+                        })
+                        ->addColumn('unit', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('unit_id');
+                            $unit = Unit::where('id',$data)->implode('unit_name');
+                            return $unit;
+                        })
+                        ->addColumn('manufacturer_price', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_price');
+
+                            return $data;
+                        })
+                        ->addColumn('sale_price', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('price');
+
+                            return $data;
+                        })
+
+                        ->rawColumns(['medicine_name'])
+                        ->rawColumns(['category'])
+                        ->rawColumns(['manufacturer_name'])
+                        ->rawColumns(['unit'])
+
+                        ->rawColumns(['manufacturer_price'])
+                        ->rawColumns(['sale_price'])
+                        ->make(true);
+            }
+        }
+
+
+        $outlet = Outlet::pluck('outlet_name', 'id');
+
+      $outlet = new Collection($outlet);
+      $outlet->prepend('All Outlet Stock', 'all');
+
+
+        return view('admin.medicinestock.OutletStock',compact('outlet'));
     }
 }

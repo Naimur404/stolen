@@ -1,6 +1,8 @@
 @extends('layouts.admin.master')
 
-@section('title',' All Medicine')
+@section('title')Outlet Medicine Stock
+
+@endsection
 
 @push('css')
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
@@ -11,15 +13,21 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-6">
-			<h3>All Medicine</h3>
+            <div class="col-sm-8">
+			<h3>Outlet Medicine Stock</h3>
         </div>
 
         </div>
 		@endslot
 
         @slot('button')
-        <a href="{{ route('medicine.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title=""> Add Medicine</a>
+<div class="row">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-4">
+            {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'id' => 'supplier_id']) }}
+        </div>
+</div>
         @endslot
 	@endcomponent
 
@@ -31,20 +39,22 @@
 
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
-	                        <table class="display data-table">
+	                        <table class="display data-table" id="basic-1">
 	                            <thead>
 	                                <tr>
+                                        <th>SI</th>
 	                                    <th>Medicine Name</th>
-                                        <th>Generic Name</th>
-                                        <th>Manufacture Name</th>
                                         <th>Category</th>
-                                        <th>Price</th>
+                                        <th>Manufacturer Name</th>
+                                        <th>Expiry Date</th>
+                                        <th>Unit</th>
+                                        <th>Manufacture Price</th>
+                                        <th>Sale Price</th>
 
-                                        <th>Image</th>
+                                        <th>Stock</th>
 
 
 
-	                                    <th>Action</th>
 
 	                                </tr>
 	                            </thead>
@@ -61,8 +71,8 @@
 	</div>
 
 	@push('scripts')
-	
-    <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
+
+ 
 
     <script type="text/javascript">
     $(function () {
@@ -71,52 +81,36 @@
               'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
           }
     });
+    let outlet_id = $('#supplier_id').val();
     var table = $('.data-table').DataTable({
+        responsive: true,
+
         processing: true,
-
-        ajax: "{{ route('medicine.index') }}",
+        serverSide: true,
+        ajax: "/get-outlet-stock/" + outlet_id,
         columns: [
-            {data: 'medicine_name', name: 'medicine name',orderable: false},
-            {data: 'generic_name', name: 'generic name'},
-            {data: 'manufacturer', name: 'manufacture name'},
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'medicine_name', name: 'medicine Name'},
             {data: 'category', name: 'category'},
-            {data: 'price', name: 'price'},
-            {data: 'image', name: 'image', orderable: false, searchable: false},
+            {data: 'manufacturer_name', name: 'Manufacturer Name'},
+            {data: 'expiry_date', name: 'Expiry Date'},
+            {data: 'unit', name: 'unit'},
+            {data: 'manufacturer_price', name: 'Manufacturer price'},
+            {data: 'sale_price', name: 'sale price'},
+            {data: 'quantity', name: 'stock'},
 
-
-            {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
+    $('#supplier_id').on('change', function(){
+    outlet_id = $(this).val();
+    table.ajax.url("/get-outlet-stock/" + outlet_id).load();
 });
+});
+
    </script>
 
 
-@if (Session()->get('success'))
 
-<script>
-$.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('success') }}</strong>', {
-type: 'theme',
-allow_dismiss: true,
-delay: 2000,
-showProgressbar: true,
-timer: 300
-});
-</script>
-
-@endif
-@if (Session()->get('error'))
-
-<script>
-$.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('error') }}</strong>', {
-type: 'theme',
-allow_dismiss: true,
-delay: 2000,
-showProgressbar: true,
-timer: 300
-});
-</script>
-
-@endif
     {{-- <script src="{{asset('assets/js/ecommerce.js')}}"></script> --}}
     {{-- <script src="{{asset('assets/js/product-list-custom.js')}}"></script> --}}
 	@endpush

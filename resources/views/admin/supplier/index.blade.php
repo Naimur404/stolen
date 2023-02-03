@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title')All Role Permission
+@section('title')All Supplier
 
 @endsection
 
@@ -61,7 +61,7 @@
 	</div>
 
 	@push('scripts')
-	<script src="{{asset('assets/js/datatable/datatables/jquery.dataTables.min.js')}}"></script>
+
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
 
     <script type="text/javascript">

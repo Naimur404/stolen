@@ -2,15 +2,26 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Manufacturer;
+use App\Models\Medicine;
+use App\Models\Unit;
 use App\Models\Warehouse;
 use App\Models\WarehouseCheckIn;
 use App\Models\WarehouseStock;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Database\Eloquent\Collection;
 
 class WarehouseStockController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:warehouseStock', ['only' => ['warehouseStock']]);
+
+    }
     /**
      * Display a listing of the resource.
      *
@@ -106,5 +117,109 @@ class WarehouseStockController extends Controller
     public function destroy(WarehouseStock $warehouseStock)
     {
         //
+    }
+    public function warehouseStock(Request $request, $id )
+
+    {
+        if($id != 'all'){
+            if ($request->ajax()) {
+                $data = WarehouseStock::where("warehouse_id",$id)->get();
+                return  DataTables::of($data)
+                        ->addIndexColumn()
+                        ->addColumn('medicine_name', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('medicine_name');
+                          return $data;
+                      })
+
+                        ->addColumn('category', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('category_id');
+                            $cat = Category::where('id',$data)->implode('category_name');
+                            return $cat;
+                        })
+                        ->addColumn('manufacturer_name', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_id');
+                            $manu = Manufacturer::where('id',$data)->implode('manufacturer_name');
+                            return $manu;
+                        })
+                        ->addColumn('unit', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('unit_id');
+                            $unit = Unit::where('id',$data)->implode('unit_name');
+                            return $unit;
+                        })
+                        ->addColumn('manufacturer_price', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_price');
+
+                            return $data;
+                        })
+                        ->addColumn('sale_price', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('price');
+
+                            return $data;
+                        })
+
+                        ->rawColumns(['medicine_name'])
+                        ->rawColumns(['category'])
+                        ->rawColumns(['manufacturer_name'])
+                        ->rawColumns(['unit'])
+
+                        ->rawColumns(['manufacturer_price'])
+                        ->rawColumns(['sale_price'])
+                        ->make(true);
+            }
+        }else{
+            if ($request->ajax()) {
+                $data = WarehouseStock::all();
+                return  DataTables::of($data)
+                        ->addIndexColumn()
+                        ->addColumn('medicine_name', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('medicine_name');
+                          return $data;
+                      })
+
+                        ->addColumn('category', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('category_id');
+                            $cat = Category::where('id',$data)->implode('category_name');
+                            return $cat;
+                        })
+                        ->addColumn('manufacturer_name', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_id');
+                            $manu = Manufacturer::where('id',$data)->implode('manufacturer_name');
+                            return $manu;
+                        })
+                        ->addColumn('unit', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('unit_id');
+                            $unit = Unit::where('id',$data)->implode('unit_name');
+                            return $unit;
+                        })
+                        ->addColumn('manufacturer_price', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_price');
+
+                            return $data;
+                        })
+                        ->addColumn('sale_price', function($row){
+                            $data = Medicine::where('id',$row->medicine_id)->implode('price');
+
+                            return $data;
+                        })
+
+                        ->rawColumns(['medicine_name'])
+                        ->rawColumns(['category'])
+                        ->rawColumns(['manufacturer_name'])
+                        ->rawColumns(['unit'])
+
+                        ->rawColumns(['manufacturer_price'])
+                        ->rawColumns(['sale_price'])
+                        ->make(true);
+            }
+        }
+
+
+        $warehouse = Warehouse::pluck('warehouse_name', 'id');
+
+      $warehouse = new Collection($warehouse);
+      $warehouse->prepend('All Warehouse Stock', 'all');
+
+
+        return view('admin.medicinestock.warehousestock',compact('warehouse'));
     }
 }

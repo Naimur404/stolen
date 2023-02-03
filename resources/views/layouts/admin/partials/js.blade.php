@@ -10,12 +10,12 @@
 <script src="{{asset('assets/js/bootstrap/popper.min.js')}}"></script>
 <script src="{{asset('assets/js/bootstrap/bootstrap.min.js')}}"></script>
 <script src="{{asset('assets/js/form-validation-custom.js')}}"></script>
+<script src="{{asset('assets/js/datatable/datatables/jquery.dataTables.min.js')}}"></script>
 
 <!-- Plugins JS start-->
 @stack('scripts')
 <!-- Plugins JS Ends-->
 <!-- Theme js-->
 <script src="{{asset('assets/js/script.js')}}"></script>
-{{-- <script src="{{asset('assets/js/datatable/datatables/jquery.dataTables.min.js')}}"></script> --}}
 <script src="{{asset('assets/js/datatable/datatables/datatable.custom.js')}}"></script>
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
