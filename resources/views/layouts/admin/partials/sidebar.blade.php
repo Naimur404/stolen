@@ -72,12 +72,18 @@
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('distribute-medicine.index')}}" href="{{route('distribute-medicine.index')}}"><i data-feather="plus-circle"></i><span>Distribute Medicine</span></a>
                     </li>
+                    @can('outletStock')
+
+
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('outletstock',$id = 'all')}}" href="{{route('outletstock',$id = 'all')}}"><i data-feather="shopping-cart"></i><span>Outlet Stock</span></a>
                     </li>
+                    @endcan
+                    @can('warehouseStock')
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('warehouseStock',$id = 'all')}}" href="{{route('warehouseStock',$id = 'all')}}"><i data-feather="box"></i><span>Warehouse Stock</span></a>
                     </li>
+                    @endcan
                       @hasrole('Super Admin')
 
 

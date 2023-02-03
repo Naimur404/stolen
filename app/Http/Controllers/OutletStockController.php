@@ -23,6 +23,12 @@ class OutletStockController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     function __construct()
+     {
+         $this->middleware('permission:outletStock', ['only' => ['outletStock']]);
+
+     }
     public function index()
     {
 

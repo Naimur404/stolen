@@ -17,6 +17,11 @@ use Illuminate\Database\Eloquent\Collection;
 
 class WarehouseStockController extends Controller
 {
+    function __construct()
+    {
+        $this->middleware('permission:warehouseStock', ['only' => ['warehouseStock']]);
+
+    }
     /**
      * Display a listing of the resource.
      *

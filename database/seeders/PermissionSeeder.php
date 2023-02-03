@@ -40,7 +40,8 @@ class PermissionSeeder extends Seeder
             'outlet.create',
             'outlet.edit',
             'outlet.delete',
-
+            'outletStock',
+            'warehouseStock',
             'medchine_purchase.management',
             'medchine_purchase.create',
             'medchine_purchase.edit',
