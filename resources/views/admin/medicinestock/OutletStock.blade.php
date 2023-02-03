@@ -71,7 +71,7 @@
 	</div>
 
 	@push('scripts')
-	<script src="{{asset('assets/js/datatable/datatables/jquery.dataTables.min.js')}}"></script>
+
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
 
     <script type="text/javascript">
@@ -84,7 +84,7 @@
     let outlet_id = $('#supplier_id').val();
     var table = $('.data-table').DataTable({
         responsive: true,
-        
+
         processing: true,
         serverSide: true,
         ajax: "/get-outlet-stock/" + outlet_id,

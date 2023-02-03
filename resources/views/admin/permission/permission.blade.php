@@ -30,7 +30,7 @@
 	        <!-- Individual column searching (text inputs) Starts-->
 	        <div class="col-sm-12">
 	            <div class="card">
-	               
+
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
 	                        <table class="display data-table" id="basic-1">
@@ -56,7 +56,7 @@
 	</div>
 
 	@push('scripts')
-	<script src="{{asset('assets/js/datatable/datatables/jquery.dataTables.min.js')}}"></script>
+
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
 
     <script type="text/javascript">
