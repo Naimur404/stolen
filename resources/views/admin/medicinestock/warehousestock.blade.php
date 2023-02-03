@@ -71,8 +71,8 @@
 	</div>
 
 	@push('scripts')
-	
-    <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
+
+    
 
     <script type="text/javascript">
     $(function () {
@@ -113,30 +113,7 @@
 @if (Session()->get('success'))
 
 
-<script>
-$.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('success') }}</strong>', {
-type: 'theme',
-allow_dismiss: true,
-delay: 2000,
-showProgressbar: true,
-timer: 300
-});
-</script>
 
-@endif
-@if (Session()->get('error'))
-
-<script>
-$.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('error') }}</strong>', {
-type: 'theme',
-allow_dismiss: true,
-delay: 2000,
-showProgressbar: true,
-timer: 300
-});
-</script>
-
-@endif
     {{-- <script src="{{asset('assets/js/ecommerce.js')}}"></script> --}}
     {{-- <script src="{{asset('assets/js/product-list-custom.js')}}"></script> --}}
 	@endpush

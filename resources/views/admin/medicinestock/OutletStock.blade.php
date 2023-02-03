@@ -72,7 +72,7 @@
 
 	@push('scripts')
 
-    <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
+ 
 
     <script type="text/javascript">
     $(function () {
@@ -108,71 +108,9 @@
 });
 
    </script>
-{{-- <script>
-
-  var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-        $(document).ready(function(){
-
-          $( "#supplier_id" ).select2({
-             ajax: {
-               url: "{{route('get-outlet')}}",
-               type: "GET",
-               dataType: 'json',
-               delay: 250,
-               data: function (params) {
-                 return {
-                    _token: CSRF_TOKEN,
-                    search: params.term // search term
-                 };
-               },
-               processResults: function (response) {
-                 return {
-                   results: response
-                 };
-               },
-               cache: true
-             }
-
-          });
 
 
 
-
-
-
-
-        });
-
-
-</script> --}}
-
-@if (Session()->get('success'))
-
-
-<script>
-$.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('success') }}</strong>', {
-type: 'theme',
-allow_dismiss: true,
-delay: 2000,
-showProgressbar: true,
-timer: 300
-});
-</script>
-
-@endif
-@if (Session()->get('error'))
-
-<script>
-$.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('error') }}</strong>', {
-type: 'theme',
-allow_dismiss: true,
-delay: 2000,
-showProgressbar: true,
-timer: 300
-});
-</script>
-
-@endif
     {{-- <script src="{{asset('assets/js/ecommerce.js')}}"></script> --}}
     {{-- <script src="{{asset('assets/js/product-list-custom.js')}}"></script> --}}
 	@endpush
