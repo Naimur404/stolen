@@ -3,7 +3,7 @@
 
 
 
-<div class="btn-group">
+<div class="btn-group" style="text-align: center">
     @if (request()->routeIs('category.index')|| request()->routeIs('payment-method.index') || request()->routeIs('unit.index'))
    @can($permission)
 
@@ -22,7 +22,7 @@
 
 <!-- Button trigger modal -->
 @can($permissiondelete)
-<button type="button" class="btn btn-danger btn-xs" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ $id }}">
+<button type="button" class="btn btn-danger btn-xs" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ $id }}" style="float: right;">
   Delete
   </button>
 @endcan
@@ -64,18 +64,18 @@
 @else
 
 
-<div class="btn-group">
+<div class="btn-group" style="text-align: center">
     @if (request()->routeIs('category.index')|| request()->routeIs('payment-method.index') || request()->routeIs('unit.index'))
 
 
 
-    <button class="btn btn-primary btn-xs open-modal" value="{{ $id }}">Edit</button>
+    <button class="btn btn-primary btn-xs open-modal text-right" value="{{ $id }}" >Edit</button>
 
 
     @else
     <form action="{{ $edit }}" method="GET">
 
-        <button type="submit" class="btn btn-primary btn-xs open-modal">Edit</button>
+        <button type="submit" class="btn btn-primary btn-xs open-modal text-right">Edit</button>
       </form>
     @endif
 
@@ -83,7 +83,7 @@
 
 <!-- Button trigger modal -->
 
-<button type="button" class="btn btn-danger btn-xs" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ $id }}">
+<button type="button" class="btn btn-danger btn-xs" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ $id }}" >
   Delete
   </button>
 

@@ -34,6 +34,7 @@
 	                        <table class="display data-table">
 	                            <thead>
 	                                <tr>
+                                        <th>SI</th>
 	                                    <th>Name</th>
                                         <th>Mobile</th>
 
@@ -58,7 +59,7 @@
 	</div>
 
 	@push('scripts')
-	
+
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
 
     <script type="text/javascript">
@@ -73,13 +74,14 @@
 
         ajax: "{{ route('manufacturer.index') }}",
         columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'manufacturer_name', name: 'name'},
             {data: 'mobile', name: 'mobile'},
             {data: 'address', name: 'address'},
             {data: 'active', name: 'is active', orderable: false, searchable: false},
 
 
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'action', name: 'action', orderable: false, searchable: false ,className: "uniqueClassName"},
         ]
     });
 });
