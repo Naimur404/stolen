@@ -58,6 +58,7 @@
         $(document).ready(function(){
 
           $( "#sel_emp2" ).select2({
+            allowClear: true,
              ajax: {
                url: "{{route('get-manufacturer')}}",
                type: "post",

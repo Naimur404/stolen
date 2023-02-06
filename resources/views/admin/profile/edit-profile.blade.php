@@ -62,6 +62,9 @@
 	                            <div class="mb-3">
                                     {!! Form::label('exampleInputPassword2', 'Password', array('class' => 'form-label')) !!}
                                         {!! Form::password('password',['class'=>'form-control', 'placeholder'=>'Password', 'id' => 'exampleInputPassword2' ]) !!}
+                                        @error('password')
+                                        <div class="invalid-feedback2"> {{ $message }}</div>
+                                    @enderror
 	                                {{-- <label class="form-label">Password</label>
 	                                <input class="form-control" type="password" value="password" /> --}}
 	                            </div>
