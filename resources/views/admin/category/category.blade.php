@@ -37,9 +37,10 @@
 
 	                <div class="card-body">
 	                    <div class="table-responsive product-table">
-	                        <table class="display data-table" id="basic-1">
+	                        <table class="display data-table center" id="basic-1">
 	                            <thead>
 	                                <tr>
+                                        <th>SI</th>
 	                                    <th>Category Name</th>
 
 	                                    <th>Action</th>
@@ -107,10 +108,12 @@
         serverSide: true,
         ajax: "{{ route('category.index') }}",
         columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'category_name', name: 'category_name'},
 
-            {data: 'action', name: 'action', orderable: false, searchable: false},
-        ]
+            {data: 'action', name: 'action', orderable: false, searchable: false, className: "uniqueClassName"},
+        ],
+
     });
 });
 $(document).ready(function($){

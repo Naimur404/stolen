@@ -40,6 +40,7 @@
 	                        <table class="display data-table" id="basic-1">
 	                            <thead>
 	                                <tr>
+                                        <th>SI</th>
 	                                    <th>Unit Name</th>
 
 	                                    <th>Action</th>
@@ -115,9 +116,10 @@
         serverSide: true,
         ajax: "{{ route('unit.index') }}",
         columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'unit_name', name: 'unit_name'},
 
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'action', name: 'action', orderable: false, searchable: false , className: "uniqueClassName"},
         ]
     });
 });

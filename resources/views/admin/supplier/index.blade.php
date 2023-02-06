@@ -36,6 +36,7 @@
 	                        <table class="display data-table" id="basic-1">
 	                            <thead>
 	                                <tr>
+                                        <th>SI</th>
 	                                    <th>Supplier Name</th>
                                         <th>Manufacturer Name</th>
                                         <th>Mobile</th>
@@ -76,6 +77,7 @@
         serverSide: true,
         ajax: "{{ route('supplier.index') }}",
         columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'supplier_name', name: 'Supplier Name'},
 
             {data: 'manufacturer', name: 'Manufacturer Name', orderable: false, searchable: false},

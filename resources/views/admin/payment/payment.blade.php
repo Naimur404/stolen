@@ -40,6 +40,7 @@
 	                        <table class="display data-table" id="basic-1">
 	                            <thead>
 	                                <tr>
+                                        <th>SI</th>
 	                                    <th>Method Name</th>
 
 	                                    <th>Action</th>
@@ -105,9 +106,10 @@
         serverSide: true,
         ajax: "{{ route('payment-method.index') }}",
         columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'method_name', name: 'method_name'},
 
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'action', name: 'action', orderable: false, searchable: false, className: "uniqueClassName"},
         ]
     });
 });

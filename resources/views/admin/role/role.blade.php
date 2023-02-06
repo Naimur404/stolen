@@ -36,6 +36,7 @@
 	                        <table class="display data-table">
 	                            <thead>
 	                                <tr>
+                                        <th>SI</th>
 	                                    <th>Name</th>
 	                                    <th>Guard</th>
 
@@ -72,10 +73,11 @@
         serverSide: true,
         ajax: "{{ route('role') }}",
         columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
             {data: 'guard_name', name: 'guard'},
 
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'action', name: 'action', orderable: false, searchable: false ,className: "uniqueClassName"},
         ]
     });
 });

@@ -34,6 +34,7 @@
 	                        <table class="display data-table" id="basic-1">
 	                            <thead>
 	                                <tr>
+                                        <th>SI</th>
 	                                    <th>Name</th>
                                         <th>Permission</th>
 
@@ -55,7 +56,7 @@
 	</div>
 
 	@push('scripts')
-	
+
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
 
     <script type="text/javascript">
@@ -70,11 +71,12 @@
         serverSide: true,
         ajax: "{{ route('allrolepermission') }}",
         columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'name'},
 
             {data: 'permission', name: 'permission', orderable: false, searchable: false},
 
-            {data: 'action', name: 'action', orderable: false, searchable: false},
+            {data: 'action', name: 'action', orderable: false, searchable: false ,className: "uniqueClassName"},
         ]
     });
 });
