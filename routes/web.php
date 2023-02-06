@@ -46,6 +46,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'],function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::view('/role', 'admin.role.role')->name('role');
+    //user route
+
     Route::get('/user', [UserRoleController::class,'users'])->name('user');
     Route::get('/add_user', [UserRoleController::class,'addUsers'])->name('add_user');
     Route::post('/add-user-store', [UserRoleController::class,'addUsersStore'])->name('add_user_store');
@@ -53,8 +55,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'],function () {
     Route::get('/edit-user/{id}', [UserRoleController::class,'editUser'])->name('edit_user');
     Route::post('/update/user', [UserRoleController::class,'updateUser'])->name('updateuser');
     Route::get('/add/user/org/{id}', [UserRoleController::class,'addUserOrg'])->name('adduserorg');
-
     Route::post('/store/user/org', [UserRoleController::class,'storeUserOrg'])->name('storeuserorg');
+
 
 //permission route
 
@@ -142,6 +144,9 @@ Route::get('get-all-medicine',[Select2Controller::class,'get_all_medicine']);
 //stock route
 Route::get('/get-outlet-stock/{id}',[OutletStockController::class,'outletStock'])->name('outletstock');
 Route::get('/get-warehouse-stock/{id}',[WarehouseStockController::class,'warehouseStock'])->name('warehouseStock');
+//profile route
+Route::get('/my-profile', [ProfileController::class,'myProfile'])->name('myprofile');
+Route::Post('/my-profile/update', [ProfileController::class,'updateMyProfile'])->name('updatemyprofile');
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {

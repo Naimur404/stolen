@@ -10,13 +10,7 @@
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/whether-icon.css')}}">
 @endpush
     @section('content')
-        @component('components.breadcrumb')
-            @slot('breadcrumb_title')
-                <h3>General</h3>
-            @endslot
-            <li class="breadcrumb-item">Widgets</li>
-            <li class="breadcrumb-item active">General</li>
-        @endcomponent
+        
 
         <div class="container-fluid">
             <div class="row">
