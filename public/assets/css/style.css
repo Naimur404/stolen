@@ -10129,7 +10129,9 @@ strong {
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
   background-color: #e0e0e0 !important;
   color: #424242 !important; }
-
+  .buttonsBlock {
+    white-space: nowrap;
+}
 .select2-container--default .select2-results__options .select2-results__option[aria-selected=true] {
   background-color: #24695c !important;
   color: #fff !important; }
@@ -12204,8 +12206,8 @@ table.dataTable.display tbody tr {
 .product-table img {
   height: 40px; }
 
-.product-table span, .product-table p {
-  color: #59667a; }
+/* .product-table span, .product-table p {
+  color: #59667a; } */
 
 .product-table tbody tr td:first-child {
   text-align: center; }

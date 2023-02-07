@@ -52,7 +52,16 @@ class WarehouseStockController extends Controller
     {
 
         $input = $request->all();
-      $stock =  WarehouseStock::create($input);
+        $warehousecheck = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['medicine_id'])->whereDate('expiry_date','=',$input['expiry_date'])->first();
+        if($warehousecheck != null){
+            $quantity = array(
+                'quantity' => $input['quantity'] +  $warehousecheck->quantity,
+            );
+            $stock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['medicine_id'])->whereDate('expiry_date','=',$input['expiry_date'])->update($quantity);
+        }else{
+            $stock =  WarehouseStock::create($input);
+        }
+
         try{
           $data = array(
             'warehouse_id'    => $stock->warehouse_id,
@@ -156,6 +165,9 @@ class WarehouseStockController extends Controller
 
                             return $data;
                         })
+                        ->addColumn('quantity', function($row){
+                           return view('admin.action.quantity',compact('row'));
+                        })
 
                         ->rawColumns(['medicine_name'])
                         ->rawColumns(['category'])
@@ -163,7 +175,9 @@ class WarehouseStockController extends Controller
                         ->rawColumns(['unit'])
 
                         ->rawColumns(['manufacturer_price'])
+
                         ->rawColumns(['sale_price'])
+                        ->rawColumns(['quantity'])
                         ->make(true);
             }
         }else{
@@ -201,6 +215,9 @@ class WarehouseStockController extends Controller
 
                             return $data;
                         })
+                        ->addColumn('quantity', function($row){
+                            return view('admin.action.quantity',compact('row'));
+                         })
 
                         ->rawColumns(['medicine_name'])
                         ->rawColumns(['category'])
@@ -209,6 +226,7 @@ class WarehouseStockController extends Controller
 
                         ->rawColumns(['manufacturer_price'])
                         ->rawColumns(['sale_price'])
+                        ->rawColumns(['quantity'])
                         ->make(true);
             }
         }

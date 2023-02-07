@@ -72,7 +72,7 @@
 
 	@push('scripts')
 
-    
+
 
     <script type="text/javascript">
     $(function () {
@@ -110,7 +110,7 @@
    </script>
 
 
-@if (Session()->get('success'))
+
 
 
 

@@ -74,7 +74,7 @@ class MedicineDistributeController extends Controller
 
             'added_by' => Auth::user()->id,
 
-            'remarks' => 'hello',
+            'remarks' => $input['remarks'],
 
 
         ];
@@ -101,8 +101,14 @@ class MedicineDistributeController extends Controller
 
 
                 );
-                $warehousetock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->pluck('quantity');
-                
+                $warehousetock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->whereDate('expiry_date','=',$input['expiry_date'][$i])->implode('quantity');
+                $new_stock = array(
+                      'quantity' => $warehousetock - $input['quantity'][$i] ,
+
+                );
+                WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->update($new_stock);
+
+
 
                 MedicineDistributeDetail::create($purchase_details);
             }
@@ -166,6 +172,7 @@ class MedicineDistributeController extends Controller
             'warehouse_id' => $input['warehouse_id'],
             'outlet_id' => $input['outlet_id'],
             'date' => $input['purchase_date'],
+            'remarks' => $input['remarks'],
         ];
         try{
           $data =  MedicineDistribute::where('id',$id)->update($purchase_input);

@@ -52,9 +52,9 @@
                     @if(!is_null($data->outlet_id))
                     @php
 
-                          $data = App\Models\Outlet::where('id',$data->outlet_id)->first();
-                          $id = $data->id;
-                          $name = $data->outlet_name
+                          $data2 = App\Models\Outlet::where('id',$data->outlet_id)->first();
+                          $id = $data2->id;
+                          $name = $data2->outlet_name
                     @endphp
                     {{ Form::select('outlet_id', [$id=>$name], null, ['class' => 'form-control', 'id' => 'supplier_id' ,'required']) }}
                     @else
@@ -92,6 +92,15 @@
                             * </i>:</label>
                 <div class="col-md-4">
                     <input type="text" name="purchase_date" class="form-control datepicker" id="purdate" placeholder="Purchase Date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required>
+                </div>
+                {!! Form::label('remarks', 'Remarks:', array('class' => 'col-md-2 text-right')) !!}
+                <div class="col-md-4">
+    
+                    {!! Form::text('remarks',$data->remarks,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Remarks Here' ]) !!}
+                    @error('remarks')
+                    <div class="invalid-feedback2"> {{ $message }}</div>
+
+                @enderror
                 </div>
             </div>
 
