@@ -72,7 +72,7 @@
 
 	@push('scripts')
 
- 
+
 
     <script type="text/javascript">
     $(function () {
@@ -86,7 +86,7 @@
         responsive: true,
 
         processing: true,
-        serverSide: true,
+        
         ajax: "/get-outlet-stock/" + outlet_id,
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},

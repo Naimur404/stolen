@@ -89,6 +89,10 @@
                         <a class="nav-link menu-title {{routeActive('warehouseStock',$id = 'all')}}" href="{{route('warehouseStock',$id = 'all')}}"><i data-feather="box"></i><span>Warehouse Stock</span></a>
                     </li>
                     @endcan
+
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('warehouse-return.index')}}" href="{{route('warehouse-return.index')}}"><i data-feather="box"></i><span>Medicine Return</span></a>
+                    </li>
                       @hasrole('Super Admin')
 
 

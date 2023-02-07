@@ -20,6 +20,7 @@ use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
 use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\WarehouseController;
+use App\Http\Controllers\WarehouseReturnController;
 use App\Http\Controllers\WarehouseStockController;
 use App\Models\MedicineDistribute;
 use App\Models\OutletStock;
@@ -105,6 +106,7 @@ Route::resource('medicine-purchase',MedicinePurchaseController::class);
 Route::resource('warehouse-stock',WarehouseStockController::class);
 Route::resource('outlet-stock',OutletStockController::class);
 Route::resource('distribute-medicine',MedicineDistributeController::class);
+Route::resource('warehouse-return',WarehouseReturnController::class);
 
 //checkin route
 Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
@@ -147,6 +149,11 @@ Route::get('/get-warehouse-stock/{id}',[WarehouseStockController::class,'warehou
 //profile route
 Route::get('/my-profile', [ProfileController::class,'myProfile'])->name('myprofile');
 Route::Post('/my-profile/update', [ProfileController::class,'updateMyProfile'])->name('updatemyprofile');
+
+
+
+//medicine return delete route
+Route::get('/delete/{medicineid}/{returnid}/return', [WarehouseReturnController::class,'medicineReturnlDelete'])->name('delete.medicineReturnlDelete');
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {
