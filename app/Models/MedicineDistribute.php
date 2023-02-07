@@ -10,6 +10,7 @@ class MedicineDistribute extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
     protected $table = 'medicine_distributes';
     protected $fillable = [
         'date',
@@ -18,10 +19,14 @@ class MedicineDistribute extends Model
         'added_by',
         'remarks',
     ];
-    public function outlet(){
+
+    public function outlet()
+    {
         return $this->belongsTo(Outlet::class, 'outlet_id', 'id');
- }
- public function warehouse(){
-    return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
-}
+    }
+
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
+    }
 }
