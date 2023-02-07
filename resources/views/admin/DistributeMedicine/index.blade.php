@@ -86,10 +86,10 @@
 
 
                                         @if (auth()->user()->can('distribute-medicine.edit') || auth()->user()->can('distribute-medicine.delete'))
-                                        <td class="">
+                                        <td class="form-inline uniqueClassName">
                                             @can('medchine_purchase.edit')
                                                 <a href="{{ route('distribute-medicine.edit', $productPurchase->id) }}"
-                                                    class="btn btn-success btn-xs mt-2" title="Pay Now" style="margin-right:3px"><i class="fa-light fa-money-bill"></i>Edit</a>
+                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa-light fa-money-bill"></i>Edit</a>
                                             @endcan
 
                                             {{-- @can('product_purchase.print')
@@ -98,12 +98,12 @@
 
                                             @can('distribute-medicine.delete')
                                                 {!! Form::open(['method' => 'DELETE', 'route' => ['distribute-medicine.destroy', $productPurchase->id]]) !!}
-                                                {{ Form::button('Delete', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs mt-2', 'id' => 'delete', 'title' => 'Delete']) }}
+                                                {{ Form::button('Delete', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
                                                 {!! Form::close() !!}
                                             @endcan
 
                                             <a href="{{ route('distribute-medicine.checkIn', $productPurchase->id) }}"
-                                                class="btn btn-info btn-xs mt-2" title="Pay Now" style="margin-left:3px"><i class="fa-light fa-money-bill"></i>Check In</a>
+                                                class="btn btn-info btn-xs " title="Pay Now" style="margin-left:3px"><i class="fa-light fa-money-bill"></i>Check In</a>
 
                                         </td>
                                         @endif

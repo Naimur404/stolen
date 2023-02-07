@@ -156,6 +156,9 @@ class WarehouseStockController extends Controller
 
                             return $data;
                         })
+                        ->addColumn('quantity', function($row){
+                           return view('admin.action.quantity',compact('row'));
+                        })
 
                         ->rawColumns(['medicine_name'])
                         ->rawColumns(['category'])
@@ -163,7 +166,9 @@ class WarehouseStockController extends Controller
                         ->rawColumns(['unit'])
 
                         ->rawColumns(['manufacturer_price'])
+
                         ->rawColumns(['sale_price'])
+                        ->rawColumns(['quantity'])
                         ->make(true);
             }
         }else{
@@ -201,6 +206,9 @@ class WarehouseStockController extends Controller
 
                             return $data;
                         })
+                        ->addColumn('quantity', function($row){
+                            return view('admin.action.quantity',compact('row'));
+                         })
 
                         ->rawColumns(['medicine_name'])
                         ->rawColumns(['category'])
@@ -209,6 +217,7 @@ class WarehouseStockController extends Controller
 
                         ->rawColumns(['manufacturer_price'])
                         ->rawColumns(['sale_price'])
+                        ->rawColumns(['quantity'])
                         ->make(true);
             }
         }
