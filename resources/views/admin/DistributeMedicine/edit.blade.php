@@ -129,7 +129,7 @@
                         </div> --}}
 
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-primary addRow" id="addRow" >Add</button>
+                            <button type="button" class="btn btn-primary addProductRow" id="addProductRow" >Add</button>
                         </div>
 
                     </div>
@@ -370,7 +370,7 @@
 
             });
 
-            $("#addRow").on('click', function() {
+            $("#addProductRow").on('click', function() {
 
                 // let leaf = $('#leaf').find(":selected").val();
                 // let qty = $('#box_qty').val();

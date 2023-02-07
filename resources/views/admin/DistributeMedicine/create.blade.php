@@ -98,7 +98,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
+                            {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
                             <div class="invalid-feedback">Please Add Medicine</div>
 
 
@@ -110,7 +110,7 @@
                         </div> --}}
 
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-primary addRow" id="addRow" >Add</button>
+                            <button type="button" class="btn btn-primary addProductRow" id="addProductRow" >Add</button>
                         </div>
 
                     </div>
@@ -327,7 +327,7 @@
 
             });
 
-            $("#addRow").on('click', function() {
+            $("#addProductRow").on('click', function() {
 
                 // let leaf = $('#leaf').find(":selected").val();
                 // let qty = $('#box_qty').val();

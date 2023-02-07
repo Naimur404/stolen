@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\MedicineDistribute;
 use App\Models\MedicineDistributeDetail;
 use App\Models\Warehouse;
+use App\Models\WarehouseStock;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -100,7 +101,8 @@ class MedicineDistributeController extends Controller
 
 
                 );
-
+                $warehousetock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->pluck('quantity');
+                
 
                 MedicineDistributeDetail::create($purchase_details);
             }
