@@ -101,9 +101,9 @@ class MedicineDistributeController extends Controller
 
 
                 );
-                $warehousetock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->implode('quantity');
+                $warehousetock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->whereDate('expiry_date','=',$input['expiry_date'][$i])->implode('quantity');
                 $new_stock = array(
-                      'quantity' => $input['quantity'][$i] - $warehousetock,
+                      'quantity' => $warehousetock - $input['quantity'][$i] ,
 
                 );
                 WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->update($new_stock);
