@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Warehouse;
 use App\Models\WarehouseReturnDetails;
 use Illuminate\Http\Request;
 
@@ -24,7 +25,7 @@ class WarehouseReturnDetailsController extends Controller
      */
     public function create()
     {
-        //
+       
     }
 
     /**

@@ -86,7 +86,7 @@
         responsive: true,
         autoWidth: false,
         processing: true,
-        serverSide: true,
+       
         ajax: "/get-warehouse-stock/" + warehouse_id,
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
