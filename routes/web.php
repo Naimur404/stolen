@@ -139,7 +139,7 @@ Route::post('/get_type',[Select2Controller::class,'getType'])->name('get-type');
 Route::post('/get-manufacturer',[Select2Controller::class,'getManufacturer'])->name('get-manufacturer');
 Route::get('get-supplier', [Select2Controller::class,'get_supplier']);
 Route::get('/get-outlet',[Select2Controller::class,'getOutlet'])->name('get-outlet');
-Route::get('get-all-medicine',[Select2Controller::class,'get_all_medicine']);
+Route::get('/get-all-medicine',[Select2Controller::class,'get_all_medicine'])->name('get-all-medicine');
 
 //stock route
 Route::get('/get-outlet-stock/{id}',[OutletStockController::class,'outletStock'])->name('outletstock');

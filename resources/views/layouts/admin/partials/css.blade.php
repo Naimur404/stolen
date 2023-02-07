@@ -1,4 +1,5 @@
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/fontawesome.css')}}">
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <!-- ico-font-->
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/icofont.css')}}">
 <!-- Themify icon-->
@@ -17,5 +18,5 @@
 <link id="color" rel="stylesheet" href="{{asset('assets/css/color-1.css')}}" media="screen">
 <!-- Responsive css-->
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/responsive.css')}}">
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
 

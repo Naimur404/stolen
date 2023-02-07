@@ -38,7 +38,7 @@
 
         <div class="card-body mt-3">
 
-            {!! Form::open(['route' => 'medicine-purchase.store', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'id' => 'product_purchase', 'files' => true]) !!}
+            {!! Form::open(['route' => 'medicine-purchase.store', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'files' => true]) !!}
 
             <div class="form-group row">
                 {{-- <label for="manufacturer" class="col-md-2 text-right col-form-label">{{ __('purchase.manufacturer') }}:</label>
@@ -144,7 +144,7 @@
                         </div> --}}
 
                         <div class="col-md-2">
-                            <button type="button" class="btn btn-primary addRow" id="addRow" >Add</button>
+                            <button type="button" class="btn btn-primary addProductRow" id="addProductRow" >Add</button>
                         </div>
 
                     </div>
@@ -270,9 +270,10 @@
                             </div>
                         </div>
                     </div>
-                    </form>
+
                 </div>
             </div>
+            {{ Form::close(); }}
         </div>
     </div>
 </div>
@@ -410,7 +411,7 @@
 
             });
 
-            $("#addRow").on('click', function() {
+            $("#addProductRow").on('click', function() {
 
                 // let leaf = $('#leaf').find(":selected").val();
                 // let qty = $('#box_qty').val();
@@ -448,8 +449,9 @@
                         }
 
                     });
-                } else
+                } else{
                     alert("Please Select Medicine Name");
+                }
 
             });
 
