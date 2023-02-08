@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\CustomerManagementController;
 use App\Http\Controllers\DashBoardController;
 use App\Http\Controllers\ManufacturerController;
 use App\Http\Controllers\MedicineController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\WarehouseReturnController;
 use App\Http\Controllers\WarehouseStockController;
+use App\Models\CustomerManagement;
 use App\Models\MedicineDistribute;
 use App\Models\OutletStock;
 use Illuminate\Support\Facades\Route;
@@ -107,6 +109,7 @@ Route::resource('warehouse-stock',WarehouseStockController::class);
 Route::resource('outlet-stock',OutletStockController::class);
 Route::resource('distribute-medicine',MedicineDistributeController::class);
 Route::resource('warehouse-return',WarehouseReturnController::class);
+Route::resource('customer',CustomerManagementController::class);
 
 //checkin route
 Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
@@ -119,6 +122,7 @@ Route::get('/delete/{medicineid}/{distributeid}', [MedicineDistributeController:
 Route::get('/status-supplier/{id}/{status}', [SupplierController::class,'active'])->name('supplier.active');
 Route::get('/status-warehouse/{id}/{status}', [WarehouseController::class,'active'])->name('warehouse.active');
 Route::get('/status-outlet/{id}/{status}', [OutletController::class,'active'])->name('outlet.active');
+Route::get('/status-customer/{id}/{status}', [CustomerManagementController::class,'active'])->name('customer.active');
 
 
 //assing outlet to user
@@ -150,7 +154,7 @@ Route::get('/get-warehouse-stock/{id}',[WarehouseStockController::class,'warehou
 Route::get('/my-profile', [ProfileController::class,'myProfile'])->name('myprofile');
 Route::Post('/my-profile/update', [ProfileController::class,'updateMyProfile'])->name('updatemyprofile');
 
-
+Route::get('/get-customer/{id}',[CustomerManagementController::class,'customer'])->name('get-customer');
 
 //medicine return delete route
 Route::get('/delete/{medicineid}/{returnid}/return', [WarehouseReturnController::class,'medicineReturnlDelete'])->name('delete.medicineReturnlDelete');

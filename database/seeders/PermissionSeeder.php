@@ -47,6 +47,12 @@ class PermissionSeeder extends Seeder
             'warehouse-return.create',
             'warehouse-return.edit',
             'warehouse-return.delete',
+
+            'customer.management',
+            'customer.create',
+            'customer.edit',
+            'customer.delete',
+
             'medchine_purchase.management',
             'medchine_purchase.create',
             'medchine_purchase.edit',
