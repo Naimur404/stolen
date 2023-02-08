@@ -93,6 +93,10 @@
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('warehouse-return.index')}}" href="{{route('warehouse-return.index')}}"><i data-feather="box"></i><span>Medicine Return</span></a>
                     </li>
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('get-customer',$id = 'all')}}" href="{{route('get-customer',$id = 'all')}}"><i data-feather="users"></i><span>Customer Management</span></a>
+                    </li>
+
                       @hasrole('Super Admin')
 
 

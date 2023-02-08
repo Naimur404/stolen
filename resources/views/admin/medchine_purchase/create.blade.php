@@ -283,6 +283,19 @@
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
     <script src="{{ asset('assets/js/product_purchase_invoice.js') }}"></script>
     <script type="text/javascript">
+    function clearInput1(target){
+        if (target.value== '0'){
+            target.value= "";
+       }
+    }
+    function clearInput2(target){
+        if (target.value== '0'){
+            target.value= "";
+       }
+    }
+
+    </script>
+    <script type="text/javascript">
 
 
 
@@ -298,12 +311,14 @@
 
         $(document).ready(function() {
 
-            $(".clearVat,#discount,#pay").on('click', function(){
+            $(".clearVat,#discount,#pay,#manufacturer_price").on('click', function(){
                 let input = $(this).val();
-                    if(input != ''){
+                    if(input == 0){
                         $(this).val('');
                     }
             })
+
+
 
 
              let  grandTotal = '';
@@ -330,6 +345,7 @@
               let vat = $(this).val();
               let subTotal = $("#subtotal").val();
               let totalVat = calculatePercentage(subTotal, vat);
+              totalVat = Math.round(totalVat);
                $("#vat").val(totalVat);
             //    console.log(calResult);
           })
@@ -338,6 +354,7 @@
               let discount = $(this).val();
               let subTotal = $("#subtotal").val();
               let totalDiscount = calculatePercentage(subTotal, discount);
+              totalDiscount = Math.round(totalDiscount);
                $("#discount").val(totalDiscount);
           })
 
