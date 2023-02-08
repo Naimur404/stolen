@@ -126,6 +126,7 @@
 
 
 	            </div>
+                        </div>
                 <div class="col-xl-6 card">
 
                     <div class="card-body">
@@ -250,3 +251,4 @@
             </div>
             </div>
         </div>
+        
