@@ -284,6 +284,9 @@
     <script src="{{ asset('assets/js/product_purchase_invoice.js') }}"></script>
     <script type="text/javascript">
 
+
+
+
        function prevent_paid_amount(){
                 var paid_amount = $("#pay").val();
             var grand_total_amount = $("#grandTotal").val();
@@ -297,7 +300,7 @@
 
             $(".clearVat,#discount,#pay").on('click', function(){
                 let input = $(this).val();
-                    if(input == 0){
+                    if(input != ''){
                         $(this).val('');
                     }
             })
