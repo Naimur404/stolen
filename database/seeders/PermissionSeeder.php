@@ -48,6 +48,10 @@ class PermissionSeeder extends Seeder
             'warehouse-return.edit',
             'warehouse-return.delete',
 
+            'sent_stock_request',
+            'stock_request',
+
+
             'customer.management',
             'customer.create',
             'customer.edit',

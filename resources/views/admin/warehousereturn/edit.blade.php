@@ -20,7 +20,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-8">
-			<h3>Pharmacy to Warehouse Return Edit</h3>
+			<h3>Edit Pharmacy to Warehouse Return</h3>
         </div>
 
         </div>
@@ -124,10 +124,16 @@
                         </div>
 
                         <div class="col-md-4">
+                            @if(!is_null($returndetails))
                             {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
-
-
+                            @else
+                            {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id' ,'required']) }}
                             <div class="invalid-feedback">Please Add Medicine</div>
+                            @endif
+
+
+
+
 
 
                         </div>

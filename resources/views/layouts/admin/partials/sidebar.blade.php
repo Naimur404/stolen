@@ -96,7 +96,16 @@
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('get-customer',$id = 'all')}}" href="{{route('get-customer',$id = 'all')}}"><i data-feather="users"></i><span>Customer Management</span></a>
                     </li>
-
+                    @can('sent_stock_request')
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('stock-request.index')}}" href="{{route('stock-request.index')}}"><i data-feather="box"></i><span>Sent Stock Request</span></a>
+                    </li>
+                    @endcan
+                    @can('stock_request')
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('warehouseRequest')}}" href="{{route('warehouseRequest')}}"><i data-feather="box"></i><span>Stock Request</span></a>
+                    </li>
+                    @endcan
                       @hasrole('Super Admin')
 
 

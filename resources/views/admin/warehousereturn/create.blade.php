@@ -27,7 +27,7 @@
 		@endslot
 
         @slot('button')
-        <a href="{{ route('distribute-medicine.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
+        <a href="{{ route('warehouse-return.index.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
         @endslot
 	@endcomponent
 
@@ -107,7 +107,7 @@
                         </div>
 
                         <div class="col-md-4">
-                            {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
+                            {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id' ,'required']) }}
                             <div class="invalid-feedback">Please Add Medicine</div>
 
 
@@ -133,7 +133,7 @@
                                     <th class="text-center">
                                         <nobr>Product Info <i class="text-danger">*</i></nobr>
                                     </th>
-                                  
+
                                     <th class="text-center">
                                         <nobr>Expiry Date <i class="text-danger">*</i></nobr>
                                     </th>

@@ -16,6 +16,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Select2Controller;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\StockRequestController;
 use App\Http\Controllers\SupplierController;
 
 use App\Http\Controllers\UnitController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\WarehouseStockController;
 use App\Models\CustomerManagement;
 use App\Models\MedicineDistribute;
 use App\Models\OutletStock;
+use App\Models\StockRequest;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -110,6 +112,7 @@ Route::resource('outlet-stock',OutletStockController::class);
 Route::resource('distribute-medicine',MedicineDistributeController::class);
 Route::resource('warehouse-return',WarehouseReturnController::class);
 Route::resource('customer',CustomerManagementController::class);
+Route::resource('stock-request',StockRequestController::class);
 
 //checkin route
 Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
@@ -124,7 +127,9 @@ Route::get('/status-warehouse/{id}/{status}', [WarehouseController::class,'activ
 Route::get('/status-outlet/{id}/{status}', [OutletController::class,'active'])->name('outlet.active');
 Route::get('/status-customer/{id}/{status}', [CustomerManagementController::class,'active'])->name('customer.active');
 
-
+Route::get('/has-sent/{id}/{status}', [StockRequestController::class,'hasSent'])->name('hasSent');
+Route::get('/has_accepted/{id}/{status}', [StockRequestController::class,'hasAccepted'])->name('hasAccepted');
+Route::get('/has_accepted/{id}/{status}/{medicineid}/medicine', [StockRequestController::class,'hasAcceptedMedicine'])->name('hasAcceptedMedicine');
 //assing outlet to user
 Route::get('/add-user-outlet/{id}', [OutletController::class,'addUser'])->name('addusers');
 Route::post('/store-user-outlet', [OutletController::class,'storeUser'])->name('storeuser');
@@ -158,6 +163,14 @@ Route::get('/get-customer/{id}',[CustomerManagementController::class,'customer']
 
 //medicine return delete route
 Route::get('/delete/{medicineid}/{returnid}/return', [WarehouseReturnController::class,'medicineReturnlDelete'])->name('delete.medicineReturnlDelete');
+
+//stock request route
+
+Route::get('/stock-request/{id}/details', [StockRequestController::class,'details'])->name('stock-request.details');
+Route::get('/stock-request/{id}/details/warehouse', [StockRequestController::class,'detailsRequestWarehouse'])->name('detailsRequestWarehouse');
+Route::get('/stock-request-details/{medicineid}/{requestid}/delete', [StockRequestController::class,'stockRequestDelete'])->name('stockRequestDelete');
+Route::get('/stock/warehouse-request', [StockRequestController::class,'warehouseRequest'])->name('warehouseRequest');
+
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {

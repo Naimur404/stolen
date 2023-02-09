@@ -95,7 +95,7 @@
                 </div>
                 {!! Form::label('remarks', 'Remarks:', array('class' => 'col-md-2 text-right')) !!}
                 <div class="col-md-4">
-    
+
                     {!! Form::text('remarks',$data->remarks,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Remarks Here' ]) !!}
                     @error('remarks')
                     <div class="invalid-feedback2"> {{ $message }}</div>
@@ -124,10 +124,14 @@
                         </div>
 
                         <div class="col-md-4">
+                            @if(!is_null($medicinedetails))
                             {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
+                             @else
+                             {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id' ,'required']) }}
+                             <div class="invalid-feedback">Please Add Medicine</div>
+                             @endif
 
 
-                            <div class="invalid-feedback">Please Add Medicine</div>
 
 
                         </div>

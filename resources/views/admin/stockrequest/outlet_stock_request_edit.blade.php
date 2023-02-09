@@ -1,6 +1,7 @@
 
+
 @extends('layouts.admin.master')
-@section('title')Add Purchase
+@section('title')Edit Medicine Stock Request To Warehouse
 @endsection
 @push('css')
 <style>
@@ -18,8 +19,8 @@
 	@component('components.breadcrumb')
 		@slot('breadcrumb_title')
         <div class="row">
-            <div class="col-sm-6">
-			<h3>Add Purchase</h3>
+            <div class="col-sm-10">
+			<h3> Edit Medicine Stock Request To Warehouse</h3>
         </div>
 
         </div>
@@ -27,7 +28,7 @@
 		@endslot
 
         @slot('button')
-        <a href="{{ route('medicine-purchase.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
+        <a href="{{ route('stock-request.index') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Back</a>
         @endslot
 	@endcomponent
 
@@ -38,26 +39,32 @@
 
         <div class="card-body mt-3">
 
-            {!! Form::open(['route' => 'medicine-purchase.store', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'files' => true]) !!}
-
+            {!! Form::open(['route' => ['stock-request.update', $data->id] ,'method' => 'PUT', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'id' => 'product_purchase']) !!}
+            <input type="hidden" name="id" value="{{ $data->id }}">
             <div class="form-group row">
                 {{-- <label for="manufacturer" class="col-md-2 text-right col-form-label">{{ __('purchase.manufacturer') }}:</label>
                 <div class="col-md-4">
                     {{ Form::select('manufacturer_id', [], null, ['class' => 'form-control', 'placeholder' => __('purchase.select_manufacturer'), 'id' => 'manufacturer_id']) }}
                 </div> --}}
 
-                <label for="supplier" class="col-md-2 text-right col-form-label">Supplier:</label>
+                <label for="supplier" class="col-md-2 text-right col-form-label">Outlet:</label>
                 <div class="col-md-4">
-                    {{ Form::select('supplier_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Supplier', 'id' => 'supplier_id','required']) }}
-                    <div class="invalid-feedback">Please Add Supplier</div>
-                    @error('supplier_id')
-                    <div class="invalid-feedback2"> {{ $message }}</div>
 
-                @enderror
+                    {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'id' => 'supplier_id' ,'required']) }}
+
+
+                    <div class="invalid-feedback">Please Add Outlet</div>
+
                 </div>
                 <label for="invoicePhoto" class="col-md-2 text-right">Warehouse Name * :</label>
                 <div class="col-md-4">
+
                     {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required'] ) }}
+
+
+
+
+                    <div class="invalid-feedback">Please Add Warehouse</div>
                     @error('warehouse_id')
                     <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -68,61 +75,33 @@
 
             <div class="form-group row">
 
-                <label for="invoice_no" class="col-md-2 text-right col-form-label">Invoice No<i class="text-danger">
-                            * </i>:</label>
-                <div class="col-md-4">
-                    <div class="">
-                        <input type="text" class="form-control valid_number" name="invoice_no" id="invoice_no" placeholder="Invoice No" value="" tabindex="3" required>
-                        @error('invoice_no')
-                        <div class="invalid-feedback2"> {{ $message }}</div>
 
-                    @enderror
-                    </div>
-                </div>
 
-                <label for="date" class="col-md-2 text-right col-form-label">Purchase Date <i class="text-danger">
+                <label for="date" class="col-md-2 text-right col-form-label">Date <i class="text-danger">
                             * </i>:</label>
                 <div class="col-md-4">
                     <input type="text" name="purchase_date" class="form-control datepicker" id="purdate" placeholder="Purchase Date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required>
                 </div>
-            </div>
-
-
-            <div class="form-group row">
-                <label for="payment_type" class="col-md-2 text-right col-form-label">Payment Method<i
-                            class="text-danger"> * </i>:</label>
+                {!! Form::label('remarks', 'Remarks:', array('class' => 'col-md-2 text-right')) !!}
                 <div class="col-md-4">
-                    {{ Form::select( 'payment_method_id', $payment_methods, null, ['class' => 'form-control', 'required'], ) }}
-                    @error('payment_method_id')
+
+                    {!! Form::text('remarks',$data->remarks,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Remarks Here' ]) !!}
+                    @error('remarks')
                     <div class="invalid-feedback2"> {{ $message }}</div>
 
                 @enderror
                 </div>
-
-
-
-                <label for="details" class="col-md-2 text-right col-form-label">Purchase Details :</label>
-                <div class="col-md-4">
-                    <input type="text" class="form-control" name="purchase_details" id="details" placeholder="Purchase Details" tabindex="4">
-                </div>
-
             </div>
 
-            <div class="row form-group">
-                <label for="invoicePhoto" class="col-md-2 text-right">image upload of invoice :</label>
-                <div class="col-md-4">
-                    {{ Form::file('invoice_image', ['class' => 'btn btn-default btn-file btn-block']) }} @if ($errors->has('invoice_image'))
-                    <span class="help-block" style="display:block">
-                                    <strong>{{ $errors->first('invoice_image') }}</strong>
-                                </span> @endif
-                </div>
-            </div>
+
+
+
 
 
             <div class="card">
 
                 <div class="card-header bg-secondary">
-                    <i class="fa fa-table"></i> Make Purchase
+                    <i class="fa fa-table"></i> Medicine To Stock
                 </div>
 
                 <div class="card-body">
@@ -130,12 +109,20 @@
                     <div class="row">
 
                         <div class="col-md-3">
-                            <h2>Purchase Medicine</h2>
+                            <h2>Add Medicine</h2>
                         </div>
 
                         <div class="col-md-4">
-                            {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id','required']) }}
+
+                            @if(!is_null($stockdetails))
+                            {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
+                            @else
+                            {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id' ,'required']) }}
                             <div class="invalid-feedback">Please Add Medicine</div>
+                            @endif
+
+
+
 
 
                         </div>
@@ -160,12 +147,8 @@
                                     <th class="text-center">
                                         <nobr>Product Info<i class="text-danger">*</i></nobr>
                                     </th>
-                                    <th class="text-center">
-                                        <nobr>Rack No<i class="text-danger">*</i></nobr>
-                                    </th>
-                                    <th class="text-center">
-                                        <nobr>Expiry Date<i class="text-danger">*</i></nobr>
-                                    </th>
+
+
                                     {{--
                                     <th class="text-center">
                                         <nobr>Stock Qty</nobr>
@@ -179,80 +162,47 @@
                                     <th class="text-center">
                                         <nobr>Quantity <i class="text-danger">*</i></nobr>
                                     </th>
-                                    <th class="text-center">
-                                        <nobr>Manufacturer Price<i class="text-danger">*</i></nobr>
-                                    </th>
-                                    <th class="text-center">
-                                        <nobr>Box MRP<i class="text-danger">*</i></nobr>
-                                    </th>
+
+
                                     <th class="text-center">
                                         <nobr>Product Type <i class="text-danger">*</i></nobr>
                                     </th>
-                                    <th class="text-center">
-                                        <nobr>Total_Price</nobr>
-                                    </th>
+
                                     <th class="text-center">
                                         <nobr>Action</nobr>
                                     </th>
                                 </tr>
+                                @foreach ($stockdetails as $details)
+
+
+                                <tr class="item-row">
+                                    @php
+                                         $medicine = App\Models\Medicine::where('id',$details->medicine_id)->first();
+                                     @endphp
+                                    <td>
+                                    <input class="form-control pr_id" type="hidden" name="product_id[]"  readonly="" value="{{ $details->medicine_id }}">
+                                     <input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly="" required="" value="{{ $medicine->medicine_name }}"> </td>
+
+
+                                     <td><input class="form-control qty" type="number" name="quantity[]" placeholder="Quantity" required="" value="{{ $details->quantity }}"></td>
+
+
+                                     <td><input class="form-control" name="product_type[]" type="text" id="product_type" readonly="" required="" value="medicine"></td>
+
+
+                                     <td>
+
+                                     <span class="btn btn-sm btn-danger"><a class="" href="{{ route('stockRequestDelete',[$details->medicine_id, $details->stock_request_id]) }}">Delete</a></span>
+                                    </td>
+                                </tr>
+                                @endforeach
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td class="text-right" colspan="7"><b>Sub total :</b></td>
-                                    <td class="text-right">
-                                        <input type="number" class="form-control text-right" name="sub_total" id="subtotal" readonly>
-                                    </td>
-                                    <td>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="6"><b>Vat :</b></td>
-                                    <td class="text-right">
 
-                                            <input type="number" id="vat_percent" max="100" class="text-right form-control" placeholder="%"/>
 
-                                    </td>
-                                    <td>
-                                        <input type="number" id="vat" class="text-right form-control clearVat" name="vat" value="0" step="any" placeholder="Tk"/>
-                                    </td>
-                                    <td>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="6"><b>Discount :</b></td>
-                                    <td class="text-right">
-                                        <input type="number" id="discount_percent" class="text-right form-control" max="100" tabindex="16" placeholder="%"/>
-                                    </td>
-                                    <td>
-                                        <input type="number" id="discount" class="text-right form-control" name="total_discount" value="0" tabindex="17" step="any" placeholder="Tk" />
-                                    </td>
-                                    <td>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="7"><b>Grand Total :</b></td>
-                                    <td class="text-right">
-                                        <input type="number" class="form-control text-right" name="grand_total" id="grandTotal" readonly="readonly" required> {{-- <span id="grandTotal">0</span> --}}
-                                    </td>
-                                    <td>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="7"><b>Paid Amount :</b></td>
-                                    <td class="text-right">
-                                        <input type="number" id="pay" class="text-right form-control " name="paid_amount" value="0" onkeyup="prevent_paid_amount()" onchange="prevent_paid_amount()" tabindex="16" />
-                                    </td>
-                                    <td>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="7"><b>Due Amount :</b></td>
-                                    <td class="text-right">
-                                        <input type="number" id="due" class="text-right form-control" name="due_amount" value="0" readonly="readonly" />
-                                    </td>
-                                    <td>
-                                    </td>
-                                </tr>
+
+
+
                             </tbody>
                         </table>
                     </div>
@@ -263,44 +213,26 @@
                             <div class="card-footer text-end">
                             <div class="mt-4">
 
-                                <button type="button" id="full_paid" class="btn btn-warning" tabindex="19">
-                                       Full paid </button>
+
                                 <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase">
-                                        Save
+                                        Update
                                     </button>
                             </div>
                             </div>
                         </div>
                     </div>
-
+                    </form>
                 </div>
             </div>
-            {{ Form::close(); }}
         </div>
     </div>
 </div>
 
-	@push('scripts')
+@push('scripts')
     {{-- <script src="{{ asset('backend/form-validations/pharmacy/product-purchase.js') }}"></script> --}}
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
-    <script src="{{ asset('assets/js/product_purchase_invoice.js') }}"></script>
+    <script src="{{ asset('assets/js/stock_request.js') }}"></script>
     <script type="text/javascript">
-    function clearInput1(target){
-        if (target.value== '0'){
-            target.value= "";
-       }
-    }
-    function clearInput2(target){
-        if (target.value== '0'){
-            target.value= "";
-       }
-    }
-
-    </script>
-    <script type="text/javascript">
-
-
-
 
        function prevent_paid_amount(){
                 var paid_amount = $("#pay").val();
@@ -313,14 +245,12 @@
 
         $(document).ready(function() {
 
-            $(".clearVat,#discount,#pay,#manufacturer_price").on('click', function(){
+            $(".clearVat,#discount,#pay").on('click', function(){
                 let input = $(this).val();
                     if(input == 0){
                         $(this).val('');
                     }
             })
-
-
 
 
              let  grandTotal = '';
@@ -347,7 +277,6 @@
               let vat = $(this).val();
               let subTotal = $("#subtotal").val();
               let totalVat = calculatePercentage(subTotal, vat);
-              totalVat = Math.round(totalVat);
                $("#vat").val(totalVat);
             //    console.log(calResult);
           })
@@ -356,7 +285,6 @@
               let discount = $(this).val();
               let subTotal = $("#subtotal").val();
               let totalDiscount = calculatePercentage(subTotal, discount);
-              totalDiscount = Math.round(totalDiscount);
                $("#discount").val(totalDiscount);
           })
 
@@ -371,38 +299,18 @@
         let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         $(document).ready(function() {
 
-            let supplier_id = '';
-            $("#supplier_id").select2({
-                ajax: {
-                    url: "{!! url('get-supplier') !!}",
-                    type: "get",
-                    dataType: 'json',
-                    //   delay: 250,
-                    data: function(params) {
-                        return {
-                            _token: CSRF_TOKEN,
-                            search: params.term,
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    },
-                    cache: true
-                }
 
-            });
+
 
               // get manufacturer id
-              $("#supplier_id").on('change', function() {
-                supplier_id = $(this).val();
-            })
+            //   $("#supplier_id").on('change', function() {
+            //     supplier_id = $(this).val();
+            // })
 
             // manufacturer wise medicine selection
             $("#medicine_id").select2({
                 ajax: {
-                    url: "{!! url('get-manufacture-wise-medicine') !!}",
+                    url: "{!! url('get-all-medicine') !!}",
                     type: "get",
                     dataType: 'json',
                     //   delay: 250,
@@ -411,7 +319,7 @@
                             _token: CSRF_TOKEN,
                             search: params.term, // search term
                             // manufacturer: manufacturer_id, // search term
-                            supplier: supplier_id,
+
                         };
                     },
                     processResults: function(response) {
@@ -423,6 +331,9 @@
                 }
 
             });
+
+
+
 
 
             //  get medicine id
@@ -473,7 +384,6 @@
                     });
                 } else
                     alert("Please Select Medicine Name");
-
 
             });
 
