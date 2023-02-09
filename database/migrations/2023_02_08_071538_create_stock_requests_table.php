@@ -25,7 +25,7 @@ return new class extends Migration
             $table->boolean('has_accepted')->default(false);
             $table->string('remarks')->nullable();
             $table->bigInteger('accepted_by')->unsigned()->nullable();
-            $table->date('accepted_on')->nullable();
+            $table->dateTime('accepted_on')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

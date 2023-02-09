@@ -161,7 +161,7 @@ class WarehouseReturnController extends Controller
             'remarks' => $input['remarks'],
         ];
         try{
-          $data =  WarehouseReturn::where('id',$id)->update($purchase_input);
+           WarehouseReturn::where('id',$id)->update($purchase_input);
             $medicines = $input['product_name'];
 
             for ($i = 0; $i < sizeof($medicines); $i++) {
