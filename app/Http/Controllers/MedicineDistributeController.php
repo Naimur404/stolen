@@ -31,7 +31,7 @@ class MedicineDistributeController extends Controller
 
     public function index()
     {
-        $medicinedistributes = MedicineDistribute::get();
+        $medicinedistributes = MedicineDistribute::orderby('id','desc')->get();
 
         return view('admin.DistributeMedicine.index', compact('medicinedistributes'));
     }
@@ -55,6 +55,8 @@ class MedicineDistributeController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $request->validate([
             'outlet_id' => 'required',
             'warehouse_id' => 'required'
@@ -115,10 +117,10 @@ class MedicineDistributeController extends Controller
             }
 
 
-            return redirect()->back()->with('success', 'Data has been added.');
+            return redirect()->route('distribute-medicine.index')->with('success', 'Data has been added.');
         } catch (Exception $e) {
 
-             return redirect()->back()->with('error', $e->getMessage());
+             return redirect()->route('distribute-medicine.index')->with('error', $e->getMessage());
          }
     }
 
@@ -204,7 +206,7 @@ class MedicineDistributeController extends Controller
                 );
                 WarehouseStock::where('warehouse_id', $purchase_input['warehouse_id'])->where('medicine_id',$purchase_details['product_id'][$i])->whereDate('expiry_date','=',$purchase_details['expiry_date'][$i])->update($new_stock);
 
-            
+
                 $check = MedicineDistributeDetail::where('medicine_distribute_id',$id)->where('medicine_id',$input['product_id'][$i])->first();
 
 

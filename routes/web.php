@@ -128,7 +128,7 @@ Route::get('/status-outlet/{id}/{status}', [OutletController::class,'active'])->
 Route::get('/status-customer/{id}/{status}', [CustomerManagementController::class,'active'])->name('customer.active');
 
 Route::get('/has-sent/{id}/{status}', [StockRequestController::class,'hasSent'])->name('hasSent');
-Route::get('/has_accepted/{id}/{status}', [StockRequestController::class,'hasAccepted'])->name('hasAccepted');
+Route::Post('/has_accepted', [StockRequestController::class,'hasAccepted'])->name('hasAccepted');
 Route::get('/has_accepted/{id}/{status}/{medicineid}/medicine', [StockRequestController::class,'hasAcceptedMedicine'])->name('hasAcceptedMedicine');
 //assing outlet to user
 Route::get('/add-user-outlet/{id}', [OutletController::class,'addUser'])->name('addusers');
