@@ -347,7 +347,7 @@
               let vat = $(this).val();
               let subTotal = $("#subtotal").val();
               let totalVat = calculatePercentage(subTotal, vat);
-              totalVat = Math.round(totalVat);
+              totalVat = totalVat.toFixed(2);
                $("#vat").val(totalVat);
             //    console.log(calResult);
           })
@@ -356,7 +356,7 @@
               let discount = $(this).val();
               let subTotal = $("#subtotal").val();
               let totalDiscount = calculatePercentage(subTotal, discount);
-              totalDiscount = Math.round(totalDiscount);
+              totalDiscount = totalDiscount.toFixed(2);;
                $("#discount").val(totalDiscount);
           })
 

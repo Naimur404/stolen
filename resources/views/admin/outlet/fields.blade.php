@@ -28,7 +28,7 @@
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                {!! Form::label( 'address', 'Address *' ,array('class' => 'form-label')) !!}
+                {!! Form::label( 'address', 'Address ' ,array('class' => 'form-label')) !!}
                 {!! Form::text('address',null,['class'=>'form-control', 'placeholder'=>'Ex: Enter Address']) !!}
 
             </div>
@@ -37,7 +37,7 @@
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                {!! Form::label( 'details', 'Details *' ,array('class' => 'form-label')) !!}
+                {!! Form::label( 'details', 'Details ' ,array('class' => 'form-label')) !!}
                 {{ Form::textarea('details', null, array('class' => 'form-control','rows' => 3,'placeholder' => 'Enter Supplier Details')) }}
 
             </div>
