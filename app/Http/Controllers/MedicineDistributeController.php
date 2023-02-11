@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\MedicineDistribute;
 use App\Models\MedicineDistributeDetail;
+use App\Models\OutletHasUser;
 use App\Models\StockRequestDetails;
 use App\Models\Warehouse;
 use App\Models\WarehouseStock;
@@ -30,8 +31,10 @@ class MedicineDistributeController extends Controller
      }
 
     public function index()
+
     {
-        $medicinedistributes = MedicineDistribute::orderby('id','desc')->get();
+        $outlet = OutletHasUser::where('user_id',Auth::user()->id)->first();
+        $medicinedistributes = MedicineDistribute::where('outlet_id',$outlet->outlet_id)->orderby('id','desc')->get();
 
         return view('admin.DistributeMedicine.index', compact('medicinedistributes'));
     }
