@@ -55,7 +55,7 @@ class WarehouseStockController extends Controller
         $warehousecheck = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['medicine_id'])->whereDate('expiry_date','=',$input['expiry_date'])->first();
         if($warehousecheck != null){
             $quantity = array(
-                'quantity' => $input['quantity'] +  $warehousecheck->quantity,
+                'quantity' => (int)$input['quantity'] +  (int)$warehousecheck->quantity,
             );
             $stock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['medicine_id'])->whereDate('expiry_date','=',$input['expiry_date'])->update($quantity);
         }else{

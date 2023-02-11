@@ -53,14 +53,32 @@ class OutletStockController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $stock =  OutletStock::create($input);
+
+        $check = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->first();
+
+
+        if($check != null){
+            $stock2 = array(
+
+                'quantity' => (int)$check->quantity + (int)$request->quantity,
+            );
+
+               OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($stock2);
+
+        }else{
+
+            $check =  OutletStock::create($input);
+
+
+        }
+
           try{
             $data = array(
-              'outlet_id'    => $stock->outlet_id,
+              'outlet_id'    => $check->outlet_id,
               'medicine_distribute_id'    => $request->medicine_distribute_id,
-              'medicine_id'    => $stock->medicine_id,
-              'expiry_date'    => $stock->expiry_date,
-              'quantity'    => $stock->quantity,
+              'medicine_id'    => $check->medicine_id,
+              'expiry_date'    => $check->expiry_date,
+              'quantity'    => $check->quantity,
                'checked_by' => Auth::user()->id,
                'remarks'    => 'added',
 

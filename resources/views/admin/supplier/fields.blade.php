@@ -5,13 +5,15 @@
             <div class="mb-3">
                 {!! Form::label('manufacturer_name', 'Manufacturer Name *', array('class' => 'form-label')) !!}
                 @if(Request::route()->named('supplier.edit'))
-                <select name="manufacturer_id[]" multiple="multiple" id="manufacturer_id" class="form-control">
+                <select name="manufacturer_id[]" multiple="multiple" id="manufacturer_id" class="form-control" required>
+                    <div class="invalid-feedback">Please Add Manufacturer </div>
                 @foreach ($manufacturers as $manufacturer)
                 <option value="{{ $manufacturer->id }}"
                     @foreach ($exist_manufacturer as $exists) {{ $exists->manufacturer_id == $manufacturer->id ? 'selected' : '' }} @endforeach>
                     {{ $manufacturer->manufacturer_name }}</option>
             @endforeach
-            <select name="manufacturer_id[]" multiple="multiple" id="manufacturer_id">
+            <select name="manufacturer_id[]" multiple="multiple" id="manufacturer_id" required>
+                <div class="invalid-feedback">Please Add Manufacturer</div>
                 @error('manufacturer_id')
                 <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -19,8 +21,8 @@
             @else
 
 
-                {{ Form::select('manufacturer_id[]', [''], null,['class' => 'form-control', 'id' => 'sel_emp2','multiple'=>'multiple']) }}
-
+                {{ Form::select('manufacturer_id[]', [''], null,['class' => 'form-control', 'id' => 'sel_emp2','multiple'=>'multiple', 'required']) }}
+                <div class="invalid-feedback">Please Add Manufacturer</div>
 
           @endif
             </div>
@@ -66,7 +68,7 @@
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                {!! Form::label( 'address', 'Address *' ,array('class' => 'form-label')) !!}
+                {!! Form::label( 'address', 'Address ' ,array('class' => 'form-label')) !!}
                 {{ Form::textarea('address', null, array('class' => 'form-control','rows' => 3,'placeholder' => 'Enter Supplier Address')) }}
 
             </div>

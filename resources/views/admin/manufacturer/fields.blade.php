@@ -30,7 +30,7 @@
     <div class="row">
         <div class="col">
             <div class="mb-3">
-                {!! Form::label( 'address', 'Address *' ,array('class' => 'form-label')) !!}
+                {!! Form::label( 'address', 'Address ' ,array('class' => 'form-label')) !!}
                 {!! Form::text('address',null,['class'=>'form-control', 'placeholder'=>'Ex: Enter Address']) !!}
 
             </div>
