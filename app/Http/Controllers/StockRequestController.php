@@ -271,23 +271,53 @@ class StockRequestController extends Controller
         return redirect()->back()->with('success','Sent Status Updated');
 
     }
-    public function hasAccepted($id,$status){
-        $data = array(
-             'has_accepted' => $status,
-             'accepted_by' => Auth::user()->id,
-             'accepted_on' => Carbon::now()
-
-        );
-
-        StockRequest::where('id',$id)->update($data);
-        $status = array (
-              'has_accepted' => $status,
-
-        );
-        StockRequestDetails::where('stock_request_id',$id)->update($status);
+    public function hasAccepted(Request $request){
+    
+        if($request->status == 0){
 
 
-        return redirect()->back()->with('success','Accepted Status Updated');
+            $data = array(
+                'has_accepted' => $request->status,
+                'accepted_by' => Auth::user()->id,
+                'accepted_on' => Carbon::now()
+
+           );
+
+           StockRequest::where('id',$request->id)->update($data);
+           $status = array (
+                 'has_accepted' => $request->status,
+
+           );
+           StockRequestDetails::where('stock_request_id',$request->id)->update($status);
+           return redirect()->back()->with('success','Accepted Status Updated');
+
+        }else{
+
+
+            $data = array(
+                'has_accepted' => $request->status,
+                'accepted_by' => Auth::user()->id,
+                'accepted_on' => Carbon::now()
+
+           );
+
+           StockRequest::where('id',$request->id)->update($data);
+           $status = array (
+                 'has_accepted' => $request->status,
+
+           );
+           StockRequestDetails::where('stock_request_id',$request->id)->update($status);
+           $data = StockRequest::find($request->id);
+
+           $medicinedetails = StockRequestDetails::where('stock_request_id',$request->id)->get();
+           $warehouse = Warehouse::pluck('warehouse_name', 'id');
+           return view('admin.DistributeMedicine.direct_distribute',compact('data','medicinedetails','warehouse'));
+
+        }
+
+
+
+
 
     }
 

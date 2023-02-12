@@ -102,10 +102,13 @@
                                             <div class="media-body text-end icon-state">
 
                                                 <label class="switch">
-                                                    <a href="{{ url('/has_accepted/'.$stockrequet->id.'/0') }}">
-                                                  <input type="checkbox" checked><span class="switch-state"></span>
+                                                    {!! Form::open(['method' => 'POST', 'route' =>'hasAccepted']) !!}
+                                                    <input type="hidden" name="id" value="{{ $stockrequet->id }}">
 
-                                                </a>
+                                                    <input type="hidden" name="status" value="0">
+                                                    {{ Form::button('', ['type' => 'submit', 'class' => '', 'id' => 'delete', 'title' => 'Delete']) }}
+                                                    <input type="checkbox" checked><span class="switch-state"></span>
+                                                    {!! Form::close() !!}
                                                 </label>
 
                                               </div>
@@ -113,10 +116,16 @@
                                               <div class="media-body text-end icon-state">
 
                                                 <label class="switch">
-                                                    <a href="{{ url('/has_accepted/'.$stockrequet->id.'/1') }}">
-                                                  <input type="checkbox"><span class="switch-state"></span>
+                                                    {!! Form::open(['method' => 'POST', 'route' =>'hasAccepted']) !!}
+                                                    <input type="hidden" name="id" value="{{ $stockrequet->id }}">
 
-                                                </a>
+                                                    <input type="hidden" name="status" value="1">
+                                                    {{ Form::button('', ['type' => 'submit', 'class' => '', 'id' => 'delete', 'title' => 'Delete']) }}
+                                                    <input type="checkbox"><span class="switch-state"></span>
+                                                    {!! Form::close() !!}
+
+
+
                                                 </label>
 
                                               </div>
