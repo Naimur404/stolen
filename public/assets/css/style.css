@@ -5757,7 +5757,7 @@ table tbody .border-bottom-warning td {
 
 .btn-xs {
   padding: 0.2rem 0.7rem;
-  font-size: 10px; }
+  font-size: 11px; }
 
 .large-btn {
   margin-bottom: -20px; }
@@ -12213,8 +12213,8 @@ table.dataTable.display tbody tr {
   text-align: center; }
 
 .product-table .dataTables_wrapper button {
-  padding: 2px 12px;
-  font-size: 14px; }
+    padding: 0.2rem 0.7rem;
+    font-size: 11px; }
 
 .d-none-productlist {
   display: none; }

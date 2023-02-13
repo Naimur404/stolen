@@ -172,7 +172,7 @@ class MedicineDistributeController extends Controller
 
         // return $input;
 
-
+// dump($input);
 
         $purchase_input = [
             'warehouse_id' => $input['warehouse_id'],
@@ -202,15 +202,15 @@ class MedicineDistributeController extends Controller
 
 
                 );
-                $warehousetock = WarehouseStock::where('warehouse_id', $purchase_input['warehouse_id'])->where('medicine_id',$purchase_details['product_id'][$i])->whereDate('expiry_date','=',$purchase_details['expiry_date'][$i])->implode('quantity');
-                $new_stock = array(
-                      'quantity' => (int)$warehousetock - (int)$input['quantity'][$i] ,
+                // $warehousetock = WarehouseStock::where('warehouse_id', $purchase_input['warehouse_id'])->where('medicine_id',$purchase_details['product_id'][$i])->whereDate('expiry_date','=',$purchase_details['expiry_date'][$i])->implode('quantity');
+                // $new_stock = array(
+                //       'quantity' => (int)$warehousetock - (int)$input['quantity'][$i] ,
 
-                );
-                WarehouseStock::where('warehouse_id', $purchase_input['warehouse_id'])->where('medicine_id',$purchase_details['product_id'][$i])->whereDate('expiry_date','=',$purchase_details['expiry_date'][$i])->update($new_stock);
+                // );
+                // WarehouseStock::where('warehouse_id', $purchase_input['warehouse_id'])->where('medicine_id',$purchase_details['product_id'][$i])->whereDate('expiry_date','=',$purchase_details['expiry_date'][$i])->update($new_stock);
 
 
-                $check = MedicineDistributeDetail::where('medicine_distribute_id',$id)->where('medicine_id',$input['product_id'][$i])->first();
+                 $check = MedicineDistributeDetail::where('medicine_distribute_id',$id)->where('medicine_id',$input['product_id'][$i])->first();
 
 
                  if($check != null){

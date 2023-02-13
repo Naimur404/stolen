@@ -198,7 +198,7 @@
                                     <td>
                                     <input class="form-control pr_id" type="hidden" name="product_id[]"  readonly="" value="{{ $details->medicine_id }}">
                                      <input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly="" required="" value="{{ $details->medicine_name }}"> </td>
-                                     <td><input class="form-control rack_no" type="text" name="rack_no[]" placeholder="Rack No" required="" value="{{ $details->rack_no }}"></td>
+                                     <td><input class="form-control rack_no" type="text" name="rack_no[]" placeholder="Rack No"  value="{{ $details->rack_no }}"></td>
                                      <td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required="" value="{{ $details->expiry_date }}"></td>
                                      <td><input class="form-control qty" type="number" name="quantity[]" placeholder="Quantity" required="" value="{{ $details->quantity }}"></td>
                                      @php
@@ -252,6 +252,16 @@
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
     <script src="{{ asset('assets/js/product_purchase_invoice.js') }}"></script>
     <script type="text/javascript">
+function clearInput1(target){
+        if (target.value== '0'){
+            target.value= "";
+       }
+    }
+    function clearInput2(target){
+        if (target.value== '0'){
+            target.value= "";
+       }
+    }
 
        function prevent_paid_amount(){
                 var paid_amount = $("#pay").val();

@@ -89,7 +89,7 @@
                                         <td class="form-inline uniqueClassName">
                                             @can('warehouse-return.edit')
                                                 <a href="{{ route('warehouse-return.edit', $warehousereturn->id) }}"
-                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa-light fa-money-bill"></i>Edit</a>
+                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:10px; "><i class="fa-light fa-money-bill"></i>Edit</a>
                                             @endcan
 
                                             {{-- @can('product_purchase.print')

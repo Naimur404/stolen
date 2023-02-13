@@ -203,7 +203,16 @@
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
     <script src="{{ asset('assets/js/warehouse_return.js') }}"></script>
     <script type="text/javascript">
-
+    function clearInput1(target){
+        if (target.value== '0'){
+            target.value= "";
+       }
+    }
+    function clearInput2(target){
+        if (target.value== '0'){
+            target.value= "";
+       }
+    }
        function prevent_paid_amount(){
                 var paid_amount = $("#pay").val();
             var grand_total_amount = $("#grandTotal").val();

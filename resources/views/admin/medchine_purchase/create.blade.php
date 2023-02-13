@@ -240,7 +240,7 @@
                                 <tr>
                                     <td class="text-right" colspan="7"><b>Paid Amount :</b></td>
                                     <td class="text-right">
-                                        <input type="number" id="pay" class="text-right form-control " name="paid_amount" value="0" onkeyup="prevent_paid_amount()" onchange="prevent_paid_amount()" tabindex="16" />
+                                        <input type="number" id="pay" class="text-right form-control " name="paid_amount" value="0" onkeyup="prevent_paid_amount()" onchange="prevent_paid_amount()" tabindex="16" step=".01" />
                                     </td>
                                     <td>
                                     </td>
@@ -305,7 +305,7 @@
        function prevent_paid_amount(){
                 var paid_amount = $("#pay").val();
             var grand_total_amount = $("#grandTotal").val();
-            if (parseInt(grand_total_amount) < parseInt(paid_amount)) {
+            if (parseFloat(grand_total_amount) < parseFloat(paid_amount)) {
                 alert("You can not paid more than grand total amount.");
                 $("#pay").val("");
                }
@@ -356,7 +356,7 @@
               let discount = $(this).val();
               let subTotal = $("#subtotal").val();
               let totalDiscount = calculatePercentage(subTotal, discount);
-              totalDiscount = totalDiscount.toFixed(2);;
+              totalDiscount = totalDiscount.toFixed(2);
                $("#discount").val(totalDiscount);
           })
 
