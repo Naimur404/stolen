@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class OutletHasUser extends Model
 {
     use HasFactory;
+
+    
 }

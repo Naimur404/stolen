@@ -85,7 +85,7 @@
                     <tr>
                         <input type="hidden" name="outlet_id" value="{{ $productPurchase->outlet_id }}">
 
-
+                          <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
                           <input type="hidden" name="medicine_distribute_id" value="{{ $productPurchase->id }}">
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name }}</td>

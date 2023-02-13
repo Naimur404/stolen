@@ -84,7 +84,7 @@ class MedicinePurchaseController extends Controller
             'sub_total' => $input['sub_total'],
             'grand_total' => $input['grand_total'],
             'total_discount' => $input['total_discount'],
-            'paid_amount' => $input['paid_amount'],
+            'paid_amount' => round($input['paid_amount']),
             'due_amount' => $input['due_amount'],
             'vat' => $input['vat'],
             'added_by' => Auth::user()->id,
@@ -241,7 +241,7 @@ class MedicinePurchaseController extends Controller
 
         $productPurchase = MedicinePurchase::findOrFail($id);
         $productPurchaseDetails = MedicinePurchaseDetails::where('medicine_purchase_id', $productPurchase->id)->get();
-       
+
 
         return view('admin.medchine_purchase.checkin', compact('productPurchase', 'productPurchaseDetails'));
     }

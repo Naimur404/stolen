@@ -52,25 +52,27 @@ class WarehouseStockController extends Controller
     {
 
         $input = $request->all();
+
         $warehousecheck = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['medicine_id'])->whereDate('expiry_date','=',$input['expiry_date'])->first();
+
         if($warehousecheck != null){
             $quantity = array(
                 'quantity' => (int)$input['quantity'] +  (int)$warehousecheck->quantity,
             );
-            $stock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['medicine_id'])->whereDate('expiry_date','=',$input['expiry_date'])->update($quantity);
+            WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['medicine_id'])->whereDate('expiry_date','=',$input['expiry_date'])->update($quantity);
         }else{
-            $stock =  WarehouseStock::create($input);
+             WarehouseStock::create($input);
         }
 
         try{
           $data = array(
-            'warehouse_id'    => $stock->warehouse_id,
+            'warehouse_id'    => $request->warehouse_id,
             'purchase_id'    => $request->purchase_id,
-            'medicine_id'    => $stock->medicine_id,
-            'expiry_date'    => $stock->expiry_date,
-            'quantity'    => $stock->quantity,
+            'medicine_id'    => $request->medicine_id,
+            'expiry_date'    => $request->expiry_date,
+            'quantity'    => $request->quantity,
              'checked_by' => Auth::user()->id,
-             'remarks'    => 'added',
+            
 
           );
             WarehouseCheckIn::create($data);

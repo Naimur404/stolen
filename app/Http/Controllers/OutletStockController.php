@@ -9,6 +9,7 @@ use App\Models\Outlet;
 use App\Models\OutletCheckIn;
 use App\Models\OutletStock;
 use App\Models\Unit;
+use App\Models\WarehouseStock;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -53,6 +54,18 @@ class OutletStockController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+
+           $warehousetock = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->first();
+
+           if( $warehousetock != null){
+            $new_stock = array(
+                'quantity' => (int)$warehousetock->quantity - (int)$request->quantity,
+
+          );
+          WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($new_stock);
+
+           }
+
 
         $check = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->first();
 

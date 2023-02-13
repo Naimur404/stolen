@@ -29,4 +29,5 @@ class MedicineDistribute extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
     }
+
 }
