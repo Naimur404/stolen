@@ -24,7 +24,7 @@ use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\WarehouseReturnController;
 use App\Http\Controllers\WarehouseStockController;
-use App\Models\CustomerManagement;
+use App\Models\Customer;
 use App\Models\MedicineDistribute;
 use App\Models\OutletStock;
 use App\Models\StockRequest;
