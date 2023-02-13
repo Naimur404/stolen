@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\CustomerManagement;
+use App\Models\Customer;
 use App\Models\Outlet;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -57,7 +57,7 @@ class CustomerManagementController extends Controller
            ]);
            $input = $request->all();
            try{
-            CustomerManagement::create($input);
+            Customer::create($input);
             return redirect()->back()->with('success', ' New Customer Added');
 
            }catch(Exception $e){
@@ -68,10 +68,10 @@ class CustomerManagementController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\CustomerManagement  $customerManagement
+     * @param  \App\Models\Customer  $customerManagement
      * @return \Illuminate\Http\Response
      */
-    public function show(CustomerManagement $customerManagement)
+    public function show(Customer $customerManagement)
     {
         //
     }
@@ -79,11 +79,11 @@ class CustomerManagementController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\CustomerManagement  $customerManagement
+     * @param  \App\Models\Customer  $customerManagement
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
-    {    $customerManagement = CustomerManagement::find($id);
+    {    $customerManagement = Customer::find($id);
         return view('admin.customermanagement.edit',compact('customerManagement'));
     }
 
@@ -91,7 +91,7 @@ class CustomerManagementController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\CustomerManagement  $customerManagement
+     * @param  \App\Models\Customer  $customerManagement
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -115,7 +115,7 @@ class CustomerManagementController extends Controller
 
 
            try{
-            CustomerManagement::where('id',$request->id)->update($data);
+            Customer::where('id',$request->id)->update($data);
             return redirect()->back()->with('success', 'Customer Update');
 
            }catch(Exception $e){
@@ -126,13 +126,13 @@ class CustomerManagementController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\CustomerManagement  $customerManagement
+     * @param  \App\Models\Customer  $customerManagement
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
 
-        CustomerManagement::where('id',$id)->delete();
+        Customer::where('id',$id)->delete();
          return redirect()->back()->with('success', 'Data has been Deleted.');
     }
     public function customer(Request $request, $id )
@@ -140,7 +140,7 @@ class CustomerManagementController extends Controller
     {
         if($id != 'all'){
             if ($request->ajax()) {
-                $data = CustomerManagement::where("outlet_id",$id)->get();
+                $data = Customer::where("outlet_id",$id)->get();
                 return  DataTables::of($data)
                         ->addIndexColumn()
                         ->addColumn('address', function($row){
@@ -177,7 +177,7 @@ class CustomerManagementController extends Controller
             }
         }else{
             if ($request->ajax()) {
-                $data = CustomerManagement::all();
+                $data = Customer::all();
                 return  DataTables::of($data)
                 ->addIndexColumn()
                 ->addColumn('address', function($row){
@@ -225,7 +225,7 @@ class CustomerManagementController extends Controller
     }
     public function active($id,$status){
 
-        $data = CustomerManagement::find($id);
+        $data = Customer::find($id);
         $data->is_active = $status;
         $data->save();
         return redirect()->back()->with('success','Active Status Updated');
