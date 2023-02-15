@@ -5764,7 +5764,15 @@ table tbody .border-bottom-warning td {
   .large-btn .btn {
     margin-right: 5px;
     margin-bottom: 15px; }
-
+ .footerextra{
+    background-color: #fff;
+    -webkit-box-shadow: 0 0 20px 16px rgb(4 122 251 / 4%);
+    box-shadow: 0 0 20px 16px rgb(4 122 251 / 4%);
+    padding: 15px;
+    bottom: 0;
+    left: 0;
+    margin-left: 0px;
+ }
 .btn-air-primary {
   -webkit-box-shadow: 0 5px 10px 2px rgba(36, 105, 92, 0.19) !important;
           box-shadow: 0 5px 10px 2px rgba(36, 105, 92, 0.19) !important; }

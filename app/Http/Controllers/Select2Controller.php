@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Customer;
 use App\Models\Manufacturer;
 use App\Models\Medicine;
 use App\Models\Outlet;
+use App\Models\OutletHasUser;
+use App\Models\PaymentMethod;
 use App\Models\Supplier;
 use App\Models\Type;
 use App\Models\Unit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
 class Select2Controller extends Controller
@@ -178,4 +183,61 @@ class Select2Controller extends Controller
 
           return response()->json($response);
       }
+   
+
+  public function get_user(Request $request){
+    $outlet_id = OutletHasUser::where('user_id',Auth::user()->id)->first();
+    $search = $request->search;
+    if($search == ''){
+      $customers = Customer::where('outlet_id',$outlet_id->outlet_id)->get();
+    }else{
+        $customers = Customer::where('outlet_id',$outlet_id->outlet_id)->where('mobile', 'like', '%' .$search . '%')->get();
+
+    }
+    $response = array();
+         foreach($customers as $customers){
+            $response[] = array(
+                 "id"=>$customers->id,
+                 "text"=>$customers->mobile,
+            );
+         }
+         return response()->json($response);
+  }
+  public function get_user_details($id){
+            $customer = Customer::find($id);
+
+            return json_encode($customer);
+
+  }
+  public function get_payment(Request $request){
+
+    $search = $request->search;
+      if($search == ''){
+
+         $payments = PaymentMethod::orderby('id','asc')
+
+         ->select('id','method_name')
+         ->get();
+      }else{
+
+         $payments = PaymentMethod::orderby('id','asc')
+
+         ->select('id','method_name')
+         ->where('method_name', 'like', '%' .$search . '%')
+         ->get();
+      }
+
+      $response = array();
+      foreach($payments as $payment){
+         $response[] = array(
+              "id"=>$payment->id,
+              "text"=>$payment->method_name
+         );
+      }
+
+      return response()->json($response);
+  }
+  public function invoice(Request $request){
+    dump($request->all());
+  }
 }
