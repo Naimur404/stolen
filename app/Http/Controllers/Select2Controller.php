@@ -44,7 +44,7 @@ class Select2Controller extends Controller
           if($search == ''){
              $categories = Manufacturer::orderby('id','asc')->select('id','manufacturer_name')->get();
           }else{
-             $categories = Manufacturer::orderby('id','asc')->select('id','manufacturer_name')->where('manufacturer_name', 'like', '%' .$search . '%')->get();
+             $categories = Manufacturer::orderby('id','asc')->select('id','manufacturer_name')->where('manufacturer_name', 'like', '%' .$search . '%')->limit(10)->get();
           }
 
           $response = array();
@@ -64,11 +64,11 @@ class Select2Controller extends Controller
         $search = $request->search;
 
           if($search == ''){
-             $suppliers = Supplier::orderby('id','asc')->select('id','supplier_name')
+             $suppliers = Supplier::orderby('id','asc')->select('id','supplier_name')->limit(10)
              ->get();
           }else{
              $suppliers = Supplier::orderby('id','asc')->select('id','supplier_name')
-             ->where('supplier_name', 'like', '%' .$search . '%')
+             ->where('supplier_name', 'like', '%' .$search . '%')->limit(10)
              ->get();
           }
 
@@ -161,15 +161,15 @@ class Select2Controller extends Controller
           if($search == ''){
 
              $medicines = Medicine::orderby('id','asc')
-
              ->select('id','medicine_name')
+             ->limit(10)
              ->get();
           }else{
 
              $medicines = Medicine::orderby('id','asc')
-
              ->select('id','medicine_name')
              ->where('medicine_name', 'like', '%' .$search . '%')
+             ->limit(10)
              ->get();
           }
 
@@ -189,9 +189,9 @@ class Select2Controller extends Controller
     $outlet_id = OutletHasUser::where('user_id',Auth::user()->id)->first();
     $search = $request->search;
     if($search == ''){
-      $customers = Customer::where('outlet_id',$outlet_id->outlet_id)->get();
+      $customers = Customer::where('outlet_id',$outlet_id->outlet_id)->limit(10)->get();
     }else{
-        $customers = Customer::where('outlet_id',$outlet_id->outlet_id)->where('mobile', 'like', '%' .$search . '%')->get();
+        $customers = Customer::where('outlet_id',$outlet_id->outlet_id)->where('mobile', 'like', '%' .$search . '%')->limit(10)->get();
 
     }
     $response = array();
@@ -215,8 +215,8 @@ class Select2Controller extends Controller
       if($search == ''){
 
          $payments = PaymentMethod::orderby('id','asc')
-
          ->select('id','method_name')
+         ->limit(10)
          ->get();
       }else{
 
@@ -224,6 +224,7 @@ class Select2Controller extends Controller
 
          ->select('id','method_name')
          ->where('method_name', 'like', '%' .$search . '%')
+         ->limit(10)
          ->get();
       }
 
