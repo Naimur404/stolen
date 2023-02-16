@@ -250,7 +250,7 @@ return redirect()->back()->with('success', 'Data has been added.');
          $response = array();
          foreach($medicines as $medicine){
             $response[] = array(
-                 "id"=>$medicine->medicine_id .','.$medicine->expiry_date,
+                 "id"=>$medicine->medicine_id,
                  "text"=>$medicine->medicine_name.' - '.' EX '.$medicine->expiry_date,
             );
          }
@@ -258,10 +258,9 @@ return redirect()->back()->with('success', 'Data has been added.');
       }
 
       public function get_medicine_details_for_sale($id){
-        $string = $id;
-        $str_arr = explode (",", $string);
+
         $outlet_id = OutletHasUser::where('user_id',Auth::user()->id)->first();
-        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id->outlet_id )->where('outlet_stocks.expiry_date' ,'=' , $str_arr[1])->where('outlet_stocks.medicine_id' ,'=' , $str_arr[0])
+        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id->outlet_id )->where('outlet_stocks.medicine_id' ,'=' , $id)
         ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
         ->select('outlet_stocks.*','medicines.medicine_name as medicine_name')->first();
 

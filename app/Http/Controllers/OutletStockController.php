@@ -74,6 +74,7 @@ class OutletStockController extends Controller
             $stock2 = array(
 
                 'quantity' => (int)$check->quantity + (int)$request->quantity,
+                'price'  => $request->rate,
             );
 
                OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($stock2);
