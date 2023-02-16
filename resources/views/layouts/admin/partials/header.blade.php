@@ -12,17 +12,11 @@
         <li class="onhover-dropdown">
           <div class="bookmark-box"><i data-feather="star"></i></div>
           <div class="bookmark-dropdown onhover-show-div">
-            <div class="form-group mb-0">
-              <div class="input-group">
-                <div class="input-group-prepend"><span class="input-group-text"><i class="fa fa-search"></i></span></div>
-                <input class="form-control" type="text" placeholder="Search for bookmark...">
-              </div>
-            </div>
             <ul>
-              <li class="add-to-bookmark"><i class="bookmark-icon" data-feather="inbox"></i>Email<span class="pull-right"><i data-feather="star"></i></span></li>
-              <li class="add-to-bookmark"><i class="bookmark-icon" data-feather="message-square"></i>Chat<span class="pull-right"><i data-feather="star"></i></span></li>
-              <li class="add-to-bookmark"><i class="bookmark-icon" data-feather="command"></i>Feather Icon<span class="pull-right"><i data-feather="star"></i></span></li>
-              <li class="add-to-bookmark"><i class="bookmark-icon" data-feather="airplay"></i>Widgets<span class="pull-right"><i data-feather="star">   </i></span></li>
+              <li class="add-to-bookmark"><i class="bookmark-icon" data-feather="inbox"></i>Stock<span class="pull-right"><i data-feather="star"></i></span></li>
+              <li class="add-to-bookmark"><i class="bookmark-icon" data-feather="message-square"></i>Sales<span class="pull-right"><i data-feather="star"></i></span></li>
+              <li class="add-to-bookmark"><i class="bookmark-icon" data-feather="command"></i>Request<span class="pull-right"><i data-feather="star"></i></span></li>
+              <li class="add-to-bookmark"><i class="bookmark-icon" data-feather="airplay"></i>Return<span class="pull-right"><i data-feather="star">   </i></span></li>
             </ul>
           </div>
         </li>
@@ -36,35 +30,8 @@
               <div class="media">
                 <span class="notification-bg bg-light-primary"><i data-feather="activity"> </i></span>
                 <div class="media-body">
-                  <p>Delivery processing </p>
+                  <p>Development is on going </p>
                   <span>10 minutes ago</span>
-                </div>
-              </div>
-            </li>
-            <li class="noti-secondary">
-              <div class="media">
-                <span class="notification-bg bg-light-secondary"><i data-feather="check-circle"> </i></span>
-                <div class="media-body">
-                  <p>Order Complete</p>
-                  <span>1 hour ago</span>
-                </div>
-              </div>
-            </li>
-            <li class="noti-success">
-              <div class="media">
-                <span class="notification-bg bg-light-success"><i data-feather="file-text"> </i></span>
-                <div class="media-body">
-                  <p>Tickets Generated</p>
-                  <span>3 hour ago</span>
-                </div>
-              </div>
-            </li>
-            <li class="noti-danger">
-              <div class="media">
-                <span class="notification-bg bg-light-danger"><i data-feather="user-check"> </i></span>
-                <div class="media-body">
-                  <p>Delivery Complete</p>
-                  <span>6 hour ago</span>
                 </div>
               </div>
             </li>
@@ -73,42 +40,15 @@
         <li>
             <div class="mode"><i class="fa fa-moon-o"></i></div>
         </li>
-        <li class="onhover-dropdown">
-          <i data-feather="message-square"></i>
-          <ul class="chat-dropdown onhover-show-div">
-            <li>
-              <div class="media">
-                <img class="img-fluid rounded-circle me-3" src="{{asset('assets/images/user/4.jpg')}}" alt="">
-                <div class="media-body">
-                  <span>Ain Chavez</span>
-                  <p class="f-12 light-font">Lorem Ipsum is simply dummy...</p>
-                </div>
-                <p class="f-12">32 mins ago</p>
-              </div>
-            </li>
-            <li>
-              <div class="media">
-                <img class="img-fluid rounded-circle me-3" src="{{asset('assets/images/user/1.jpg')}}" alt="">
-                <div class="media-body">
-                  <span>Erica Hughes</span>
-                  <p class="f-12 light-font">Lorem Ipsum is simply dummy...</p>
-                </div>
-                <p class="f-12">58 mins ago</p>
-              </div>
-            </li>
-            <li>
-              <div class="media">
-                <img class="img-fluid rounded-circle me-3" src="{{asset('assets/images/user/2.jpg')}}" alt="">
-                <div class="media-body">
-                  <span>Kori Thomas</span>
-                  <p class="f-12 light-font">Lorem Ipsum is simply dummy...</p>
-                </div>
-                <p class="f-12">1 hr ago</p>
-              </div>
-            </li>
-            <li class="text-center"> <a class="f-w-700" href="javascript:void(0)">See All     </a></li>
-          </ul>
-        </li>
+          @can('invoice.create')
+              <li class="onhover-dropdown">
+                  @if(request()->route()->named('invoice.create'))
+                      <a href="{{ url('/') }}"><i data-feather="home"></i></a>
+                  @else
+                      <a href="{{ route('invoice.create') }}" class="btn btn-outline-primary" title="POS"><i data-feather="printer"></i></a>
+                  @endif
+              </li>
+          @endcan
         <li class="onhover-dropdown p-0">
           <a class="btn btn-primary-light" href="{{ route('logout') }}"><i data-feather="log-out"></i>Log out</a>
         </li>
