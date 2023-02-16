@@ -1,6 +1,6 @@
 
 @extends('admin.Pos.pos_master')
-@section('title')Add Purchase
+@section('title')POS
 @endsection
 @push('css')
 <style>
@@ -24,7 +24,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-6">
-			<h3>Add Purchase</h3>
+			<h3>POS</h3>
         </div>
 
         </div>
@@ -34,6 +34,8 @@
 
 	@endcomponent
     {!! Form::open(['route' => 'invoice.store', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'files' => true]) !!}
+
+    <input type="hidden" name="outlet_id" value="{{ $outlet_id->outlet_id }}">
 <div class="row item-row-add">
 
 <div class="col-md-9 col-lg-9">
@@ -59,8 +61,9 @@
                         {{ Form::number('', '', array('class'=> 'form-control', 'placeholder' =>'Quantity', 'id'=>'qty'))}}
                     </div> --}}
 
+
                     <div class="col-md-2">
-                        <button type="button" class="btn btn-primary addProductRow" id="addProductRow" >Add</button>
+                        <button type="button" class="btn btn-primary btn-xs  addProductRow" id="addProductRow" ><i data-feather="arrow-right-circle" class="mt-1"></i></button>
                     </div>
 
                     <div class="col-md-6">
@@ -82,7 +85,7 @@
 
             <div class="card">
 
-                <div class="card-header bg-secondary">
+                <div class="card-header bg-primary">
                     <i class="fa fa-table"></i> Make Purchase
                 </div>
 
@@ -168,32 +171,29 @@
 
                 </div>
             </div>
-            <div class="card-header bg-secondary">
+            <div class="card-header bg-primary">
                 <i class="fa fa-table"></i> Customer Details
             </div>
             <div class="form-group row mt-5">
 
 
                 <div class="col-md-3">
-                    {!! Form::label('user_id', 'Select User', array('class' => 'form-label')) !!}
-                    {{ Form::select('user_id', [], null, ['class' => 'form-control add', 'placeholder' => 'Select User', 'id' => 'user_id' ]) }}
+                    {!! Form::label('mobile', 'Select User', array('class' => 'form-label')) !!}
+                    {{ Form::select('mobile', [], null, ['class' => 'form-control add', 'placeholder' => 'Select User', 'id' => 'user_id' ,'required' ]) }}
+                    <div class="invalid-feedback">Please Enter User Phone Number</div>
 
 
 
                 </div>
                 <div class="col-md-1">
-
-                    <button type="button" class="btn btn-primary adduser mt-4" id="adduser" >Add</button>
+                    <!-- Button trigger modal -->
+                    <button class="btn btn-primary btn-xs adduser" style="margin-top: 32px" id="adduser"   type="button"><i data-feather="arrow-right-circle" class="mt-1"></i></button>
                 </div>
 
-                {{--
-                <div class="col-md-4">
-                    {{ Form::number('', '', array('class'=> 'form-control', 'placeholder' =>'Quantity', 'id'=>'qty'))}}
-                </div> --}}
 
                 <div class="col-md-3">
                     {!! Form::label('name', 'User Name', array('class' => 'form-label')) !!}
-                    {!! Form::text('name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter User Name']) !!}
+                    {!! Form::text('name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter User Name' ,'required']) !!}
                 </div>
                 <div class="col-md-3">
                     {!! Form::label('address', 'Address', array('class' => 'form-label')) !!}
@@ -214,7 +214,7 @@
 
             <div class="card">
 
-                <div class="card-header bg-secondary">
+                <div class="card-header bg-primary">
                     <i class="fa fa-table"></i> Invoice
                 </div>
 
@@ -230,7 +230,7 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td class="text-right" colspan="7"><b>Sub total :</b></td>
+                                    <td class="text-right" colspan="7"><b>Sub total:</b></td>
                                     <td class="text-right">
                                         <input type="number" class="form-control text-right" name="sub_total" id="subtotal" readonly>
                                     </td>
@@ -238,7 +238,24 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-right" colspan="6"><b>Vat :</b></td>
+                                    <td class="text-right" colspan="7"><b>Total Discount :</b></td>
+
+                                    <td>
+                                        <input type="number" id="discount" class="text-right form-control discount" name="discount" value="0" tabindex="17" step="any" placeholder="Tk" />
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" colspan="7"><b>After Discount:</b></td>
+                                    <td class="text-right">
+                                        <input type="number" class="form-control text-right afterdis" name="afterdis" id="afterdis" readonly>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" colspan="6"><b>Vat:</b></td>
                                     <td class="text-right">
 
                                             <input type="number" id="vat_percent" max="100" class="text-right form-control" placeholder="%"/>
@@ -250,19 +267,9 @@
                                     <td>
                                     </td>
                                 </tr>
+
                                 <tr>
-                                    <td class="text-right" colspan="6"><b>Discount :</b></td>
-                                    <td class="text-right">
-                                        <input type="number" id="discount_percent" class="text-right form-control" max="100" tabindex="16" placeholder="%"/>
-                                    </td>
-                                    <td>
-                                        <input type="number" id="discount" class="text-right form-control" name="total_discount" value="0" tabindex="17" step="any" placeholder="Tk" />
-                                    </td>
-                                    <td>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="7"><b>Grand Total :</b></td>
+                                    <td class="text-right" colspan="7"><b>Grand Total:</b></td>
                                     <td class="text-right">
                                         <input type="number" class="form-control text-right" name="grand_total" id="grandTotal" readonly="readonly" required> {{-- <span id="grandTotal">0</span> --}}
                                     </td>
@@ -270,15 +277,25 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-right" colspan="7"><b>Paid Amount :</b></td>
+                                    <td class="text-right" colspan="7"><b>Given Amount :</b></td>
                                     <td class="text-right">
-                                        <input type="number" id="pay" class="text-right form-control " name="paid_amount" value="0" onkeyup="prevent_paid_amount()" onchange="prevent_paid_amount()" tabindex="16" step=".01" />
+                                        <input type="number" id="pay" class="text-right form-control " name="paid_amount" value="0" onkeyup="prevent_paid_amount()" onchange="prevent_paid_amount()" tabindex="16" step=".01" required/>
                                     </td>
                                     <td>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td class="text-right" colspan="7"><b>Back Amount :</b></td>
+                                    <td class="text-right">
+                                        <input type="number" id="back" class="text-right form-control back" name="back_amount" value="0" readonly="readonly" />
+                                    </td>
+                                    <td>
+
+
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" colspan="7"><b>Due Amount :</b></td>
                                     <td class="text-right">
                                         <input type="number" id="due" class="text-right form-control" name="due_amount" value="0" readonly="readonly" />
                                     </td>
@@ -296,7 +313,8 @@
                         <div class="col-md-12">
                             <label for="payment_type" class="text-right col-form-label mt-3">Payment Name</label>
 
-                        {{ Form::select( 'payment_method_id', [], null, ['class' => 'form-control', 'required', 'id' => 'payment_method_id','placeholder'=>'Select Payment Type'], ) }}
+                        {{ Form::select( 'payment_method_id', [], null, ['class' => 'form-control', 'required', 'id' => 'payment_method_id','placeholder'=>'Select Payment Type' ,'required'], ) }}
+                        <div class="invalid-feedback">Please Add Payment Type</div>
 
                             <div class="card-footer text-end">
 
@@ -339,14 +357,14 @@ function clearInput1(target){
             target.value= "";
        }
     }
-       function prevent_paid_amount(){
-                var paid_amount = $("#pay").val();
-            var grand_total_amount = $("#grandTotal").val();
-            if (parseInt(grand_total_amount) < parseInt(paid_amount)) {
-                alert("You can not paid more than grand total amount.");
-                $("#pay").val("");
-               }
-            }
+    //    function prevent_paid_amount(){
+    //             var paid_amount = $("#pay").val();
+    //         var grand_total_amount = $("#grandTotal").val();
+    //         // if (parseInt(grand_total_amount) < parseInt(paid_amount)) {
+    //         //     alert("You can not paid more than grand total amount.");
+    //         //     $("#pay").val("");
+    //         //    }
+    //         }
 
         $(document).ready(function() {
 
@@ -358,40 +376,40 @@ function clearInput1(target){
             })
 
 
-             let  grandTotal = '';
-            $("#full_paid").on('click', function() {
-                  grandTotal = $("#grandTotal").val();
-                 $("#pay").val(grandTotal);
-            });
+            //  let  grandTotal = '';
+            // $("#full_paid").on('click', function() {
+            //       grandTotal = $("#grandTotal").val();
+            //      $("#pay").val(grandTotal);
+            // });
             // payment validations
-          $("#discount").on('click', function(){
-                let subTotal = $('#subtotal').val();
-                $("#discount").attr({
-                     max: subTotal,
-                });
-          });
-          $("#pay").on('click', function(){
-            grandTotal = $("#grandTotal").val();
-                $("#pay").attr({
-                     max: grandTotal,
-                });
-          });
+        //   $("#discount").on('click', function(){
+        //         let subTotal = $('#subtotal').val();
+        //         $("#discount").attr({
+        //              max: subTotal,
+        //         });
+        //   });
+        //   $("#pay").on('click', function(){
+        //     grandTotal = $("#grandTotal").val();
+        //         $("#pay").attr({
+        //              min: grandTotal,
+        //         });
+        //   });
 
         //   percentage live calculations
           $("#vat_percent").bind('keypress keyup keydown mouseup', function(){
               let vat = $(this).val();
-              let subTotal = $("#subtotal").val();
+              let subTotal = $("#afterdis").val();
               let totalVat = calculatePercentage(subTotal, vat);
                $("#vat").val(totalVat);
             //    console.log(calResult);
           })
 
-          $("#discount_percent").bind('keypress keyup keydown mouseup', function(){
-              let discount = $(this).val();
-              let subTotal = $("#subtotal").val();
-              let totalDiscount = calculatePercentage(subTotal, discount);
-               $("#discount").val(totalDiscount);
-          })
+        //   $("#discount_percent").bind('keypress keyup keydown mouseup', function(){
+        //       let discount = $(this).val();
+        //       let subTotal = $("#afterdis").val();
+        //       let totalDiscount = calculatePercentage(subTotal, discount);
+        //        $("#discount").val(totalDiscount);
+        //   })
 
           function calculatePercentage(subTotal, vat){
                  let result = subTotal*(vat/100);
@@ -606,7 +624,7 @@ function clearInput1(target){
 
                         success: function(data) {
                             if (data != null) {
-                                $('.pr_id').first().val(data.id);
+                                $('.pr_id').first().val(data.medicine_id);
                                 $('#expiry_date').val(data.expiry_date);
                                 $('#product_name').val(data.medicine_name);
                                 $('.stock-qty').first().val(data.quantity);
@@ -647,14 +665,18 @@ function clearInput1(target){
                 qty: ".qty",
                 Quantity: "#Quantity",
                 total: ".total",
+                totaldis: ".totaldis",
                 // totalQty: "#totalQty",
 
                 subtotal: "#subtotal",
                 discount: "#discount",
+                discountt: "#discountt",
                 // shipping : "#shipping",
                 vat: "#vat",
                 grandTotal: "#grandTotal",
+                afterdis:  "#afterdis",
                 pay: "#pay",
+                back: ".back",
                 due: "#due"
             });
 

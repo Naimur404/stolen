@@ -183,7 +183,7 @@ class Select2Controller extends Controller
 
           return response()->json($response);
       }
-   
+
 
   public function get_user(Request $request){
     $outlet_id = OutletHasUser::where('user_id',Auth::user()->id)->first();
@@ -197,14 +197,14 @@ class Select2Controller extends Controller
     $response = array();
          foreach($customers as $customers){
             $response[] = array(
-                 "id"=>$customers->id,
+                 "id"=>$customers->mobile,
                  "text"=>$customers->mobile,
             );
          }
          return response()->json($response);
   }
   public function get_user_details($id){
-            $customer = Customer::find($id);
+            $customer = Customer::where('mobile',$id)->first();
 
             return json_encode($customer);
 
@@ -237,7 +237,5 @@ class Select2Controller extends Controller
 
       return response()->json($response);
   }
-  public function invoice(Request $request){
-    dump($request->all());
-  }
+
 }

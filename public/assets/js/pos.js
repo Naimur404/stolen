@@ -65,6 +65,9 @@ Invoice.prototype = {
         this.calcGrandTotal();
         this.calcPayment();
         this.datePicker();
+        this.calcdistotal();
+        this.calcBack();
+        this.calcdisSubtotal();
 
 
         // var row_index;
@@ -101,17 +104,20 @@ Invoice.prototype = {
     calcTotal: function() {
         jQuery($.opt.parentClass).each(function(i) {
             var row = jQuery(this);
-            var discount = row.find($.opt.discount).val();
+            var discount = row.find($.opt.discountt).val();
             var total = row.find($.opt.price).val() * row.find($.opt.qty).val();
 
          if(discount == 0 || discount == ''){
             total = self.roundNumber(total, 2);
+            discount = 0;
+            row.find($.opt.totaldis).val(discount);
             row.find($.opt.total).val(total);
          }else{
             total = self.roundNumber(total, 2);
            discount = ((discount/ 100) * total);
-           final = total - discount
-           row.find($.opt.total).val(final);
+           row.find($.opt.totaldis).val(discount);
+
+           row.find($.opt.total).val(total);
          }
             //    total = ((discountt/ 100) * total)
 
@@ -155,6 +161,26 @@ Invoice.prototype = {
      *
      * @returns {number}
      */
+    calcdistotal: function() {
+        var distotal = 0;
+        jQuery($.opt.totaldis).each(function(i) {
+            var total = jQuery(this).val();
+            // var total = jQuery(this).html();
+            if (!isNaN(total)) distotal += Number(total);
+        });
+
+        distotal = self.roundNumber(distotal, 2);
+
+        //  console.log('sub total '+subtotal);
+
+        jQuery($.opt.discount).val(distotal);
+        // jQuery($.opt.subtotal).html(subtotal);
+
+        // $('#subtotal').val(subtotal);
+
+        return 1;
+    },
+
     calcSubtotal: function() {
         var subtotal = 0;
         jQuery($.opt.total).each(function(i) {
@@ -175,6 +201,14 @@ Invoice.prototype = {
         return 1;
     },
 
+    calcdisSubtotal: function() {
+        var afterdis = Number(jQuery($.opt.subtotal).val())  -
+        Number(jQuery($.opt.discount).val());
+        afterdis = self.roundNumber(afterdis, 2);
+    jQuery($.opt.afterdis).val(afterdis);
+    return 1;
+    },
+
     /**
      * Calculate grand total of an order.
      *
@@ -192,9 +226,25 @@ Invoice.prototype = {
     // },
 
     calcGrandTotal: function() {
-        var grandTotal = Number(jQuery($.opt.subtotal).val()) +
-            Number(jQuery($.opt.vat).val()) -
-            Number(jQuery($.opt.discount).val());
+        if(Number(jQuery($.opt.afterdis).val()) == 0 || Number(jQuery($.opt.afterdis).val()) == '' ){
+            if( Number(jQuery($.opt.vat).val()) != 0 || Number(jQuery($.opt.vat).val()) != ''){
+                var grandTotal = Number(jQuery($.opt.subtotal).val())  +
+                Number(jQuery($.opt.vat).val());
+            }else{
+                var grandTotal = Number(jQuery($.opt.subtotal).val());
+            }
+
+        }else{
+
+            if( Number(jQuery($.opt.vat).val()) != 0 || Number(jQuery($.opt.vat).val()) != ''){
+                var grandTotal = Number(jQuery($.opt.afterdis).val())  +
+                Number(jQuery($.opt.vat).val());
+            }else{
+                var grandTotal = Number(jQuery($.opt.afterdis).val());
+            }
+
+        }
+
         grandTotal = self.roundNumber(grandTotal, 2);
         jQuery($.opt.grandTotal).val(grandTotal);
         return 1;
@@ -202,12 +252,34 @@ Invoice.prototype = {
 
 
     calcPayment: function() {
-        var due = Number(jQuery($.opt.grandTotal).val()) -
-            Number(jQuery($.opt.pay).val());
+          if(Number(jQuery($.opt.pay).val()) > Number(jQuery($.opt.grandTotal).val())){
+            var due =  0;
+          }else{
+            var due =  Number(jQuery($.opt.grandTotal).val()) - Number(jQuery($.opt.pay).val());
+          }
+
+
+
+
         due = self.roundNumber(due, 2);
         jQuery($.opt.due).val(due);
         return 1;
     },
+
+    calcBack: function() {
+        if(Number(jQuery($.opt.pay).val()) < Number(jQuery($.opt.grandTotal).val())){
+          var back =  0;
+        }else{
+          var back = Number(jQuery($.opt.pay).val()) - Number(jQuery($.opt.grandTotal).val());
+        }
+
+
+
+
+      back = self.roundNumber(back, 2);
+      jQuery($.opt.back).val(back);
+      return 1;
+  },
 
     datePicker: function() {
         // $(".invoice_datepicker").datepicker({ minDate: 0 });
@@ -225,7 +297,7 @@ Invoice.prototype = {
         var i = 0;
         i++;
 
-        jQuery(".item-row:first").after('<tr class="item-row"><td>'+ i +'</td><td><input class="form-control pr_id" type="hidden" name="product_id[]"  readonly><input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly required></td><td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required readonly></td><td><input class="form-control stock-qty"  type="number" name="stockquantity[]" placeholder="Quantity" required readonly></td><td><input class="form-control qty"  type="number" name="quantity[]" placeholder="Quantity" required></td><td><input class="form-control price" name="box_mrp[]" type="number" step="any" id="price" onfocus= "clearInput2(this)" required><td><input class="form-control" name="product_type[]" type="text" id="product_type" value="" readonly required><td><input class="form-control discount" name="discount[]" type="text" id="discount" type="number" onfocus= "clearInput3(this)" ></td><td><input class="form-control total" placeholder="0.00 " readonly></td><td><span class="btn btn-sm btn-danger"><a class=' + $.opt.delete.substring(1) + ' href="javascript:;" title="Remove row">Delete</a></span></td></tr>');
+        jQuery(".item-row:first").after('<tr class="item-row"><td>'+ i +'</td><td><input class="form-control pr_id" type="hidden" name="product_id[]"  readonly><input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly required></td><td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required readonly></td><td><input class="form-control stock-qty"  type="number" name="stockquantity[]" placeholder="Quantity" required readonly></td><td><input class="form-control qty"  type="number" name="quantity[]" placeholder="Quantity" required></td><td><input class="form-control price" name="box_mrp[]" type="number" step="any" id="price" onfocus= "clearInput2(this)" required><td><input class="form-control" name="product_type[]" type="text" id="product_type" value="" readonly required><td> <input class="form-control totaldis"  name="totaldis[]" type="hidden" id="totaldis"  readonly><input class="form-control discountt" name="discountt[]"  id="discountt" type="number" placeholder="%" onfocus= "clearInput3(this)"></td><td><input class="form-control total" type="number" name="total[]" placeholder="0.00 " readonly></td><td><span class="btn btn-sm btn-danger"><a class=' + $.opt.delete.substring(1) + ' href="javascript:;" title="Remove row">Delete</a></span></td></tr>');
 
 
 
@@ -332,13 +404,17 @@ jQuery.fn.invoice.defaults = {
     qty: ".qty",
     Quantity: "#Quantity",
     total: ".total",
+    totaldis: ".totaldis",
     // totalQty: "#totalQty",
 
     subtotal: "#subtotal",
     discount: "#discount",
+    discountt: "#discountt",
     // shipping: "#shipping",
     vat: "#vat",
     grandTotal: "#grandTotal",
+    afterdis:  "#afterdis",
     pay: "#pay",
+    back: ".back",
     due: "#due"
 };
