@@ -49,7 +49,7 @@
             <div class="form-group row">
 
 
-                    <div class="col-md-4">
+                    <div class="col-md-3">
                         {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id','required']) }}
                         <div class="invalid-feedback">Please Add Medicine</div>
 
@@ -62,11 +62,14 @@
                     </div> --}}
 
 
-                    <div class="col-md-2">
-                        <button type="button" class="btn btn-primary btn-xs  addProductRow" id="addProductRow" ><i data-feather="arrow-right-circle" class="mt-1"></i></button>
+                    <div class="col-md-1">
+                        <button type="button" class="btn btn-primary  addProductRow" id="addProductRow" >Add</button>
                     </div>
-
-                    <div class="col-md-6">
+                    <div class="col-md-3">
+                      
+                        {!! Form::text('medicine_id',null,['class'=>'form-control', 'id' => 'points','placeholder'=>'Barcode' ]) !!}
+                    </div>
+                    <div class="col-md-5">
                         <p class="btn btn-air-info">{{ Auth::user()->name }}</p>
 
                         <p class="btn btn-air-info mb-3" style="margin-left:5PX">{{ Carbon\Carbon::today()->toDateString() }}</p>
@@ -103,11 +106,11 @@
                                         <nobr>SL<i class="text-danger"></i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Product Info<i class="text-danger">*</i></nobr>
+                                        <nobr>Product<i class="text-danger">*</i></nobr>
                                     </th>
 
                                     <th class="text-center">
-                                        <nobr>Expiry Date<i class="text-danger">*</i></nobr>
+                                        <nobr>Expiry<i class="text-danger">*</i></nobr>
                                     </th>
                                     {{--
                                     <th class="text-center">
@@ -120,19 +123,17 @@
                                         <nobr>Box Qty<i class="text-danger">*</i></nobr>
                                     </th> --}}
                                     <th class="text-center">
-                                        <nobr>Stock Quantity <i class="text-danger">*</i></nobr>
+                                        <nobr>Stock <i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Quantity<i class="text-danger">*</i></nobr>
+                                        <nobr>Qty<i class="text-danger">*</i></nobr>
                                     </th>
 
                                     <th class="text-center">
                                         <nobr>Price<i class="text-danger">*</i></nobr>
                                     </th>
 
-                                    <th class="text-center">
-                                        <nobr>Product Type <i class="text-danger">*</i></nobr>
-                                    </th>
+
                                     <th class="text-center">
                                         <nobr>Discount<i class="text-danger">*</i></nobr>
                                     </th>
@@ -142,9 +143,9 @@
                                     {{-- <th class="text-center">
                                         <nobr>Total_Price</nobr>
                                     </th> --}}
-                                    <th class="text-center">
+                                    {{-- <th class="text-center">
                                         <nobr>Action</nobr>
-                                    </th>
+                                    </th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -313,7 +314,7 @@
                         <div class="col-md-12">
                             <label for="payment_type" class="text-right col-form-label mt-3">Payment Name</label>
 
-                        {{ Form::select( 'payment_method_id', [], null, ['class' => 'form-control', 'required', 'id' => 'payment_method_id','placeholder'=>'Select Payment Type' ,'required'], ) }}
+                        {{ Form::select( 'payment_method_id', ['Cash'], null, ['class' => 'form-control', 'required', 'id' => 'payment_method_id' ,'required'], ) }}
                         <div class="invalid-feedback">Please Add Payment Type</div>
 
                             <div class="card-footer text-end">
@@ -634,7 +635,7 @@ function clearInput1(target){
 
                                 $('#price').val(data.price);
 
-                                $('#product_type').val('medicine');
+
                             } else {
                                 alert('Data not found!');
 
