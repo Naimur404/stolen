@@ -8,6 +8,7 @@ use App\Http\Controllers\MedicineController;
 use App\Http\Controllers\MedicineDistributeController;
 use App\Http\Controllers\MedicinePurchaseController;
 use App\Http\Controllers\OutletController;
+use App\Http\Controllers\OutletInvoiceController;
 use App\Http\Controllers\OutletStockController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PermissionController;
@@ -113,6 +114,7 @@ Route::resource('distribute-medicine',MedicineDistributeController::class);
 Route::resource('warehouse-return',WarehouseReturnController::class);
 Route::resource('customer',CustomerManagementController::class);
 Route::resource('stock-request',StockRequestController::class);
+Route::resource('invoice', OutletInvoiceController::class);
 
 //checkin route
 Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
@@ -141,6 +143,11 @@ Route::get('get-medicine-details-for-purchase/{id}',[MedicineController::class,'
 Route::get('get-manufacture-wise-medicine',[MedicineController::class,'get_manufacturer_wise_medicine']);
 Route::get('get-product-for-sale', [SupplierController::class,'get_product_for_sale']);
 
+//outlet invoice route
+
+Route::get('get-medicine-details-for-sale/{id}',[OutletInvoiceController::class,'get_medicine_details_for_sale']);
+Route::get('/get-outlet-Stock',[OutletInvoiceController::class,'getoutletStock'])->name('getoutletStock');
+
 
 //select2 route
 
@@ -150,8 +157,11 @@ Route::post('/get_type',[Select2Controller::class,'getType'])->name('get-type');
 Route::post('/get-manufacturer',[Select2Controller::class,'getManufacturer'])->name('get-manufacturer');
 Route::get('get-supplier', [Select2Controller::class,'get_supplier']);
 Route::get('/get-outlet',[Select2Controller::class,'getOutlet'])->name('get-outlet');
-Route::get('/get-all-medicine',[Select2Controller::class,'get_all_medicine'])->name('get-all-medicine');
 
+Route::get('/get-all-medicine',[Select2Controller::class,'get_all_medicine'])->name('get-all-medicine');
+Route::get('get-user', [Select2Controller::class,'get_user']);
+Route::get('get-payment', [Select2Controller::class,'get_payment']);
+Route::get('get-user-details/{id}', [Select2Controller::class,'get_user_details']);
 //stock route
 Route::get('/get-outlet-stock/{id}',[OutletStockController::class,'outletStock'])->name('outletstock');
 Route::get('/get-warehouse-stock/{id}',[WarehouseStockController::class,'warehouseStock'])->name('warehouseStock');
@@ -183,3 +193,5 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function
     Route::resource('medicine',MedicineController::class);
     Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class,'active'])->name('manufacturer.active');
 });
+
+

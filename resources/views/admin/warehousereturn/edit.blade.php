@@ -112,7 +112,7 @@
             <div class="card">
 
                 <div class="card-header bg-secondary">
-                    <i class="fa fa-table"></i> Make Distribute Medicin
+                    <i class="fa fa-table"></i> Medcine Return
                 </div>
 
                 <div class="card-body">

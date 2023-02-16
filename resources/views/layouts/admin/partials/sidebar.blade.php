@@ -101,6 +101,12 @@
                         <a class="nav-link menu-title {{routeActive('stock-request.index')}}" href="{{route('stock-request.index')}}"><i data-feather="box"></i><span>Sent Stock Request</span></a>
                     </li>
                     @endcan
+
+                    @can('invoice.management')
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('invoice.index')}}" href="{{route('invoice.index')}}"><i data-feather="box"></i><span>Porduct Sale</span></a>
+                    </li>
+                    @endcan
                     @can('stock_request')
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('warehouseRequest')}}" href="{{route('warehouseRequest')}}"><i data-feather="box"></i><span>Stock Request</span></a>
