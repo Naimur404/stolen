@@ -2344,7 +2344,7 @@ table tbody .border-bottom-warning td {
   border-radius: 0;
   background-color: #fff; }
   .card .card-header {
-    padding: 30px;
+    padding: 10px;
     border-bottom: none;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
@@ -4320,7 +4320,7 @@ table tbody .border-bottom-warning td {
     transition: 0.5s;
     background-color: #f5f7fb; }
   .page-wrapper .page-body-wrapper .page-header {
-    padding-bottom: 30px; }
+    padding-bottom: 10px; }
     .page-wrapper .page-body-wrapper .page-header .row {
       -webkit-box-align: center;
           -ms-flex-align: center;
@@ -11883,7 +11883,7 @@ div.DTS div.dataTables_scrollBody table {
     .dataTables_wrapper table.dataTable thead th, .dataTables_wrapper table.dataTable thead td {
       border-bottom: 2px solid #e6edef; }
     .dataTables_wrapper table.dataTable th, .dataTables_wrapper table.dataTable td {
-      padding: 0.75rem;
+      padding: 0.5rem;
       border-color: #e6edef; }
   .dataTables_wrapper .dataTables_filter {
     margin-bottom: 25px;
@@ -14400,7 +14400,7 @@ body {
 .table {
   margin-bottom: 0px; }
   .table th, .table td {
-    padding: 0.75rem; }
+    padding: 0.5rem; }
   .table th {
     color: #242934; }
   .table td {
