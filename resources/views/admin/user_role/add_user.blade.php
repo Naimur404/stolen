@@ -50,7 +50,6 @@
 								</div>
 							</div>
 							<div class="row">
-
 								<div class="col">
 									<div class="mb-3">
                                         {!! Form::label('exampleFormControlInput1', 'Email address', array('class' => 'form-label')) !!}
@@ -62,6 +61,26 @@
 									</div>
 								</div>
 							</div>
+
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3 mt-2">
+                                        {!! Form::label('Outlets', 'Outlet', array('class' => 'form-label')) !!}
+                                        {!! Form::select('outlet_id', $outlets, null,['class'=>'form-control', 'placeholder' => 'Choose' ]) !!}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="mb-3 mt-2">
+                                        {!! Form::label('Warehouse', 'Warehouse', array('class' => 'form-label')) !!}
+                                        {!! Form::select('warehouse_id', $warehouses, null,['class'=>'form-control', 'placeholder' => 'Choose' ]) !!}
+                                    </div>
+                                </div>
+                            </div>
+
 							<div class="row">
 								<div class="col">
 									<div class="mb-3">

@@ -22,6 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'image',
+        'outlet_id',
+        'warehouse_id',
     ];
 
     /**
@@ -53,5 +56,5 @@ class User extends Authenticatable
     }
         return $hasPermisison;
     }
-   
+
 }
