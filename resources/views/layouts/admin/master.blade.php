@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="{!! $app_setting->description !!}">
     <meta name="keywords" content="">
-    <meta name="author" content="pixelstrap">
+    <meta name="author" content="Pigeon Soft">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <link rel="icon" href="{{asset('uploads/'.$app_setting->favicon)}}" type="image/x-icon">
     <link rel="shortcut icon" href="{{asset('uploads/'.$app_setting->favicon)}}" type="image/x-icon">
