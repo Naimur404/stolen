@@ -35,9 +35,9 @@ class UserRoleController extends Controller
 
                            $edit = route('edit_user',$row->id);
                            $delete = route('delete_user',$row->id);
-                           $btn = '<a href="'.$edit.'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editBook"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+                           $btn = '<a href="'.$edit.'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Edit" class="edit btn btn-primary btn-sm editBook">Edit</a>';
 
-                           $btn = $btn.' <a href="'.$delete.'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook"><i class="fa fa-trash"></i></a>';
+                           $btn = $btn.' <a href="'.$delete.'" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-danger btn-sm deleteBook">Delete</a>';
 
 
 
