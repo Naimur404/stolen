@@ -44,6 +44,7 @@
                                         <th>Total</th>
                                         <th>Pay</th>
                                         <th>Due</th>
+                                        <th>Points</th>
                                         <th>Sold By</th>
 
 
@@ -83,7 +84,7 @@
 
                                         <td> {{ $productPurchase->due_amount }} </td>
 
-
+                                           <td>{{$productPurchase->earn_point }}</td>
                                            <td>
                                             @php
                                             $user = App\Models\User::where('id',$productPurchase->added_by)->first();

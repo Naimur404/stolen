@@ -74,7 +74,7 @@ class OutletStockController extends Controller
             $stock2 = array(
 
                 'quantity' => (int)$check->quantity + (int)$request->quantity,
-                'price'  => $request->rate,
+                'price'  => $request->price,
             );
 
                OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($stock2);
@@ -183,11 +183,7 @@ class OutletStockController extends Controller
 
                             return $data;
                         })
-                        ->addColumn('sale_price', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('price');
 
-                            return $data;
-                        })
 
                         ->rawColumns(['medicine_name'])
                         ->rawColumns(['category'])
@@ -195,7 +191,7 @@ class OutletStockController extends Controller
                         ->rawColumns(['unit'])
 
                         ->rawColumns(['manufacturer_price'])
-                        ->rawColumns(['sale_price'])
+
                         ->make(true);
             }
         }else{
@@ -228,11 +224,7 @@ class OutletStockController extends Controller
 
                             return $data;
                         })
-                        ->addColumn('sale_price', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('price');
 
-                            return $data;
-                        })
 
                         ->rawColumns(['medicine_name'])
                         ->rawColumns(['category'])
@@ -240,7 +232,7 @@ class OutletStockController extends Controller
                         ->rawColumns(['unit'])
 
                         ->rawColumns(['manufacturer_price'])
-                        ->rawColumns(['sale_price'])
+
                         ->make(true);
             }
         }

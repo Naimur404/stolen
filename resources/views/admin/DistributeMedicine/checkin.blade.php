@@ -93,7 +93,7 @@
                         </td>
                         <td>{{ Form::number('rack_no', $data->rack_no, ['class' => 'form-control', 'readonly']) }}
                             </td>
-                            <td>{{ Form::number('rate', $data->rate, ['class' => 'form-control', 'readonly']) }}
+                            <td>{{ Form::number('price', $data->rate, ['class' => 'form-control', 'readonly']) }}
                             </td>
                         <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
                             <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">

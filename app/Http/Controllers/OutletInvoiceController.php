@@ -7,13 +7,14 @@ use App\Models\OutletHasUser;
 use App\Models\OutletInvoice;
 use App\Models\OutletInvoiceDetails;
 use App\Models\OutletStock;
+use App\Models\PaymentMethod;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
+
 
 
 class OutletInvoiceController extends Controller
@@ -38,11 +39,11 @@ class OutletInvoiceController extends Controller
 
         if ($user->hasRole('Super Admin')){
 
-            $datas = OutletInvoice::all();
+            $datas = OutletInvoice::orderby('id','desc')->get();
             return view('admin.Pos.index_pos',compact('datas'));
         }else{
         $outlet = OutletHasUser::where('user_id', Auth::user()->id)->first();
-        $datas = OutletInvoice::where('outlet_id',$outlet->outlet_id)->get();
+        $datas = OutletInvoice::where('outlet_id',$outlet->outlet_id)->orderby('id','desc')->get();
         return view('admin.Pos.index_pos',compact('datas'));
 
         }
@@ -55,10 +56,10 @@ class OutletInvoiceController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
+    { $payment_methods = PaymentMethod::pluck('method_name', 'id');
         $outlet_id = OutletHasUser::where('user_id', Auth::user()->id)->first();
 
-         return view('admin.Pos.pos',compact('outlet_id'));
+         return view('admin.Pos.pos',compact('outlet_id','payment_methods'));
     }
 
     /**
@@ -235,7 +236,7 @@ return redirect()->back()->with('success', 'Data has been added.');
 
             $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id->outlet_id )->where('outlet_stocks.quantity' ,'>' ,'0')
             ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-            ->select('outlet_stocks.medicine_id as id','outlet_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name','medicines.id as medicine_id')->get();
+            ->select('outlet_stocks.medicine_id as id','outlet_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name','medicines.id as medicine_id')->limit(20)->get();
 
          }else{
 
