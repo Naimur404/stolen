@@ -47,6 +47,21 @@
                     {{ Form::select('manufacturer_id', [], null, ['class' => 'form-control', 'placeholder' => __('purchase.select_manufacturer'), 'id' => 'manufacturer_id']) }}
                 </div> --}}
 
+
+                <label for="invoicePhoto" class="col-md-2 text-right">Warehouse Name * :</label>
+                <div class="col-md-4">
+
+                    {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required' ,'id' => 'warehouse_id'] ) }}
+
+
+
+
+                    <div class="invalid-feedback">Please Add Warehouse</div>
+                    @error('warehouse_id')
+                    <div class="invalid-feedback2"> {{ $message }}</div>
+
+                @enderror
+                </div>
                 <label for="supplier" class="col-md-2 text-right col-form-label">Outlet:</label>
                 <div class="col-md-4">
                     @if(!is_null($data->outlet_id))
@@ -67,21 +82,8 @@
 
                 @enderror
                 </div>
-                <label for="invoicePhoto" class="col-md-2 text-right">Warehouse Name * :</label>
-                <div class="col-md-4">
-
-                    {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required'] ) }}
-
-
-
-
-                    <div class="invalid-feedback">Please Add Warehouse</div>
-                    @error('warehouse_id')
-                    <div class="invalid-feedback2"> {{ $message }}</div>
-
-                @enderror
-                </div>
             </div>
+
 
 
             <div class="form-group row">
@@ -176,16 +178,15 @@
                                         <nobr>Quantity <i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Manufacturer Price<i class="text-danger">*</i></nobr>
+                                        <nobr>Stock <i class="text-danger"></i></nobr>
                                     </th>
+
                                     <th class="text-center">
-                                        <nobr>Box MRP<i class="text-danger">*</i></nobr>
+                                        <nobr>MRP<i class="text-danger">*</i></nobr>
                                     </th>
+
                                     <th class="text-center">
-                                        <nobr>Product Type <i class="text-danger">*</i></nobr>
-                                    </th>
-                                    <th class="text-center">
-                                        <nobr>Total_Price</nobr>
+                                        <nobr>Total Price</nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Action</nobr>
@@ -201,13 +202,11 @@
                                      <td><input class="form-control rack_no" type="text" name="rack_no[]" placeholder="Rack No"  value="{{ $details->rack_no }}"></td>
                                      <td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required="" value="{{ $details->expiry_date }}"></td>
                                      <td><input class="form-control qty" type="number" name="quantity[]" placeholder="Quantity" required="" value="{{ $details->quantity }}"></td>
-                                     @php
-                                         $medicine = App\Models\Medicine::where('id',$details->medicine_id)->first();
-                                     @endphp
-                                     <td><input class="form-control price" type="number" step="any" name="manufacturer_price[]" id="manufacturer_price" required="" value="{{ $medicine->manufacturer_price }}"></td>
-                                     <td><input class="form-control" name="box_mrp[]" type="number" step="any" id="box_price" required="" value="{{ $medicine->price }}"</td>
-                                     <td><input class="form-control" name="product_type[]" type="text" id="product_type" readonly="" required="" value="medicine"></td>
-                                     <td><input class="form-control" name="total_price[]" type="text" id="product_type" readonly="" required="" value="{{ $medicine->manufacturer_price * $details->quantity }}"></td>
+
+                                     <td><input class="form-control qty" type="number"  placeholder="" required="" value="" readonly></td>
+                                     <td><input class="form-control" name="box_mrp[]" type="number" step="any" id="box_price" required="" value="{{ $details->rate }}"</td>
+
+                                     <td><input class="form-control" name="total_price[]" type="text" id="product_type" readonly="" required="" value="{{ $details->rate * $details->quantity }}"></td>
 
                                      <td>
 
@@ -250,7 +249,7 @@
 	@push('scripts')
     {{-- <script src="{{ asset('backend/form-validations/pharmacy/product-purchase.js') }}"></script> --}}
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
-    <script src="{{ asset('assets/js/product_purchase_invoice.js') }}"></script>
+    <script src="{{ asset('assets/js/outletstock.js') }}"></script>
     <script type="text/javascript">
 function clearInput1(target){
         if (target.value== '0'){
@@ -357,9 +356,12 @@ function clearInput1(target){
             // })
 
             // manufacturer wise medicine selection
-            $("#medicine_id").select2({
+            let warehouse_id = $("#warehouse_id").val();
+             if (warehouse_id != ''){
+
+                $("#medicine_id").select2({
                 ajax: {
-                    url: "{!! url('get-all-medicine') !!}",
+                    url: "{!! url('get-warehouse-Stock') !!}"  + "/" + warehouse_id,
                     type: "get",
                     dataType: 'json',
                     //   delay: 250,
@@ -405,7 +407,7 @@ function clearInput1(target){
 
                 if (medicine_id) {
                     $.ajax({
-                        url: "{!! url('get-medicine-details-for-purchase') !!}" + "/" + medicine_id,
+                        url: "{!! url('get-medicine-details-warehouse') !!}" + "/" + medicine_id  + "/" + warehouse_id,
                         type: "GET",
                         dataType: "json",
                         beforeSend: function() {
@@ -414,12 +416,13 @@ function clearInput1(target){
 
                         success: function(data) {
                             if (data != null) {
-                                $('.pr_id').first().val(data.id);
-                                $('.qty').first().val(qty);
+                                $('.pr_id').first().val(data.medicine_id);
+                                $('.stock').val(data.quantity);
+
                                 $('#product_name').val(data.medicine_name);
                                 $('#box_price').val(data.price);
-                                $('#manufacturer_price').val(data.manufacturer_price);
-                                $('#product_type').val('medicine');
+                                $('#expiry_date').val(data.expiry_date);
+
                             } else {
                                 alert('Data not found!');
 
@@ -435,6 +438,93 @@ function clearInput1(target){
                     alert("Please Select Medicine Name");
 
             });
+
+             }
+
+            // manufacturer wise medicine selection
+            $("#warehouse_id").on('click', function() {
+                warehouse_id = $(this).val();
+            $("#medicine_id").select2({
+                ajax: {
+                    url: "{!! url('get-warehouse-Stock') !!}"  + "/" + warehouse_id,
+                    type: "get",
+                    dataType: 'json',
+                    //   delay: 250,
+                    data: function(params) {
+                        return {
+                            _token: CSRF_TOKEN,
+                            search: params.term, // search term
+                            // manufacturer: manufacturer_id, // search term
+
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+
+            });
+
+
+
+
+
+            //  get medicine id
+            let medicine_id = '';
+            $("#medicine_id").on('change', function() {
+
+                medicine_id = $(this).val();
+
+            });
+
+            $("#addProductRow").on('click', function() {
+
+                // let leaf = $('#leaf').find(":selected").val();
+                // let qty = $('#box_qty').val();
+                //   let multiply = leaf*qty;
+                let qty = $('#qty').val();
+                // clear input text after click
+                $('#qty').val('');
+
+
+                if (medicine_id) {
+                    $.ajax({
+                        url: "{!! url('get-medicine-details-warehouse') !!}" + "/" + medicine_id  + "/" + warehouse_id,
+                        type: "GET",
+                        dataType: "json",
+                        beforeSend: function() {
+
+                        },
+
+                        success: function(data) {
+                            if (data != null) {
+                                $('.pr_id').first().val(data.medicine_id);
+                                $('.stock').val(data.quantity);
+
+                                $('#product_name').val(data.medicine_name);
+                                $('#box_price').val(data.price);
+                                $('#expiry_date').val(data.expiry_date);
+
+                            } else {
+                                alert('Data not found!');
+
+                            }
+                        },
+
+                        complete: function() {
+
+                        }
+
+                    });
+                } else
+                    alert("Please Select Medicine Name");
+
+            });
+        });
+
 
 
             // purchase invoice generator

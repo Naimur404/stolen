@@ -56,7 +56,7 @@
                           $id = $data2->id;
                           $name = $data2->outlet_name
                     @endphp
-                    {{ Form::select('outlet_id', [$id=>$name], null, ['class' => 'form-control', 'id' => 'supplier_id' ,'required']) }}
+                    {{ Form::select('outlet_id', [$id=>$name], null, ['class' => 'form-control', 'id' => 'outlet_id' ,'required']) }}
                     @else
                     {{ Form::select('outlet_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'supplier_id' ,'required']) }}
                     @endif
@@ -173,20 +173,14 @@
                                         <nobr>Box Qty<i class="text-danger">*</i></nobr>
                                     </th> --}}
                                     <th class="text-center">
+                                        <nobr>Stock <i class="text-danger">*</i></nobr>
+                                    </th>
+                                    <th class="text-center">
                                         <nobr>Quantity <i class="text-danger">*</i></nobr>
                                     </th>
-                                    <th class="text-center">
-                                        <nobr>Manufacturer Price<i class="text-danger">*</i></nobr>
-                                    </th>
-                                    <th class="text-center">
-                                        <nobr>Box MRP<i class="text-danger">*</i></nobr>
-                                    </th>
-                                    <th class="text-center">
-                                        <nobr>Product Type <i class="text-danger">*</i></nobr>
-                                    </th>
-                                    <th class="text-center">
-                                        <nobr>Total_Price</nobr>
-                                    </th>
+
+
+
                                     <th class="text-center">
                                         <nobr>Action</nobr>
                                     </th>
@@ -201,13 +195,9 @@
 
                                      <td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required="" value="{{ $details->expiry_date }}"></td>
                                      <td><input class="form-control qty" type="number" name="quantity[]" placeholder="Quantity" required="" value="{{ $details->quantity }}"></td>
-                                     @php
-                                         $medicine = App\Models\Medicine::where('id',$details->medicine_id)->first();
-                                     @endphp
-                                     <td><input class="form-control price" type="number" step="any" name="manufacturer_price[]" id="manufacturer_price" required="" value="{{ $medicine->manufacturer_price }}"></td>
-                                     <td><input class="form-control" name="box_mrp[]" type="number" step="any" id="box_price" required="" value="{{ $medicine->price }}"</td>
-                                     <td><input class="form-control" name="product_type[]" type="text" id="product_type" readonly="" required="" value="medicine"></td>
-                                     <td><input class="form-control" name="total_price[]" type="text" id="product_type" readonly="" required="" value="{{ $medicine->manufacturer_price * $details->quantity }}"></td>
+                                     <td><input class="form-control qty" type="number"  placeholder="" required="" value="" readonly></td>
+
+
 
                                      <td>
 
@@ -319,7 +309,7 @@
         $(document).ready(function() {
 
 
-            $("#supplier_id").select2({
+            $("#outlet_id").select2({
                 ajax: {
                     url: "{!! url('get-outlet') !!}",
                     type: "get",
@@ -347,9 +337,12 @@
             // })
 
             // manufacturer wise medicine selection
-            $("#medicine_id").select2({
+
+            let outlet_id = $("#outlet_id").val();
+             if (outlet_id != ''){
+                $("#medicine_id").select2({
                 ajax: {
-                    url: "{!! url('get-all-medicine') !!}",
+                    url: "{!! url('get-oulet-Stockss') !!}"  + "/" + outlet_id,
                     type: "get",
                     dataType: 'json',
                     //   delay: 250,
@@ -395,7 +388,7 @@
 
                 if (medicine_id) {
                     $.ajax({
-                        url: "{!! url('get-medicine-details-for-purchase') !!}" + "/" + medicine_id,
+                        url: "{!! url('get-medicine-details-outlet') !!}" + "/" + medicine_id  + "/" + outlet_id,
                         type: "GET",
                         dataType: "json",
                         beforeSend: function() {
@@ -404,12 +397,13 @@
 
                         success: function(data) {
                             if (data != null) {
-                                $('.pr_id').first().val(data.id);
-                                $('.qty').first().val(qty);
+                                $('.pr_id').first().val(data.medicine_id);
+                                $('.stock').val(data.quantity);
+
                                 $('#product_name').val(data.medicine_name);
-                                $('#box_price').val(data.price);
-                                $('#manufacturer_price').val(data.manufacturer_price);
-                                $('#product_type').val('medicine');
+
+                                $('#expiry_date').val(data.expiry_date);
+
                             } else {
                                 alert('Data not found!');
 
@@ -425,6 +419,91 @@
                     alert("Please Select Medicine Name");
 
             });
+
+             }
+            // manufacturer wise medicine selection
+            $("#outlet_id").on('change', function (e) {
+                outlet_id = $(this).val();
+            $("#medicine_id").select2({
+                ajax: {
+                    url: "{!! url('get-oulet-Stockss') !!}"  + "/" + outlet_id,
+                    type: "get",
+                    dataType: 'json',
+                    //   delay: 250,
+                    data: function(params) {
+                        return {
+                            _token: CSRF_TOKEN,
+                            search: params.term, // search term
+                            // manufacturer: manufacturer_id, // search term
+
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+
+            });
+
+
+
+
+
+            //  get medicine id
+            let medicine_id = '';
+            $("#medicine_id").on('change', function() {
+
+                medicine_id = $(this).val();
+
+            });
+
+            $("#addProductRow").on('click', function() {
+
+                // let leaf = $('#leaf').find(":selected").val();
+                // let qty = $('#box_qty').val();
+                //   let multiply = leaf*qty;
+                let qty = $('#qty').val();
+                // clear input text after click
+                $('#qty').val('');
+
+
+                if (medicine_id) {
+                    $.ajax({
+                        url: "{!! url('get-medicine-details-outlet') !!}" + "/" + medicine_id  + "/" + outlet_id,
+                        type: "GET",
+                        dataType: "json",
+                        beforeSend: function() {
+
+                        },
+
+                        success: function(data) {
+                            if (data != null) {
+                                $('.pr_id').first().val(data.medicine_id);
+                                $('.stock').val(data.quantity);
+
+                                $('#product_name').val(data.medicine_name);
+
+                                $('#expiry_date').val(data.expiry_date);
+
+                            } else {
+                                alert('Data not found!');
+
+                            }
+                        },
+
+                        complete: function() {
+
+                        }
+
+                    });
+                } else
+                    alert("Please Select Medicine Name");
+
+            });
+        });
 
 
             // purchase invoice generator

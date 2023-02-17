@@ -89,7 +89,7 @@
                                         <td class="form-inline uniqueClassName">
                                             @can('warehouse-return.edit')
                                                 <a href="{{ route('warehouse-return.edit', $warehousereturn->id) }}"
-                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:10px; "><i class="fa-light fa-money-bill"></i>Edit</a>
+                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:10px; "><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             @endcan
 
                                             {{-- @can('product_purchase.print')
@@ -98,7 +98,7 @@
 
                                             @can('warehouse-return.delete')
                                                 {!! Form::open(['method' => 'DELETE', 'route' => ['warehouse-return.destroy', $warehousereturn->id]]) !!}
-                                                {{ Form::button('Delete', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
+                                                {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
                                                 {!! Form::close() !!}
                                             @endcan
 

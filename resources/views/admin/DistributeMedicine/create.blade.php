@@ -160,9 +160,7 @@
                                     <th class="text-center">
                                         <nobr>MRP<i class="text-danger">*</i></nobr>
                                     </th>
-                                    <th class="text-center">
-                                        <nobr>Product Type <i class="text-danger">*</i></nobr>
-                                    </th>
+                                  
                                     <th class="text-center">
                                         <nobr>Total Price</nobr>
                                     </th>
@@ -378,7 +376,7 @@ function clearInput1(target){
                                 $('#product_name').val(data.medicine_name);
                                 $('#box_price').val(data.price);
                                 $('#expiry_date').val(data.expiry_date);
-                                $('#product_type').val('medicine');
+
                             } else {
                                 alert('Data not found!');
 
