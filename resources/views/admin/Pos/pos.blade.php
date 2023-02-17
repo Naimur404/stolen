@@ -50,8 +50,8 @@
 
 
                     <div class="col-md-3">
-                        {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id','required']) }}
-                        <div class="invalid-feedback">Please Add Medicine</div>
+                        {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
+
 
 
                     </div>
@@ -70,18 +70,14 @@
 
                         {!! Form::text('medicine',null,['class'=>'form-control' ,'placeholder'=>'Barcode','id' => 'barcode']) !!}
                     </div>
-                    <div class="col-md-4">
+                    <div class="col-md-5">
                         <p class="btn btn-air-info">{{ Auth::user()->name }}</p>
 
-                        <p class="btn btn-air-info mb-3" style="margin-left:5PX">{{ Carbon\Carbon::today()->toDateString() }}</p>
+                        <p class="btn btn-air-info mb-3" style="margin-left:5PX">{{ Carbon\Carbon::today()->format('d M Y') }}</p>
                         <p class="btn btn-air-info mb-3" style="margin-left:5PX" id="time"></p>
                     </div>
 
-                    <div class="col-md-1">
 
-                        <a href="{{ route('index') }}"
-                            class="btn btn-info btn-xs mt-1" >Home</a>
-                    </div>
                 </div>
 
 
@@ -186,9 +182,9 @@
 
 
                 <div class="col-md-3">
-                    {!! Form::label('mobile', 'Select User', array('class' => 'form-label')) !!}
+                    {!! Form::label('mobile', 'Select Customer', array('class' => 'form-label')) !!}
                     {{ Form::select('mobile', [], null, ['class' => 'form-control add', 'placeholder' => 'Select User', 'id' => 'user_id' ,'required' ]) }}
-                    <div class="invalid-feedback">Please Enter User Phone Number</div>
+                    <div class="invalid-feedback">Please Enter Customer Phone Number</div>
 
 
 
@@ -201,7 +197,7 @@
 
                 <div class="col-md-3">
                     {!! Form::label('name', 'User Name', array('class' => 'form-label')) !!}
-                    {!! Form::text('name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter User Name' ,'required']) !!}
+                    {!! Form::text('name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Customer Name' ,'required']) !!}
                 </div>
                 <div class="col-md-3">
                     {!! Form::label('address', 'Address', array('class' => 'form-label')) !!}
@@ -518,19 +514,27 @@ function clearInput1(target){
 
             });
 
+      let user_id = '';
+    $("#user_id").on('change', function(){
 
 
+
+    user_id = $(this).val();
+    $("#adduser").click();
+
+
+});
 
 
 
 
             //  get medicine id
-            let user_id = '';
-            $("#user_id").on('change', function() {
 
-                user_id = $(this).val();
+            // $("#user_id").on('change', function() {
 
-            });
+            //     user_id = $(this).val();
+
+            // });
 
 
             $("#adduser").on('click', function() {

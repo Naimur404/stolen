@@ -48,7 +48,7 @@
 
                 <label for="supplier" class="col-md-2 text-right col-form-label">Outlet:</label>
                 <div class="col-md-4">
-                    {{ Form::select('outlet_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'supplier_id']) }}
+                    {{ Form::select('outlet_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet_id']) }}
                     <div class="invalid-feedback">Please Add Outlet</div>
                     @error('outlet_id')
                     <div class="invalid-feedback2"> {{ $message }}</div>
@@ -151,17 +151,11 @@
                                         <nobr>Quantity <i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Manufacturer Price <i class="text-danger">*</i></nobr>
+                                        <nobr>Stock <i class="text-danger"></i></nobr>
                                     </th>
-                                    <th class="text-center">
-                                        <nobr>Box MRP <i class="text-danger">*</i></nobr>
-                                    </th>
-                                    <th class="text-center">
-                                        <nobr>Product Type <i class="text-danger">*</i></nobr>
-                                    </th>
-                                    <th class="text-center">
-                                        <nobr>Total Price</nobr>
-                                    </th>
+
+                                  
+
                                     <th class="text-center">
                                         <nobr>Action</nobr>
                                     </th>
@@ -279,7 +273,7 @@
         $(document).ready(function() {
 
 
-            $("#supplier_id").select2({
+            $("#outlet_id").select2({
                 ajax: {
                     url: "{!! url('get-outlet') !!}",
                     type: "get",
@@ -307,9 +301,25 @@
             // })
 
             // manufacturer wise medicine selection
+
+
+
+
+
+
+            //  get medicine id
+
+
+
+
+
+            let outlet_id = '';
+            // manufacturer wise medicine selection
+            $("#outlet_id").on('select2:select', function (e) {
+                outlet_id = $(this).val();
             $("#medicine_id").select2({
                 ajax: {
-                    url: "{!! url('get-all-medicine') !!}",
+                    url: "{!! url('get-oulet-Stockss') !!}"  + "/" + outlet_id,
                     type: "get",
                     dataType: 'json',
                     //   delay: 250,
@@ -355,7 +365,7 @@
 
                 if (medicine_id) {
                     $.ajax({
-                        url: "{!! url('get-medicine-details-for-purchase') !!}" + "/" + medicine_id,
+                        url: "{!! url('get-medicine-details-outlet') !!}" + "/" + medicine_id  + "/" + outlet_id,
                         type: "GET",
                         dataType: "json",
                         beforeSend: function() {
@@ -364,12 +374,13 @@
 
                         success: function(data) {
                             if (data != null) {
-                                $('.pr_id').first().val(data.id);
-                                $('.qty').first().val(qty);
+                                $('.pr_id').first().val(data.medicine_id);
+                                $('.stock').val(data.quantity);
+
                                 $('#product_name').val(data.medicine_name);
-                                $('#box_price').val(data.price);
-                                $('#manufacturer_price').val(data.manufacturer_price);
-                                $('#product_type').val('medicine');
+
+                                $('#expiry_date').val(data.expiry_date);
+
                             } else {
                                 alert('Data not found!');
 
@@ -385,6 +396,22 @@
                     alert("Please Select Medicine Name");
 
             });
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             // purchase invoice generator

@@ -14,7 +14,6 @@ class WarehouseReturnDetails extends Model
         'warehouse_return_id',
         'medicine_id',
         'medicine_name',
-        
         'expiry_date',
         'quantity',
         'has_received'

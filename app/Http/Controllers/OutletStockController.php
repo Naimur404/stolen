@@ -14,7 +14,7 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-
+use Illuminate\Support\Facades\DB;
 use Yajra\DataTables\Facades\DataTables;
 
 class OutletStockController extends Controller
@@ -62,7 +62,7 @@ class OutletStockController extends Controller
                 'quantity' => (int)$warehousetock->quantity - (int)$request->quantity,
 
           );
-      
+
           WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($new_stock);
 
            }
@@ -247,4 +247,45 @@ class OutletStockController extends Controller
 
         return view('admin.medicinestock.OutletStock',compact('outlet'));
     }
+
+    public function getoutletStocks(Request $request,$id){
+
+
+        $search = $request->search;
+        if($search == ''){
+
+            $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $id)->where('outlet_stocks.quantity' ,'>' ,'0')
+            ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
+            ->select('outlet_stocks.medicine_id as id','outlet_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name','medicines.id as medicine_id')->limit(20)->get();
+
+         }else{
+
+            $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $id )->where('outlet_stocks.quantity' ,'>' ,'0')
+            ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
+            ->select('outlet_stocks.medicine_id as id','outlet_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name' ,'medicines.id as medicine_id')->where('medicine_name', 'like', '%' .$search . '%')->get();
+
+
+
+         }
+
+         $response = array();
+         foreach($medicines as $medicine){
+            $response[] = array(
+                 "id"=>$medicine->medicine_id,
+                 "text"=>$medicine->medicine_name.' - '.' EX '.$medicine->expiry_date,
+            );
+         }
+         return response()->json($response);
+      }
+
+      public function get_medicine_details_outlet($id,$id2){
+
+
+        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $id2 )->where('outlet_stocks.medicine_id' ,'=' , $id)
+        ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
+        ->select('outlet_stocks.*','medicines.medicine_name as medicine_name')->first();
+
+        // $product_details = Medicine::where('id', $id)->select('id','medicine_name','price','manufacturer_price')->first();
+        return json_encode($product_details);
+  }
 }
