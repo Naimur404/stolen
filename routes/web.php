@@ -148,6 +148,11 @@ Route::get('get-product-for-sale', [SupplierController::class,'get_product_for_s
 Route::get('get-medicine-details-for-sale/{id}',[OutletInvoiceController::class,'get_medicine_details_for_sale']);
 Route::get('/get-outlet-Stock',[OutletInvoiceController::class,'getoutletStock'])->name('getoutletStock');
 
+//get warehuse stock
+
+Route::get('get-medicine-details-warehouse/{id}/{wid}',[WarehouseStockController::class,'get_medicine_details_warehouse']);
+Route::get('/get-warehouse-Stock/{id}',[WarehouseStockController::class,'getwarehouseStock'])->name('getwarehouseStock');
+
 
 //select2 route
 

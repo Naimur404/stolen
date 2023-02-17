@@ -6,13 +6,13 @@
 
     <form action="{{ $edit }}" method="GET">
 
-        <button type="submit" class="btn btn-primary btn-xs open-modal">Edit</button>
+        <button type="submit" class="btn btn-primary btn-xs open-modal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
       </form>
 
 <!-- Button trigger modal -->
 
 <button type="button" class="btn btn-danger btn-xs" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ $id }}" >
-  Delete
+    <i class="fa fa-trash"></i>
   </button>
 
   <!-- Modal -->
@@ -37,7 +37,7 @@
                 <button type="submit" class="btn btn-danger btn-xs">Parmanent Delete</button>
                     </form>
 
-       
+
 
         </div>
       </div>

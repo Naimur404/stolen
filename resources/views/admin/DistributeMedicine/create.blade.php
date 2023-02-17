@@ -46,20 +46,22 @@
                     {{ Form::select('manufacturer_id', [], null, ['class' => 'form-control', 'placeholder' => __('purchase.select_manufacturer'), 'id' => 'manufacturer_id']) }}
                 </div> --}}
 
+
+                <label for="invoicePhoto" class="col-md-2 text-right">Warehouse Name * :</label>
+                <div class="col-md-4">
+                    {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required' ,'id' => 'warehouse'] ) }}
+                    <div class="invalid-feedback">Please Add Warehouse</div>
+                    @error('warehouse_id')
+                    <div class="invalid-feedback2"> {{ $message }}</div>
+
+                @enderror
+                </div>
+
                 <label for="supplier" class="col-md-2 text-right col-form-label">Outlet:</label>
                 <div class="col-md-4">
                     {{ Form::select('outlet_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'supplier_id']) }}
                     <div class="invalid-feedback">Please Add Outlet</div>
                     @error('outlet_id')
-                    <div class="invalid-feedback2"> {{ $message }}</div>
-
-                @enderror
-                </div>
-                <label for="invoicePhoto" class="col-md-2 text-right">Warehouse Name * :</label>
-                <div class="col-md-4">
-                    {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required'] ) }}
-                    <div class="invalid-feedback">Please Add Warehouse</div>
-                    @error('warehouse_id')
                     <div class="invalid-feedback2"> {{ $message }}</div>
 
                 @enderror
@@ -153,16 +155,16 @@
                                         <nobr>Quantity <i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Manufacturer Price<i class="text-danger">*</i></nobr>
+                                        <nobr>Stock<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Box MRP<i class="text-danger">*</i></nobr>
+                                        <nobr>MRP<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Product Type <i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Total_Price</nobr>
+                                        <nobr>Total Price</nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Action</nobr>
@@ -203,7 +205,7 @@
 	@push('scripts')
     {{-- <script src="{{ asset('backend/form-validations/pharmacy/product-purchase.js') }}"></script> --}}
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
-    <script src="{{ asset('assets/js/product_purchase_invoice.js') }}"></script>
+    <script src="{{ asset('assets/js/outletstock.js') }}"></script>
     <script type="text/javascript">
 
 
@@ -309,11 +311,13 @@ function clearInput1(target){
             //   $("#supplier_id").on('change', function() {
             //     supplier_id = $(this).val();
             // })
-
+            let warehouse_id = '';
             // manufacturer wise medicine selection
+            $("#warehouse").on('click', function() {
+                warehouse_id = $(this).val();
             $("#medicine_id").select2({
                 ajax: {
-                    url: "{!! url('get-all-medicine') !!}",
+                    url: "{!! url('get-warehouse-Stock') !!}"  + "/" + warehouse_id,
                     type: "get",
                     dataType: 'json',
                     //   delay: 250,
@@ -359,7 +363,7 @@ function clearInput1(target){
 
                 if (medicine_id) {
                     $.ajax({
-                        url: "{!! url('get-medicine-details-for-purchase') !!}" + "/" + medicine_id,
+                        url: "{!! url('get-medicine-details-warehouse') !!}" + "/" + medicine_id  + "/" + warehouse_id,
                         type: "GET",
                         dataType: "json",
                         beforeSend: function() {
@@ -368,11 +372,12 @@ function clearInput1(target){
 
                         success: function(data) {
                             if (data != null) {
-                                $('.pr_id').first().val(data.id);
-                                $('.qty').first().val(qty);
+                                $('.pr_id').first().val(data.medicine_id);
+                                $('.stock').val(data.quantity);
+
                                 $('#product_name').val(data.medicine_name);
                                 $('#box_price').val(data.price);
-                                $('#manufacturer_price').val(data.manufacturer_price);
+                                $('#expiry_date').val(data.expiry_date);
                                 $('#product_type').val('medicine');
                             } else {
                                 alert('Data not found!');
@@ -389,7 +394,7 @@ function clearInput1(target){
                     alert("Please Select Medicine Name");
 
             });
-
+        });
 
             // purchase invoice generator
             jQuery().invoice({

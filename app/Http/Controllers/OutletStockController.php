@@ -62,6 +62,7 @@ class OutletStockController extends Controller
                 'quantity' => (int)$warehousetock->quantity - (int)$request->quantity,
 
           );
+      
           WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($new_stock);
 
            }
