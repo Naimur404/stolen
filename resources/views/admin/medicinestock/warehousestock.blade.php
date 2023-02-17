@@ -86,7 +86,7 @@
         responsive: true,
         autoWidth: false,
         processing: true,
-       
+
         ajax: "/get-warehouse-stock/" + warehouse_id,
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
@@ -96,7 +96,7 @@
             {data: 'expiry_date', name: 'Expiry Date'},
             {data: 'unit', name: 'unit'},
             {data: 'manufacturer_price', name: 'Manufacturer price'},
-            {data: 'sale_price', name: 'sale price'},
+            {data: 'price', name: 'sale price'},
             {data: 'quantity', name: 'stock'},
 
         ]

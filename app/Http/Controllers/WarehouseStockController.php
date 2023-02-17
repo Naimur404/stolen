@@ -72,7 +72,7 @@ class WarehouseStockController extends Controller
             'expiry_date'    => $request->expiry_date,
             'quantity'    => $request->quantity,
              'checked_by' => Auth::user()->id,
-            
+
 
           );
             WarehouseCheckIn::create($data);
@@ -162,11 +162,7 @@ class WarehouseStockController extends Controller
 
                             return $data;
                         })
-                        ->addColumn('sale_price', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('price');
 
-                            return $data;
-                        })
                         ->addColumn('quantity', function($row){
                            return view('admin.action.quantity',compact('row'));
                         })
@@ -178,7 +174,7 @@ class WarehouseStockController extends Controller
 
                         ->rawColumns(['manufacturer_price'])
 
-                        ->rawColumns(['sale_price'])
+
                         ->rawColumns(['quantity'])
                         ->make(true);
             }
@@ -212,11 +208,7 @@ class WarehouseStockController extends Controller
 
                             return $data;
                         })
-                        ->addColumn('sale_price', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('price');
-
-                            return $data;
-                        })
+                  
                         ->addColumn('quantity', function($row){
                             return view('admin.action.quantity',compact('row'));
                          })
@@ -227,7 +219,7 @@ class WarehouseStockController extends Controller
                         ->rawColumns(['unit'])
 
                         ->rawColumns(['manufacturer_price'])
-                        ->rawColumns(['sale_price'])
+
                         ->rawColumns(['quantity'])
                         ->make(true);
             }

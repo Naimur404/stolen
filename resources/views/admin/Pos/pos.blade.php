@@ -63,17 +63,24 @@
 
 
                     <div class="col-md-1">
-                        <button type="button" class="btn btn-primary  addProductRow" id="addProductRow" >Add</button>
+
+                        <button type="button" class="btn btn-primary btn-xs  addProductRow mt-2" id="addProductRow" >Add</button>
                     </div>
                     <div class="col-md-3">
-                      
-                        {!! Form::text('medicine_id',null,['class'=>'form-control', 'id' => 'points','placeholder'=>'Barcode' ]) !!}
+
+                        {!! Form::text('medicine',null,['class'=>'form-control' ,'placeholder'=>'Barcode','id' => 'barcode']) !!}
                     </div>
-                    <div class="col-md-5">
+                    <div class="col-md-4">
                         <p class="btn btn-air-info">{{ Auth::user()->name }}</p>
 
                         <p class="btn btn-air-info mb-3" style="margin-left:5PX">{{ Carbon\Carbon::today()->toDateString() }}</p>
-                        <p class="btn btn-air-info mb-3" style="margin-left:5PX">{{ Carbon\Carbon::now()->format('H:i:m') }}</p>
+                        <p class="btn btn-air-info mb-3" style="margin-left:5PX" id="time"></p>
+                    </div>
+
+                    <div class="col-md-1">
+
+                        <a href="{{ route('index') }}"
+                            class="btn btn-info btn-xs mt-1" >Home</a>
                     </div>
                 </div>
 
@@ -205,7 +212,7 @@
                     {!! Form::number('points',null,['class'=>'form-control', 'id' => 'points','placeholder'=>'Enter Points','step' => '0.1' ]) !!}
                 </div>
             </div>
-            {{ Form::close(); }}
+
         </div>
     </div>
 </div>
@@ -215,7 +222,7 @@
 
             <div class="card">
 
-                <div class="card-header bg-primary">
+                <div class="card-header bg-primary mt-2">
                     <i class="fa fa-table"></i> Invoice
                 </div>
 
@@ -314,13 +321,13 @@
                         <div class="col-md-12">
                             <label for="payment_type" class="text-right col-form-label mt-3">Payment Name</label>
 
-                        {{ Form::select( 'payment_method_id', ['Cash'], null, ['class' => 'form-control', 'required', 'id' => 'payment_method_id' ,'required'], ) }}
+                        {{ Form::select( 'payment_method_id', $payment_methods, null, ['class' => 'form-control', 'required' ,'required'], ) }}
                         <div class="invalid-feedback">Please Add Payment Type</div>
 
                             <div class="card-footer text-end">
 
 
-                                {!!  Form::submit('Bill Genarate',['class'=> 'btn btn-primary']); !!}
+                                {!!  Form::submit('Save & Download',['class'=> 'btn btn-primary']); !!}
 
                             </div>
                         </div>
@@ -341,6 +348,15 @@
     <script src="{{ asset('assets/js/pos.js') }}"></script>
 
     <script type="text/javascript">
+
+let a;
+    let time;
+    setInterval(() => {
+      a = new Date();
+      time = a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds();
+      document.getElementById('time').innerHTML = time;
+    }, 1000);
+
 
 
 function clearInput1(target){
@@ -376,7 +392,12 @@ function clearInput1(target){
                     }
             })
 
-
+            $(window).keydown(function(event){
+    if(event.keyCode == 13) {
+      event.preventDefault();
+      return false;
+    }
+  });
             //  let  grandTotal = '';
             // $("#full_paid").on('click', function() {
             //       grandTotal = $("#grandTotal").val();
@@ -445,27 +466,7 @@ function clearInput1(target){
                 }
 
             });
-            $("#payment_method_id").select2({
-                ajax: {
-                    url: "{!! url('get-payment') !!}",
-                    type: "get",
-                    dataType: 'json',
-                    //   delay: 250,
-                    data: function(params) {
-                        return {
-                            _token: CSRF_TOKEN,
-                            search: params.term,
-                        };
-                    },
-                    processResults: function(response) {
-                        return {
-                            results: response
-                        };
-                    },
-                    cache: true
-                }
 
-            });
 
 
             $("#user_id").select2({
@@ -521,6 +522,8 @@ function clearInput1(target){
 
 
 
+
+
             //  get medicine id
             let user_id = '';
             $("#user_id").on('change', function() {
@@ -528,6 +531,7 @@ function clearInput1(target){
                 user_id = $(this).val();
 
             });
+
 
             $("#adduser").on('click', function() {
 
@@ -596,15 +600,43 @@ function clearInput1(target){
 
 
 
+           // 13 is the code for return
 
-            let medicine_id = '';
-            $("#medicine_id").on('change', function() {
+
+        //    let medicine_id = '';
+        //     $("#medicine_id").on('change', function() {
+
+        //         medicine_id = $(this).val();
+
+        //     });
+        let medicine_id = '';
+
+            $('#medicine_id').on('select2:select', function (e) {
+
+
 
                 medicine_id = $(this).val();
 
-            });
+                $("#addProductRow").click();
+  // Do something
+});
 
-            $("#addProductRow").on('click', function() {
+
+$("#barcode").keyup(function(e){
+  if (e.which==13) {
+
+
+    medicine_id = $(this).val();
+    $("#addProductRow").click();
+  }
+  else {
+    // Do whatever you like
+  }
+  e.preventDefault();
+});
+
+
+                $("#addProductRow").click(function() {
 
                 // let leaf = $('#leaf').find(":selected").val();
                 // let qty = $('#box_qty').val();
@@ -651,7 +683,6 @@ function clearInput1(target){
                     alert("Please Select Medicine Name");
 
             });
-
 
             // purchase invoice generator
             jQuery().invoice({
