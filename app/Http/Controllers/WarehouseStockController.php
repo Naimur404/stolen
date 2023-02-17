@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\DB;
 
 class WarehouseStockController extends Controller
 {
@@ -208,7 +209,7 @@ class WarehouseStockController extends Controller
 
                             return $data;
                         })
-                  
+
                         ->addColumn('quantity', function($row){
                             return view('admin.action.quantity',compact('row'));
                          })
@@ -234,4 +235,47 @@ class WarehouseStockController extends Controller
 
         return view('admin.medicinestock.warehousestock',compact('warehouse'));
     }
+
+
+
+    public function getwarehouseStock(Request $request,$id){
+
+
+        $search = $request->search;
+        if($search == ''){
+
+            $medicines = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id )->where('warehouse_stocks.quantity' ,'>' ,'0')
+            ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
+            ->select('warehouse_stocks.medicine_id as id','warehouse_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name','medicines.id as medicine_id')->limit(20)->get();
+
+         }else{
+
+            $medicines = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id )->where('warehouse_stocks.quantity' ,'>' ,'0')
+            ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
+            ->select('warehouse_stocks.medicine_id as id','warehouse_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name' ,'medicines.id as medicine_id')->where('medicine_name', 'like', '%' .$search . '%')->get();
+
+
+
+         }
+
+         $response = array();
+         foreach($medicines as $medicine){
+            $response[] = array(
+                 "id"=>$medicine->medicine_id,
+                 "text"=>$medicine->medicine_name.' - '.' EX '.$medicine->expiry_date,
+            );
+         }
+         return response()->json($response);
+      }
+
+      public function get_medicine_details_warehouse($id,$id2){
+
+
+        $product_details = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id2 )->where('warehouse_stocks.medicine_id' ,'=' , $id)
+        ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
+        ->select('warehouse_stocks.*','medicines.medicine_name as medicine_name')->first();
+
+        // $product_details = Medicine::where('id', $id)->select('id','medicine_name','price','manufacturer_price')->first();
+        return json_encode($product_details);
+  }
 }

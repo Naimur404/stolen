@@ -97,7 +97,7 @@ class MedicinePurchaseController extends Controller
 
             for ($i = 0; $i < sizeof($medicines); $i++) {
                 $purchase_details = array(
-                    'warehouse_id' => $purchase->warehouse_id,
+                    'warehouse_id' => $input['warehouse_id'],
                     'medicine_purchase_id' => $purchase->id,
                     'medicine_id' => $input['product_id'][$i],
                     'medicine_name' => $input['product_name'][$i],

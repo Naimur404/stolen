@@ -8,13 +8,13 @@
    @can($permission)
 
 
-    <button class="btn btn-primary btn-xs open-modal" value="{{ $id }}">Edit</button>
+    <button class="btn btn-primary btn-xs open-modal" value="{{ $id }}"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
     @endcan
 
     @else
     <form action="{{ $edit }}" method="GET">
 
-        <button type="submit" class="btn btn-primary btn-xs open-modal">Edit</button>
+        <button type="submit" class="btn btn-primary btn-xs open-modal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
       </form>
     @endif
 
@@ -23,7 +23,7 @@
 <!-- Button trigger modal -->
 @can($permissiondelete)
 <button type="button" class="btn btn-danger btn-xs" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ $id }}" style="float: right;">
-  Delete
+    <i class="fa fa-trash"></i>
   </button>
 @endcan
   <!-- Modal -->
@@ -69,13 +69,13 @@
 
 
 
-    <button class="btn btn-primary btn-xs open-modal text-right" value="{{ $id }}" >Edit</button>
+    <button class="btn btn-primary btn-xs open-modal text-right" value="{{ $id }}" ><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
 
 
     @else
     <form action="{{ $edit }}" method="GET">
 
-        <button type="submit" class="btn btn-primary btn-xs open-modal text-right">Edit</button>
+        <button type="submit" class="btn btn-primary btn-xs open-modal text-right"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button>
       </form>
     @endif
 
@@ -84,7 +84,7 @@
 <!-- Button trigger modal -->
 
 <button type="button" class="btn btn-danger btn-xs" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ $id }}" >
-  Delete
+    <i class="fa fa-trash"></i>
   </button>
 
   <!-- Modal -->

@@ -5779,7 +5779,10 @@ table tbody .border-bottom-warning td {
   .btn-air-primary:hover, .btn-air-primary:active, .btn-air-primary:not([disabled]):not(.disabled):active {
     background-color: #17433b;
     border-color: #17433b; }
-
+.uniqueClassName{
+text-align: center;
+vertical-align: middle;
+ }
 .btn-air-secondary {
   -webkit-box-shadow: 0 5px 10px 2px rgba(36, 105, 92, 0.19) !important;
           box-shadow: 0 5px 10px 2px rgba(36, 105, 92, 0.19) !important; }

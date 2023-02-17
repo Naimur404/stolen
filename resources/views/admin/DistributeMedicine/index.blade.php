@@ -87,23 +87,32 @@
 
                                         @if (auth()->user()->can('distribute-medicine.edit') || auth()->user()->can('distribute-medicine.delete'))
                                         <td class="form-inline uniqueClassName">
+                                            @php
+                                $data = App\Models\OutletCheckIn::where('medicine_distribute_id',$productPurchase->id)->first();
+                            @endphp
+                                      @if (is_null($data))
                                             @can('medchine_purchase.edit')
                                                 <a href="{{ route('distribute-medicine.edit', $productPurchase->id) }}"
-                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa-light fa-money-bill"></i>Edit</a>
+                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:5px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             @endcan
 
+                                            @else
+                                            <a href="javscript:void()"
+                                            class="btn btn-primary btn-xs" title="Pay Now" style="margin-right:5px"><i class="fa fa-check" aria-hidden="true"></i></a>
+
+                                       @endif
                                             {{-- @can('product_purchase.print')
                                             <a href="{{ route('medicine-purchase.show', $productPurchase->id) }}" class="btn btn-info btn-xs"  title="Print Invoice" target="__blank" style="margin-right:3px"><i class="fas fa-print"></i></a>
                                             @endcan --}}
 
                                             @can('distribute-medicine.delete')
                                                 {!! Form::open(['method' => 'DELETE', 'route' => ['distribute-medicine.destroy', $productPurchase->id]]) !!}
-                                                {{ Form::button('Delete', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
+                                                {{ Form::button('<i class="fa fa-pencil-square-o" aria-hidden="true"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
                                                 {!! Form::close() !!}
                                             @endcan
 
                                             <a href="{{ route('distribute-medicine.checkIn', $productPurchase->id) }}"
-                                                class="btn btn-info btn-xs " title="Pay Now" style="margin-left:3px"><i class="fa-light fa-money-bill"></i>Check In</a>
+                                                class="btn btn-info btn-xs " title="Pay Now" style="margin-left:5px"><i class="fa fa-eye" aria-hidden="true"></i></a>
 
                                         </td>
                                         @endif
