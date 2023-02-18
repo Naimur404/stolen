@@ -99,7 +99,7 @@
                                                 <a href="{{ route('print-invoice', $productPurchase->id) }}" target="_blank"
                                                     class="btn btn-danger btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
 
-                                                    <a href="{{ route('medicine-purchase.edit', $productPurchase->id) }}"
+                                                    <a href=""
                                                         class="btn btn-success btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa fa-retweet" aria-hidden="true"></i></a>
 
 
