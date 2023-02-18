@@ -89,7 +89,7 @@
                         <td>{{ $data->medicine_name }}</td>
                         <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
                         </td>
-                        <td>{{ Form::number('price', $data->manufacturer_price, ['class' => 'form-control', 'readonly']) }}
+                        <td>{{ Form::number('price', $data->box_mrp, ['class' => 'form-control', 'readonly']) }}
                             </td>
                         <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
                             <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">

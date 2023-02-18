@@ -42,8 +42,8 @@ class OutletInvoiceController extends Controller
             $datas = OutletInvoice::orderby('id','desc')->get();
             return view('admin.Pos.index_pos',compact('datas'));
         }else{
-        $outlet = OutletHasUser::where('user_id', Auth::user()->id)->first();
-        $datas = OutletInvoice::where('outlet_id',$outlet->outlet_id)->orderby('id','desc')->get();
+
+        $datas = OutletInvoice::where('outlet_id',Auth::user()->outlet_id)->orderby('id','desc')->get();
         return view('admin.Pos.index_pos',compact('datas'));
 
         }
@@ -109,7 +109,7 @@ class OutletInvoiceController extends Controller
                 'mobile' => $input['mobile'],
 
                 'address' =>  $input['address'],
-                'points'  => $input['points'] + $customerCheck->points,
+                'points'  => round(($input['grand_total']/100),2) + $customerCheck->points,
 
                );
             $customer =  Customer::where('mobile',$request->mobile)->first();
@@ -128,7 +128,7 @@ class OutletInvoiceController extends Controller
           'grand_total' => $input['grand_total'],
           'paid_amount' => $input['paid_amount'],
           'due_amount' => $input['due_amount'],
-          'earn_point' => $input['points'],
+          'earn_point' => round(($input['grand_total']/100),2),
           'payment_method_id' => $input['payment_method_id'],
           'added_by' => Auth::user()->id,
 
@@ -174,7 +174,10 @@ try{
 
 }
 
-return redirect()->back()->with('success', 'Data has been added.');
+return response()->json([
+    'data' => $outletinvoice
+  ]);
+
 }catch(Exception $e){
     return redirect()->back()->with('error', $e->getMessage());
 }
@@ -267,5 +270,14 @@ return redirect()->back()->with('success', 'Data has been added.');
 
         // $product_details = Medicine::where('id', $id)->select('id','medicine_name','price','manufacturer_price')->first();
         return json_encode($product_details);
+  }
+
+  public function printInvoice($id){
+
+    $outletInvoice = OutletInvoice::find($id);
+    $outletInvoicedetails = OutletInvoiceDetails::where('outlet_invoice_id',$id)->get();
+    return view('admin.invoice.print',compact('outletInvoice','outletInvoicedetails'));
+
+
   }
 }

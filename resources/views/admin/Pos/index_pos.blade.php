@@ -34,19 +34,19 @@
 	                        <table class="display data-table">
 	                            <thead>
 	                                <tr>
-                                        <th>SL</th>
-
-                                        <th>Outlet Name</th>
-                                        <th>Customer Name</th>
-                                        {{-- <th>Product Type</th> --}}
+                                        <th>ID</th>
                                         <th>Sale Date</th>
+                                        <th>Outlet Name</th>
+                                        <th>Customer</th>
+                                        {{-- <th>Product Type</th> --}}
+
                                         <th>Payment Method</th>
                                         <th>Total</th>
                                         <th>Pay</th>
-                                        <th>Due</th>
-                                        <th>Points</th>
-                                        <th>Sold By</th>
 
+
+                                        <th>Sold By</th>
+                                        <th>Action</th>
 
                                         {{-- @if (auth()->user()->can('invoice.edit') || auth()->user()->can('invoice.delete'))
                                         <th>Action</th>
@@ -56,7 +56,10 @@
 	                            <tbody>
                                     @foreach ($datas as $productPurchase)
                                     <tr>
-                                        <td>{{ $loop->index + 1 }}</td>
+                                        <td>{{ $productPurchase->id }}</td>
+
+                                        <td>{{ \Carbon\Carbon::parse($productPurchase->sale_date)->format('d-m-Y')}}
+                                        </td>
                                         @if ( $productPurchase->outlet_id == null)
 
                                             <td> N/A </td>
@@ -68,12 +71,10 @@
                                         <td>  @php
                                             $customer = App\Models\Customer::where('id',$productPurchase->customer_id)->first();
                                          @endphp
-                                         {{ $customer->name }}
+                                         {{ $customer->mobile }}
 
                                         </td>
 
-                                        <td>{{ \Carbon\Carbon::parse($productPurchase->sale_date)->format('d-m-Y')}}
-                                        </td>
                                         <td>@php
                                            $data = App\Models\PaymentMethod::where('id',$productPurchase->payment_method_id)->first();
                                         @endphp
@@ -82,9 +83,9 @@
                                         <td>{{ $productPurchase->grand_total }}</td>
                                         <td>{{ $productPurchase->paid_amount }}</td>
 
-                                        <td> {{ $productPurchase->due_amount }} </td>
 
-                                           <td>{{$productPurchase->earn_point }}</td>
+
+
                                            <td>
                                             @php
                                             $user = App\Models\User::where('id',$productPurchase->added_by)->first();
@@ -92,28 +93,18 @@
                                             {{ $user->name }}
                                            </td>
 
-                                        {{-- @if (auth()->user()->can('medchine_purchase.edit') || auth()->user()->can('medchine_purchase.delete'))
+
                                         <td class="form-inline">
-                                            @can('medchine_purchase.edit')
-                                                <a href="{{ route('medicine-purchase.edit', $productPurchase->id) }}"
-                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa-light fa-money-bill"></i>Edit</a>
-                                            @endcan
 
-                                            {{-- @can('product_purchase.print')
-                                            <a href="{{ route('medicine-purchase.show', $productPurchase->id) }}" class="btn btn-info btn-xs"  title="Print Invoice" target="__blank" style="margin-right:3px"><i class="fas fa-print"></i></a>
-                                            @endcan --}}
+                                                <a href="{{ route('print-invoice', $productPurchase->id) }}" target="_blank"
+                                                    class="btn btn-danger btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
 
-                                            {{-- @can('medchine_purchase.delete')
-                                                {!! Form::open(['method' => 'DELETE', 'route' => ['medicine-purchase.destroy', $productPurchase->id]]) !!}
-                                                {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
-                                                {!! Form::close() !!}
-                                            @endcan
+                                                    <a href=""
+                                                        class="btn btn-success btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa fa-retweet" aria-hidden="true"></i></a>
 
-                                            <a href="{{ route('medicine-purchase.checkIn', $productPurchase->id) }}"
-                                                class="btn btn-info btn-xs " title="Pay Now" style="margin-left:3px"><i class="fa-light fa-money-bill"></i>Check In</a>
 
                                         </td>
-                                        @endif --}}
+
                                     </tr>
                                 @endforeach
 	                            </tbody>
