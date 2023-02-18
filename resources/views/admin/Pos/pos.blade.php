@@ -33,7 +33,7 @@
 
 
 	@endcomponent
-    {!! Form::open(['route' => 'invoice.store', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'files' => true]) !!}
+    {!! Form::open(['id' => 'my-form', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'files' => true]) !!}
 
     <input type="hidden" name="outlet_id" value="{{ $outlet_id->outlet_id }}">
 <div class="row item-row-add">
@@ -92,7 +92,7 @@
             <div class="card">
 
                 <div class="card-header bg-primary">
-                    <i class="fa fa-table"></i> Make Purchase
+                    <i class="fa fa-table"></i> Item Details
                 </div>
 
                 <div class="card-body">
@@ -323,7 +323,7 @@
                             <div class="card-footer text-end">
 
 
-                                {!!  Form::submit('Save & Download',['class'=> 'btn btn-primary']); !!}
+                                <button type="button" class="btn btn-primary" onclick="submitForm()">Save & Print</button>
 
                             </div>
                         </div>
@@ -370,6 +370,43 @@ function clearInput1(target){
             target.value= "";
        }
     }
+
+
+
+    function submitForm() {
+  // Get form data
+  const form = document.getElementById('my-form');
+  const formData = new FormData(form);
+
+  // Send AJAX request
+  $.ajax({
+    url: "{{ route('invoice.store') }}",
+    method: "POST",
+    data: formData,
+    contentType: false,
+    processData: false,
+    success: function(response) {
+      var datas = response.data;
+      var url = "{{ route('print-invoice', ':id') }}";
+      url = url.replace(':id', datas.id);
+      window.open(url, "_blank");
+      window.location.href = "{{ route('invoice.create') }}";
+
+    },
+    error: function(xhr) {
+      // Handle error response
+    }
+  });
+}
+
+
+// $(window).on('afterprint', function() {
+//   // Redirect back to the original page
+//   window.location.href = "{{ route('invoice.create') }}";
+// });
+
+
+
     //    function prevent_paid_amount(){
     //             var paid_amount = $("#pay").val();
     //         var grand_total_amount = $("#grandTotal").val();
