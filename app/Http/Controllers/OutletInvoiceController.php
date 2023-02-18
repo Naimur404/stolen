@@ -42,8 +42,8 @@ class OutletInvoiceController extends Controller
             $datas = OutletInvoice::orderby('id','desc')->get();
             return view('admin.Pos.index_pos',compact('datas'));
         }else{
-        $outlet = OutletHasUser::where('user_id', Auth::user()->id)->first();
-        $datas = OutletInvoice::where('outlet_id',$outlet->outlet_id)->orderby('id','desc')->get();
+
+        $datas = OutletInvoice::where('outlet_id',Auth::user()->outlet_id)->orderby('id','desc')->get();
         return view('admin.Pos.index_pos',compact('datas'));
 
         }
@@ -109,7 +109,7 @@ class OutletInvoiceController extends Controller
                 'mobile' => $input['mobile'],
 
                 'address' =>  $input['address'],
-                'points'  => ($input['grand_total']/100) + $customerCheck->points,
+                'points'  => round(($input['grand_total']/100),2) + $customerCheck->points,
 
                );
             $customer =  Customer::where('mobile',$request->mobile)->first();
