@@ -196,7 +196,7 @@
 
 
                 <div class="col-md-3">
-                    {!! Form::label('name', 'User Name', array('class' => 'form-label')) !!}
+                    {!! Form::label('name', 'Customer Name', array('class' => 'form-label')) !!}
                     {!! Form::text('name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Customer Name' ,'required']) !!}
                 </div>
                 <div class="col-md-3">
