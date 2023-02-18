@@ -70,7 +70,7 @@ class OutletInvoiceController extends Controller
      */
     public function store(Request $request)
     {
-  
+
 
         $input = $request->all();
 
@@ -109,7 +109,7 @@ class OutletInvoiceController extends Controller
                 'mobile' => $input['mobile'],
 
                 'address' =>  $input['address'],
-                'points'  => ($input['sub_total']/100) + $customerCheck->points,
+                'points'  => ($input['grand_total']/100) + $customerCheck->points,
 
                );
             $customer =  Customer::where('mobile',$request->mobile)->first();
@@ -128,7 +128,7 @@ class OutletInvoiceController extends Controller
           'grand_total' => $input['grand_total'],
           'paid_amount' => $input['paid_amount'],
           'due_amount' => $input['due_amount'],
-          'earn_point' => $input['sub_total']/100,
+          'earn_point' => round(($input['grand_total']/100),2),
           'payment_method_id' => $input['payment_method_id'],
           'added_by' => Auth::user()->id,
 

@@ -37,7 +37,7 @@
                                         <th>ID</th>
                                         <th>Sale Date</th>
                                         <th>Outlet Name</th>
-                                        <th>Customer Name</th>
+                                        <th>Customer</th>
                                         {{-- <th>Product Type</th> --}}
 
                                         <th>Payment Method</th>
@@ -71,7 +71,7 @@
                                         <td>  @php
                                             $customer = App\Models\Customer::where('id',$productPurchase->customer_id)->first();
                                          @endphp
-                                         {{ $customer->name }}({{ $customer->mobile }})
+                                         {{ $customer->mobile }}
 
                                         </td>
 
