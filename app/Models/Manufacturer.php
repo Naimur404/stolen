@@ -17,4 +17,8 @@ class Manufacturer extends Model
         'address',
         'is_active',
     ];
+
+    public static function get_manufacturer_name($id){
+        return Manufacturer::where('id', $id)->value('manufacturer_name');
+ }
 }

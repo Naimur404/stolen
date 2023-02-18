@@ -120,7 +120,8 @@ Route::resource('invoice', OutletInvoiceController::class);
 Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
 Route::get('distribute-medicine/{id}/check-in',[MedicineDistributeController::class,'checkIn'])->name('distribute-medicine.checkIn');
 
-
+//medicine route
+Route::get('all-medicines-lists', [MedicineController::class ,'get_all_medicines'])->name('medicine.all-medicines');
 
 //active status route
 Route::get('/delete/{medicineid}/{distributeid}', [MedicineDistributeController::class,'medicineDistributeDetailDelete'])->name('delete.medicineDistributeDetailDelete');
@@ -155,6 +156,7 @@ Route::get('get-medicine-details-warehouse/{id}/{wid}',[WarehouseStockController
 Route::get('/get-warehouse-Stock/{id}',[WarehouseStockController::class,'getwarehouseStock'])->name('getwarehouseStock');
 
 //get warehouse stock for return
+
 Route::get('get-medicine-details-outlet/{id}/{wid}',[OutletStockController::class,'get_medicine_details_outlet']);
 Route::get('/get-oulet-Stockss/{id}',[OutletStockController::class,'getoutletStocks'])->name('getoutletStocks');
 //select2 route

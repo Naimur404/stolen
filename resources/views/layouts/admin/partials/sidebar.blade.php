@@ -39,18 +39,18 @@
                                href="{{route('distribute-medicine.index')}}"><i data-feather="plus-circle"></i><span>Distribute Medicine</span></a>
                         </li>
                     @endcan
-
                     @can('outletStock')
+
                         <li class="dropdown">
-                            <a class="nav-link menu-title {{routeActive('outletstock',$id = 'all')}}"
-                               href="{{route('outletstock',$id = 'all')}}"><i data-feather="shopping-cart"></i><span>Outlet Stock</span></a>
+                            <a class="nav-link menu-title {{routeActive('outlet-stock.index')}}"
+                               href="{{route('outlet-stock.index')}}"><i data-feather="shopping-cart"></i><span>Outlet Stock</span></a>
                         </li>
                     @endcan
 
                     @can('warehouseStock')
                         <li class="dropdown">
-                            <a class="nav-link menu-title {{routeActive('warehouseStock',$id = 'all')}}"
-                               href="{{route('warehouseStock',$id = 'all')}}"><i data-feather="box"></i><span>Warehouse Stock</span></a>
+                            <a class="nav-link menu-title {{routeActive('warehouse-stock.index')}}"
+                               href="{{route('warehouse-stock.index')}}"><i data-feather="box"></i><span>Warehouse Stock</span></a>
                         </li>
                     @endcan
 

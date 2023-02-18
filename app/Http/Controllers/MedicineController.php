@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
+use App\Models\Manufacturer;
 use App\Models\Medicine;
 use App\Models\MedicinePurchaseDetails;
 use App\Models\SupplierHasManufacturer;
@@ -23,39 +25,11 @@ class MedicineController extends Controller
         $this->middleware('permission:medicine.edit', ['only' => ['edit','update']]);
         $this->middleware('permission:medicine.delete', ['only' => ['destroy']]);
     }
-    public function index(Request $request)
+    public function index()
     {
-        if ($request->ajax()) {
-            $data = Medicine::orderBy("id","desc")->get();
-            return  DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('manufacturer', function($row){
-                        $man_id = $row->manufacturer_id;
-                      return view('admin.action.manufacture',compact('man_id'));
-                  })
 
-                    ->addColumn('category', function($row){
-                          $cat_id = $row->category_id;
-                        return view('admin.action.category',compact('cat_id'));
-                    })
-                    ->addColumn('image', function($row){
-                        $image = $row->image;
-                      return view('admin.action.image',compact('image'));
-                  })
 
-                    ->addColumn('action', function($row){
-                        $id = $row->id;
-                        $edit = route('medicine.edit',$id);
-                        $delete = route('medicine.destroy',$id);
-                        return view('admin.action.action', compact('id','edit','delete'));
-                    })
-                    ->rawColumns(['manufacturer'])
-                    ->rawColumns(['category'])
-                    ->rawColumns(['image'])
 
-                    ->rawColumns(['action'])
-                    ->make(true);
-        }
         return view('admin.medchine.index');
     }
 
@@ -233,6 +207,78 @@ class MedicineController extends Controller
 
           return response()->json($response);
       }
-    
+      public function get_all_medicines(Request $request){
+
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $row_per_page = $request->get("length"); // rows display per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = (isset($columnIndex_arr[0]['column']))? $columnIndex_arr[0]['column'] : false; // column index
+        $columnName = (isset($columnName_arr[$columnIndex]['data']))? $columnName_arr[$columnIndex]['data'] : false; // column name
+        // $columnSortOrder = $order_arr[0]['dir']; // asc or desc
+        $columnSortOrder = (isset($order_arr[0]['dir']))? $order_arr[0]['dir'] : false; // asc or desc
+        $searchValue = (isset($search_arr['value'])) ? $search_arr['value'] : false; // Search value
+
+        // total records count
+        $totalRecords = Medicine::select('count(*) as allcount')->count();
+        $total_record_switch_filter = Medicine::select('count(*) as allcount')->where('medicine_name', 'like', '%' .$searchValue . '%')->count();
+
+        // fetch records with search
+        $medicines = Medicine::orderBy($columnName,$columnSortOrder)
+          ->where('medicines.medicine_name', 'like', '%' .$searchValue . '%')
+          ->select('medicines.*')
+          ->skip($start)
+          ->take($row_per_page)
+          ->get();
+
+        $data_arr = array();
+        $sl = 1;
+        foreach($medicines as $medicine){
+            $s_no =  $sl++;
+        //    $id = $medicine->id;
+           $medicine_name = $medicine->medicine_name;
+           $generic_name = $medicine->generic_name;
+           $category = Category::get_category_name($medicine->category_id);
+           $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);
+           $price = '৳&nbsp;'.$medicine->price;
+           $manufacturer_price = '৳&nbsp;' .$medicine->manufacturer_price;
+
+            if(auth()->user()->can('medicine.edit') || auth()->user()->can('medicine.delete')){
+                $action ='<a href="'.route('medicine.edit', $medicine->id).'" class="btn btn-success btn-xs mr-1" title="View"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+                $action = '<a href="'.route('medicine.edit', $medicine->id).'"
+                class="btn btn-success btn-xs" title="Update" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+                $action .= '<a href="'.route('medicine.destroy', $medicine->id).'"
+                class="btn btn-danger btn-xs" id="delete" title="Delete" style="margin-right:3px"><i class="fa fa-trash"></i></a>';
+            }else{
+                $action = 'N/A';
+            }
+
+           $data_arr[] = array(
+             "id" => $s_no,
+             "medicine_name" => $medicine_name,
+             "generic_name" => $generic_name,
+             "category" => $category,
+             "manufacturer_name" => $manufacturer_name,
+             "price" => $price,
+             "manufacturer_price" => $manufacturer_price,
+
+             "action" => $action
+           );
+        }
+
+        $response = array(
+           "draw" => intval($draw),
+           "iTotalRecords" => $totalRecords,
+           "iTotalDisplayRecords" => $total_record_switch_filter,
+           "aaData" => $data_arr
+        );
+
+        return json_encode($response);
+      }
 
 }
