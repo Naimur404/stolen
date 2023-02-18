@@ -40,11 +40,6 @@
                                         <th>Manufacture Name</th>
                                         <th>Category</th>
                                         <th>Price</th>
-
-                                        <th>Image</th>
-
-
-
 	                                    <th>Action</th>
 
 	                                </tr>
@@ -74,16 +69,16 @@
     });
     var table = $('.data-table').DataTable({
         processing: true,
-
-        ajax: "{{ route('medicine.index') }}",
+        serverSide: true,
+        ajax: "{{ route('medicine.all-medicines') }}",
         columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            {data: 'medicine_name', name: 'medicine name',orderable: false},
+            {data: 'id', name: 'si'},
+            {data: 'medicine_name', name: 'medicine name'},
             {data: 'generic_name', name: 'generic name'},
-            {data: 'manufacturer', name: 'manufacture name'},
+            {data: 'manufacturer_name', name: 'manufacture name'},
             {data: 'category', name: 'category'},
             {data: 'price', name: 'price'},
-            {data: 'image', name: 'image', orderable: false, searchable: false},
+
 
 
             {data: 'action', name: 'action', orderable: false, searchable: false ,className: "uniqueClassName"},

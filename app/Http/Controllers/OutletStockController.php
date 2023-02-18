@@ -32,7 +32,22 @@ class OutletStockController extends Controller
      }
     public function index()
     {
+        if(auth()->user()->hasrole('Super Admin')){
 
+            $outlet = Outlet::pluck('outlet_name', 'id');
+            $outlet = new Collection($outlet);
+            $outlet->prepend('All Outlet Stock', 'all');
+
+            }else{
+                $outlet = Outlet::where('id',Auth::user()->outlet_id)->pluck('outlet_name', 'id');
+            }
+
+
+
+
+
+
+                    return view('admin.medicinestock.OutletStock',compact('outlet'));
     }
 
     /**
@@ -154,98 +169,109 @@ class OutletStockController extends Controller
     public function outletStock(Request $request, $id )
 
     {
-        if($id != 'all'){
-            if ($request->ajax()) {
-                $data = OutletStock::where("outlet_id",$id)->get();
-                return  DataTables::of($data)
-                        ->addIndexColumn()
-                        ->addColumn('medicine_name', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('medicine_name');
-                          return $data;
-                      })
-
-                        ->addColumn('category', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('category_id');
-                            $cat = Category::where('id',$data)->implode('category_name');
-                            return $cat;
-                        })
-                        ->addColumn('manufacturer_name', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_id');
-                            $manu = Manufacturer::where('id',$data)->implode('manufacturer_name');
-                            return $manu;
-                        })
-                        ->addColumn('unit', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('unit_id');
-                            $unit = Unit::where('id',$data)->implode('unit_name');
-                            return $unit;
-                        })
-                        ->addColumn('manufacturer_price', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_price');
-
-                            return $data;
-                        })
 
 
-                        ->rawColumns(['medicine_name'])
-                        ->rawColumns(['category'])
-                        ->rawColumns(['manufacturer_name'])
-                        ->rawColumns(['unit'])
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $row_per_page = $request->get("length"); // rows display per page
 
-                        ->rawColumns(['manufacturer_price'])
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
 
-                        ->make(true);
-            }
+        $columnIndex = (isset($columnIndex_arr[0]['column']))? $columnIndex_arr[0]['column'] : false; // column index
+        $columnName = (isset($columnName_arr[$columnIndex]['data']))? $columnName_arr[$columnIndex]['data'] : false; // column name
+        $columnSortOrder = (isset($order_arr[0]['dir']))? $order_arr[0]['dir'] : false; // asc or desc
+        $searchValue = (isset($search_arr['value'])) ? $search_arr['value'] : false; // Search value
+
+
+
+        // total records count
+        if($id == 'all'){
+
+
+            $totalRecords = OutletStock::where('quantity', '>', '0')->select('count(*) as allcount')
+            ->count();
+           $medicine_stock  = DB::table('outlet_stocks')->orderBy($columnName,$columnSortOrder)->where('quantity', '>', '0')->leftjoin('medicines' ,'outlet_stocks.medicine_id' ,'=' ,'medicines.id')->where('medicines.medicine_name', 'like', '%' .$searchValue . '%')->select('outlet_stocks.*', 'medicines.medicine_name')
+
+              ->skip($start)
+              ->take($row_per_page)
+              ->get();
+
         }else{
-            if ($request->ajax()) {
-                $data = OutletStock::all();
-                return  DataTables::of($data)
-                        ->addIndexColumn()
-                        ->addColumn('medicine_name', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('medicine_name');
-                          return $data;
-                      })
+           if(auth()->user()->hasrole('Super Admin')){
+            $totalRecords = OutletStock::where('quantity', '>', '0')->select('count(*) as allcount')->where('outlet_id', '=', $id)->count();
+            $medicine_stock =    DB::table('outlet_stocks')->orderBy($columnName,$columnSortOrder)->where('outlet_id', '=', $id)->where('quantity', '>', '0')->leftjoin('medicines' ,'outlet_stocks.medicine_id' ,'=' ,'medicines.id')->where('medicines.medicine_name', 'like', '%' .$searchValue . '%')->select('outlet_stocks.*', 'medicines.medicine_name')
 
-                        ->addColumn('category', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('category_id');
-                            $cat = Category::where('id',$data)->implode('category_name');
-                            return $cat;
-                        })
-                        ->addColumn('manufacturer_name', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_id');
-                            $manu = Manufacturer::where('id',$data)->implode('manufacturer_name');
-                            return $manu;
-                        })
-                        ->addColumn('unit', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('unit_id');
-                            $unit = Unit::where('id',$data)->implode('unit_name');
-                            return $unit;
-                        })
-                        ->addColumn('manufacturer_price', function($row){
-                            $data = Medicine::where('id',$row->medicine_id)->implode('manufacturer_price');
+              ->skip($start)
+              ->take($row_per_page)
+              ->get();
 
-                            return $data;
-                        })
+           }else{
+            $totalRecords = OutletStock::where('quantity', '>', '0')->select('count(*) as allcount')->where('outlet_id', '=', Auth::user()->outlet_id)->count();
+            $medicine_stock =    DB::table('outlet_stocks')->orderBy($columnName,$columnSortOrder)->where('outlet_id', '=', Auth::user()->outlet_id)->where('quantity', '>', '0')->leftjoin('medicines' ,'outlet_stocks.medicine_id' ,'=' ,'medicines.id')->where('medicines.medicine_name', 'like', '%' .$searchValue . '%')->select('outlet_stocks.*', 'medicines.medicine_name')
+
+            ->skip($start)
+            ->take($row_per_page)
+            ->get();
 
 
-                        ->rawColumns(['medicine_name'])
-                        ->rawColumns(['category'])
-                        ->rawColumns(['manufacturer_name'])
-                        ->rawColumns(['unit'])
+           }
 
-                        ->rawColumns(['manufacturer_price'])
 
-                        ->make(true);
-            }
+
+
+
         }
 
+        $total_record_switch_filter = $totalRecords;
 
-        $outlet = Outlet::pluck('outlet_name', 'id');
-
-      $outlet = new Collection($outlet);
-      $outlet->prepend('All Outlet Stock', 'all');
+        // fetch records with search
 
 
-        return view('admin.medicinestock.OutletStock',compact('outlet'));
+
+
+        $data_arr = array();
+
+        $sl = 1;
+
+        foreach($medicine_stock as $stock){
+            $s_no = $sl++;
+            $medicine_name = Medicine::get_medicine_name($stock->medicine_id);
+            $manufacturer_price = '৳&nbsp;' .Medicine::get_manufacturer_price($stock->medicine_id);;
+             $medicine = Medicine::where('id',$stock->medicine_id)->first();
+            $category = Category::get_category_name($medicine->category_id);
+            $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);
+            $price = '৳&nbsp;'.$stock->price;
+            $expiry_date = $stock->expiry_date;
+
+            $stock = $stock->quantity;
+
+            $data_arr[] = array(
+              "id" => $s_no,
+              "medicine_name" => $medicine_name,
+
+              "category" => $category,
+              "manufacturer_name" => $manufacturer_name,
+              "price" => $price,
+              "manufacturer_price" => $manufacturer_price,
+              "quantity" => $stock,
+              "expiry_date" => $expiry_date,
+            );
+         }
+
+         $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $total_record_switch_filter,
+            "aaData" => $data_arr
+         );
+
+         return json_encode($response);
+
+
+
     }
 
     public function getoutletStocks(Request $request,$id){

@@ -47,7 +47,7 @@
                                         <th>Category</th>
                                         <th>Manufacturer Name</th>
                                         <th>Expiry Date</th>
-                                        <th>Unit</th>
+
                                         <th>Manufacture Price</th>
                                         <th>Sale Price</th>
 
@@ -86,15 +86,16 @@
         responsive: true,
         autoWidth: false,
         processing: true,
+        serverSide: true,
 
         ajax: "/get-warehouse-stock/" + warehouse_id,
         columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'id', name: 'si'},
             {data: 'medicine_name', name: 'medicine Name'},
             {data: 'category', name: 'category'},
             {data: 'manufacturer_name', name: 'Manufacturer Name'},
             {data: 'expiry_date', name: 'Expiry Date'},
-            {data: 'unit', name: 'unit'},
+
             {data: 'manufacturer_price', name: 'Manufacturer price'},
             {data: 'price', name: 'sale price'},
             {data: 'quantity', name: 'stock'},
