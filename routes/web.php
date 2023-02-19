@@ -15,6 +15,7 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\Select2Controller;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\StockRequestController;
@@ -28,6 +29,7 @@ use App\Http\Controllers\WarehouseStockController;
 use App\Models\Customer;
 use App\Models\MedicineDistribute;
 use App\Models\OutletStock;
+use App\Models\SalesReturn;
 use App\Models\StockRequest;
 use Illuminate\Support\Facades\Route;
 
@@ -190,6 +192,11 @@ Route::get('/stock-request/{id}/details', [StockRequestController::class,'detail
 Route::get('/stock-request/{id}/details/warehouse', [StockRequestController::class,'detailsRequestWarehouse'])->name('detailsRequestWarehouse');
 Route::get('/stock-request-details/{medicineid}/{requestid}/delete', [StockRequestController::class,'stockRequestDelete'])->name('stockRequestDelete');
 Route::get('/stock/warehouse-request', [StockRequestController::class,'warehouseRequest'])->name('warehouseRequest');
+
+
+//sales return route
+
+Route::resource('sale-return', SalesReturnController::class);
 
 });
 

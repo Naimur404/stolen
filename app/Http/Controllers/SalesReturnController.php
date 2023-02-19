@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\OutletInvoice;
+use App\Models\OutletInvoiceDetails;
 use App\Models\SalesReturn;
 use Illuminate\Http\Request;
 
@@ -44,9 +46,13 @@ class SalesReturnController extends Controller
      * @param  \App\Models\SalesReturn  $salesReturn
      * @return \Illuminate\Http\Response
      */
-    public function show(SalesReturn $salesReturn)
-    {
-        //
+    public function show($id)
+    {  
+
+        $data = OutletInvoice::find($id);
+        $medicinedetails = OutletInvoiceDetails::where('outlet_invoice_id',$data->id)->get();
+       
+         return view('admin.Pos.sales_retun',compact('data','medicinedetails'));
     }
 
     /**
