@@ -3,7 +3,7 @@
 
 
 @extends('layouts.admin.master')
-@section('title')Due Payment
+@section('title')Sales Return
 @endsection
 @push('css')
 <style>
@@ -22,7 +22,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-6">
-			<h3>Due Payment</h3>
+			<h3>Sales Return</h3>
         </div>
 
         </div>
@@ -47,16 +47,17 @@
 
             <div class="service_invoice_header">
                 <div class="row">
-                    <div class="col-md-4">Invoice Id : <b></b></div>
-                    <div class="col-md-4">
-                        <p class="text-center"><b>Invoice No : </b></p>
-                    </div>
-                    <div class="col-md-4">Purchase Date :
-                        <b></b></div>
+                    <div class="col-md-8"><b>Invoice Id : #{{ $data->id }}</b></div>
+                 
+                    <div class="col-md-4"><b>Sale Date : {{ \Carbon\Carbon::parse($data->sale_date)->format('d-m-Y') }}
+                    </b></div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3">Supplier Name : </div>
+                    @php
+                    $outlet = App\Models\Outlet::where('id',$data->outlet_id)->first();
+                   @endphp
+                    <div class="col-md-8"><b>Outlet Name :  {{ $outlet->outlet_name }}</b></div>
                     {{-- <div class="col-md-4"> <b>
                             @if ($productPurchase->supplier_id == null)
                                 N/A
@@ -64,27 +65,20 @@
                                 {{ $productPurchase->supplier->supplier_name }}
                             @endif
                         </b></div> --}}
-
-
+                        @php
+                        $customer = App\Models\Customer::where('id',$data->customer_id)->first();
+                       @endphp
+                        <div class="col-md-4"><b>Customer Phone : {{ $customer->mobile }}</b>
+                        <b></b></div>
                 </div>
-                <div class="row">
-                    <div class="col-md-3">Manufacturer Name : </div>
-                    {{-- <div class="col-md-4"><b>
-                            @if ($productPurchase->manufacturer_id == null)
-                                N/A
-                            @elseif ($productPurchase->manufacturer_id != null)
-                                {{ $productPurchase->manufacturer->manufacturer_name }}
-                            @endif
-                        </b></div> --}}
-
-                </div>
+               
              
             </div>
 
             <div class="card mt-5">
 
                 <div class="card-header bg-secondary">
-                    <i class="fa fa-table"></i> Make Purchase
+                    <i class="fa fa-table"></i> Return Purchase Details
                 </div>
 
                 <div class="card-body">
