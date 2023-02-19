@@ -63,9 +63,17 @@
                     @endcan
 
                     @can('customer.management')
+                    @php
+                        if(Auth::user()->hasrole('Super Admin')){
+                             $id = 'all';
+                        }else{
+                            $id = Auth::user()->outlet_id;
+                        }
+                    @endphp
+
                         <li class="dropdown">
-                            <a class="nav-link menu-title {{routeActive('get-customer',$id = 'all')}}"
-                               href="{{route('get-customer',$id = 'all')}}"><i data-feather="users"></i><span>Customer Management</span></a>
+                            <a class="nav-link menu-title {{routeActive('get-customer',$id)}}"
+                               href="{{route('get-customer',$id)}}"><i data-feather="users"></i><span>Customer Management</span></a>
                         </li>
                     @endcan
 

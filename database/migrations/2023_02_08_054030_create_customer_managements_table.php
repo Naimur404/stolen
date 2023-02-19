@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->bigInteger('outlet_id')->unsigned();
             $table->foreign('outlet_id')->references('id')->on('outlets');
-            $table->bigInteger('points')->default('0');
+            $table->bigInteger('points')->default('0')->nullable();
             $table->boolean('is_active')->default(true);
             $table->softDeletes();
             $table->timestamps();

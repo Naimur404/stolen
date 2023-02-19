@@ -35,7 +35,7 @@
 	@endcomponent
     {!! Form::open(['id' => 'my-form', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'files' => true]) !!}
 
-    <input type="hidden" name="outlet_id" value="{{ $outlet_id->outlet_id }}">
+    <input type="hidden" name="outlet_id" value="{{ $outlet_id }}">
 <div class="row item-row-add">
 
 <div class="col-md-9 col-lg-9">

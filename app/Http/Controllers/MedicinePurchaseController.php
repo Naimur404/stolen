@@ -18,10 +18,24 @@ class MedicinePurchaseController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     function __construct()
+     {
+         $this->middleware('permission:medchine_purchase.management|medchine_purchase.create|medchine_purchase.edit|medchine_purchase.delete', ['only' => ['index','store']]);
+         $this->middleware('permission:medchine_purchase.create', ['only' => ['create','store']]);
+         $this->middleware('permission:medchine_purchase.edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:medchine_purchase.delete', ['only' => ['destroy']]);
+         $this->middleware('permission:medchine_purchase.checkin', ['only' => ['checkIn']]);
+     }
     public function index()
     {
-
-        $productPurchases = MedicinePurchase::orderBy('id', 'desc')->get();
+        $warehouse_id = Auth::user()->warehouse_id != null  ?  Auth::user()->warehouse_id : Warehouse::orderby('id','desc')->first('id');
+        if(Auth::user()->hasrole('Super Admin')){
+            $productPurchases = MedicinePurchase::orderBy('id', 'desc')->get();
+        }else{
+            $productPurchases = MedicinePurchase::where('id',$warehouse_id)->orderBy('id', 'desc')->get();
+        }
+      
         return view('admin.medchine_purchase.index', compact('productPurchases'));
     }
 
@@ -33,8 +47,15 @@ class MedicinePurchaseController extends Controller
     public function create()
     {
         // $leafs = LeafSetting::all();
+        $warehouse_id = Auth::user()->warehouse_id != null  ?  Auth::user()->warehouse_id : Warehouse::orderby('id','desc')->first('id');
         $payment_methods = PaymentMethod::pluck('method_name', 'id');
-        $warehouse = Warehouse::pluck('warehouse_name', 'id');
+        if(Auth::user()->hasrole('Super Admin')){
+
+            $warehouse = Warehouse::pluck('warehouse_name', 'id');
+        }else{
+            $warehouse = Warehouse::where('id' ,$warehouse_id)->pluck('warehouse_name', 'id');
+        }
+       
         return view('admin.medchine_purchase.create', compact('payment_methods','warehouse'));
     }
 

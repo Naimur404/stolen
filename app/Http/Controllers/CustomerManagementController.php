@@ -7,6 +7,7 @@ use App\Models\Outlet;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Str;
 
@@ -56,8 +57,17 @@ class CustomerManagementController extends Controller
 
            ]);
            $input = $request->all();
+           $data = array(
+            'name' => $input['name'],
+            'mobile' => $input['mobile'],
+            'address' => $input['address'],
+            'points' => 0,
+            'outlet_id' => $input['outlet_id'],
+
+           );
+          
            try{
-            Customer::create($input);
+            Customer::create($data);
             return redirect()->back()->with('success', ' New Customer Added');
 
            }catch(Exception $e){
@@ -140,6 +150,7 @@ class CustomerManagementController extends Controller
     {
         if($id != 'all'){
             if ($request->ajax()) {
+
                 $data = Customer::where("outlet_id",$id)->get();
                 return  DataTables::of($data)
                         ->addIndexColumn()
@@ -175,6 +186,7 @@ class CustomerManagementController extends Controller
                         ->rawColumns(['action'])
                         ->make(true);
             }
+            $outlet = Outlet::where('id', Auth::user()->outlet_id)->pluck('outlet_name', 'id');
         }else{
             if ($request->ajax()) {
                 $data = Customer::all();
@@ -212,16 +224,17 @@ class CustomerManagementController extends Controller
                 ->rawColumns(['action'])
                 ->make(true);
             }
+            $outlet = Outlet::pluck('outlet_name', 'id');
+
+            $outlet = new Collection($outlet);
+            $outlet->prepend('All Outlet Customer', 'all');
         }
 
 
-        $outlet = Outlet::pluck('outlet_name', 'id');
-
-      $outlet = new Collection($outlet);
-      $outlet->prepend('All Outlet Customer', 'all');
 
 
-        return view('admin.customermanagement.index',compact('outlet'));
+
+    return view('admin.customermanagement.index',compact('outlet'));
     }
     public function active($id,$status){
 
