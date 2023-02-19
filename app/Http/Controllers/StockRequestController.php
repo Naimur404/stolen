@@ -24,13 +24,17 @@ class StockRequestController extends Controller
     {
         $this->middleware('permission:sent_stock_request', ['only' => ['index','store','update','destroy','edit','stockRequestDelete','details']]);
         $this->middleware('permission:stock_request', ['only' => ['warehouseRequest','store','hasSent','hasAccepted','hasAcceptedMedicine','detailsRequestWarehouse']]);
-
+        
     }
     public function index()
     {
-    $data = OutletHasUser::where('user_id', Auth::user()->id)->first();
-    $outlet = Outlet::where('id',$data->outlet_id)->first();
-    $stockrequets = StockRequest::where('outlet_id',$outlet->id)->get();
+    $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
+    if(Auth::user()->hasrole('Super Admin')){
+        $stockrequets = StockRequest::all();
+    }else{
+        $stockrequets = StockRequest::where('outlet_id',$outlet_id)->get();
+    }
+   
 
     return view('admin.stockrequest.outlet_stock_request_index', compact('stockrequets'));
     }
@@ -41,9 +45,9 @@ class StockRequestController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create()
-    {
-        $data = OutletHasUser::where('user_id', Auth::user()->id)->first();
-        $outlet = Outlet::where('id',$data->outlet_id)->pluck('outlet_name','id');
+
+    {   $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
+        $outlet = Outlet::where('id',$outlet_id)->pluck('outlet_name','id');
         $warehouse = Warehouse::pluck('warehouse_name','id');
         return view('admin.stockrequest.outlet_request_to_warehouse',compact('outlet','warehouse'));
     }
@@ -142,8 +146,8 @@ class StockRequestController extends Controller
      */
     public function edit($id)
     {
-        $data = OutletHasUser::where('user_id', Auth::user()->id)->first();
-        $outlet = Outlet::where('id',$data->outlet_id)->pluck('outlet_name','id');
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
+        $outlet = Outlet::where('id', $outlet_id)->pluck('outlet_name','id');
         $data = StockRequest::find($id);
 
         $stockdetails = StockRequestDetails::where('stock_request_id',$data->id)->get();
@@ -257,8 +261,15 @@ class StockRequestController extends Controller
 
     }
     public function warehouseRequest(){
+        $warehouse_id = Auth::user()->warehouse_id != null  ?  Auth::user()->warehouse_id : Warehouse::orderby('id','desc')->first('id');
+        if(Auth::user()->hasrole('Super Admin')){
+            $stockrequets = StockRequest::all();
 
-    $stockrequets = StockRequest::all();
+        }else{
+            $stockrequets = StockRequest::where('warehouse_id', $warehouse_id)->get();
+        }
+
+  
 
     return view('admin.stockrequest.warehouse_stock_request', compact('stockrequets'));
 
@@ -272,7 +283,7 @@ class StockRequestController extends Controller
 
     }
     public function hasAccepted(Request $request){
-    
+
         if($request->status == 0){
 
 

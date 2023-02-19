@@ -71,6 +71,9 @@
 tr{
     border-bottom: 1pt solid black;
 }
+.new{
+    border-bottom: none;
+}
     </style>
 </head>
 
@@ -91,19 +94,39 @@ tr{
     </div>
 
     <div class="row">
-        <hr>
-        <div class="row">
-            <div class="col-mb-4">
-        <p>Order ID: #{{ $outletInvoice->id }}
-            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp Date: {{ \Carbon\Carbon::parse($outletInvoice->created_at)->format('d-m-Y') }}</p>
-    </div>
-    @php
-    $payment = App\Models\PaymentMethod::where('id',$outletInvoice->payment_method_id)->first();
-   @endphp
 
-<div class="col-mb-6">
-    <p> Posted By: {{ Auth::user()->name }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp&nbsp;&nbsp;&nbsp;&nbsp; Pay Mode: {{ $payment->method_name  }}</p>
-</div>
+        <div class="row">
+            <table class="product-table">
+                <thead>
+                    <tr class="new">
+
+
+<tr>
+                </thead>
+                <tr class="new"><td style="width: 50px; border: none; text-align: left;">
+                    Order ID: #{{ $outletInvoice->id }}
+</td>
+<td style="width: 50px; border: none; text-align: right;">
+
+                Date: {{ \Carbon\Carbon::parse($outletInvoice->created_at)->format('d-m-Y') }}
+</td>
+</tr>
+<tr class="new">
+@php
+$payment = App\Models\PaymentMethod::where('id',$outletInvoice->payment_method_id)->first();
+@endphp
+
+<td style="width: 50px; border: none; text-align: left;"> Posted By: {{ Auth::user()->name }}</td>
+
+ <td style="width: 50px; border: none; text-align: right;">Pay Mode: {{ $payment->method_name  }}</td>
+
+            </tr>
+
+            </table>
+            <div class="col-mb-4">
+
+    </div>
+
 
 
         </div>
@@ -118,7 +141,7 @@ tr{
             <th class="product">Item</th>
             <th>Rate</th>
             <th>Qty</th>
-            <th>Amount</th>
+            <th style="text-align: right; ">Amount</th>
 
         </tr>
     </thead>
@@ -130,7 +153,7 @@ tr{
                 <td class="product"> {{ $loop->index+1 }}. {{ $item->medicine_name }} </td>
                 <td>{{ $item->rate }} </td>
                 <td>{{ $item->quantity }} </td>
-                <td>{{ $item->rate * $item->quantity }} </td>
+                <td style="text-align: right; ">{{ $item->rate * $item->quantity }} </td>
             </tr>
 
         @endforeach
@@ -140,7 +163,7 @@ tr{
     <table class="payment-table">
         <tr>
             <td colspan="3" style="text-align: right; ">Sub Total: </td>
-            <td style="width: 50px; border: none; text-align: right;"> {{ round($outletInvoice->sub_total) }} </td>
+            <td style="width: 40px; border: none; text-align: right;"> {{ round($outletInvoice->sub_total) }} </td>
 
         </tr>
         <tr>
@@ -182,7 +205,7 @@ tr{
         <tr>
 
             <td style="text-align: left; border: none;">Your Previous Points: </td>
-            <td colspan="3" style="border: none;"> <b>{{ $outletInvoice->earn_point - $customer->Points }} </b></td>
+            <td colspan="3" style="border: none;"> <b>{{  $customer->points - $outletInvoice->earn_point }} </b></td>
 
         </tr>
         <tr>
@@ -196,9 +219,9 @@ tr{
 
         </tr>
     </table>
-
+    <br>
     <div class="row justify-content-center mt-3">
-        <img style="margin-left: 110px" src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$outletInvoice->id", 'C39+') !!}" alt="barcode"   />
+        <img style="margin-left: 125px" src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$outletInvoice->id", 'C39+') !!}" alt="barcode"   />
     </div>
 
     <div class="footer">

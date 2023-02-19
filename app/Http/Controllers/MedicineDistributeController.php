@@ -28,13 +28,20 @@ class MedicineDistributeController extends Controller
          $this->middleware('permission:distribute-medicine.create', ['only' => ['create','store']]);
          $this->middleware('permission:distribute-medicine.edit', ['only' => ['edit','update']]);
          $this->middleware('permission:distribute-medicine.delete', ['only' => ['destroy']]);
+         $this->middleware('permission:distribute-medicine.checkin', ['only' => ['checkIn']]);
      }
 
     public function index()
 
     {
-        $outlet = OutletHasUser::where('user_id',Auth::user()->id)->first();
-        $medicinedistributes = MedicineDistribute::where('outlet_id',$outlet->outlet_id)->orderby('id','desc')->get();
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
+        if (Auth::user()->hasRole('Super Admin')){
+            $medicinedistributes = MedicineDistribute::orderby('id','desc')->get();
+
+        }else{
+            $medicinedistributes = MedicineDistribute::where('outlet_id',$outlet_id)->orderby('id','desc')->get();
+        }
+        
 
         return view('admin.DistributeMedicine.index', compact('medicinedistributes'));
     }

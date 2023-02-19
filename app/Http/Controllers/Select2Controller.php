@@ -138,13 +138,27 @@ class Select2Controller extends Controller
         return response()->json($response);
      }
      public function getOutlet(Request $request){
-        $search = $request->search;
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
+        if (Auth::user()->hasRole('Super Admin')){
 
-        if($search == ''){
-            $outlets = Outlet::where('is_active',1)->orderby('outlet_name','asc')->select('id','outlet_name')->limit(5)->get();
+            $search = $request->search;
+
+            if($search == ''){
+                $outlets = Outlet::where('is_active',1)->orderby('outlet_name','asc')->select('id','outlet_name')->limit(5)->get();
+            }else{
+               $outlets = Outlet::where('is_active',1)->orderby('outlet_name','asc')->select('id','outlet_name')->where('outlet_name', 'like', '%' .$search . '%')->limit(5)->get();
+            }
         }else{
-           $outlets = Outlet::where('is_active',1)->orderby('outlet_name','asc')->select('id','outlet_name')->where('outlet_name', 'like', '%' .$search . '%')->limit(5)->get();
+            $search = $request->search;
+
+            if($search == ''){
+                $outlets = Outlet::where('id',$outlet_id)->where('is_active',1)->orderby('outlet_name','asc')->select('id','outlet_name')->limit(5)->get();
+            }else{
+               $outlets = Outlet::where('id',$outlet_id)->where('is_active',1)->orderby('outlet_name','asc')->select('id','outlet_name')->where('outlet_name', 'like', '%' .$search . '%')->limit(5)->get();
+            }
         }
+        
+       
 
         $response = array();
         foreach($outlets as $outlet){

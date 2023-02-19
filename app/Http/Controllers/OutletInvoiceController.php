@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Outlet;
 use App\Models\OutletHasUser;
 use App\Models\OutletInvoice;
 use App\Models\OutletInvoiceDetails;
@@ -31,19 +32,20 @@ class OutletInvoiceController extends Controller
          $this->middleware('permission:invoice.create', ['only' => ['create','store']]);
          $this->middleware('permission:invoice.edit', ['only' => ['edit','update']]);
          $this->middleware('permission:invoice.delete', ['only' => ['destroy']]);
+
      }
     public function index()
 
 
-    {  $user  = User::find(Auth::user()->id);
+    {  $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
 
-        if ($user->hasRole('Super Admin')){
+        if (Auth::user()->hasRole('Super Admin')){
 
-            $datas = OutletInvoice::orderby('id','desc')->get();
+            $datas = OutletInvoice::whereDate('sale_date','>=',Carbon::now()->month())->orderby('id','desc')->get();
             return view('admin.Pos.index_pos',compact('datas'));
         }else{
 
-        $datas = OutletInvoice::where('outlet_id',Auth::user()->outlet_id)->orderby('id','desc')->get();
+        $datas = OutletInvoice::whereDate('sale_date','>=',Carbon::now()->month())->where('outlet_id',$outlet_id)->orderby('id','desc')->get();
         return view('admin.Pos.index_pos',compact('datas'));
 
         }
@@ -57,7 +59,9 @@ class OutletInvoiceController extends Controller
      */
     public function create()
     { $payment_methods = PaymentMethod::pluck('method_name', 'id');
-        $outlet_id = OutletHasUser::where('user_id', Auth::user()->id)->first();
+
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
+        // $outlet_id = OutletHasUser::where('user_id', Auth::user()->id)->first();
 
          return view('admin.Pos.pos',compact('outlet_id','payment_methods'));
     }
@@ -98,7 +102,7 @@ class OutletInvoiceController extends Controller
                 'mobile' => $input['mobile'],
                 'address' =>  $input['address'],
                 'outlet_id' => $input['outlet_id'],
-                'points'  => $input['points'],
+                'points'  => round(($input['grand_total']/100),2),
 
                );
           $customer =  Customer::create($customerdetails);
@@ -232,18 +236,18 @@ return response()->json([
 
 
     public function getoutletStock(Request $request){
-        $outlet_id = OutletHasUser::where('user_id',Auth::user()->id)->first();
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
 
         $search = $request->search;
         if($search == ''){
 
-            $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id->outlet_id )->where('outlet_stocks.quantity' ,'>' ,'0')
+            $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id )->where('outlet_stocks.quantity' ,'>' ,'0')
             ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
             ->select('outlet_stocks.medicine_id as id','outlet_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name','medicines.id as medicine_id')->limit(20)->get();
 
          }else{
 
-            $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id->outlet_id )->where('outlet_stocks.quantity' ,'>' ,'0')
+            $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id )->where('outlet_stocks.quantity' ,'>' ,'0')
             ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
             ->select('outlet_stocks.medicine_id as id','outlet_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name' ,'medicines.id as medicine_id')->where('medicine_name', 'like', '%' .$search . '%')->get();
 
@@ -263,8 +267,8 @@ return response()->json([
 
       public function get_medicine_details_for_sale($id){
 
-        $outlet_id = OutletHasUser::where('user_id',Auth::user()->id)->first();
-        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id->outlet_id )->where('outlet_stocks.medicine_id' ,'=' , $id)
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
+        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id )->where('outlet_stocks.medicine_id' ,'=' , $id)
         ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
         ->select('outlet_stocks.*','medicines.medicine_name as medicine_name')->first();
 

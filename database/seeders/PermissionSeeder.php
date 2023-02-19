@@ -60,17 +60,19 @@ class PermissionSeeder extends Seeder
             'customer.management',
             'customer.create',
             'customer.edit',
-            'customer.delete',
+            'customer.delete', 
 
             'medchine_purchase.management',
             'medchine_purchase.create',
             'medchine_purchase.edit',
             'medchine_purchase.delete',
+            'medchine_purchase.checkin',
 
             'distribute-medicine.management',
             'distribute-medicine.create',
             'distribute-medicine.edit',
             'distribute-medicine.delete',
+            'distribute-medicine.checkin',
 
 
             'warehouse.management',
