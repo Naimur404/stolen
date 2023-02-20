@@ -18,6 +18,8 @@ class MedicineDistribute extends Model
         'outlet_id',
         'added_by',
         'remarks',
+        'has_sent',
+        'has_received',
     ];
 
     public function outlet()

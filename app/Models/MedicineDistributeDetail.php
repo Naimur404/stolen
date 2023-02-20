@@ -17,5 +17,7 @@ class MedicineDistributeDetail extends Model
         'expiry_date',
         'quantity',
         'rate',
+        'has_sent',
+        'has_received',
     ];
 }
