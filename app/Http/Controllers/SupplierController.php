@@ -74,8 +74,6 @@ class SupplierController extends Controller
             'manufacturer_id' => 'required',
             'supplier_name' => 'required|string',
             'mobile' => 'required|min:11',
-            'address' => 'required'
-
 
            ]);
         $input = $request->all();
@@ -84,13 +82,13 @@ class SupplierController extends Controller
         try{
              $supplier = Supplier::create($input);
 
-             foreach ($manufacturers as $manufacturer){
-                 SupplierHasManufacturer::create([
+            foreach ($manufacturers as $manufacturer) {
+                SupplierHasManufacturer::create([
                     'manufacturer_id' => $manufacturer,
-                     'supplier_id' => $supplier->id,
+                    'supplier_id' => $supplier->id,
 
-                 ]);
-             }
+                ]);
+            }
 
 
              return redirect()->back()->with('success', 'Data has been added.');

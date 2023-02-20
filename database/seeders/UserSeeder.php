@@ -35,6 +35,10 @@ class UserSeeder extends Seeder
 
             $user->assignRole([$role->id]);
         }
+        else{
+            $user = User::where('email', '=', 'admin@admin.com')->first();
+            $user->assignRole([$role->id]);
+        }
 
     }
 }

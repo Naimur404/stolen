@@ -7,9 +7,11 @@ use App\Models\MedicinePurchaseDetails;
 use App\Models\PaymentMethod;
 use App\Models\Warehouse;
 use App\Models\WarehouseCheckIn;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class MedicinePurchaseController extends Controller
 {
@@ -19,23 +21,24 @@ class MedicinePurchaseController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     function __construct()
-     {
-         $this->middleware('permission:medchine_purchase.management|medchine_purchase.create|medchine_purchase.edit|medchine_purchase.delete', ['only' => ['index','store']]);
-         $this->middleware('permission:medchine_purchase.create', ['only' => ['create','store']]);
-         $this->middleware('permission:medchine_purchase.edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:medchine_purchase.delete', ['only' => ['destroy']]);
-         $this->middleware('permission:medchine_purchase.checkin', ['only' => ['checkIn']]);
-     }
+    function __construct()
+    {
+        $this->middleware('permission:medchine_purchase.management|medchine_purchase.create|medchine_purchase.edit|medchine_purchase.delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:medchine_purchase.create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:medchine_purchase.edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:medchine_purchase.delete', ['only' => ['destroy']]);
+        $this->middleware('permission:medchine_purchase.checkin', ['only' => ['checkIn']]);
+    }
+
     public function index()
     {
-        $warehouse_id = Auth::user()->warehouse_id != null  ?  Auth::user()->warehouse_id : Warehouse::orderby('id','desc')->first('id');
-        if(Auth::user()->hasrole('Super Admin')){
+        $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
+        if (Auth::user()->hasrole('Super Admin')) {
             $productPurchases = MedicinePurchase::orderBy('id', 'desc')->get();
-        }else{
-            $productPurchases = MedicinePurchase::where('id',$warehouse_id)->orderBy('id', 'desc')->get();
+        } else {
+            $productPurchases = MedicinePurchase::where('id', $warehouse_id)->orderBy('id', 'desc')->get();
         }
-      
+
         return view('admin.medchine_purchase.index', compact('productPurchases'));
     }
 
@@ -47,110 +50,111 @@ class MedicinePurchaseController extends Controller
     public function create()
     {
         // $leafs = LeafSetting::all();
-        $warehouse_id = Auth::user()->warehouse_id != null  ?  Auth::user()->warehouse_id : Warehouse::orderby('id','desc')->first('id');
+        $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
         $payment_methods = PaymentMethod::pluck('method_name', 'id');
-        if(Auth::user()->hasrole('Super Admin')){
+        if (Auth::user()->hasrole('Super Admin')) {
 
             $warehouse = Warehouse::pluck('warehouse_name', 'id');
-        }else{
-            $warehouse = Warehouse::where('id' ,$warehouse_id)->pluck('warehouse_name', 'id');
+        } else {
+            $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name', 'id');
         }
-       
-        return view('admin.medchine_purchase.create', compact('payment_methods','warehouse'));
+
+        return view('admin.medchine_purchase.create', compact('payment_methods', 'warehouse'));
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
     {
         $request->validate([
-            'invoice_image'=> 'mimes:jpeg,jpg,png,ico,JPG|max:2048',
+            'invoice_image' => 'mimes:jpeg,jpg,png,ico,JPG|max:2048',
         ]);
 
 
-
-        $input=$request->all();
+        $input = $request->all();
 
         // return $input;
 
         if ($request->hasFile('invoice_image')) {
-            $file=$request->file('invoice_image');
-            $input['invoice_image']=imageUp($file);
-        }else{
+            $file = $request->file('invoice_image');
+            $input['invoice_image'] = imageUp($file);
+        } else {
             $input['invoice_image'] = '';
         }
 
-        if($request->total_discount == null){
-             $input['total_discount'] = 0.00;
+        if ($request->total_discount == null) {
+            $input['total_discount'] = 0.00;
         }
 
-        if($request->vat == null){
-             $input['vat'] = 0.00;
+        if ($request->vat == null) {
+            $input['vat'] = 0.00;
         }
 
         $purchase_input = [
-            'warehouse_id' => $input['warehouse_id'],
+            'warehouse_id' => (int)$input['warehouse_id'],
             'invoice_no' => $input['invoice_no'],
             'invoice_image' => $input['invoice_image'],
-
-            'purchase_date' => $input['purchase_date'],
-
-            'payment_method_id' => $input['payment_method_id'],
-            'supplier_id' => $input['supplier_id'],
+            'purchase_date' => Carbon::parse($input['purchase_date'])->toDateString(),
+            'payment_method_id' => (int)$input['payment_method_id'],
+            'supplier_id' => (int)$input['supplier_id'],
             'purchase_details' => $input['purchase_details'],
-            'sub_total' => $input['sub_total'],
-            'grand_total' => $input['grand_total'],
-            'total_discount' => $input['total_discount'],
+            'sub_total' => (double)$input['sub_total'],
+            'grand_total' => (double)$input['grand_total'],
+            'total_discount' => (double)$input['total_discount'],
             'paid_amount' => round($input['paid_amount']),
-            'due_amount' => $input['due_amount'],
-            'vat' => $input['vat'],
+            'due_amount' => (double)$input['due_amount'],
+            'vat' => (double)$input['vat'],
             'added_by' => Auth::user()->id,
 
         ];
         try {
+            Log::info($purchase_input);
             $purchase = MedicinePurchase::create($purchase_input);
 
             $medicines = $input['product_name'];
+            Log::info($medicines);
 
             for ($i = 0; $i < sizeof($medicines); $i++) {
                 $purchase_details = array(
-                    'warehouse_id' => $input['warehouse_id'],
+                    'warehouse_id' => (int)$input['warehouse_id'],
                     'medicine_purchase_id' => $purchase->id,
-                    'medicine_id' => $input['product_id'][$i],
+                    'medicine_id' => (int)$input['product_id'][$i],
                     'medicine_name' => $input['product_name'][$i],
-                    'prouct_type' => $input['product_type'][$i],
-                    'quantity' => $input['quantity'][$i],
+                    'product_type' => $input['product_type'][$i],
+                    'quantity' => (int)$input['quantity'][$i],
                     'rack_no' => $input['rack_no'][$i],
-                    'expiry_date' => $input['expiry_date'][$i],
-                    'manufacturer_price' => $input['manufacturer_price'][$i],
-                    'box_mrp' => $input['box_mrp'][$i],
-                    'total_price' => $input['total_price'][$i],
-                    'rate' => $input['total_price'][$i] / $input['quantity'][$i],
-                    'total_amount' => $purchase->grand_total,
-                    'total_discount' => $input['total_discount'],
-                    'vat' => $purchase->vat,
+                    'expiry_date' => Carbon::parse($input['expiry_date'][$i])->toDateString(),
+                    'manufacturer_price' => (double)$input['manufacturer_price'][$i],
+                    'box_mrp' => (double)$input['box_mrp'][$i],
+                    'total_price' => (double)$input['total_price'][$i],
+                    'rate' => round($input['total_price'][$i] / $input['quantity'][$i], 2),
+                    'total_amount' => (double)$purchase->grand_total,
+                    'total_discount' => (double)$input['total_discount'],
+                    'vat' => (double)$purchase->vat,
 
                 );
 
+                Log::info($purchase_details);
 
-                MedicinePurchaseDetails::create($purchase_details);
+                $details = MedicinePurchaseDetails::create($purchase_details);
+                Log::info($details);
             }
 
 
             return redirect()->back()->with('success', 'Data has been added.');
         } catch (Exception $e) {
-             return redirect()->back()->with('error', $e->getMessage());
-         }
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\medicinePurchase  $medicinePurchase
+     * @param \App\medicinePurchase $medicinePurchase
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -165,7 +169,7 @@ class MedicinePurchaseController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\medicinePurchase  $medicinePurchase
+     * @param \App\medicinePurchase $medicinePurchase
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -180,8 +184,8 @@ class MedicinePurchaseController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\medicinePurchase  $medicinePurchase
+     * @param \Illuminate\Http\Request $request
+     * @param \App\medicinePurchase $medicinePurchase
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, medicinePurchase $medicinePurchase)
@@ -201,7 +205,7 @@ class MedicinePurchaseController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\medicinePurchase  $medicinePurchase
+     * @param \App\medicinePurchase $medicinePurchase
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -214,49 +218,52 @@ class MedicinePurchaseController extends Controller
     }
 
 
-    public function get_all_purchase_medicine(Request $request){
+    public function get_all_purchase_medicine(Request $request)
+    {
 
         $search = $request->search;
 
 
-          if($search == ''){
-             $sale_medicines = MedicinePurchaseDetails::distinct()->orderby('id','asc'
-             )
-             ->where('medicine_type', '=', $request->medicineType)
-             ->select('medicine_id','medicine_name', 'medicine_type')
-             ->get();
-          }else{
-             $sale_medicines = medicinePurchaseDetails::distinct()->orderby('id','asc')
-             ->where('medicine_type', '=', $request->medicineType)
-             ->select('medicine_id','medicine_name','medicine_type')
-             ->where('medicine_name', 'like', '%' .$search . '%')
-             ->get();
-          }
+        if ($search == '') {
+            $sale_medicines = MedicinePurchaseDetails::distinct()->orderby('id', 'asc'
+            )
+                ->where('medicine_type', '=', $request->medicineType)
+                ->select('medicine_id', 'medicine_name', 'medicine_type')
+                ->get();
+        } else {
+            $sale_medicines = medicinePurchaseDetails::distinct()->orderby('id', 'asc')
+                ->where('medicine_type', '=', $request->medicineType)
+                ->select('medicine_id', 'medicine_name', 'medicine_type')
+                ->where('medicine_name', 'like', '%' . $search . '%')
+                ->get();
+        }
 
-          $response = array();
-          foreach($sale_medicines as $medicine){
-             $response[] = array(
-                  "id"=>$medicine->medicine_id,
-                  "text"=>$medicine->medicine_name. '('. $medicine->medicine_type.')'
-             );
-          }
+        $response = array();
+        foreach ($sale_medicines as $medicine) {
+            $response[] = array(
+                "id" => $medicine->medicine_id,
+                "text" => $medicine->medicine_name . '(' . $medicine->medicine_type . ')'
+            );
+        }
 
-          return response()->json($response);
-      }
+        return response()->json($response);
+    }
 
 
-    public function get_type_wise_medicine_details($medicine_id, $medicine_type){
+    public function get_type_wise_medicine_details($medicine_id, $medicine_type)
+    {
         $medicine_details = medicinePurchaseDetails::
-                                                where('medicine_id', $medicine_id)
-                                                ->where('medicine_type', '=', $medicine_type)
-                                                ->select('id','medicine_id','medicine_name','medicine_type','expiry_date','stock_quantity','rate')
-                                                ->first();
+        where('medicine_id', $medicine_id)
+            ->where('medicine_type', '=', $medicine_type)
+            ->select('id', 'medicine_id', 'medicine_name', 'medicine_type', 'expiry_date', 'stock_quantity', 'rate')
+            ->first();
         $medicine_details->stock_quantity = medicinePurchaseDetails::
-                                    where('medicine_id', $medicine_id)
-                                        ->where('medicine_type', '=', $medicine_type)
-                                        ->sum('stock_quantity');
+        where('medicine_id', $medicine_id)
+            ->where('medicine_type', '=', $medicine_type)
+            ->sum('stock_quantity');
         return json_encode($medicine_details);
     }
+
     public function checkIn($id)
     {
 

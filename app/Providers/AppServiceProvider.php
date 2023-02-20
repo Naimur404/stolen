@@ -29,10 +29,10 @@ class AppServiceProvider extends ServiceProvider
         $project_title = '| Pharmassist';
         View::share('title', $project_title);
 
-//        if (Schema::hasTable('settings')) {
+        if (Schema::hasTable('settings')) {
             $app_setting = Settings::first();
             View::share('app_setting', $app_setting);
-//        }
+        }
 
     }
 }

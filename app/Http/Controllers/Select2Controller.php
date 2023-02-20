@@ -157,8 +157,8 @@ class Select2Controller extends Controller
                $outlets = Outlet::where('id',$outlet_id)->where('is_active',1)->orderby('outlet_name','asc')->select('id','outlet_name')->where('outlet_name', 'like', '%' .$search . '%')->limit(5)->get();
             }
         }
-        
-       
+
+
 
         $response = array();
         foreach($outlets as $outlet){
@@ -199,24 +199,25 @@ class Select2Controller extends Controller
       }
 
 
-  public function get_user(Request $request){
-    $outlet_id = OutletHasUser::where('user_id',Auth::user()->id)->first();
-    $search = $request->search;
-    if($search == ''){
-      $customers = Customer::where('outlet_id',$outlet_id->outlet_id)->limit(10)->get();
-    }else{
-        $customers = Customer::where('outlet_id',$outlet_id->outlet_id)->where('mobile', 'like', '%' .$search . '%')->limit(10)->get();
+    public function get_user(Request $request)
+    {
+        $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+        $search = $request->search;
+        if ($search == '') {
+            $customers = Customer::where('outlet_id', $outlet_id)->limit(10)->get();
+        } else {
+            $customers = Customer::where('outlet_id', $outlet_id)->where('mobile', 'like', '%' . $search . '%')->limit(10)->get();
 
-    }
-    $response = array();
-         foreach($customers as $customers){
+        }
+        $response = array();
+        foreach ($customers as $customers) {
             $response[] = array(
-                 "id"=>$customers->mobile,
-                 "text"=>$customers->mobile,
+                "id" => $customers->mobile,
+                "text" => $customers->mobile,
             );
-         }
-         return response()->json($response);
-  }
+        }
+        return response()->json($response);
+    }
   public function get_user_details($id){
             $customer = Customer::where('mobile',$id)->first();
 
