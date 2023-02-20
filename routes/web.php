@@ -197,6 +197,7 @@ Route::get('/stock/warehouse-request', [StockRequestController::class,'warehouse
 //sales return route
 
 Route::resource('sale-return', SalesReturnController::class);
+Route::get('sale-return/{id}/details', [SalesReturnController::class,'details'])->name('sale-return.details');
 
 });
 

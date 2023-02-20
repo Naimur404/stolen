@@ -1,7 +1,3 @@
-
-
-
-
 @extends('layouts.admin.master')
 @section('title')Sales Return
 @endsection
@@ -35,29 +31,28 @@
 	@endcomponent
 <div class="col-md-12 col-lg-12">
     <div class="card">
+        {!! Form::open(['route' => ['sale-return.store'], 'method' => 'post', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
         <div class="card-header py-2">
             <div class="d-flex justify-content-between align-items-center">
 
-              
+
             </div>
         </div>
 
         <div class="card-body">
-            {!! Form::open(['route' => ['sale-return.index'], 'method' => 'PUT', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
+
 
             <div class="service_invoice_header">
                 <div class="row">
                     <div class="col-md-8"><b>Invoice Id : #{{ $data->id }}</b></div>
-                 
+                     <input type="hidden" name="invoice_id" value="{{ $data->id }}">
                     <div class="col-md-4"><b>Sale Date : {{ \Carbon\Carbon::parse($data->sale_date)->format('d-m-Y') }}
                     </b></div>
                 </div>
 
                 <div class="row">
-                    @php
-                    $outlet = App\Models\Outlet::where('id',$data->outlet_id)->first();
-                   @endphp
-                    <div class="col-md-8"><b>Outlet Name :  {{ $outlet->outlet_name }}</b></div>
+                    <input type="hidden" name="outlet_id" value="{{ $data->outlet_id }}">
+                    <div class="col-md-8"><b>Outlet Name :  {{ $data->outlet->outlet_name }}</b></div>
                     {{-- <div class="col-md-4"> <b>
                             @if ($productPurchase->supplier_id == null)
                                 N/A
@@ -65,14 +60,13 @@
                                 {{ $productPurchase->supplier->supplier_name }}
                             @endif
                         </b></div> --}}
-                        @php
-                        $customer = App\Models\Customer::where('id',$data->customer_id)->first();
-                       @endphp
-                        <div class="col-md-4"><b>Customer Phone : {{ $customer->mobile }}</b>
+
+                        <input type="hidden" name="customer_id" value="{{ $data->customer_id }}">
+                        <div class="col-md-4"><b>Customer Phone : {{ $data->customer->mobile }}</b>
                         <b></b></div>
                 </div>
-               
-             
+
+
             </div>
 
             <div class="card mt-5">
@@ -82,10 +76,6 @@
                 </div>
 
                 <div class="card-body">
-
-                  
-
-
                     <div class="table-responsive pt-2">
                         <table class="table table-bordered table-hover" id="purchaseTable">
                             <thead>
@@ -93,27 +83,27 @@
                                 <th class="text-center">
                                     <nobr>Medicine<i class="text-danger">*</i></nobr>
                                 </th>
-                               
+
                                 <th class="text-center">
                                     <nobr>Expiry Date<i class="text-danger">*</i></nobr>
                                 </th>
-                             
+
                                 <th class="text-center">
                                     <nobr>QTY <i class="text-danger">*</i></nobr>
                                 </th>
                                 <th class="text-center">
                                     <nobr>Return <i class="text-danger">*</i></nobr>
                                 </th>
-                             
+
                                 <th class="text-center">
                                     <nobr>Price<i class="text-danger">*</i></nobr>
                                 </th>
-                               
+
                                 <th class="text-center">
                                     <nobr>Total Price</nobr>
                                 </th>
-                               
-                               
+
+
                             </tr>
                             @foreach ($medicinedetails as $details)
 
@@ -132,7 +122,7 @@
                                  <input class="form-control" type="hidden" name="returnamount[]"  readonly="" id="returnamount" value="">
                                  <td><input class="form-control total" name="total_price[]" type="text" id="product_type" readonly="" required="" value="{{ $details->rate * $details->quantity }}"></td>
 
-                              
+
                             </tr>
                             @endforeach
                             </thead>
@@ -143,18 +133,19 @@
                                     <input type="number" class="form-control text-right" name="sub_total"
                                            id="subtotal" readonly>
                                 </td>
-                             
+
                             </tr>
                             <tr>
                                 <td class="text-right" colspan="5"><b>Deduct Amount :</b></td>
                                 <td class="text-right">
                                     <input type="number" class="form-control text-right" name="deduct_amount"
-                                           id="deduct_amount" readonly>
+                                           id="deduct_amount"  onkeyup="prevent_amount()"
+                                           onchange="prevent_amount()" required>
                                 </td>
-                                
+
                             </tr>
-                            
-                       
+
+
                             <tr>
                                 <td class="text-right" colspan="5"><b>Grand Total :</b></td>
                                 <td class="text-right">
@@ -162,16 +153,16 @@
                                            id="grandTotal" readonly="readonly"
                                            required> {{-- <span id="grandTotal">0</span> --}}
                                 </td>
-                                
+
                             </tr>
                             <tr>
-                                <td class="text-right" colspan="5"><b>Back Amount :</b></td>
+                                <td class="text-right" colspan="5"><b>Retrun Amount :</b></td>
                                 <td class="text-right">
                                     <input type="number" id="pay" class="text-right form-control "
                                            name="paid_amount" value="0" onkeyup="prevent_paid_amount()"
                                            onchange="prevent_paid_amount()" tabindex="16" step=".01"/>
                                 </td>
-                                
+
                             </tr>
                             <tr>
                                 <td class="text-right" colspan="5"><b>Due Amount :</b></td>
@@ -179,20 +170,24 @@
                                     <input type="number" id="due" class="text-right form-control" name="due_amount"
                                            value="0" readonly="readonly"/>
                                 </td>
-                                
+
                             </tr>
                             </tbody>
                         </table>
                     </div>
                     <div class="form-group row">
-                        <div class="col-md-6 text-right">
+                        <div class="col-md-4 text-right">
+                            <label for="payment_type" class="text-right col-form-label mt-3">Payment Method *</label>
+
+                            {{ Form::select( 'payment_method_id', $payment_methods, null, ['class' => 'form-control', 'required' ,'required'], ) }}
+                            <div class="invalid-feedback">Please Add Payment Type</div>
                         </div>
-                        <div class="col-md-6 text-right">
+                        <div class="col-md-8 text-right">
                             <div class="card-footer text-end">
                                 <div class="mt-4">
 
                                     <button type="button" id="full_paid" class="btn btn-warning" tabindex="19">
-                                      Return Back Full 
+                                      Return Back Full
                                     </button>
                                     <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase">
                                         Save
@@ -204,12 +199,13 @@
 
                 </div>
             </div>
-           
 
-            {!! Form::close() !!}
+
+
 
         </div>
     </div>
+    {!! Form::close() !!}
 </div>
 
 @push('scripts')
@@ -220,11 +216,20 @@
 <script type="text/javascript">
 
 
+function prevent_amount() {
+        var paid_amount = $("#deduct_amount").val();
+        var grand_total_amount = $("#subtotal").val();
+        if (parseFloat(grand_total_amount) < parseFloat(paid_amount)) {
+            alert("Deduct amount not more than sub total.");
+            $("#deduct_amount").val("");
+        }
+    }
+
     function prevent_paid_amount() {
         var paid_amount = $("#pay").val();
-        var grand_total_amount = $("#deduct_amount").val();
+        var grand_total_amount = $("#grandTotal").val();
         if (parseFloat(grand_total_amount) < parseFloat(paid_amount)) {
-            alert("You can not back amount not more than reduct amount.");
+            alert("Back amount not more than grand total.");
             $("#pay").val("");
         }
     }
@@ -251,7 +256,7 @@
 
         let backamount = '';
         $("#full_paid").on('click', function () {
-            backamount  = $("#deduct_amount").val();
+            backamount  = $("#grandTotal").val();
             $("#pay").val(backamount);
         });
         // payment validations
@@ -263,31 +268,31 @@
         });
         let grandTotal = '';
         $("#pay").on('click', function () {
-            grandTotal = $("#deduct_amount").val();
+            grandTotal = $("#grandTotal").val();
             $("#pay").attr({
-                max: deduct_amount,
+                max: grandTotal,
             });
         });
 
         //   percentage live calculations
-      
-
-  
 
 
-   
+
+
+
+
 
     // select manufacturer
 
 
         // manufacturer wise medicine selection
-      
+
 
 
         //  get medicine id
-      
 
-    
+
+
 
 
         // purchase invoice generator
@@ -306,13 +311,13 @@
             subtotal: "#subtotal",
             discount: "#discount",
             // shipping : "#shipping",
-            vat: "#vat", 
+            vat: "#vat",
             returnqty: "#returnqty",
             deduct: "#deduct_amount",
             grandTotal: "#grandTotal",
             return: ".returnqty",
             returnamount: "#returnamount",
-            deduct_amount: "#deduct_amount",
+            deductamount: "#deduct_amount",
             pay: "#pay",
             due: "#due"
         });
