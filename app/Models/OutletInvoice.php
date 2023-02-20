@@ -41,4 +41,5 @@ class OutletInvoice extends Model
     {
         return $this->hasOne(Customer::class, 'id', 'customer_id');
     }
+
 }

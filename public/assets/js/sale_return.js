@@ -65,8 +65,8 @@ Invoice.prototype = {
         this.calcGrandTotal();
         this.calcPayment();
         this.datePicker();
-        this.calcReturn();
-        this.calcSubtotaRetrun();
+        // this.calcReturn();
+        // this.calcSubtotaRetrun();
 
         // var row_index;
 
@@ -115,20 +115,20 @@ Invoice.prototype = {
     },
 
 
-    calcReturn: function() {
-        jQuery($.opt.parentClass).each(function(i) {
-            var row = jQuery(this);
-            var amount = row.find($.opt.price).val() * row.find($.opt.return).val();
+    // calcReturn: function() {
+    //     jQuery($.opt.parentClass).each(function(i) {
+    //         var row = jQuery(this);
+    //         var amount = row.find($.opt.price).val() * row.find($.opt.return).val();
 
-            amount = self.roundNumber(amount, 2);
+    //         amount = self.roundNumber(amount, 2);
 
-            // row.find($.opt.amount).html(amount);
+    //         // row.find($.opt.amount).html(amount);
 
-            row.find($.opt.returnamount).val(amount);
-        });
+    //         row.find($.opt.returnamount).val(amount);
+    //     });
 
-        return 1;
-    },
+    //     return 1;
+    // },
 
     /***
      * Calculate total quantity of an order.
@@ -174,25 +174,25 @@ Invoice.prototype = {
         return 1;
     },
 
-    calcSubtotaRetrun: function() {
-        var subtotalreturn = 0;
-        jQuery($.opt.returnamount).each(function(i) {
-            var returnamount = jQuery(this).val();
-            // var total = jQuery(this).html();
-            if (!isNaN(returnamount)) subtotalreturn  += Number(returnamount);
-        });
+    // calcSubtotaRetrun: function() {
+    //     var subtotalreturn = 0;
+    //     jQuery($.opt.returnamount).each(function(i) {
+    //         var returnamount = jQuery(this).val();
+    //         // var total = jQuery(this).html();
+    //         if (!isNaN(returnamount)) subtotalreturn  += Number(returnamount);
+    //     });
 
-        subtotalreturn = self.roundNumber(subtotalreturn, 2);
+    //     subtotalreturn = self.roundNumber(subtotalreturn, 2);
 
-        //  console.log('sub total '+subtotal);
+    //     //  console.log('sub total '+subtotal);
 
-        jQuery($.opt.deduct_amount).val(subtotalreturn);
-        // jQuery($.opt.subtotal).html(subtotal);
+    //     jQuery($.opt.deduct_amount).val(subtotalreturn);
+    //     // jQuery($.opt.subtotal).html(subtotal);
 
-        // $('#subtotal').val(subtotal);
+    //     // $('#subtotal').val(subtotal);
 
-        return 1;
-    },
+    //     return 1;
+    // },
 
     /**
      * Calculate grand total of an order.
@@ -211,24 +211,19 @@ Invoice.prototype = {
     // },
 
     calcGrandTotal: function() {
-        if(Number(jQuery($.opt.deduct_amount).val()) >  Number(jQuery($.opt.subtotal).val())){
-             var grandTotal = Number(jQuery($.opt.deduct_amount).val());
+
+            var grandTotal = Number(jQuery($.opt.subtotal).val())
+            - Number(jQuery($.opt.deduct_amount).val());
        grandTotal = self.roundNumber(grandTotal, 2);
        jQuery($.opt.grandTotal).val(grandTotal);
        return 1;
-        }else{
-            var grandTotal = Number(jQuery($.opt.subtotal).val()) 
-            - Number(jQuery($.opt.deduct_amount).val());
-       grandTotal = self.roundNumber(grandTotal, 2);
-       jQuery($.opt.grandTotal).val(grandTotal);  
-         
-        }
-     
+
+
     },
- 
+
 
     calcPayment: function() {
-        var due = Number(jQuery($.opt.deduct_amount).val()) -
+        var due = Number(jQuery($.opt.grandTotal).val()) -
             Number(jQuery($.opt.pay).val());
         due = self.roundNumber(due, 2);
         jQuery($.opt.due).val(due);
@@ -236,7 +231,12 @@ Invoice.prototype = {
     },
 
 
-  
+    // calcBack: function() {
+    //     var back = Number(jQuery($.opt.deduct_amount).val())
+    //     back = self.roundNumber(back, 2);
+    //     jQuery($.opt.pay).val(back);
+    //     return 1;
+    // },
 
     datePicker: function() {
         // $(".invoice_datepicker").datepicker({ minDate: 0 });
@@ -249,7 +249,7 @@ Invoice.prototype = {
      *
      * @returns {number}
      */
-   
+
 
 
 
@@ -328,8 +328,8 @@ Invoice.prototype = {
  *  Publicly accessible defaults.
  */
 jQuery.fn.invoice.defaults = {
- 
-   
+
+
     parentClass: ".item-row",
     price: ".price",
     qty: ".qty",
