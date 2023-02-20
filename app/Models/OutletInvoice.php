@@ -36,4 +36,9 @@ class OutletInvoice extends Model
     {
         return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
     }
+
+    public function customer()
+    {
+        return $this->hasOne(Customer::class, 'id', 'customer_id');
+    }
 }

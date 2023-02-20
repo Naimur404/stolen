@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Outlet;
 use App\Models\Warehouse;
 use App\Models\WarehouseReturn;
 use App\Models\WarehouseReturnDetails;
