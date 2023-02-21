@@ -30,6 +30,11 @@
             margin: 10px 0;
 
         }
+        .pos-logo{
+            max-height: 100px;
+            max-width: 300px;
+            filter: grayscale(100%);
+        }
 
 
         .footer {
@@ -87,7 +92,8 @@
             $outlet = App\Models\Outlet::where('id',$outletInvoice->outlet_id)->first();
         @endphp
 
-        <p><b style="font-size: 25px">{{ $outlet->outlet_name }}</b> <br>
+        <img class="pos-logo" src="{{asset('uploads/'.$app_setting->logo)}}" alt="">
+        <p><b style="font-size: 20px">{{ $outlet->outlet_name }}</b> <br>
             {{ $outlet->address }} <br>
             {{ $outlet->mobile }}</p>
 
