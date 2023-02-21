@@ -55,7 +55,8 @@ class MedicineDistributeController extends Controller
     public function create()
     {
         $warehouse = Warehouse::pluck('warehouse_name', 'id');
-        return view('admin.DistributeMedicine.create',compact('warehouse'));
+        $outlets = Outlet::pluck('outlet_name', 'id');
+        return view('admin.DistributeMedicine.create',compact('warehouse', 'outlets'));
     }
 
     /**

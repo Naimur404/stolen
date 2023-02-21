@@ -49,7 +49,7 @@
 
                 <label for="invoicePhoto" class="col-md-2 text-right">Warehouse Name * :</label>
                 <div class="col-md-4">
-                    {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required' ,'id' => 'warehouse'] ) }}
+                    {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required', 'placeholder' => 'Select Warehouse', 'id' => 'warehouse'] ) }}
                     <div class="invalid-feedback">Please Add Warehouse</div>
                     @error('warehouse_id')
                     <div class="invalid-feedback2"> {{ $message }}</div>
@@ -59,7 +59,7 @@
 
                 <label for="supplier" class="col-md-2 text-right col-form-label">Outlet:</label>
                 <div class="col-md-4">
-                    {{ Form::select('outlet_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'supplier_id']) }}
+                    {{ Form::select('outlet_id', $outlets, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet']) }}
                     <div class="invalid-feedback">Please Add Outlet</div>
                     @error('outlet_id')
                     <div class="invalid-feedback2"> {{ $message }}</div>
@@ -160,7 +160,7 @@
                                     <th class="text-center">
                                         <nobr>MRP<i class="text-danger">*</i></nobr>
                                     </th>
-                                  
+
                                     <th class="text-center">
                                         <nobr>Total Price</nobr>
                                     </th>
