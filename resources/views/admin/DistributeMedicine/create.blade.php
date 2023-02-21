@@ -311,8 +311,9 @@ function clearInput1(target){
             // })
             let warehouse_id = '';
             // manufacturer wise medicine selection
-            $("#warehouse").on('click', function() {
+            $("#warehouse").on('change', function() {
                 warehouse_id = $(this).val();
+            });
             $("#medicine_id").select2({
                 ajax: {
                     url: "{!! url('get-warehouse-Stock') !!}"  + "/" + warehouse_id,
