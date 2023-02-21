@@ -18,17 +18,17 @@ class WarehouseOutletSeeder extends Seeder
     public function run()
     {
         $warehouseData = [
-            'warehouse_name' => 'Main Warehouse',
-            'address' => 'Dhaka',
+            'warehouse_name' => 'Tohirun Plaza Warehouse',
+            'address' => 'Adamdighi',
             'mobile' => '01710000000',
             'is_active' => true,
         ];
         Warehouse::firstOrCreate($warehouseData);
 
         $outletData = [
-            'outlet_name' => 'Moonlight Pharmacy',
-            'address' => 'Bogura',
-            'mobile' => '01810000000',
+            'outlet_name' => 'Khairun Necha Bhaban Outlet',
+            'address' => 'Adamdighi',
+            'mobile' => '01321-025961',
             'is_active' => true,
         ];
         Outlet::firstOrCreate($outletData);
@@ -37,7 +37,7 @@ class WarehouseOutletSeeder extends Seeder
         foreach ($outlets as $outlet) {
             Customer::firstOrCreate([
                 'name' => 'Walking Customer',
-                'mobile' => '01700000000',
+                'mobile' => '00000000000',
                 'address' => 'N/A',
                 'outlet_id' => $outlet->id,
                 'points' => 0,

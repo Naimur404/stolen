@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+use App\Models\Outlet;
 use App\Models\User;
+use App\Models\Warehouse;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -17,28 +19,53 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
+        // Admin Seeder
+        $adminExists = User::where('email', '=', 'admin@admin.com')->exists();
+        $adminRole = Role::where(['name' => 'Admin'])->first();
 
-        $userExists = User::where('email', '=', 'admin@admin.com')->exists();
-        $role = Role::firstOrCreate(['name' => 'Super Admin']);
-
-        $permissions = Permission::pluck('id','id')->all();
-
-        $role->syncPermissions($permissions);
-
-        if (!$userExists) {
+        if (!$adminExists && $adminRole){
             $user = User::create([
-                'name' => 'Ariful Islam',
+                'name' => 'Admin',
                 'email' => 'admin@admin.com',
                 'email_verified_at' => now(),
-                'password' => bcrypt('12345678')
+                'password' => bcrypt('12345678'),
+                'warehouse_id' => Warehouse::orderBy('id', 'desc')->first()->id
             ]);
 
-            $user->assignRole([$role->id]);
-        }
-        else{
-            $user = User::where('email', '=', 'admin@admin.com')->first();
-            $user->assignRole([$role->id]);
+            $user->assignRole([$adminRole->id]);
         }
 
+        // Outlet Manager Seeder
+
+        $managerExists = User::where('email', '=', 'manager@gmail.com')->exists();
+        $managerRole = Role::where(['name' => 'Outlet Manager'])->first();
+
+        if (!$managerExists && $managerRole){
+            $user = User::create([
+                'name' => 'Manager',
+                'email' => 'manager@gmail.com',
+                'email_verified_at' => now(),
+                'password' => bcrypt('12345678'),
+                'outlet_id' => Outlet::orderBy('id', 'desc')->first()->id
+            ]);
+
+            $user->assignRole([$managerRole->id]);
+        }
+
+        // Outlet Sales Man Seeder
+        $salesExists = User::where('email', '=', 'pos@gmail.com')->exists();
+        $salesRole = Role::where(['name' => 'Outlet Sales Man'])->first();
+
+        if (!$salesExists && $salesRole){
+            $user = User::create([
+                'name' => 'POS',
+                'email' => 'pos@gmail.com',
+                'email_verified_at' => now(),
+                'password' => bcrypt('12345678'),
+                'outlet_id' => Outlet::orderBy('id', 'desc')->first()->id
+            ]);
+
+            $user->assignRole([$salesRole->id]);
+        }
     }
 }

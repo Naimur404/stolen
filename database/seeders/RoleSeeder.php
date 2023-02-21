@@ -5,8 +5,9 @@ namespace Database\Seeders;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Models\Role;
 
-class PermissionSeeder extends Seeder
+class RoleSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,20 +16,10 @@ class PermissionSeeder extends Seeder
      */
     public function run()
     {
-        $permissions = [
+        $roles = ['Admin', 'Outlet Manager', 'Outlet Sales Man'];
 
+        $admin_permissions = [
             'myprofile',
-
-            'administrativearea.management',
-            'settings.management',
-
-            'permission.edit',
-            'permission.delete',
-
-            'warehouse.management',
-            'warehouse.create',
-            'warehouse.edit',
-            'warehouse.delete',
 
             'outlet.management',
             'outlet.create',
@@ -88,6 +79,22 @@ class PermissionSeeder extends Seeder
             'distribute-medicine.create',
             'distribute-medicine.edit',
             'distribute-medicine.delete',
+
+            'invoice.management',
+
+            'stock_request',
+        ];
+
+        $manager_permissions = [
+            'myprofile',
+
+            'outletStock',
+
+            'customer.management',
+            'customer.create',
+            'customer.edit',
+
+            'distribute-medicine.management',
             'distribute-medicine.checkin',
 
             'invoice.management',
@@ -97,18 +104,35 @@ class PermissionSeeder extends Seeder
 
             'sent_stock_request',
             'stock_request',
-
-
         ];
 
-        foreach ($permissions as $permission)
+        $sales_permissions = [
+            'myprofile',
 
-            if (Permission::where('name', $permission)->exists()) {
-                continue;
-            }else{
-                Permission::create(['name' => $permission]);
-            }
+            'outletStock',
 
-        }
+            'customer.management',
+            'customer.create',
+            'customer.edit',
+
+            'invoice.management',
+            'invoice.create',
+            'invoice.edit',
+        ];
+
+        $adminRole = Role::firstOrCreate(['name' => 'Admin']);
+        $adminPerms = Permission::whereIn('name', $admin_permissions)->pluck('id','id');
+        $adminRole->syncPermissions($adminPerms);
+
+
+        $managerRole = Role::firstOrCreate(['name' => 'Outlet Manager']);
+        $managerPerms = Permission::whereIn('name', $manager_permissions)->pluck('id','id');
+        $managerRole->syncPermissions($managerPerms);
+
+        $posRole = Role::firstOrCreate(['name' => 'Outlet Sales Man']);
+        $posPerms = Permission::whereIn('name', $sales_permissions)->pluck('id','id');
+        $posRole->syncPermissions($posPerms);
+
+
     }
-
+}
