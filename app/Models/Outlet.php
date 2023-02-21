@@ -33,6 +33,15 @@ class Outlet extends Model
 
     }
 
+    public static function getOutletName($id)
+    {
+        if ($id != null) {
+            return Outlet::find($id)->outlet_name;
+        }
+        else
+            return null;
+    }
+
 
 }
 

@@ -8,6 +8,8 @@
 
     <div class="nav-right col pull-right right-menu p-0">
       <ul class="nav-menus">
+          <li><h4 class="text-success pt-3">{{ \App\Models\Outlet::getOutletName(\Illuminate\Support\Facades\Auth::user()->outlet_id) }}</h4></li>
+
         <li><a class="text-dark" href="#!" onclick="javascript:toggleFullScreen()"><i data-feather="maximize"></i></a></li>
         <li class="onhover-dropdown">
           <div class="bookmark-box"><i data-feather="star"></i></div>
