@@ -64,7 +64,7 @@
 
                     @can('customer.management')
                     @php
-                        if(Auth::user()->hasrole('Super Admin')){
+                        if(Auth::user()->hasrole(['Super Admin', 'Admin'])){
                              $id = 'all';
                         }else{
                             $id = Auth::user()->outlet_id;
