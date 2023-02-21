@@ -30,24 +30,21 @@ class OutletStockController extends Controller
          $this->middleware('permission:outletStock', ['only' => ['outletStock']]);
 
      }
+
     public function index()
     {
-        if(auth()->user()->hasrole('Super Admin')){
+        if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
 
             $outlet = Outlet::pluck('outlet_name', 'id');
             $outlet = new Collection($outlet);
             $outlet->prepend('All Outlet Stock', 'all');
 
-            }else{
-                $outlet = Outlet::where('id',Auth::user()->outlet_id)->pluck('outlet_name', 'id');
-            }
+        } else {
+            $outlet = Outlet::where('id', Auth::user()->outlet_id)->pluck('outlet_name', 'id');
+        }
 
 
-
-
-
-
-                    return view('admin.medicinestock.OutletStock',compact('outlet'));
+        return view('admin.medicinestock.OutletStock', compact('outlet'));
     }
 
     /**
