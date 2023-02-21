@@ -313,7 +313,6 @@ function clearInput1(target){
             // manufacturer wise medicine selection
             $("#warehouse").on('change', function() {
                 warehouse_id = $(this).val();
-            });
             $("#medicine_id").select2({
                 ajax: {
                     url: "{!! url('get-warehouse-Stock') !!}"  + "/" + warehouse_id,
