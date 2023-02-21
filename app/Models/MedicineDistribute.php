@@ -32,4 +32,8 @@ class MedicineDistribute extends Model
         return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
     }
 
+    public function user() {
+        return $this->hasOne(User::class, 'id', 'added_by');
+    }
+
 }

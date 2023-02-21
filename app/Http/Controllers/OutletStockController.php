@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Medicine;
+use App\Models\MedicineDistributeDetail;
 use App\Models\Outlet;
 use App\Models\OutletCheckIn;
 use App\Models\OutletStock;
@@ -110,7 +111,8 @@ class OutletStockController extends Controller
                'remarks'    => 'added',
 
             );
-              OutletCheckIn::create($data);
+            OutletCheckIn::create($data);
+//            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->update([''])
 
            return redirect()->back()->with('success', ' Successfully Added.');
         }catch(Exception $e){

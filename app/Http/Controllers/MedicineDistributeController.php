@@ -35,11 +35,12 @@ class MedicineDistributeController extends Controller
     public function index()
 
     {
-        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-        if (Auth::user()->hasRole('Super Admin')){
+
+        if (Auth::user()->hasRole(['Super Admin', 'Admin'])){
             $medicinedistributes = MedicineDistribute::orderby('id','desc')->get();
 
         }else{
+            $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
             $medicinedistributes = MedicineDistribute::where('outlet_id',$outlet_id)->orderby('id','desc')->get();
         }
 
