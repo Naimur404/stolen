@@ -23,6 +23,15 @@ class SalesReturnController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+
+     function __construct()
+     {
+         $this->middleware('permission:sale-return.management|sale-return.store|sale-return.delete|sale-return.details|sale-return.show', ['only' => ['index','store']]);
+         $this->middleware('permission:sale-return.store', ['only' => ['store']]);
+         $this->middleware('permission:sale-return.show', ['only' => ['show']]);
+         $this->middleware('permission:sale-return.delete', ['only' => ['destroy']]);
+         $this->middleware('permission:sale-return.detail', ['only' => ['details']]);
+     }
     public function index()
     {
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
@@ -58,19 +67,7 @@ class SalesReturnController extends Controller
     public function store(Request $request)
     {
 
-        // 'return_date',
-        // 'outlet_id',
-        // 'customer_id',
-        // 'invoice_id',
-        // 'sub_total',
-        // 'deduct_amount',
-        // 'grand_total',
-        // 'paid_amount',
-        // 'due_amount',
-        // 'deduct_point',
-        // 'payment_method_id',
-        // 'added_by',
-        // dump($request->all());
+
 
         $input = $request->all();
 

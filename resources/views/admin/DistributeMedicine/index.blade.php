@@ -19,8 +19,10 @@
         @endslot
 
         @slot('button')
+        @can('medchine_purchase.create')
             <a href="{{ route('distribute-medicine.create') }}" class="btn btn-primary btn"
                data-original-title="btn btn-danger btn" title="">Distribute Medicine</a>
+               @endcan
         @endslot
     @endcomponent
 
@@ -35,7 +37,7 @@
                             <table class="display data-table">
                                 <thead>
                                 <tr>
-                                    <th>SL</th>
+                                    <th>Date</th>
                                     <th>Outlet Name</th>
                                     <th>Warehouse Name</th>
 
@@ -44,9 +46,8 @@
                                     <th>Remarks</th>
 
 
-                                    @if (auth()->user()->can('distribute-medicine.edit') || auth()->user()->can('distribute-medicine.delete'))
                                         <th>Action</th>
-                                    @endif
+
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -55,7 +56,7 @@
                                         $data = App\Models\MedicineDistributeDetail::where('medicine_distribute_id',$productPurchase->id)->get();
                                     @endphp --}}
                                     <tr>
-                                        <td>{{ $loop->index + 1 }}</td>
+                                        <td>{{ $productPurchase->date }}</td>
                                         @if ( $productPurchase->outlet_id == null)
 
                                             <td> N/A</td>
@@ -79,22 +80,21 @@
                                         <td>{{ $productPurchase->remarks }}</td>
 
 
-                                        @if (auth()->user()->can('distribute-medicine.edit') || auth()->user()->can('distribute-medicine.delete'))
+
                                             <td class="form-inline uniqueClassName">
-                                                @php
-                                                    $data = App\Models\OutletCheckIn::where('medicine_distribute_id',$productPurchase->id)->first();
-                                                @endphp
-                                                @if (is_null($data))
+                                                @if(Auth::user()->hasRole(['Admin','Super Admin']))
+                                                @if($productPurchase->has_received == 0)
                                                     @can('medchine_purchase.edit')
+
                                                         <a href="{{ route('distribute-medicine.edit', $productPurchase->id) }}"
-                                                           class="btn btn-success btn-xs" title="Pay Now"
+                                                           class="btn btn-success btn-xs" title="Edit"
                                                            style="margin-right:5px"><i class="fa fa-pencil-square-o"
                                                                                        aria-hidden="true"></i></a>
                                                     @endcan
 
                                                 @else
                                                     <a href="javscript:void()"
-                                                       class="btn btn-primary btn-xs" title="Pay Now"
+                                                       class="btn btn-primary btn-xs" title="Sent"
                                                        style="margin-right:5px"><i class="fa fa-check"
                                                                                    aria-hidden="true"></i></a>
 
@@ -105,16 +105,33 @@
 
                                                 @can('distribute-medicine.delete')
                                                     {!! Form::open(['method' => 'DELETE', 'route' => ['distribute-medicine.destroy', $productPurchase->id]]) !!}
-                                                    {{ Form::button('<i class="fa fa-pencil-square-o" aria-hidden="true"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
+                                                    {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
                                                     {!! Form::close() !!}
                                                 @endcan
 
+
+
                                                 <a href="{{ route('distribute-medicine.checkIn', $productPurchase->id) }}"
-                                                   class="btn btn-info btn-xs " title="Pay Now" style="margin-left:5px"><i
+                                                   class="btn btn-info btn-xs " title="CheckIn" style="margin-left:5px"><i
                                                         class="fa fa-eye" aria-hidden="true"></i></a>
 
+
+
+                                                @else
+                                                @if($productPurchase->has_sent == 1)
+                                                <a href="javscript:void()"
+                                                class="btn btn-primary btn-xs" title="Recived"
+                                                style="margin-right:5px"><i class="fa fa-check"
+                                                                            aria-hidden="true"></i></a>
+                                                @endif
+                                                <a href="{{ route('distribute-medicine.checkIn', $productPurchase->id) }}"
+                                                   class="btn btn-info btn-xs " title="CheckIn" style="margin-left:5px"><i
+                                                        class="fa fa-eye" aria-hidden="true"></i></a>
+
+                                                @endif
+
                                             </td>
-                                        @endif
+
                                     </tr>
                                 @endforeach
                                 </tbody>

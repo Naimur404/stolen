@@ -90,6 +90,12 @@
                                href="{{route('invoice.index')}}"><i data-feather="box"></i><span>Product Sale</span></a>
                         </li>
                     @endcan
+                    @can('sale-return.management')
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('sale-return.index')}}"
+                           href="{{route('sale-return.index')}}"><i data-feather="box"></i><span>Sales Return</span></a>
+                    </li>
+                    @endcan
                     @can('stock_request')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('warehouseRequest')}}"

@@ -73,6 +73,12 @@ class PermissionSeeder extends Seeder
             'warehouse-return.edit',
             'warehouse-return.delete',
 
+            'sale-return.management',
+            'sale-return.store',
+            'sale-return.show',
+            'sale-return.delete',
+            'sale-return.detail',
+
             'customer.management',
             'customer.create',
             'customer.edit',

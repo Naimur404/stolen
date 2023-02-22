@@ -65,7 +65,7 @@ Invoice.prototype = {
         this.calcGrandTotal();
         this.calcPayment();
         this.datePicker();
-
+        this.check();
 
         // var row_index;
 
@@ -109,6 +109,17 @@ Invoice.prototype = {
 
             row.find($.opt.total).val(total);
         });
+
+        return 1;
+    },
+
+       check: function() {
+        var paid_amount = jQuery($.opt.qty).val();
+            var grand_total_amount = jQuery($.opt.stock).val();
+            if ( parseInt(paid_amount) > parseInt(grand_total_amount) ) {
+                alert("Quantity not more than Stock.");
+                jQuery($.opt.qty).val('');
+               }
 
         return 1;
     },
@@ -203,7 +214,7 @@ Invoice.prototype = {
      * @returns {number}
      */
     newRow: function() {
-        jQuery(".item-row:first").after('<tr class="item-row"><td><input class="form-control pr_id" type="hidden" name="product_id[]"  readonly> <input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly required> </td><td><input class="form-control rack_no"  type="text" name="rack_no[]" placeholder="Rack No"></td><td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required></td><td><input class="form-control qty"  type="number" name="quantity[]" placeholder="Quantity" required></td><td><input class="form-control stock" type="number" step="any" name="stock[]"  onfocus= "clearInput1(this)" required readonly></td><td><input class="form-control price" name="box_mrp[]" type="number" step="any" id="box_price" onfocus= "clearInput2(this)" required></td><td><input class="form-control total" name="total_price[]" placeholder="0.00 " readonly></td><td><span class="btn btn-sm btn-danger"><a class=' + $.opt.delete.substring(1) + ' href="javascript:;" title="Remove row">Delete</a></span></td></tr>');
+        jQuery(".item-row:first").after('<tr class="item-row"><td><input class="form-control pr_id" type="hidden" name="product_id[]"  readonly> <input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly required> </td><td><input class="form-control rack_no"  type="text" name="rack_no[]" placeholder="Rack No"></td><td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required></td><td><input class="form-control qty"  type="number" name="quantity[]" placeholder="Quantity"  id="qty" required></td><td><input class="form-control stock" type="number" step="any" name="stock[]" id="stock" onfocus= "clearInput1(this)" required readonly></td><td><input class="form-control price" name="box_mrp[]" type="number" step="any" id="box_price" onfocus= "clearInput2(this)" required></td><td><input class="form-control total" name="total_price[]" placeholder="0.00 " readonly></td><td><span class="btn btn-sm btn-danger"><a class=' + $.opt.delete.substring(1) + ' href="javascript:;" title="Remove row">Delete</a></span></td></tr>');
 
 
         if (jQuery($.opt.delete).length > 0) {
@@ -304,6 +315,7 @@ jQuery.fn.invoice.defaults = {
     parentClass: ".item-row",
     price: ".price",
     qty: ".qty",
+    stock: ".stock",
     Quantity: "#Quantity",
     total: ".total",
     // totalQty: "#totalQty",

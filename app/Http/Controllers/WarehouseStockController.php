@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Medicine;
+use App\Models\MedicineDistribute;
+use App\Models\MedicineDistributeDetail;
 use App\Models\Unit;
 use App\Models\Warehouse;
 use App\Models\WarehouseCheckIn;
@@ -125,9 +127,43 @@ class WarehouseStockController extends Controller
      * @param  \App\Models\WarehouseStock  $warehouseStock
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, WarehouseStock $warehouseStock)
+    public function update(Request $request, $id)
     {
-        //
+
+
+             try{
+                 $warehousetock = WarehouseStock::where('warehouse_id', $id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->first();
+
+           if( $warehousetock != null){
+            $new_stock = array(
+                'quantity' => (int)$warehousetock->quantity - (int)$request->quantity,
+
+          );
+          $has_received2 = array(
+
+            'has_sent' => '1',
+
+        );
+        MedicineDistributeDetail::where('medicine_distribute_id',$request->medicine_distribute_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($has_received2);
+
+          WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($new_stock);
+        }
+
+
+            $has_received = array(
+                'has_sent' => '1',
+            );
+
+          MedicineDistribute::where('id',$request->medicine_distribute_id)->update($has_received);
+
+
+        return redirect()->back()->with('success', ' Successfully Distriute This Medicine.');
+    }
+
+    catch(Exception $e){
+       return redirect()->route('distribute-medicine.index')->with('success', $e->getMessage());
+    }
+
     }
 
     /**
