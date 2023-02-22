@@ -79,6 +79,7 @@ class RoleSeeder extends Seeder
             'distribute-medicine.create',
             'distribute-medicine.edit',
             'distribute-medicine.delete',
+            'distribute-medicine.checkin',
 
             'invoice.management',
 
