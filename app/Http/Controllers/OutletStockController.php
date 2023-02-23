@@ -102,24 +102,28 @@ class OutletStockController extends Controller
 
 
         }
-        
+        $check2 =  MedicineDistributeDetail::where('medicine_distribute_id',$request->medicine_distribute_id)->where('has_received','0')->get();
+        if(count($check2) < 1){
             $has_received = array(
                 'has_received' => '1',
 
           );
           MedicineDistribute::where('id',$request->medicine_distribute_id)->update($has_received);
+        }
+
+
 
 
 
           try{
             $data = array(
-              'outlet_id'    => $check->outlet_id,
+              'outlet_id'    => $request->outlet_id,
               'medicine_distribute_id'    => $request->medicine_distribute_id,
-              'medicine_id'    => $check->medicine_id,
-              'expiry_date'    => $check->expiry_date,
-              'quantity'    => $check->quantity,
-               'checked_by' => Auth::user()->id,
-               'remarks'    => 'added',
+              'medicine_id'    => $request->medicine_id,
+              'expiry_date'    => $request->expiry_date,
+              'quantity'    => $request->quantity,
+              'checked_by' => Auth::user()->id,
+              'remarks'    => 'added',
 
             );
             OutletCheckIn::create($data);

@@ -11,7 +11,7 @@
     @component('components.breadcrumb')
         @slot('breadcrumb_title')
             <div class="row">
-                <div class="col-sm-8">
+                <div class="col-sm-8 mt-3">
                     <h3>All Distribute Medicine to Outlet</h3>
                 </div>
 
@@ -37,7 +37,7 @@
                             <table class="display data-table">
                                 <thead>
                                 <tr>
-                                    <th>Date</th>
+                                    <th class="date">Date</th>
                                     <th>Outlet Name</th>
                                     <th>Warehouse Name</th>
 
@@ -83,7 +83,7 @@
 
                                             <td class="form-inline uniqueClassName">
                                                 @if(Auth::user()->hasRole(['Admin','Super Admin']))
-                                                @if($productPurchase->has_received == 0)
+                                                @if($productPurchase->has_sent == 0)
                                                     @can('medchine_purchase.edit')
 
                                                         <a href="{{ route('distribute-medicine.edit', $productPurchase->id) }}"
@@ -94,7 +94,7 @@
 
                                                 @else
                                                     <a href="javscript:void()"
-                                                       class="btn btn-primary btn-xs" title="Sent"
+                                                       class="btn btn-warning btn-xs" title="Sent"
                                                        style="margin-right:5px"><i class="fa fa-check"
                                                                                    aria-hidden="true"></i></a>
 
@@ -118,9 +118,9 @@
 
 
                                                 @else
-                                                @if($productPurchase->has_sent == 1)
+                                                @if($productPurchase->has_received == 1)
                                                 <a href="javscript:void()"
-                                                class="btn btn-primary btn-xs" title="Recived"
+                                                class="btn btn-warning btn-xs" title="Recived"
                                                 style="margin-right:5px"><i class="fa fa-check"
                                                                             aria-hidden="true"></i></a>
                                                 @endif
@@ -150,7 +150,10 @@
 
         <script type="text/javascript">
             $(document).ready(function () {
-                $('.data-table').DataTable();
+                $('.data-table').DataTable(
+                    {
+                        order: [[0, 'desc']],
+});
             });
 
 
