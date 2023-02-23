@@ -12,6 +12,7 @@
 @stack('css')
 <!-- Plugins css Ends-->
 <!-- Bootstrap css-->
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/date-picker.css')}}">
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/bootstrap.css')}}">
 <!-- App css-->
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/style.css')}}">

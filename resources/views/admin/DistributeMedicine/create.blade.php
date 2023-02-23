@@ -76,7 +76,8 @@
                 <label for="date" class="col-md-2 text-right col-form-label">Date <i class="text-danger">
                             * </i>:</label>
                 <div class="col-md-4">
-                    <input type="text" name="purchase_date" class="form-control datepicker" id="purdate" placeholder="Purchase Date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required>
+                    <input class=" form-control" type="date" data-language="en" data-bs-original-title="" title="" name="purchase_date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required>
+                    {{-- <input type="text" name="purchase_date" class="form-control datepicker" id="purdate" placeholder="Purchase Date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required> --}}
                 </div>
                 {!! Form::label('remarks', 'Remarks:', array('class' => 'col-md-2 text-right')) !!}
                 <div class="col-md-4">
@@ -217,7 +218,7 @@ function clearInput1(target){
             target.value= "";
        }
     };
-     
+
 
         $(document).ready(function() {
 
@@ -330,10 +331,6 @@ function clearInput1(target){
 
             });
 
-
-
-
-
             //  get medicine id
             let medicine_id = '';
             $("#medicine_id").on('change', function() {
@@ -368,6 +365,7 @@ function clearInput1(target){
 
                                 $('#product_name').val(data.medicine_name);
                                 $('#box_price').val(data.price);
+
                                 $('#expiry_date').val(data.expiry_date);
 
                             } else {

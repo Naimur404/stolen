@@ -172,8 +172,8 @@
 
                         <div class="col-md-3">
                             {!! Form::label('mobile', 'Select Customer', array('class' => 'form-label')) !!}
-                            {{ Form::select('mobile', [], null, ['class' => 'form-control add', 'placeholder' => 'Select User', 'id' => 'user_id' ,'required' ]) }}
-                            <div class="invalid-feedback">Please Enter Customer Phone Number</div>
+                            {{ Form::select('mobile', [], null, ['class' => 'form-control add', 'placeholder' => 'Walking Customer', 'id' => 'user_id']) }}
+
 
 
                         </div>
@@ -207,7 +207,7 @@
 
                 <div class="card">
 
-                    <div class="card-header bg-primary mt-2">
+                    <div class="card-header bg-primary mt-4">
                         <i class="fa fa-table"></i> Invoice
                     </div>
 
@@ -215,7 +215,7 @@
 
 
                         <div class="table-responsive pt-2">
-                            <table class="table table-striped" id="purchaseTable">
+                            <table class="table table-striped" id="purchaseTableww">
                                 <thead>
                                 </thead>
                                 <tbody>
@@ -229,7 +229,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td class="text-right" colspan="7"><b>Total Discount :</b></td>
+                                    <td class="text-right" colspan="7"><b>Discount :</b></td>
 
                                     <td>
                                         <input type="number" id="discount" class="text-right form-control discount"
@@ -305,6 +305,21 @@
 
                                     </td>
                                 </tr>
+                                <tr>
+
+                                </tr>
+
+                                <tr>
+                                    <td class="text-right" colspan="7"><b>Total Items :</b></td>
+                                    <td class="text-right">
+                                        <input type="number" id="item" class="text-right form-control" name="item"
+                                               value="0" readonly="readonly"/>
+                                    </td>
+                                    <td>
+
+
+                                    </td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -319,7 +334,8 @@
 
                                 <div class="card-footer text-end">
 
-
+                                    <button type="button" class="btn btn-info" onclick="lastprint()">Last Invoice print
+                                    </button>
                                     <button type="button" class="btn btn-primary" onclick="submitForm()">Save & Print
                                     </button>
 
@@ -398,6 +414,32 @@
             }
 
 
+            function lastprint() {
+                // Get form data
+                const form = document.getElementById('my-form');
+                const formData = new FormData(form);
+
+                // Send AJAX request
+                $.ajax({
+                    url: "{{ route('last-invoice.print') }}",
+                    method: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        var datas = response.data;
+                        var url = "{{ route('print-invoice', ':id') }}";
+                        url = url.replace(':id', datas.id);
+                        window.open(url, "_blank");
+                        // window.location.href = "{{ route('invoice.create') }}";
+
+                    },
+                    error: function (xhr) {
+                        // Handle error response
+                    }
+                });
+            }
+
             // $(window).on('afterprint', function() {
             //   // Redirect back to the original page
             //   window.location.href = "{{ route('invoice.create') }}";
@@ -472,6 +514,8 @@
 
             // select manufacturer
             let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+
             $(document).ready(function () {
 
 
@@ -689,7 +733,7 @@
                                     $('#expiry_date').val(data.expiry_date);
                                     $('#product_name').val(data.medicine_name);
                                     $('.stock-qty').first().val(data.quantity);
-                                    $('.qty').first().val(qty);
+                                    $('.qty').first().val('1');
 
 
                                     $('#price').val(data.price);
@@ -735,6 +779,7 @@
                     afterdis: "#afterdis",
                     pay: "#pay",
                     back: ".back",
+                    item: "#item",
                     due: "#due"
                 });
 

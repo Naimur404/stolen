@@ -193,7 +193,9 @@ Route::get('/stock-request/{id}/details/warehouse', [StockRequestController::cla
 Route::get('/stock-request-details/{medicineid}/{requestid}/delete', [StockRequestController::class,'stockRequestDelete'])->name('stockRequestDelete');
 Route::get('/stock/warehouse-request', [StockRequestController::class,'warehouseRequest'])->name('warehouseRequest');
 
-
+//invoice print
+Route::post('/last-invoice', [OutletInvoiceController::class,'print'])->name('last-invoice.print');
+Route::get('/print-invoice/{id}', [OutletInvoiceController::class,'printInvoice'])->name('print-invoice');
 //sales return route
 
 Route::resource('sale-return', SalesReturnController::class);

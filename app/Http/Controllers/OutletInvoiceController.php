@@ -81,8 +81,8 @@ class OutletInvoiceController extends Controller
         $input = $request->all();
 
         $request->validate([
-            'name' => 'required|string',
-            'mobile' => 'required|min:8',
+           
+
             'outlet_id' => 'required',
             'product_id' => 'required',
             'product_name' => 'required',
@@ -94,33 +94,43 @@ class OutletInvoiceController extends Controller
 
 
         ]);
-        $customerCheck = Customer::where('mobile', $request->mobile)->first();
+
+        if($request->mobile == ''){
+            $customer = Customer::where('outlet_id', $request->outlet_id)->where('mobile','LIKE','%00000%')->first();
+
+        }else{
 
 
-        if (is_null($customerCheck)) {
-            $customerdetails = array(
-                'name' => $input['name'],
-                'mobile' => $input['mobile'],
-                'address' => $input['address'],
-                'outlet_id' => $input['outlet_id'],
-                'points' => round(($input['grand_total'] / 100), 2),
+            $customerCheck = Customer::where('mobile', $request->mobile)->first();
 
-            );
-            $customer = Customer::create($customerdetails);
 
-        } else {
-            $customerdetails = array(
-                'name' => $input['name'],
-                'mobile' => $input['mobile'],
+            if (is_null($customerCheck)) {
+                $customerdetails = array(
+                    'name' => $input['name'],
+                    'mobile' => $input['mobile'],
+                    'address' => $input['address'],
+                    'outlet_id' => $input['outlet_id'],
+                    'points' => round(($input['grand_total'] / 100), 2),
 
-                'address' => $input['address'],
-                'points' => round(($input['grand_total'] / 100), 2) + $customerCheck->points,
+                );
+                $customer = Customer::create($customerdetails);
 
-            );
-            $customer = Customer::where('mobile', $request->mobile)->first();
-            Customer::where('mobile', $request->mobile)->update($customerdetails);
+            } else {
+                $customerdetails = array(
+                    'name' => $input['name'],
+                    'mobile' => $input['mobile'],
+
+                    'address' => $input['address'],
+                    'points' => round(($input['grand_total'] / 100), 2) + $customerCheck->points,
+
+                );
+                $customer = Customer::where('mobile', $request->mobile)->first();
+                Customer::where('mobile', $request->mobile)->update($customerdetails);
+
+            }
 
         }
+
 
         $invoice = array(
 
@@ -284,5 +294,14 @@ class OutletInvoiceController extends Controller
         return view('admin.invoice.print', compact('outletInvoice', 'outletInvoicedetails'));
 
 
+    }
+
+    public function print(Request $request){
+
+        $outletinvoice = OutletInvoice::where('outlet_id',$request->outlet_id)->orderBy('id','desc')->first();
+
+              return response()->json([
+                'data' => $outletinvoice
+            ]);
     }
 }

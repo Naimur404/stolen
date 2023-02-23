@@ -87,7 +87,7 @@
                                         <td class="form-inline">
                                             @can('medchine_purchase.edit')
                                                 <a href="{{ route('medicine-purchase.edit', $productPurchase->id) }}"
-                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                    class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             @endcan
 
                                             {{-- @can('product_purchase.print')
@@ -101,7 +101,7 @@
                                             @endcan
 
                                             <a href="{{ route('medicine-purchase.checkIn', $productPurchase->id) }}"
-                                                class="btn btn-info btn-xs " title="Pay Now" style="margin-left:3px"><i class="fa fa-eye" aria-hidden="true"></i></a>
+                                                class="btn btn-info btn-xs " title="CheckIn" style="margin-left:3px"><i class="fa fa-eye" aria-hidden="true"></i></a>
 
                                         </td>
                                         @endif
