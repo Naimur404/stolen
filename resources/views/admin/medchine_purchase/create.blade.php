@@ -84,9 +84,10 @@
                     <label for="date" class="col-md-2 text-right col-form-label">Purchase Date <i class="text-danger">
                             * </i>:</label>
                     <div class="col-md-4">
-                        <input type="text" name="purchase_date" class="form-control datepicker" id="purdate"
+                        <input class=" form-control" type="date" data-language="en" data-bs-original-title="" title="" name="purchase_date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required>
+                        {{-- <input type="text" name="purchase_date" class="form-control datepicker" id="purdate"
                                placeholder="Purchase Date" value="{{ Carbon\Carbon::today()->toDateString() }}"
-                               tabindex="2" required>
+                               tabindex="2" required> --}}
                     </div>
                 </div>
 
@@ -467,7 +468,7 @@
                             success: function (data) {
                                 if (data != null) {
                                     $('.pr_id').first().val(data.id);
-                                    $('.qty').first().val(qty);
+                                    $('.qty').first().val('1');
                                     $('#product_name').val(data.medicine_name);
                                     $('#box_price').val(data.price);
                                     $('#manufacturer_price').val(data.manufacturer_price);

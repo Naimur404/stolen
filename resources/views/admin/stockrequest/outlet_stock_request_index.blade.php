@@ -135,7 +135,7 @@
                                             @if($stockrequet->has_accepted == 0)
                                             @can('sent_stock_request')
                                                 <a href="{{ route('stock-request.edit', $stockrequet->id) }}"
-                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa-light fa-money-bill" ></i>Edit</a>
+                                                    class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa-light fa-money-bill" ></i>Edit</a>
                                             @endcan
                                             @endif
 
@@ -150,7 +150,7 @@
                                             @endcan
                                             @can('sent_stock_request')
                                             <a href="{{ route('stock-request.details', $stockrequet->id) }}"
-                                                class="btn btn-info btn-xs mt-2" title="Pay Now"><i class="fa-light fa-money-bill"></i>Details</a>
+                                                class="btn btn-info btn-xs mt-2" title="Details"><i class="fa-light fa-money-bill"></i>Details</a>
                                         @endcan
 
                                         </td>

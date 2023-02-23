@@ -138,7 +138,7 @@
 
 
 
-                                        <td class="uniqueClassName">
+                                        <td class="form-inline">
 
                                             {{-- @can('warehouse-return.edit')
                                                 <a href="{{ route('stock-request.edit', $stockrequet->id) }}"
@@ -152,12 +152,12 @@
 
                                             @can('stock_request')
                                                 {!! Form::open(['method' => 'DELETE', 'route' => ['stock-request.destroy', $stockrequet->id]]) !!}
-                                                {{ Form::button('Delete', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs mt-2', 'id' => 'delete', 'title' => 'Delete']) }}
+                                                {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs mt-2', 'id' => 'delete', 'title' => 'Delete']) }}
                                                 {!! Form::close() !!}
                                             @endcan
                                             @can('stock_request')
                                             <a href="{{ route('detailsRequestWarehouse', $stockrequet->id) }}"
-                                                class="btn btn-info btn-xs mt-2" title="Pay Now"><i class="fa-light fa-money-bill"></i>Details</a>
+                                                class="btn btn-info btn-xs mt-2" title="Details" style="margin-left: 10px"><i class="fa fa-eye" aria-hidden="true"></i></a>
                                         @endcan
 
                                         </td>
