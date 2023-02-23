@@ -84,6 +84,13 @@ class RoleSeeder extends Seeder
             'invoice.management',
 
             'stock_request',
+
+            'sale-return.management',
+            'sale-return.store',
+            'sale-return.show',
+            'sale-return.delete',
+            'sale-return.detail',
+
         ];
 
         $manager_permissions = [
@@ -105,6 +112,12 @@ class RoleSeeder extends Seeder
 
             'sent_stock_request',
             'stock_request',
+
+            'sale-return.management',
+            'sale-return.store',
+            'sale-return.show',
+            'sale-return.delete',
+            'sale-return.detail',
         ];
 
         $sales_permissions = [
