@@ -94,9 +94,7 @@
                                 <table class="table table-striped " id="purchaseTable">
                                     <thead>
                                     <tr class="item-row">
-                                        <th class="text-center">
-                                            <nobr>SL<i class="text-danger"></i></nobr>
-                                        </th>
+                                       
                                         <th class="text-center">
                                             <nobr>Product<i class="text-danger">*</i></nobr>
                                         </th>
