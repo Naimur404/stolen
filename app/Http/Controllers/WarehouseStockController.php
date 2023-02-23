@@ -148,14 +148,13 @@ class WarehouseStockController extends Controller
 
           WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($new_stock);
         }
-
-
-            $has_received = array(
-                'has_sent' => '1',
-            );
-
-          MedicineDistribute::where('id',$request->medicine_distribute_id)->update($has_received);
-
+      $check =  MedicineDistributeDetail::where('medicine_distribute_id',$request->medicine_distribute_id)->where('has_sent','0')->get();
+if(count($check)  < 1  ){
+    $has_received = array(
+        'has_sent' => '1',
+    );
+    MedicineDistribute::where('id',$request->medicine_distribute_id)->update($has_received);
+}
 
         return redirect()->back()->with('success', ' Successfully Distriute This Medicine.');
     }
