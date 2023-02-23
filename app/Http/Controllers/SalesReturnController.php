@@ -42,7 +42,7 @@ class SalesReturnController extends Controller
             return view('admin.Pos.sales_return_index', compact('datas'));
         } else {
 
-            $datas = SalesReturn::whereDate('retrun_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)->orderby('id', 'desc')->get();
+            $datas = SalesReturn::whereDate('return_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)->orderby('id', 'desc')->get();
             return view('admin.Pos.sales_return_index', compact('datas'));
 
         }
