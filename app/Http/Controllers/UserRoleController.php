@@ -102,6 +102,21 @@ class UserRoleController extends Controller
             'email' => 'email',
 
         ]);
+        $role = DB::table('model_has_roles')->where('model_id', $request->id)->first();
+        if (!empty($role)) {
+            DB::table('model_has_roles')->where('model_id', $request->id)->delete();
+        }
+         $model = array(
+
+         'role_id'  => $request->role,
+         'model_type' => 'App\Models\User',
+         'model_id'   => $request->id,
+
+         );
+
+
+         DB::table('model_has_roles')->insert($model);
+
 
         $user = User::find($request->id);
         $user->name = $request->name;
@@ -116,15 +131,11 @@ class UserRoleController extends Controller
             ]);
             $user->password = Hash::make($request->password);
         }
-        $role = DB::table('model_has_roles')->where('model_id', $request->id)->first();
-        if (!empty($role)) {
-            DB::table('model_has_roles')->where('model_id', $request->id)->delete();
-        }
-        if ($request->role) {
-            $user = User::findOrFail($request->id);
-            $user->assignRole($request->role);
-        }
-        $user->save();
+
+
+        $user->update();
+
+
 
 
         return redirect()->route('user')->with('success', 'Update User successfully');

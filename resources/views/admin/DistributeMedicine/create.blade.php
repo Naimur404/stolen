@@ -211,20 +211,13 @@ function clearInput1(target){
         if (target.value== '0'){
             target.value= "";
        }
-    }
+    };
     function clearInput2(target){
         if (target.value== '0'){
             target.value= "";
        }
-    }
-       function prevent_paid_amount(){
-                var paid_amount = $("#pay").val();
-            var grand_total_amount = $("#grandTotal").val();
-            if (parseInt(grand_total_amount) < parseInt(paid_amount)) {
-                alert("You can not paid more than grand total amount.");
-                $("#pay").val("");
-               }
-            }
+    };
+     
 
         $(document).ready(function() {
 
@@ -233,7 +226,7 @@ function clearInput1(target){
                     if(input == 0){
                         $(this).val('');
                     }
-            })
+            });
 
 
              let  grandTotal = '';
@@ -403,6 +396,7 @@ function clearInput1(target){
 
                 price: ".price",
                 qty: ".qty",
+                stock: ".stock",
                 Quantity: "#Quantity",
                 total: ".total",
                 // totalQty: "#totalQty",

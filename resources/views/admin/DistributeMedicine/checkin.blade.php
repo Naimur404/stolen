@@ -81,8 +81,10 @@
                 </tr>
 
                 @foreach ($productPurchaseDetails as $data)
-                {!! Form::open(['route' => 'outlet-stock.store' ,'class' => 'needs-validation', 'novalidate'=> '']) !!}
+                @if (Auth::user()->hasRole(['Super Admin', 'Admin']))
+                {!! Form::open(['route' => ['warehouse-stock.update', $productPurchase->warehouse_id ] ,'class' => 'needs-validation', 'novalidate'=> '' ,'method'=>'PUT',]) !!}
                     <tr>
+
                         <input type="hidden" name="outlet_id" value="{{ $productPurchase->outlet_id }}">
 
                           <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
@@ -99,11 +101,9 @@
                             <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
                            </td>
                         <td>
-                            @php
-                                $data = App\Models\OutletCheckIn::where('medicine_distribute_id',$productPurchase->id)->where('medicine_id',$data->medicine_id)->first();
-                            @endphp
-                            @if (is_null($data))
-                            <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase"  >
+
+                            @if ($data->has_sent == 0)
+                            <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase">
                                 Medicine Distribute
                             </button>
                             @else
@@ -114,6 +114,40 @@
                           </td>
                     </tr>
                     {!! Form::close() !!}
+                    @else
+                    {!! Form::open(['route' => 'outlet-stock.store' ,'class' => 'needs-validation', 'novalidate'=> '']) !!}
+                    <tr>
+
+                        <input type="hidden" name="outlet_id" value="{{ $productPurchase->outlet_id }}">
+
+                          <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
+                          <input type="hidden" name="medicine_distribute_id" value="{{ $productPurchase->id }}">
+                        <td>{{ $loop->index + 1 }}</td>
+                        <td>{{ $data->medicine_name }}</td>
+                        <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
+                        </td>
+                        <td>{{ Form::number('rack_no', $data->rack_no, ['class' => 'form-control', 'readonly']) }}
+                            </td>
+                            <td>{{ Form::number('price', $data->rate, ['class' => 'form-control', 'readonly']) }}
+                            </td>
+                        <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
+                            <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
+                           </td>
+                        <td>
+
+                            @if ($data->has_received == 0)
+                            <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase"  >
+                               Checkin
+                            </button>
+                            @else
+                            <button type="submit" class="btn btn-danger" tabindex="19" id="save_purchase" disabled >
+                              ChekIn Done
+                            </button>
+                            @endif
+                          </td>
+                    </tr>
+                    {!! Form::close() !!}
+                    @endif
                 @endforeach
 
 

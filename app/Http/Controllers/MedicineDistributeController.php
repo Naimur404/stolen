@@ -41,7 +41,7 @@ class MedicineDistributeController extends Controller
 
         }else{
             $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-            $medicinedistributes = MedicineDistribute::where('outlet_id',$outlet_id)->orderby('id','desc')->get();
+            $medicinedistributes = MedicineDistribute::where('outlet_id',$outlet_id)->where('has_sent','1')->orderby('id','desc')->get();
         }
 
 
@@ -117,12 +117,7 @@ class MedicineDistributeController extends Controller
 
 
                 );
-                // $warehousetock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->whereDate('expiry_date','=',$input['expiry_date'][$i])->implode('quantity');
-                // $new_stock = array(
-                //       'quantity' => (int)$warehousetock - (int)$input['quantity'][$i] ,
 
-                // );
-                // WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->update($new_stock);
 
 
 
@@ -212,12 +207,7 @@ class MedicineDistributeController extends Controller
 
 
                 );
-                // $warehousetock = WarehouseStock::where('warehouse_id', $purchase_input['warehouse_id'])->where('medicine_id',$purchase_details['product_id'][$i])->whereDate('expiry_date','=',$purchase_details['expiry_date'][$i])->implode('quantity');
-                // $new_stock = array(
-                //       'quantity' => (int)$warehousetock - (int)$input['quantity'][$i] ,
 
-                // );
-                // WarehouseStock::where('warehouse_id', $purchase_input['warehouse_id'])->where('medicine_id',$purchase_details['product_id'][$i])->whereDate('expiry_date','=',$purchase_details['expiry_date'][$i])->update($new_stock);
 
 
                  $check = MedicineDistributeDetail::where('medicine_distribute_id',$id)->where('medicine_id',$input['product_id'][$i])->first();
@@ -269,9 +259,18 @@ class MedicineDistributeController extends Controller
     }
     public function checkIn($id)
     {
+        if (Auth::user()->hasRole(['Super Admin', 'Admin'])){
 
-        $productPurchase = MedicineDistribute::findOrFail($id);
-        $productPurchaseDetails = MedicineDistributeDetail::where('medicine_distribute_id', $productPurchase->id)->get();
+            $productPurchase = MedicineDistribute::findOrFail($id);
+            $productPurchaseDetails = MedicineDistributeDetail::where('medicine_distribute_id', $productPurchase->id)->get();
+
+        }else{
+
+            $productPurchase = MedicineDistribute::findOrFail($id);
+            $productPurchaseDetails = MedicineDistributeDetail::where('medicine_distribute_id', $productPurchase->id)->where('has_sent','1')->get();
+
+        }
+
 
 
         return view('admin.DistributeMedicine.checkin', compact('productPurchase', 'productPurchaseDetails'));

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Medicine;
+use App\Models\MedicineDistribute;
 use App\Models\MedicineDistributeDetail;
 use App\Models\Outlet;
 use App\Models\OutletCheckIn;
@@ -66,19 +67,11 @@ class OutletStockController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $input = $request->all();
 
-           $warehousetock = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->first();
 
-           if( $warehousetock != null){
-            $new_stock = array(
-                'quantity' => (int)$warehousetock->quantity - (int)$request->quantity,
-
-          );
-
-          WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($new_stock);
-
-           }
 
 
         $check = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->first();
@@ -90,15 +83,33 @@ class OutletStockController extends Controller
                 'quantity' => (int)$check->quantity + (int)$request->quantity,
                 'price'  => $request->price,
             );
+            $has_received2 = array(
 
+                'has_received' => '1',
+
+            );
+              MedicineDistributeDetail::where('medicine_distribute_id',$request->medicine_distribute_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($has_received2);
                OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($stock2);
 
         }else{
+            $has_received2 = array(
 
+                'has_received' => '1',
+
+            );
+           MedicineDistributeDetail::where('medicine_distribute_id',$request->medicine_distribute_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($has_received2);
             $check =  OutletStock::create($input);
 
 
         }
+        
+            $has_received = array(
+                'has_received' => '1',
+
+          );
+          MedicineDistribute::where('id',$request->medicine_distribute_id)->update($has_received);
+
+
 
           try{
             $data = array(
@@ -114,7 +125,7 @@ class OutletStockController extends Controller
             OutletCheckIn::create($data);
 //            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->update([''])
 
-           return redirect()->back()->with('success', ' Successfully Added.');
+           return redirect()->back()->with('success', ' Successfully Recieved This Medicine.');
         }catch(Exception $e){
            return redirect()->route('distribute-medicine.index')->with('success', $e->getMessage());
         }
