@@ -31,6 +31,7 @@ use App\Models\MedicineDistribute;
 use App\Models\OutletStock;
 use App\Models\SalesReturn;
 use App\Models\StockRequest;
+use App\Models\WarehouseReturn;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -121,6 +122,7 @@ Route::resource('invoice', OutletInvoiceController::class);
 //checkin route
 Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
 Route::get('distribute-medicine/{id}/check-in',[MedicineDistributeController::class,'checkIn'])->name('distribute-medicine.checkIn');
+Route::get('medicine-return/{id}/check-in',[WarehouseReturnController::class,'checkIn'])->name('medicine-return.checkIn');
 
 //medicine route
 Route::get('all-medicines-lists', [MedicineController::class ,'get_all_medicines'])->name('medicine.all-medicines');
@@ -174,6 +176,7 @@ Route::get('/get-all-medicine',[Select2Controller::class,'get_all_medicine'])->n
 Route::get('get-user', [Select2Controller::class,'get_user']);
 Route::get('get-payment', [Select2Controller::class,'get_payment']);
 Route::get('get-user-details/{id}', [Select2Controller::class,'get_user_details']);
+
 //stock route
 Route::get('/get-outlet-stock/{id}',[OutletStockController::class,'outletStock'])->name('outletstock');
 Route::get('/get-warehouse-stock/{id}',[WarehouseStockController::class,'warehouseStock'])->name('warehouseStock');
@@ -183,9 +186,9 @@ Route::Post('/my-profile/update', [ProfileController::class,'updateMyProfile'])-
 
 Route::get('/get-customer/{id}',[CustomerManagementController::class,'customer'])->name('get-customer');
 
-//medicine return delete route
+//medicine return  route
 Route::get('/delete/{medicineid}/{returnid}/return', [WarehouseReturnController::class,'medicineReturnlDelete'])->name('delete.medicineReturnlDelete');
-
+Route::post('/return-recieve', [WarehouseReturnController::class,'returnRecieve'])->name('returnRecieve');
 //stock request route
 
 Route::get('/stock-request/{id}/details', [StockRequestController::class,'details'])->name('stock-request.details');

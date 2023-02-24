@@ -1,5 +1,5 @@
 @extends('layouts.admin.master')
-@section('title') Add Distribute Medicine to Outlet Checkin
+@section('title') Return Medicine to Warehouse Checkin
 @endsection
 @push('css')
 <style>
@@ -18,7 +18,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-10">
-			<h3> Add Distribute Medicine to Outlet Checkin</h3>
+			<h3> Return Medicine to Warehouse Checkin</h3>
         </div>
 
         </div>
@@ -44,7 +44,7 @@
 
             <div class="service_invoice_header">
                 <div class="row">
-                    <div class="col-md-4">Medicine Distribute Id : <b>{{ $productPurchase->id }}</b></div>
+                    <div class="col-md-4">Medicine Return Id : <b>{{ $productPurchase->id }}</b></div>
                     <div class="col-md-4">
 
                     </div>
@@ -74,41 +74,35 @@
                     <th>SL</th>
                     <th>Name Of Medicine</th>
                     <th>Quantity</th>
-                    <th>Rack No</th>
-                    <th>Price</th>
                     <th>Expiry Date</th>
                     <th>Action</th>
                 </tr>
 
                 @foreach ($productPurchaseDetails as $data)
-                {!! Form::open(['route' => 'outlet-stock.store' ,'class' => 'needs-validation', 'novalidate'=> '']) !!}
+                {!! Form::open(['route' => 'returnRecieve' ,'class' => 'needs-validation', 'novalidate'=> '']) !!}
                     <tr>
                         <input type="hidden" name="outlet_id" value="{{ $productPurchase->outlet_id }}">
+                        <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
 
-
-                          <input type="hidden" name="medicine_distribute_id" value="{{ $productPurchase->id }}">
+                          <input type="hidden" name="warehouse_return_id" value="{{ $productPurchase->id }}">
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name }}</td>
                         <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
                         </td>
-                        <td>{{ Form::number('rack_no', $data->rack_no, ['class' => 'form-control', 'readonly']) }}
-                            </td>
-                            <td>{{ Form::number('rate', $data->rate, ['class' => 'form-control', 'readonly']) }}
-                            </td>
+
+
                         <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
                             <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
                            </td>
                         <td>
-                            @php
-                                $data = App\Models\OutletCheckIn::where('medicine_distribute_id',$productPurchase->id)->where('medicine_id',$data->medicine_id)->first();
-                            @endphp
-                            @if (is_null($data))
+
+                            @if ($data->has_received == 0)
                             <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase"  >
-                                Medicine Distribute
+                                Medicine Return
                             </button>
                             @else
                             <button type="submit" class="btn btn-danger" tabindex="19" id="save_purchase" disabled >
-                              Already  Distribute
+                              Already  Return
                             </button>
                             @endif
                           </td>

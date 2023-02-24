@@ -22,7 +22,9 @@
 		@endslot
 
         @slot('button')
+        @can('warehouse-return.create')
         <a href="{{ route('warehouse-return.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Return Medicine To Warehouse</a>
+        @endcan
         @endslot
 	@endcomponent
 
@@ -47,9 +49,9 @@
 
 
 
-                                        @if (auth()->user()->can('distribute-medicine.edit') || auth()->user()->can('distribute-medicine.delete'))
+
                                         <th>Action</th>
-                                        @endif
+
                                     </tr>
 	                            </thead>
 	                            <tbody>
@@ -89,7 +91,7 @@
                                         <td class="form-inline uniqueClassName">
                                             @can('warehouse-return.edit')
                                                 <a href="{{ route('warehouse-return.edit', $warehousereturn->id) }}"
-                                                    class="btn btn-success btn-xs" title="Pay Now" style="margin-right:10px; "><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                                    class="btn btn-success btn-xs" title="Edit" style="margin-right:10px; "><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             @endcan
 
                                             {{-- @can('product_purchase.print')
@@ -101,8 +103,11 @@
                                                 {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
                                                 {!! Form::close() !!}
                                             @endcan
-
-
+                                            @can('warehouse-return.checkIn')
+                                            <a href="{{ route('medicine-return.checkIn', $warehousereturn->id) }}"
+                                                class="btn btn-info btn-xs " title="CheckIn" style="margin-left:5px"><i
+                                                     class="fa fa-eye" aria-hidden="true"></i></a>
+                                            @endcan
                                         </td>
 
                                     </tr>
