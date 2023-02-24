@@ -48,7 +48,7 @@
 
                 <label for="supplier" class="col-md-2 text-right col-form-label">Outlet:</label>
                 <div class="col-md-4">
-                    {{ Form::select('outlet_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet_id']) }}
+                    {{ Form::select('outlet_id', $outlets, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id'=>'outlet' ]) }}
                     <div class="invalid-feedback">Please Add Outlet</div>
                     @error('outlet_id')
                     <div class="invalid-feedback2"> {{ $message }}</div>
@@ -74,7 +74,7 @@
                 <label for="date" class="col-md-2 text-right col-form-label">Date <i class="text-danger">
                             * </i>:</label>
                 <div class="col-md-4">
-                    <input type="text" name="purchase_date" class="form-control datepicker" id="purdate" placeholder="Purchase Date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required>
+                    <input type="date" name="purchase_date" class="form-control" id="purdate" placeholder="Purchase Date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required>
                 </div>
                 {!! Form::label('remarks', 'Remarks:', array('class' => 'col-md-2 text-right')) !!}
                 <div class="col-md-4">
@@ -154,7 +154,7 @@
                                         <nobr>Stock <i class="text-danger"></i></nobr>
                                     </th>
 
-                                  
+
 
                                     <th class="text-center">
                                         <nobr>Action</nobr>
@@ -315,7 +315,7 @@
 
             let outlet_id = '';
             // manufacturer wise medicine selection
-            $("#outlet_id").on('select2:select', function (e) {
+            $("#outlet").on('change', function (e) {
                 outlet_id = $(this).val();
             $("#medicine_id").select2({
                 ajax: {
