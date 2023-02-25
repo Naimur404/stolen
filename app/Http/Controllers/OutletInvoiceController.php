@@ -81,7 +81,7 @@ class OutletInvoiceController extends Controller
         $input = $request->all();
 
         $request->validate([
-           
+
 
             'outlet_id' => 'required',
             'product_id' => 'required',
@@ -130,6 +130,25 @@ class OutletInvoiceController extends Controller
             }
 
         }
+        $discount = 0;
+        if($request->discount > 0 && $request->flatdiscount > 0){
+            $discount = $request->discount + $request->flatdiscount;
+        }elseif($request->discount == 0 && $request->flatdiscount == 0){
+
+            $discount = 0;
+        }
+
+            else{
+            if($request->discount > 0){
+                $discount = $request->discount;
+              }else{
+
+              }
+              if($request->flatdiscount > 0){
+                $discount = $request->flatdiscount;
+              }
+
+        }
 
 
         $invoice = array(
@@ -139,7 +158,7 @@ class OutletInvoiceController extends Controller
             'sale_date' => Carbon::now(),
             'sub_total' => $input['sub_total'],
             'vat' => $input['vat'],
-            'total_discount' => $input['discount'],
+            'total_discount' => $discount,
             'grand_total' => $input['grand_total'],
             'paid_amount' => $input['paid_amount'],
             'due_amount' => $input['due_amount'],
