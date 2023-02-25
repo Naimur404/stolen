@@ -39,11 +39,16 @@
         //      inv.init();
         // });
 
+        $( "body" ).mouseover(function() {
 
 
-        jQuery("body").on('keyup', function(e) {
             inv.init();
         });
+        jQuery("body").on('keyup', function(e) {
+
+            inv.init();
+        });
+
 
         return this;
     };
@@ -206,11 +211,28 @@ Invoice.prototype = {
     },
 
     calcdisSubtotal: function() {
-        var afterdis = Number(jQuery($.opt.subtotal).val())  -
-        Number(jQuery($.opt.discount).val());
-        afterdis = self.roundNumber(afterdis, 2);
-    jQuery($.opt.afterdis).val(afterdis);
-    return 1;
+        var afterdis = 0;
+        if(Number(jQuery($.opt.flatdiscount).val()) > 0 && Number(jQuery($.opt.discount).val()) > 0){
+            afterdis = Number(jQuery($.opt.subtotal).val())  -
+            Number(jQuery($.opt.discount).val()) - Number(jQuery($.opt.flatdiscount).val());
+        }else{
+            if(Number(jQuery($.opt.flatdiscount).val()) > 0){
+                afterdis = Number(jQuery($.opt.subtotal).val())  -
+                Number(jQuery($.opt.flatdiscount).val());
+                afterdis = self.roundNumber(afterdis, 2);
+
+            }
+            if( Number(jQuery($.opt.discount).val()) > 0){
+                afterdis = Number(jQuery($.opt.subtotal).val())  -
+                Number(jQuery($.opt.discount).val());
+                afterdis = self.roundNumber(afterdis, 2);
+
+            }
+
+        }
+
+        jQuery($.opt.afterdis).val(afterdis);
+        return 1;
     },
 
     /**
@@ -230,12 +252,14 @@ Invoice.prototype = {
     // },
 
     calcGrandTotal: function() {
+
+
         if(Number(jQuery($.opt.afterdis).val()) == 0 || Number(jQuery($.opt.afterdis).val()) == '' ){
             if( Number(jQuery($.opt.vat).val()) != 0 || Number(jQuery($.opt.vat).val()) != ''){
                 var grandTotal = Number(jQuery($.opt.subtotal).val())  +
                 Number(jQuery($.opt.vat).val());
             }else{
-                var grandTotal = Number(jQuery($.opt.subtotal).val());
+                grandTotal = Number(jQuery($.opt.subtotal).val());
             }
 
         }else{
@@ -244,7 +268,7 @@ Invoice.prototype = {
                 var grandTotal = Number(jQuery($.opt.afterdis).val())  +
                 Number(jQuery($.opt.vat).val());
             }else{
-                var grandTotal = Number(jQuery($.opt.afterdis).val());
+                 grandTotal = Number(jQuery($.opt.afterdis).val());
             }
 
         }
@@ -413,6 +437,7 @@ jQuery.fn.invoice.defaults = {
     subtotal: "#subtotal",
     discount: "#discount",
     discountt: "#discountt",
+    flatdiscount: "#flatdiscount",
     // shipping: "#shipping",
     vat: "#vat",
     grandTotal: "#grandTotal",

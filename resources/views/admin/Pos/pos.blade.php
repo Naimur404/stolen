@@ -94,7 +94,7 @@
                                 <table class="table table-striped " id="purchaseTable">
                                     <thead>
                                     <tr class="item-row">
-                                       
+
                                         <th class="text-center">
                                             <nobr>Product<i class="text-danger">*</i></nobr>
                                         </th>
@@ -232,6 +232,16 @@
                                     <td>
                                         <input type="number" id="discount" class="text-right form-control discount"
                                                name="discount" value="0" tabindex="17" step="any" placeholder="Tk"/>
+                                    </td>
+                                    <td>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="text-right" colspan="7"><b>Flat Discount :</b></td>
+
+                                    <td>
+                                        <input type="number" id="flatdiscount" class="text-right form-control flatdiscount"
+                                               name="flatdiscount" value="0" tabindex="17" step="any" placeholder="Tk" onfocus= "clearInput4(this)"/>
                                     </td>
                                     <td>
                                     </td>
@@ -384,6 +394,11 @@
                 }
             }
 
+            function clearInput4(target) {
+                if (target.value == '0') {
+                    target.value = "";
+                }
+            }
 
             function submitForm() {
                 // Get form data
@@ -733,7 +748,7 @@
                                     $('.stock-qty').first().val(data.quantity);
                                     $('.qty').first().val('1');
 
-
+                                    $('.total').val(1*data.price);
                                     $('#price').val(data.price);
 
 
@@ -770,6 +785,7 @@
 
                     subtotal: "#subtotal",
                     discount: "#discount",
+                    flatdiscount: "#flatdiscount",
                     discountt: "#discountt",
                     // shipping : "#shipping",
                     vat: "#vat",
