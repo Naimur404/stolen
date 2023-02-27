@@ -74,6 +74,7 @@
                     <th>SL</th>
                     <th>Name Of Medicine</th>
                     <th>Quantity</th>
+                    <th>Stock</th>
                     <th>Expiry Date</th>
                     <th>Action</th>
                 </tr>
@@ -89,8 +90,11 @@
                         <td>{{ $data->medicine_name }}</td>
                         <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
                         </td>
-
-
+                        @php
+                        $stock =  App\Models\OutletStock::where('outlet_id',$productPurchase->outlet_id)->where('medicine_id',$data->medicine_id)->whereDate('expiry_date','=',$data->expiry_date)->first();
+                    @endphp
+                        <td>{{ Form::number('quantity', $stock->quantity, ['class' => 'form-control', 'readonly']) }}
+                        </td>
                         <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
                             <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
                            </td>

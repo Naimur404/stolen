@@ -212,9 +212,13 @@ Invoice.prototype = {
 
     calcdisSubtotal: function() {
         var afterdis = 0;
-        if(Number(jQuery($.opt.flatdiscount).val()) > 0 && Number(jQuery($.opt.discount).val()) > 0){
+        if(Number(jQuery($.opt.flatdiscount).val()) > 0 && Number(jQuery($.opt.discount).val()) > 0  && Number(jQuery($.opt.points).val()) > 0){
             afterdis = Number(jQuery($.opt.subtotal).val())  -
-            Number(jQuery($.opt.discount).val()) - Number(jQuery($.opt.flatdiscount).val());
+            Number(jQuery($.opt.discount).val()) - Number(jQuery($.opt.points).val());
+        }
+        else if(Number(jQuery($.opt.flatdiscount).val()) == 0 && Number(jQuery($.opt.discount).val()) == 0 && Number(jQuery($.opt.points).val()) == 0){
+            afterdis = Number(jQuery($.opt.subtotal).val());
+
         }else{
             if(Number(jQuery($.opt.flatdiscount).val()) > 0){
                 afterdis = Number(jQuery($.opt.subtotal).val())  -
@@ -228,7 +232,12 @@ Invoice.prototype = {
                 afterdis = self.roundNumber(afterdis, 2);
 
             }
+            if( Number(jQuery($.opt.points).val()) > 0){
+                afterdis = Number(jQuery($.opt.subtotal).val())  -
+                Number(jQuery($.opt.points).val());
+                afterdis = self.roundNumber(afterdis, 2);
 
+            }
         }
 
         jQuery($.opt.afterdis).val(afterdis);
@@ -325,7 +334,7 @@ Invoice.prototype = {
         var i = 0;
         i++;
 
-        jQuery(".item-row:first").after('<tr class="item-row"><td><input class="form-control pr_id" type="hidden" name="product_id[]"  readonly><input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly required></td><td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required readonly></td><td><input class="form-control stock-qty"  type="number" name="stockquantity[]" placeholder="Quantity" required readonly></td><td><input class="form-control qty"  type="number" name="quantity[]" value="1" required ></td><td><input class="form-control price" name="box_mrp[]" type="number" step="any" id="price" onfocus= "clearInput2(this)" required></td><td> <input class="form-control totaldis"  name="totaldis[]" type="hidden" id="totaldis"  readonly><input class="form-control discountt" name="discountt[]"  id="discountt" type="number" placeholder="%" onfocus= "clearInput3(this)"></td><td><input class="form-control total" type="number" name="total[]" placeholder="0.00 " readonly></td><td><span class="btn btn-xs btn-danger mb-1"><a class= "' + $.opt.delete.substring(1) + '" href="javascript:;" title="Remove row">Remove</a></span></td></tr>');
+        jQuery(".item-row:first").after('<tr class="item-row"><td><input class="form-control pr_id" type="hidden" name="product_id[]"  readonly><input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly required></td><td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required readonly></td><td><input class="form-control stock-qty"  type="number" name="stockquantity[]" placeholder="Quantity" required id="stock" readonly></td><td><input class="form-control qty"  type="number" name="quantity[]" value="1" required id="qty" onkeyup="prevent_stock_amount()"onchange="prevent_stock_amount()"></td><td><input class="form-control price" name="box_mrp[]" type="number" step="any" id="price" onfocus= "clearInput2(this)" required></td><td> <input class="form-control totaldis"  name="totaldis[]" type="hidden" id="totaldis"  readonly><input class="form-control discountt" name="discountt[]"  id="discountt" type="number" placeholder="%" onfocus= "clearInput3(this)"></td><td><input class="form-control total" type="number" name="total[]" placeholder="0.00 " readonly></td><td><span class="btn btn-xs btn-danger mb-1"><a class= "' + $.opt.delete.substring(1) + '" href="javascript:;" title="Remove row">Remove</a></span></td></tr>');
 
 
         if (jQuery($.opt.delete).length > 0) {
@@ -445,5 +454,6 @@ jQuery.fn.invoice.defaults = {
     pay: "#pay",
     back: ".back",
     item: "#item",
+    points: "#redeem_points",
     due: "#due"
 };

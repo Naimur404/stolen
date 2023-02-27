@@ -35,7 +35,7 @@
                             <table class="display data-table">
                                 <thead>
                                 <tr>
-
+                                    <th>ID</th>
                                     <th>Sale Date</th>
                                     <th>Outlet Name</th>
                                     <th>Customer</th>
@@ -57,7 +57,7 @@
                                 <tbody>
                                 @foreach ($datas as $productPurchase)
                                     <tr>
-
+                                      <td>{{ $productPurchase->id }}</td>
 
                                         <td>{{ \Carbon\Carbon::parse($productPurchase->sale_date)->format('d-m-Y')}}
                                         </td>

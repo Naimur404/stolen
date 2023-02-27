@@ -207,6 +207,14 @@
             target.value= "";
        }
     }
+    function prevent_stock_amount(){
+                var stock = $("#stock").val();
+            var qty = $("#qty").val();
+            if (parseInt(qty) > parseInt(stock)) {
+                alert("Quantity not more than Stock amount.");
+                $("#qty").val("");
+               }
+            }
        function prevent_paid_amount(){
                 var paid_amount = $("#pay").val();
             var grand_total_amount = $("#grandTotal").val();

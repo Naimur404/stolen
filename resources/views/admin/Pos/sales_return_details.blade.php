@@ -1,7 +1,7 @@
 
 
 @extends('layouts.admin.master')
-@section('title')Due Payment
+@section('title')Sale Return Details
 @endsection
 @push('css')
 <style>
@@ -20,7 +20,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-6">
-			<h3>Due Payment</h3>
+			<h3>Sale Return Details</h3>
         </div>
 
         </div>

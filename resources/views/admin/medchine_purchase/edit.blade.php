@@ -36,7 +36,7 @@
         <div class="card-header py-2">
             <div class="d-flex justify-content-between align-items-center">
 
-              
+
             </div>
         </div>
 
@@ -104,7 +104,7 @@
                         <td>{{ $data->medicine_name }}</td>
                         <td>{{ $data->quantity }}</td>
                         <td>{{ $data->manufacturer_price }}</td>
-                        <td>{{ $data->total_amount }}</td>
+                        <td>{{ $data->quantity*$data->manufacturer_price}}</td>
                     </tr>
                 @endforeach
 

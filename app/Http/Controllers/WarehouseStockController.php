@@ -247,7 +247,7 @@ if(count($check)  < 1  ){
         foreach($medicine_stock as $stock){
             $s_no = $sl++;
             $medicine_name = Medicine::get_medicine_name($stock->medicine_id);
-            $manufacturer_price = '৳&nbsp;' .Medicine::get_manufacturer_price($stock->medicine_id);;
+            $manufacturer_price = '৳&nbsp;' .Medicine::get_manufacturer_price($stock->medicine_id,$stock->expiry_date);;
              $medicine = Medicine::where('id',$stock->medicine_id)->first();
             $category = Category::get_category_name($medicine->category_id);
             $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);

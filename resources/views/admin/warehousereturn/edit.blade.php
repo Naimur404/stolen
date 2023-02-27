@@ -173,11 +173,12 @@
                                         <nobr>Box Qty<i class="text-danger">*</i></nobr>
                                     </th> --}}
                                     <th class="text-center">
-                                        <nobr>Stock <i class="text-danger">*</i></nobr>
-                                    </th>
-                                    <th class="text-center">
                                         <nobr>Quantity <i class="text-danger">*</i></nobr>
                                     </th>
+                                    <th class="text-center">
+                                        <nobr>Stock <i class="text-danger">*</i></nobr>
+                                    </th>
+
 
 
 
@@ -194,14 +195,17 @@
                                      <input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly="" required="" value="{{ $details->medicine_name }}"> </td>
 
                                      <td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required="" value="{{ $details->expiry_date }}"></td>
-                                     <td><input class="form-control qty" type="number" name="quantity[]" placeholder="Quantity" required="" value="{{ $details->quantity }}"></td>
-                                     <td><input class="form-control qty" type="number"  placeholder="" required="" value="" readonly></td>
+                                     <td><input class="form-control qty" type="number" name="quantity[]" placeholder="Quantity" required="" value="{{ $details->quantity }}" id="qty" onkeyup="prevent_stock_amount()"onchange="prevent_stock_amount()"></td>
+                                     @php
+                                         $stock =  App\Models\OutletStock::where('outlet_id',$data->outlet_id)->where('medicine_id',$details->medicine_id)->whereDate('expiry_date','=',$details->expiry_date)->first();
+                                     @endphp
+                                     <td><input class="form-control stock" type="number"  placeholder="" required="" name="stock[]" value="{{ $stock->quantity }}" readonly id="stock"></td>
 
 
 
-                                     <td>
 
-                                        <span class="btn btn-sm btn-danger"><a class="" href="{{ route('delete.medicineReturnlDelete',[$details->medicine_id, $details->warehouse_return_id]) }}">Delete</a></span>
+
+                                       <td> <span class="btn btn-sm btn-danger"><a class="" href="{{ route('delete.medicineReturnlDelete',[$details->medicine_id, $details->warehouse_return_id]) }}">Delete</a></span>
                                     </td>
                                 </tr>
                                 @endforeach
@@ -242,7 +246,14 @@
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
     <script src="{{ asset('assets/js/warehouse_return.js') }}"></script>
     <script type="text/javascript">
-
+  function prevent_stock_amount(){
+                var stock = $("#stock").val();
+            var qty = $("#qty").val();
+            if (parseInt(qty) > parseInt(stock)) {
+                alert("Quantity not more than Stock amount.");
+                $("#qty").val("");
+               }
+            }
        function prevent_paid_amount(){
                 var paid_amount = $("#pay").val();
             var grand_total_amount = $("#grandTotal").val();
