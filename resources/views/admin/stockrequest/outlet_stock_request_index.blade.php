@@ -47,9 +47,9 @@
 
 
 
-                                        @if (auth()->user()->can('distribute-medicine.edit') || auth()->user()->can('distribute-medicine.delete'))
+
                                         <th>Action</th>
-                                        @endif
+                                       
                                     </tr>
 	                            </thead>
 	                            <tbody>

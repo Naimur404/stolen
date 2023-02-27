@@ -29,7 +29,10 @@ class Medicine extends Model
     public static function get_medicine_name($id){
         return Medicine::where('id', $id)->value('medicine_name');
  }
- public static function get_manufacturer_price($id,$date){
+ public static function get_manufacturer_price($id){
+    return Medicine::where('id', $id)->value('manufacturer_price');
+}
+public static function get_manufacturer_prices($id,$date){
     return MedicinePurchaseDetails::where('medicine_id', $id)->whereDate('expiry_date','=',$date)->value('manufacturer_price');
 }
 public function medicine_stock(){

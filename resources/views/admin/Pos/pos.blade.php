@@ -32,7 +32,7 @@
 
 
     @endcomponent
-    {!! Form::open(['id' => 'my-form', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'files' => true]) !!}
+    {!! Form::open(['id' => 'my-form', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'autocomplete' => 'off', 'files' => true]) !!}
 
     <input type="hidden" name="outlet_id" value="{{ $outlet_id }}">
     <div class="row item-row-add">
@@ -304,6 +304,7 @@
                                         <input type="number" id="pay" class="text-right form-control "
                                                name="paid_amount" value="0" onkeyup="prevent_paid_amount()"
                                                onchange="prevent_paid_amount()" tabindex="16" step=".01" required/>
+
                                     </td>
 
                                 </tr>
@@ -429,7 +430,10 @@
             }
 
             function submitForm() {
-                // Get form data
+                var pay = $("#pay").val();
+                if(pay == 0 || pay == ''){
+                    alert("Given Amount Can Not Be Zero Or Empty.");
+                }else{
                 const form = document.getElementById('my-form');
                 const formData = new FormData(form);
 
@@ -452,6 +456,10 @@
                         // Handle error response
                     }
                 });
+
+                }
+                // Get form data
+
             }
 
 
@@ -460,7 +468,6 @@
                 const form = document.getElementById('my-form');
                 const formData = new FormData(form);
 
-                // Send AJAX request
                 $.ajax({
                     url: "{{ route('last-invoice.print') }}",
                     method: "POST",

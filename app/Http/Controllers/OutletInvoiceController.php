@@ -95,8 +95,21 @@ class OutletInvoiceController extends Controller
 
         ]);
 
-        if($request->mobile == ''){
+        if($request->mobile == '' || $request->mobile == null){
             $customer = Customer::where('outlet_id', $request->outlet_id)->where('mobile','LIKE','%00000%')->first();
+            if (is_null($customer)) {
+
+                $customerdetails = array(
+                    'name' => 'Walking Customer',
+                    'mobile' => '00000000000',
+                    'address' => '',
+                    'outlet_id' => $input['outlet_id'],
+                    'points' => '0',
+
+                );
+                $customer = Customer::create($customerdetails);
+            }
+
 
         }else{
 

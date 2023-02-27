@@ -103,7 +103,7 @@
                     <div class="row">
 
                         <div class="col-md-3">
-                            <h2>Return Medicine</h2>
+                            <h2>Medicine To Stock</h2>
                         </div>
 
                         <div class="col-md-4">
