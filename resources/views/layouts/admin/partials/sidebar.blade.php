@@ -87,7 +87,7 @@
                     @can('invoice.management')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('invoice.index')}}"
-                               href="{{route('invoice.index')}}"><i data-feather="box"></i><span>Product Sale</span></a>
+                               href="{{route('invoice.index')}}"><i data-feather="box"></i><span>All Invoice</span></a>
                         </li>
                     @endcan
                     @can('sale-return.management')

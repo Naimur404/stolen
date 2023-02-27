@@ -15,7 +15,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
+use Illuminate\Support\Facades\Session;
 
 class OutletInvoiceController extends Controller
 {
@@ -79,7 +79,7 @@ class OutletInvoiceController extends Controller
 
 
         $input = $request->all();
-
+        Session::forget('redeem_points');
         $request->validate([
 
 
@@ -116,12 +116,17 @@ class OutletInvoiceController extends Controller
                 $customer = Customer::create($customerdetails);
 
             } else {
+                if($request->redeem_points > 0){
+
+                  $points = $customerCheck->points - $request->redeem_points;
+                  Session::put('redeem_points', $request->redeem_points);
+                  }
                 $customerdetails = array(
                     'name' => $input['name'],
                     'mobile' => $input['mobile'],
 
                     'address' => $input['address'],
-                    'points' => round(($input['grand_total'] / 100), 2) + $customerCheck->points,
+                    'points' => round(($input['grand_total'] / 100), 2) + $points,
 
                 );
                 $customer = Customer::where('mobile', $request->mobile)->first();

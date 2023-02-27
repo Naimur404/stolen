@@ -96,7 +96,7 @@
                            </td>
                         <td>
                             @php
-                                $data = App\Models\WarehouseCheckIn::where('purchase_id',$productPurchase->id)->where('medicine_id',$data->medicine_id)->first();
+                                $data = App\Models\WarehouseCheckIn::where('purchase_id',$productPurchase->id)->where('medicine_id',$data->medicine_id)->whereDate('expiry_date','=',$data->expiry_date)->first();
                             @endphp
                             @if (is_null($data))
                             <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase"  >

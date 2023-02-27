@@ -131,11 +131,11 @@
 
 
 
-                                        <td class="uniqueClassName">
+                                        <td class="form-inline">
                                             @if($stockrequet->has_accepted == 0)
                                             @can('sent_stock_request')
                                                 <a href="{{ route('stock-request.edit', $stockrequet->id) }}"
-                                                    class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa-light fa-money-bill" ></i>Edit</a>
+                                                    class="btn btn-success btn-xs" title="Edit" style="margin-right:10px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             @endcan
                                             @endif
 
@@ -145,12 +145,12 @@
 
                                             @can('sent_stock_request')
                                                 {!! Form::open(['method' => 'DELETE', 'route' => ['stock-request.destroy', $stockrequet->id]]) !!}
-                                                {{ Form::button('Delete', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs mt-2', 'id' => 'delete', 'title' => 'Delete']) }}
+                                                {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
                                                 {!! Form::close() !!}
                                             @endcan
                                             @can('sent_stock_request')
                                             <a href="{{ route('stock-request.details', $stockrequet->id) }}"
-                                                class="btn btn-info btn-xs mt-2" title="Details"><i class="fa-light fa-money-bill"></i>Details</a>
+                                                class="btn btn-info btn-xs" title="Details" style="margin-left: 10px"> <i class="fa fa-eye" aria-hidden="true"></i></a>
                                         @endcan
 
                                         </td>
