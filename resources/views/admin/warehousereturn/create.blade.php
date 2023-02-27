@@ -383,11 +383,11 @@
                         success: function(data) {
                             if (data != null) {
                                 $('.pr_id').first().val(data.medicine_id);
-                                $('.stock').val(data.quantity);
+                                $('.stock').first().val(data.quantity);
 
-                                $('#product_name').val(data.medicine_name);
+                                $('#product_name').first().val(data.medicine_name);
 
-                                $('#expiry_date').val(data.expiry_date);
+                                $('#expiry_date').first().val(data.expiry_date);
 
                             } else {
                                 alert('Data not found!');
