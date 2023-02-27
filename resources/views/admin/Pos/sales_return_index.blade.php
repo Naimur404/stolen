@@ -68,11 +68,14 @@
 
                                             <td>{{ $productPurchase->outlet->outlet_name }}</td>
                                         @endif
-                                        <td>  @php
-                                                $customer = App\Models\Customer::where('id',$productPurchase->customer_id)->first();
-                                            @endphp
-                                            {{ $customer->mobile }}
+                                        <td> @if($productPurchase->customer_id != '' || $productPurchase->customer_id != null)
+                                            @php
+                                              $customer = App\Models\Customer::where('id',$productPurchase->customer_id)->first();
+                                          @endphp
 
+                                          {{ $customer->mobile }}
+
+                                          @endif
                                         </td>
 
                                         <td>@php

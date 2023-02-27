@@ -253,8 +253,9 @@
                                     <td class="text-right" colspan="7"><b>Paid Amount :</b></td>
                                     <td class="text-right">
                                         <input type="number" id="pay" class="text-right form-control "
-                                               name="paid_amount" value="0" onkeyup="prevent_paid_amount()"
-                                               onchange="prevent_paid_amount()" tabindex="16" step=".01"/>
+                                               name="paid_amount" value="" onkeyup="prevent_paid_amount()" placeholder="0.00"
+                                               onchange="prevent_paid_amount()" tabindex="16" step=".01" required/>
+                                               <div class="invalid-feedback">Paid Amount Can Not Be Empty</div>
                                     </td>
                                     <td>
                                     </td>

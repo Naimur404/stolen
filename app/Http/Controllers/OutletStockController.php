@@ -254,7 +254,7 @@ class OutletStockController extends Controller
             $s_no = $sl++;
             $medicine_name = Medicine::get_medicine_name($stock->medicine_id);
             $manufacturer_price = '৳&nbsp;' .Medicine::get_manufacturer_price($stock->medicine_id);;
-             $medicine = Medicine::where('id',$stock->medicine_id)->first();
+            $medicine = Medicine::where('id',$stock->medicine_id)->first();
             $category = Category::get_category_name($medicine->category_id);
             $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);
             $price = '৳&nbsp;'.$stock->price;
