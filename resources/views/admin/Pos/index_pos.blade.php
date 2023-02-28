@@ -74,9 +74,14 @@
                                               @php
                                                 $customer = App\Models\Customer::where('id',$productPurchase->customer_id)->first();
                                             @endphp
+                                            @if ($customer->mobile == null || $customer->mobile == '')
 
-                                            {{ $customer->mobile }}
-                                       
+                                              @else
+                                              {{ $customer->mobile }}
+                                            @endif
+
+
+
                                             @endif
 
                                         </td>

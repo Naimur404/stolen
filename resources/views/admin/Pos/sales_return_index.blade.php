@@ -74,7 +74,11 @@
                                           @endphp
 
                                           {{ $customer->mobile }}
+                                          @if ($customer->mobile == null || $customer->mobile == '')
 
+                                          @else
+                                          {{ $customer->mobile }}
+                                        @endif
                                           @endif
                                         </td>
 
