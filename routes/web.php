@@ -13,7 +13,7 @@ use App\Http\Controllers\OutletStockController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
-
+use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\Select2Controller;
@@ -204,6 +204,15 @@ Route::get('/print-invoice/{id}', [OutletInvoiceController::class,'printInvoice'
 Route::resource('sale-return', SalesReturnController::class);
 Route::get('sale-return/{id}/details', [SalesReturnController::class,'details'])->name('sale-return.details');
 
+
+//report route
+
+Route::get('sale-report', [ReportController::class,'medicine_sale_report_form'])->name('sale-report');
+Route::post('sale-report-submit', [ReportController::class,'medicine_sale_report_submit'])->name('sale-report-submit');
+
+Route::get('purchase-report', [ReportController::class,'medicine_purchase_report_form'])->name('purchase-report');
+Route::post('purchase-report-submit', [ReportController::class,'medicine_purchase_report_submit'])->name('purchase-report-submit');
+
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {
@@ -215,6 +224,17 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function
     Route::resource('manufacturer',ManufacturerController::class);
     Route::resource('medicine',MedicineController::class);
     Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class,'active'])->name('manufacturer.active');
+});
+
+Route::group(['middleware' => ['auth'], 'prefix' => 'report'],function () {
+
+
+
+    Route::get('sale-report', [ReportController::class,'medicine_sale_report_form'])->name('sale-report');
+    Route::post('sale-report-submit', [ReportController::class,'medicine_sale_report_submit'])->name('sale-report-submit');
+
+    Route::get('purchase-report', [ReportController::class,'medicine_purchase_report_form'])->name('purchase-report');
+    Route::post('purchase-report-submit', [ReportController::class,'medicine_purchase_report_submit'])->name('purchase-report-submit');
 });
 
 

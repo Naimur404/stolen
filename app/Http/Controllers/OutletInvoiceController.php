@@ -129,6 +129,7 @@ class OutletInvoiceController extends Controller
                 $customer = Customer::create($customerdetails);
 
             } else {
+                $points = $customerCheck->points;
                 if($request->redeem_points > 0){
 
                   $points = $customerCheck->points - $request->redeem_points;
