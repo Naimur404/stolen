@@ -226,15 +226,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function
     Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class,'active'])->name('manufacturer.active');
 });
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'report'],function () {
 
 
 
-    Route::get('sale-report', [ReportController::class,'medicine_sale_report_form'])->name('sale-report');
-    Route::post('sale-report-submit', [ReportController::class,'medicine_sale_report_submit'])->name('sale-report-submit');
 
-    Route::get('purchase-report', [ReportController::class,'medicine_purchase_report_form'])->name('purchase-report');
-    Route::post('purchase-report-submit', [ReportController::class,'medicine_purchase_report_submit'])->name('purchase-report-submit');
-});
+ 
+
 
 
