@@ -135,24 +135,19 @@
                             </ul>
                         </li>
                         @endcan
-                        <li class="dropdown">
-                            <a class="nav-link menu-title {{ prefixActive('/report') }} "
-                               href="javascript:void(0)"><i data-feather="anchor"></i><span>Report</span></a>
-                            <ul class="nav-submenu menu-content"
-                                style="display:{{ prefixBlock('/report') }};">
+
                                 @can('sale.report')
 
+                                <li class="dropdown">
 
-                                <li>
-
-                                    <a class="submenu-title {{routeActive('sale-report')}}"
+                                    <a class="nav-link menu-title {{routeActive('sale-report')}}"
                                        href="{{route('sale-report')}}"><i
                                             data-feather="align-justify"></i><span>Sales Report</span></a>
                                 </li>
                                 @endcan
                                 @can('purchase.report')
-                                <li class="">
-                                    <a class="submenu-title {{routeActive('purchase-report')}}"
+                                <li class="dropdown">
+                                    <a class="nav-link menu-title {{routeActive('purchase-report')}}"
                                        href="{{route('purchase-report')}}"><i
                                             data-feather="database"></i><span>Purchase Report</span></a>
                                 </li>
@@ -168,8 +163,7 @@
                                        href="{{route('medicine.index')}}"><i
                                             data-feather="droplet"></i><span>Medicine</span></a>
                                 </li> --}}
-                            </ul>
-                        </li>
+
 
 
                     @can('payment-method.management')
