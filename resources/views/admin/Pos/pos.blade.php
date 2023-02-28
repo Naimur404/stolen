@@ -434,6 +434,7 @@
                 if(pay == 0 || pay == ''){
                     alert("Given Amount Can Not Be Zero Or Empty.");
                 }else{
+                    if(confirm('Do You Want To Submit?')){
                 const form = document.getElementById('my-form');
                 const formData = new FormData(form);
 
@@ -457,7 +458,11 @@
                     }
                 });
 
+                }else{
+                    return false;
                 }
+                    }
+
                 // Get form data
 
             }
