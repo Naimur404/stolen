@@ -103,6 +103,7 @@
                         </li>
                     @endcan
 
+
                     @can('medicine.management')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{ prefixActive('/medicine-setting') }} "
@@ -133,7 +134,43 @@
                                 </li>
                             </ul>
                         </li>
-                    @endcan
+                        @endcan
+                        <li class="dropdown">
+                            <a class="nav-link menu-title {{ prefixActive('/report') }} "
+                               href="javascript:void(0)"><i data-feather="anchor"></i><span>Report</span></a>
+                            <ul class="nav-submenu menu-content"
+                                style="display:{{ prefixBlock('/report') }};">
+                                @can('sale.report')
+
+
+                                <li>
+
+                                    <a class="submenu-title {{routeActive('sale-report')}}"
+                                       href="{{route('sale-report')}}"><i
+                                            data-feather="align-justify"></i><span>Sales Report</span></a>
+                                </li>
+                                @endcan
+                                @can('purchase.report')
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('purchase-report')}}"
+                                       href="{{route('purchase-report')}}"><i
+                                            data-feather="database"></i><span>Purchase Report</span></a>
+                                </li>
+                                @endcan
+
+                                {{-- <li class="">
+                                    <a class="submenu-title {{routeActive('manufacturer.index')}}"
+                                       href="{{route('manufacturer.index')}}"><i data-feather="filter"></i><span>Manufacturer</span></a>
+                                </li>
+
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('medicine.index')}}"
+                                       href="{{route('medicine.index')}}"><i
+                                            data-feather="droplet"></i><span>Medicine</span></a>
+                                </li> --}}
+                            </ul>
+                        </li>
+
 
                     @can('payment-method.management')
                         <li class="dropdown">

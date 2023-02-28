@@ -45,4 +45,12 @@ class MedicinePurchase extends Model
     public function purchase_details(){
            return $this->belongsTo(MedicinePurchaseDetails::class);
     }
+    public function payment()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'payment_method_id', 'id');
+    }
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'added_by');
+    }
 }

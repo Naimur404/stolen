@@ -23,7 +23,7 @@ class WarehouseReturnController extends Controller
     {
 
         $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-        if (Auth::user()->hasRole('Super Admin','Admin')){
+        if (Auth::user()->hasRole(['Super Admin','Admin'])){
         $warehousereturns = WarehouseReturn::get();
         }else{
             $warehousereturns = WarehouseReturn::where('outlet_id',$outlet_id)->get();

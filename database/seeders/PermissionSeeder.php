@@ -68,6 +68,11 @@ class PermissionSeeder extends Seeder
             'outletStock',
             'warehouseStock',
 
+            'sale.report',
+            'purchase.report',
+            'sale_report.search',
+            'purchase_report.search',
+
             'warehouse-return.management',
             'warehouse-return.create',
             'warehouse-return.edit',
