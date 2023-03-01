@@ -218,6 +218,37 @@ class Select2Controller extends Controller
         }
         return response()->json($response);
     }
+
+
+    public function get_user2(Request $request)
+    {
+        $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+        $search = $request->search;
+        if(Auth::user()->hasRole(['Super Admin', 'Admin'])){
+            if ($search == '') {
+                $customers = Customer::limit(10)->get();
+            } else {
+                $customers = Customer::where('mobile', 'like', '%' . $search . '%')->limit(10)->get();
+
+            }
+        }else{
+            if ($search == '') {
+                $customers = Customer::where('outlet_id', $outlet_id)->limit(10)->get();
+            } else {
+                $customers = Customer::where('outlet_id', $outlet_id)->where('mobile', 'like', '%' . $search . '%')->limit(10)->get();
+
+            }
+        }
+
+        $response = array();
+        foreach ($customers as $customers) {
+            $response[] = array(
+                "id" => $customers->id,
+                "text" => $customers->mobile,
+            );
+        }
+        return response()->json($response);
+    }
   public function get_user_details($id){
             $customer = Customer::where('mobile',$id)->first();
 

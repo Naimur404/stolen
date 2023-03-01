@@ -39,7 +39,7 @@ $total_pay = 0;
                 </div>
                 <div class="card-body">
 
-                    {!! Form::open(['url' => 'sale-report-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
+                    {!! Form::open(['url' => 'report/sale-report-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
                      <div class="row">
                          <div class="col-md-3">
                             <div class="input-group mb-3">
@@ -57,6 +57,13 @@ $total_pay = 0;
                                {!! Form::date('end_date', '', ['class'=>'form-control', 'autocomplete'=>'off', 'placeholder'=> 'end date']) !!}
                               </div>
                          </div>
+                         <div class="col-md-3">
+
+                            {{ Form::select('customer_id', [], null, ['class' => 'form-control add', 'placeholder' => 'Walking Customer', 'id' => 'user_id']) }}
+
+
+
+                        </div>
                          <div class="col-md-2">
                             <button type="submit" class="btn btn-info">
                                 Search
@@ -71,7 +78,7 @@ $total_pay = 0;
                         id="product_purchase">
                         <thead>
                             <tr>
-                                <th>sl</th>
+                                <th>SL</th>
 
                                 <th>Outlet Name</th>
                                 <th>Purchase Date</th>
@@ -185,6 +192,32 @@ $(document).ready(function() {
             'colvis'
         ]
     } );
+    let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+    $("#user_id").select2({
+                    tags: true,
+                    ajax: {
+                        url: "{!! url('get-user2') !!}",
+                        type: "get",
+                        dataType: 'json',
+                        //   delay: 250,
+                        data: function (params) {
+                            return {
+                                _token: CSRF_TOKEN,
+                                search: params.term,
+
+
+                            };
+                        },
+                        processResults: function (response) {
+                            return {
+                                results: response
+                            };
+                        },
+                        cache: true
+                    }
+
+                });
 } );
 
 

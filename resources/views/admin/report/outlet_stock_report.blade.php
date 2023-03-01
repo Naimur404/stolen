@@ -31,7 +31,7 @@ $total_pay = 0;
             <div class="card ">
                 <div class="card-header py-2">
                     <div class="d-flex justify-content-between align-items-center">
-                        <h4>Medicine Purchase report
+                        <h4>Outlet Stock report
                             @isset($start_date)
                                   From : {{ \Carbon\Carbon::parse($start_date)->format('d-m-Y') }} To {{ \Carbon\Carbon::parse($end_date)->format('d-m-Y') }}
                             @endisset
@@ -40,7 +40,7 @@ $total_pay = 0;
                 </div>
                 <div class="card-body">
 
-                    {!! Form::open(['url' => 'report/purchase-report-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
+                    {!! Form::open(['url' => 'report/outlet-stock-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
                      <div class="row">
                          <div class="col-md-3">
                             <div class="input-group mb-3">
@@ -58,6 +58,12 @@ $total_pay = 0;
                                {!! Form::date('end_date', '', ['class'=>'form-control', 'autocomplete'=>'off', 'placeholder'=> 'end date']) !!}
                               </div>
                          </div>
+                         <div class="col-md-3">
+                            {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
+                            <div class="invalid-feedback">Please Add Medicine</div>
+
+
+                        </div>
                          <div class="col-md-2">
                             <button type="submit" class="btn btn-info">
                                 Search
@@ -74,14 +80,14 @@ $total_pay = 0;
                             <tr>
                                 <th>SL</th>
 
+                                <th>Outlet Name</th>
+                                <th>Medicine Name</th>
+                                <th>Expiry Date</th>
 
-                                <th>Supplier</th>
-                                <th>Purchase Date</th>
-                                <th>Payment Method</th>
-                                <th>Purchased By</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
                                 <th>Total</th>
-                                <th>Pay</th>
-                                <th>Due</th>
+
                             </tr>
                         </thead>
                         <tbody>
@@ -91,36 +97,33 @@ $total_pay = 0;
                             @foreach ($productSales as $productPurchase)
                                 <tr>
                                     <td>{{ $loop->index + 1 }}</td>
-                                    @if ( $productPurchase->supplier_id == null)
+                                    @if ( $productPurchase->outlet_id == null)
 
 
                                         <td> N/A </td>
-                                    @elseif ($productPurchase->supplier_id != null)
+                                    @elseif ($productPurchase->outlet_id != null)
 
-                                        <td>{{ $productPurchase->supplier->supplier_name }}</td>
+                                        <td>{{ $productPurchase->outlet->outlet_name }}</td>
                                     @endif
 
-                                    <td>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y') }}
+
+                                    <td>{{ $productPurchase->medicine->medicine_name }}</td>
+                                    <td>{{ \Carbon\Carbon::parse($productPurchase->expiry_date)->format('d-m-Y') }}
                                     </td>
-                                    <td>{{ $productPurchase->payment->method_name }}</td>
-
-
-                                    <td>{{ $productPurchase->user->name }}</td>
 
 
 
-                                    <td>{{ $productPurchase->grand_total }}</td>
-                                    <td>{{ $productPurchase->paid_amount }}</td>
-                                    @if ($productPurchase->due_amount > 0)
-                                        <td> {{ $productPurchase->due_amount }} </td>
-                                    @else
-                                        <td>Paid</td>
-                                    @endif
+
+
+                                    <td>{{ $productPurchase->price }}</td>
+                                    <td>{{ $productPurchase->quantity }}</td>
+                                    <td>{{ $productPurchase->price * $productPurchase->quantity }}</td>
+
                                 </tr>
                                 @php
-                                $grand_total = $grand_total + $productPurchase->grand_total;
-                                $total_due = $total_due + $productPurchase->paid_amount;
-                                $total_pay = $total_pay + $productPurchase->due_amount;
+                                $grand_total = $grand_total + $productPurchase->quantity;
+
+                                $total_pay = $total_pay + $productPurchase->price * $productPurchase->quantity;
                                 @endphp
                             @endforeach
                         </tbody>
@@ -132,8 +135,8 @@ $total_pay = 0;
                                 <td></td>
                                 <td></td>
                                 <td class="text-right"><b>Total Amount</b></td>
-                                <td><b>৳ {{ $grand_total }}</b></td>
-                                <td><b>৳ {{ $total_due }}</b></td>
+                                <td><b>{{ $grand_total }}</b></td>
+
                                 <td><b>৳ {{ $total_pay }}</b></td>
                             </tr>
                         </tfoot>
@@ -184,6 +187,62 @@ $(document).ready(function() {
             'colvis'
         ]
     } );
+
+    let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+
+
+
+            // $("#supplier_id").select2({
+            //     ajax: {
+            //         url: "{!! url('get-outlet') !!}",
+            //         type: "get",
+            //         dataType: 'json',
+            //         //   delay: 250,
+            //         data: function(params) {
+            //             return {
+            //                 _token: CSRF_TOKEN,
+            //                 search: params.term,
+            //             };
+            //         },
+            //         processResults: function(response) {
+            //             return {
+            //                 results: response
+            //             };
+            //         },
+            //         cache: true
+            //     }
+
+            // });
+
+              // get manufacturer id
+            //   $("#supplier_id").on('change', function() {
+            //     supplier_id = $(this).val();
+            // })
+
+            // manufacturer wise medicine selection
+            $("#medicine_id").select2({
+                ajax: {
+                    url: "{!! url('get-all-medicine') !!}",
+                    type: "get",
+                    dataType: 'json',
+                    //   delay: 250,
+                    data: function(params) {
+                        return {
+                            _token: CSRF_TOKEN,
+                            search: params.term, // search term
+                            // manufacturer: manufacturer_id, // search term
+
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+
+            });
 } );
 
 
