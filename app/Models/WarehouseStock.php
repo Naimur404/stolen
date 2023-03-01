@@ -16,4 +16,11 @@ class WarehouseStock extends Model
         'quantity',
         'price',
     ];
+    public function medicine(){
+        return $this->belongsTo(Medicine::class,  'medicine_id','id');
+    }
+    public function warehouse()
+    {
+        return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
+    }
 }

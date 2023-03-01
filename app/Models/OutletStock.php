@@ -19,4 +19,8 @@ class OutletStock extends Model
     public function medicine(){
         return $this->belongsTo(Medicine::class,  'medicine_id','id');
     }
+    public function outlet()
+    {
+        return $this->belongsTo(Outlet::class, 'outlet_id', 'id');
+    }
 }
