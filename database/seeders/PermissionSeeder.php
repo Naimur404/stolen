@@ -77,6 +77,7 @@ class PermissionSeeder extends Seeder
             'outlet-stock.search',
             'warehouse-stock.report',
             'warehouse-stock.search',
+            'pay-due.payment',
 
             'warehouse-return.management',
             'warehouse-return.create',

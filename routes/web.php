@@ -29,6 +29,7 @@ use App\Http\Controllers\WarehouseReturnController;
 use App\Http\Controllers\WarehouseStockController;
 use App\Models\Customer;
 use App\Models\MedicineDistribute;
+use App\Models\OutletInvoice;
 use App\Models\OutletStock;
 use App\Models\SalesReturn;
 use App\Models\StockRequest;
@@ -186,7 +187,7 @@ Route::get('/get-warehouse-stock/{id}',[WarehouseStockController::class,'warehou
 Route::get('/my-profile', [ProfileController::class,'myProfile'])->name('myprofile');
 Route::Post('/my-profile/update', [ProfileController::class,'updateMyProfile'])->name('updatemyprofile');
 
-Route::get('/get-customer/{id}',[CustomerManagementController::class,'customer'])->name('get-customer');
+
 
 //medicine return  route
 Route::get('/delete/{medicineid}/{returnid}/return', [WarehouseReturnController::class,'medicineReturnlDelete'])->name('delete.medicineReturnlDelete');
@@ -207,10 +208,12 @@ Route::resource('sale-return', SalesReturnController::class);
 Route::get('sale-return/{id}/details', [SalesReturnController::class,'details'])->name('sale-return.details');
 
 
-//report route
+Route::get('/get-customer/{id}',[CustomerManagementController::class,'customer'])->name('get-customer');
 
+Route::get('/sale-due/list',[OutletInvoiceController::class,'dueList'])->name('duelist');
+Route::get('/pay-due/{id}',[OutletInvoiceController::class,'payDue'])->name('payDue');
+Route::post('/pay-due',[OutletInvoiceController::class,'paymentDue'])->name('paymentDue');
 
-Route::view('re', 'admin.report.report');
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {

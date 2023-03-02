@@ -218,10 +218,10 @@
             <td colspan="3" style="border: none; "><b>{{ $outletInvoice->earn_point }}</b></td>
 
         </tr>
-        @if(Session()->get('redeem_points') > 0)
+        @if($outletInvoice->redeem_point > 0)
         <tr>
             <td style="text-align: left; border: none;">Your Redeem Points:</td>
-            <td colspan="3" style="border: none;"><b> {{ Session()->get('redeem_points'); }} </b></td>
+            <td colspan="3" style="border: none;"><b> {{ $outletInvoice->redeem_point }} </b></td>
 
         </tr>
         @endif
