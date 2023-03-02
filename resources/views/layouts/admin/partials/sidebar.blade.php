@@ -136,12 +136,12 @@
                         </li>
                         @endcan
                         <li class="dropdown">
-                            <a class="nav-link menu-title {{ prefixActive('/report') }} "
+                            <a class="nav-link menu-title {{ prefixActive('/report2') }} "
                                href="javascript:void(0)"><i data-feather="anchor"></i><span>Report</span></a>
                             <ul class="nav-submenu menu-content"
-                                style="display:{{ prefixBlock('/report') }};">
+                                style="display:{{ prefixBlock('/report2') }};">
                                 <li>
-                                @can('sale.report')
+                                {{-- @can('sale.report')
                                 <li class="">
                                     <a class="submenu-title {{routeActive('sale-report')}}"
                                        href="{{route('sale-report')}}"><i data-feather="filter"></i><span>Sales</span></a>
@@ -161,25 +161,23 @@
                                     <a class="submenu-title {{routeActive('outlet-stock-report')}}"
                                        href="{{route('outlet-stock-report')}}"><i data-feather="filter"></i><span><h10>Outlet Stock</h10></span></a>
                                 </li>
+
+
                                 @endcan
-                                @can('warehouse-stock.report')
+
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('outlet-stock-report')}}"
+                                       href="{{route('outlet-stock-report')}}"><i data-feather="filter"></i><span><h10>Outlet</h10></span></a>
+                                </li>
+                                @can('warehouse-stock.report') --}}
 
 
                                 <li class="">
-                                    <a class="submenu-title {{routeActive('warehouse-stock-report')}}"
-                                       href="{{route('warehouse-stock-report')}}"><i data-feather="filter"></i><span><h10>Warehouse Stock</h10></span></a>
-                                </li>
-                                @endcan
-                                {{-- <li class="">
-                                    <a class="submenu-title {{routeActive('manufacturer.index')}}"
-                                       href="{{route('manufacturer.index')}}"><i data-feather="filter"></i><span>Manufacturer</span></a>
+                                    <a class="submenu-title {{routeActive('all-report')}}"
+                                       href="{{route('all-report')}}"><i data-feather="filter"></i><span><h10>All Report</h10></span></a>
                                 </li>
 
-                                <li class="">
-                                    <a class="submenu-title {{routeActive('medicine.index')}}"
-                                       href="{{route('medicine.index')}}"><i
-                                            data-feather="droplet"></i><span>Medicine</span></a>
-                                </li> --}}
+
 
                             </ul>
                         </li>

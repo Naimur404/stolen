@@ -14,6 +14,7 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReportController;
+use App\Http\Controllers\ReportController2;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\Select2Controller;
@@ -208,12 +209,8 @@ Route::get('sale-return/{id}/details', [SalesReturnController::class,'details'])
 
 //report route
 
-Route::get('sale-report', [ReportController::class,'medicine_sale_report_form'])->name('sale-report');
-Route::post('sale-report-submit', [ReportController::class,'medicine_sale_report_submit'])->name('sale-report-submit');
 
-Route::get('purchase-report', [ReportController::class,'medicine_purchase_report_form'])->name('purchase-report');
-Route::post('purchase-report-submit', [ReportController::class,'medicine_purchase_report_submit'])->name('purchase-report-submit');
-
+Route::view('re', 'admin.report.report');
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {
@@ -241,6 +238,27 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report'],function () {
 
     Route::get('warehouse-stock', [ReportController::class,'warehouse_stock_report_form'])->name('warehouse-stock-report');
     Route::post('warehouse-stock-submit', [ReportController::class,'warehouse_stock_report_submit'])->name('warehouse-stock-submit');
+
+
+});
+
+Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
+
+
+    Route::view('all-report', 'admin.report.report')->name('all-report');
+
+    Route::post('sale-report-submit', [ReportController2::class,'medicine_sale_report_submit'])->name('sale-report-submit');
+
+
+    Route::post('purchase-report-submit', [ReportController2::class,'medicine_purchase_report_submit'])->name('purchase-report-submit');
+
+
+    Route::post('outlet-stock-submit', [ReportController2::class,'outlet_stock_report_submit'])->name('outlet-stock-submit');
+
+
+    Route::post('warehouse-stock-submit', [ReportController2::class,'warehouse_stock_report_submit'])->name('warehouse-stock-submit');
+
+
 });
 
 
