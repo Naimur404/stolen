@@ -23,6 +23,7 @@ class OutletInvoice extends Model
         'paid_amount',
         'due_amount',
         'earn_point',
+        'redeem_point',
         'payment_method_id',
         'added_by',
     ];
