@@ -90,6 +90,12 @@
                                href="{{route('invoice.index')}}"><i data-feather="box"></i><span>All Invoice</span></a>
                         </li>
                     @endcan
+                    @can('pay-due.payment')
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('duelist')}}"
+                           href="{{route('duelist')}}"><i data-feather="box"></i><span>Sales Due</span></a>
+                    </li>
+                    @endcan
                     @can('sale-return.management')
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('sale-return.index')}}"

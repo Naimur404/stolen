@@ -9,6 +9,7 @@ use App\Models\OutletInvoice;
 use App\Models\OutletInvoiceDetails;
 use App\Models\OutletStock;
 use App\Models\PaymentMethod;
+use App\Models\RedeemPointLog;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -31,6 +32,8 @@ class OutletInvoiceController extends Controller
         $this->middleware('permission:invoice.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:invoice.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:invoice.delete', ['only' => ['destroy']]);
+
+        $this->middleware('permission:pay-due.payment', ['only' => ['dueList','payDue','paymentDue']]);
 
     }
 
@@ -79,7 +82,7 @@ class OutletInvoiceController extends Controller
 
 
         $input = $request->all();
-        Session::forget('redeem_points');
+
         $request->validate([
 
 
@@ -133,7 +136,7 @@ class OutletInvoiceController extends Controller
                 if($request->redeem_points > 0){
 
                   $points = $customerCheck->points - $request->redeem_points;
-                  Session::put('redeem_points', $request->redeem_points);
+
                   }
                 $customerdetails = array(
                     'name' => $input['name'],
@@ -181,6 +184,7 @@ class OutletInvoiceController extends Controller
             'grand_total' => $input['grand_total'],
             'paid_amount' => $input['paid_amount'],
             'due_amount' => $input['due_amount'],
+            'redeem_point' => $input['redeem_points'],
             'earn_point' => round(($input['grand_total'] / 100), 2),
             'payment_method_id' => $input['payment_method_id'],
             'added_by' => Auth::user()->id,
@@ -190,6 +194,23 @@ class OutletInvoiceController extends Controller
 
 
             $outletinvoice = OutletInvoice::create($invoice);
+
+
+            if(isset($request->redeem_points) && ($request->redeem_points > 0)){
+
+                $redeem = array(
+
+                    'outlet_id' => $input['outlet_id'],
+                    'customer_id' => $customer->id,
+                    'invoice_id' => $outletinvoice->id,
+                    'previous_point' => $customerCheck->points,
+                    'redeem_point' => $request->redeem_points,
+
+                );
+
+                RedeemPointLog::create($redeem);
+
+            }
             $medicines = $input['product_name'];
 
             for ($i = 0; $i < sizeof($medicines); $i++) {
@@ -341,5 +362,63 @@ class OutletInvoiceController extends Controller
               return response()->json([
                 'data' => $outletinvoice
             ]);
+    }
+
+
+    public function dueList()
+
+
+    {
+        $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+
+        if (Auth::user()->hasRole('Super Admin')) {
+
+            $datas = OutletInvoice::where('due_amount','>','0')->whereDate('sale_date', '>=', Carbon::now()->month())->orderby('id', 'desc')->get();
+            return view('admin.pos.sale_due_index', compact('datas'));
+        } else {
+
+            $datas = OutletInvoice::where('due_amount','>','0')->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)->orderby('id', 'desc')->get();
+            return view('admin.Pos.sale_due_index', compact('datas'));
+
+        }
+
+    }
+
+
+
+    public function payDue($id)
+
+
+    {
+        $outletInvoice = OutletInvoice::findOrFail($id);
+        $outletInvoiceDetails = OutletInvoiceDetails::where('outlet_invoice_id', $id)->get();
+        return view('admin.Pos.due_payment', compact('outletInvoice', 'outletInvoiceDetails'));
+
+    }
+
+    public function paymentDue(Request $request)
+
+
+    {
+
+
+        $invoiceData = OutletInvoice::where('id',$request->outlet_invoice_id)->first();
+
+
+        try{
+            $arra = array(
+                'total_discount' => $invoiceData->total_discount + $request->discount,
+                'paid_amount' => $invoiceData->paid_amount + $request->amount,
+                'due_amount'   => $invoiceData->due_amount - ($request->discount + $request->amount),
+
+             );
+
+         OutletInvoice::where('id',$request->outlet_invoice_id)->update($arra);
+         return redirect()->back()->with('success', 'Due Payment Successfull.');
+
+        }catch(Exception $e){
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
     }
 }

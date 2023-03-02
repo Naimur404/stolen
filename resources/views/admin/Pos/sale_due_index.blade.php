@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title',' All Invoice')
+@section('title',' All Due Invoice')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
@@ -12,15 +12,14 @@
         @slot('breadcrumb_title')
             <div class="row">
                 <div class="col-sm-6">
-                    <h3> All Invoice</h3>
+                    <h3>All Due Invoice</h3>
                 </div>
 
             </div>
         @endslot
 
         @slot('button')
-            <a href="{{ route('invoice.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn"
-               title="">New Sale</a>
+
         @endslot
     @endcomponent
 
@@ -44,7 +43,7 @@
                                     <th>Payment Method</th>
                                     <th>Total</th>
                                     <th>Pay</th>
-
+                                    <th>Due</th>
 
                                     <th>Sold By</th>
                                     <th>Action</th>
@@ -93,6 +92,7 @@
 
                                         <td>{{ $productPurchase->grand_total }}</td>
                                         <td>{{ $productPurchase->paid_amount }}</td>
+                                        <td>{{ $productPurchase->due_amount }}</td>
 
 
                                         <td>
@@ -105,13 +105,11 @@
 
                                         <td class="form-inline">
 
-                                            <a href="{{ route('print-invoice', $productPurchase->id) }}" target="_blank"
-                                               class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i
-                                                    class="fa fa-print" aria-hidden="true"></i></a>
 
-                                            <a href="{{ route('sale-return.show', $productPurchase->id) }}"
-                                               class="btn btn-success btn-xs" title="Return"
-                                               style="margin-right:3px"><i class="fa fa-retweet" aria-hidden="true"></i></a>
+
+                                            <a href="{{ route('payDue', $productPurchase->id) }}"
+                                               class="btn btn-success btn-xs" title="Pay Now"
+                                               style="margin-right:3px"><i class="fa fa-paypal"></i></a>
 
 
                                         </td>

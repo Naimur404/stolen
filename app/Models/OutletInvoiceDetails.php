@@ -23,4 +23,7 @@ class OutletInvoiceDetails extends Model
         'discount',
         'total_price',
     ];
+    public function medicine(){
+        return $this->belongsTo(Medicine::class, 'medicine_id', 'id');
+   }
 }
