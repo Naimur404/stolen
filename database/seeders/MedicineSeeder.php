@@ -23,7 +23,7 @@ class MedicineSeeder extends Seeder
 
         $csvFile = fopen(base_path("database/data/medicine_dataset.csv"), "r");
 
-        $limit = 3000;
+        $limit = 35000;
         $c=0;
         $firstline = true;
         while (($data = fgetcsv($csvFile, 3500, ",")) !== FALSE && $c < $limit) {
