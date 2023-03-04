@@ -13,7 +13,7 @@ class MedicinePurchase extends Model
     protected $table = 'medicine_purchases';
     protected $fillable = [
         'warehouse_id',
-        'supplier_id',
+        'supplier_id', 
         'invoice_no',
         'invoice_image',
         'sub_total',

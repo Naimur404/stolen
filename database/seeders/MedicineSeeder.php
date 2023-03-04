@@ -27,15 +27,15 @@ class MedicineSeeder extends Seeder
         $c=0;
         $firstline = true;
         while (($data = fgetcsv($csvFile, 3500, ",")) !== FALSE && $c < $limit) {
-            $exists = Medicine::where('medicine_name', '=' , $data[1])->where('strength', '=', $data[3])->exists();
+            $exists = Medicine::where('medicine_name', '=' , $data[1])->where('strength', '=', $data[2])->exists();
             if (!$firstline && !$exists) {
                 Medicine::create([
                     'manufacturer_id' => Manufacturer::where('manufacturer_name', '=', $data[0])->value('id') ?? 1,
                     'medicine_name' => $data[1],
-                    'generic_name' => $data[2],
-                    'strength' => $data[3],
-                    'category_id' => Category::where('category_name', '=', $data[4])->value('id') ?? 1,
-                    'price' => (float) $data[5],
+                    'generic_name' => $data[3],
+                    'strength' => $data[2],
+                    'category_id' => Category::where('category_name', '=', $data[5])->value('id') ?? 1,
+                    'price' => (float) $data[4],
                     'unit_id' => Unit::where('unit_name', '=', 'pc')->value('id') ?? 1,
                     'type_id' => Type::where('type_name', '=', 'Medicine')->value('id') ?? 1,
                 ]);

@@ -374,7 +374,7 @@ class OutletInvoiceController extends Controller
         if (Auth::user()->hasRole('Super Admin')) {
 
             $datas = OutletInvoice::where('due_amount','>','0')->whereDate('sale_date', '>=', Carbon::now()->month())->orderby('id', 'desc')->get();
-            return view('admin.pos.sale_due_index', compact('datas'));
+            return view('admin.Pos.sale_due_index', compact('datas'));
         } else {
 
             $datas = OutletInvoice::where('due_amount','>','0')->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)->orderby('id', 'desc')->get();
