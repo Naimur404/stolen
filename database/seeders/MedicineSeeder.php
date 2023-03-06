@@ -9,6 +9,7 @@ use App\Models\Type;
 use App\Models\Unit;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use Psy\Util\Str;
 
 class MedicineSeeder extends Seeder
 {
@@ -21,7 +22,7 @@ class MedicineSeeder extends Seeder
     {
 
 
-        $csvFile = fopen(base_path("database/data/medicine_dataset.csv"), "r");
+        $csvFile = fopen(base_path("database/data/medicine_data.csv"), "r");
 
         $limit = 35000;
         $c=0;
@@ -32,9 +33,9 @@ class MedicineSeeder extends Seeder
                 Medicine::create([
                     'manufacturer_id' => Manufacturer::where('manufacturer_name', '=', $data[0])->value('id') ?? 1,
                     'medicine_name' => $data[1],
-                    'generic_name' => $data[3],
-                    'strength' => $data[2],
-                    'category_id' => Category::where('category_name', '=', $data[5])->value('id') ?? 1,
+                    'generic_name' => \Illuminate\Support\Str::limit($data[2], 200),
+                    'strength' => $data[3],
+                    'category_id' => Category::where('category_name', '=', $data[4])->value('id') ?? 1,
                     'price' => (float) $data[4],
                     'unit_id' => Unit::where('unit_name', '=', 'pc')->value('id') ?? 1,
                     'type_id' => Type::where('type_name', '=', 'Medicine')->value('id') ?? 1,
