@@ -1,5 +1,5 @@
 @extends('layouts.admin.public_layouts')
-@section('title','Warehouse Stock Report')
+@section('title','Invoice Report Details')
 @section('main-content')
 <style>
     .space{
@@ -23,7 +23,7 @@
             text-align: center;
         }
 </style>
-
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/fontawesome.css')}}">
 @php
     $total_amount = 0;
 @endphp
@@ -39,64 +39,59 @@
     </div>
 </div>
 
-<div class="row all-content">
-    <p align="center"><b> Warehouse Stock -
+{{-- <div class="row all-content">
+    <p align="center"><b> Medicine Sales Report -
         @if ($start_date && $end_date !=null )
            From {{Carbon\Carbon::parse($start_date)->format('d-m-Y')}}
            To {{Carbon\Carbon::parse($end_date)->format('d-m-Y') }}
        @endif
-   </b></p>
+   </b></p> --}}
     <div class="col-md-12">
         <table class="table table-hover table-bordered">
             <thead class="">
                 <tr>
                     <th>SL</th>
 
-                                <th>Warehouse Name</th>
+
+
+                                <th>Purchase Date</th>
                                 <th>Medicine Name</th>
                                 <th>Expiry Date</th>
-
-                                <th>Price</th>
                                 <th>Quantity</th>
-                                <th>Total</th>
+                                <th>Price</th>
+                                <th>Discount</th>
+
                 </tr>
             </thead>
             <tbody>
                 @php
                 $grand_quantity = 0;
                 $total_price = 0;
+                $total_discount = 0;
 
                 @endphp
-                    @foreach ($productSales as $productPurchase)
-                    <tr>
+                     @foreach ($productSales as $productPurchase)
+                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
-                        @if ( $productPurchase->warehouse_id == null)
+                         <td>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y') }}
+                         </td>
+                         <td>{{ $productPurchase->medicine_name }}</td>
 
 
-                            <td> N/A </td>
-                        @elseif ($productPurchase->warehouse_id != null)
-
-                            <td>{{ $productPurchase->warehouse->warehouse_name }}</td>
-                        @endif
-
-
-                        <td>{{ $productPurchase->medicine->medicine_name }}</td>
-                        <td>{{ \Carbon\Carbon::parse($productPurchase->expiry_date)->format('d-m-Y') }}
-                        </td>
+                         <td>{{ $productPurchase->expiry_date }}</td>
 
 
 
+                         <td>{{ $productPurchase->quantity }}</td>
+                         <td>{{ $productPurchase->rate }}</td>
 
-
-                        <td>{{ $productPurchase->price }}</td>
-                        <td>{{ $productPurchase->quantity }}</td>
-                        <td>{{ $productPurchase->price * $productPurchase->quantity }}</td>
-
-                    </tr>
-                    @php
+                         <td>{{ $productPurchase->discount }}</td>
+                     </tr>
+                     @php
                     $grand_quantity = $grand_quantity + $productPurchase->quantity;
 
-                    $total_price = $total_price + $productPurchase->price * $productPurchase->quantity;
+                    $total_price = $total_price + $productPurchase->rate * $productPurchase->quantity;
+                    $total_discount = $total_discount + $productPurchase->discount;
                     @endphp
                 @endforeach
 
@@ -104,17 +99,13 @@
             </tbody>
         </table>
 
-        <p class="text-center">Total Quantity {{ $grand_quantity }} | Total Price {{ $total_price }}</p>
+        <p class="text-center">Grand Total {{ $total_price }} | Total Quantity {{ $grand_quantity }} | Total Discount {{ $total_discount }}</p>
         <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
 
     </div>
 </div>
 
-@section('custom-js')
 <script>
     setTimeout(function() { window.print(); }, 1000);
 </script>
-
 @endsection
-@endsection
-

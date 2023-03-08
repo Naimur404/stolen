@@ -12,6 +12,7 @@ use App\Models\PaymentMethod;
 use App\Models\Supplier;
 use App\Models\Type;
 use App\Models\Unit;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -284,5 +285,7 @@ class Select2Controller extends Controller
 
       return response()->json($response);
   }
+
+
 
 }

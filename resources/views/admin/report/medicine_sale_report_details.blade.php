@@ -23,7 +23,7 @@
             text-align: center;
         }
 </style>
-
+<link rel="stylesheet" type="text/css" href="{{asset('assets/css/fontawesome.css')}}">
 @php
     $total_amount = 0;
 @endphp
@@ -53,13 +53,14 @@
                     <th>SL</th>
 
 
-                                <th>Supplier</th>
+                                <th>Outlet Name</th>
                                 <th>Purchase Date</th>
                                 <th>Payment Method</th>
                                 <th>Purchased By</th>
                                 <th>Total</th>
                                 <th>Pay</th>
                                 <th>Due</th>
+                                <th>Action</th>
                 </tr>
             </thead>
             <tbody>
@@ -71,15 +72,13 @@
                      @foreach ($productSales as $productPurchase)
                      <tr>
                          <td>{{ $loop->index + 1 }}</td>
-                         @if ( $productPurchase->supplier_id == null)
+                         @if ($productPurchase->outlet_id == null )
 
+                         <td> N/A </td>
+                     @elseif ($productPurchase->outlet_id != null )
+                         <td>{{ $productPurchase->outlet->outlet_name }}</td>
 
-                             <td> N/A </td>
-                         @elseif ($productPurchase->supplier_id != null)
-
-                             <td>{{ $productPurchase->supplier->supplier_name }}</td>
-                         @endif
-
+                     @endif
                          <td>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y') }}
                          </td>
                          <td>{{ $productPurchase->payment->method_name }}</td>
@@ -96,6 +95,16 @@
                          @else
                              <td>Paid</td>
                          @endif
+
+                         <td class="">
+
+                            <a href="{{ route('sale-report-details1', $productPurchase->id) }}" target="_blank"
+                               class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i
+                                    class="fa fa-print" aria-hidden="true"></i></a>
+
+
+
+                        </td>
                      </tr>
                      @php
                      $grand_total = $grand_total + $productPurchase->grand_total;
@@ -109,15 +118,9 @@
         </table>
 
         <p class="text-center">Grand Total {{ $grand_total }} | Total Pay {{ $total_pay }} | Total Due {{ $total_due }}</p>
-        <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
 
     </div>
 </div>
 
-@section('custom-js')
-<script>
-    setTimeout(function() { window.print(); }, 1000);
-</script>
 
-@endsection
 @endsection
