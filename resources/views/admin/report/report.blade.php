@@ -136,30 +136,7 @@
                     </div>
                     {!! Form::close() !!}
 
-@endcan
-                    {{-- {!! Form::open(array('url'=> 'report2/purchase-report-submit', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-                    <div class="row form-group">
-                        <div class="col-md-2 mt-4">
-                            <b>Medicine Purchase Report</b>
-                        </div>
-                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
-                        <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
-
-                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-                    </div>
-                    {!! Form::close() !!}
-
-                    {!! Form::open(array('url'=> 'report2/purchase-report-submit', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-                    <div class="row form-group">
-                        <div class="col-md-2 mt-4">
-                            <b>Medicine Purchase Report</b>
-                        </div>
-                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
-                        <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
-
-                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-                    </div>
-                    {!! Form::close() !!} --}}
+                     @endcan
                 </div>
             </div>
         </div>
