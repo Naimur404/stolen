@@ -67,7 +67,7 @@
                         </div>
                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
                         <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
-                        <div class="col-md-3">Medicine Name  {{ Form::select('customer_id', [], null, ['class' => 'form-control add', 'placeholder' => 'All Customer', 'id' => 'user_id']) }}
+                        <div class="col-md-3">Customer  {{ Form::select('customer_id', [], null, ['class' => 'form-control add', 'placeholder' => 'All Customer', 'id' => 'user_id']) }}
                             </div>
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                     </div>
@@ -86,6 +86,57 @@
                     </div>
                     {!! Form::close() !!}
                     @endcan
+
+@can('sale_report_by_user')
+                    {!! Form::open(array('url'=> 'report2/sale-report-user', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                    <div class="row form-group">
+                        <div class="col-md-2 mt-4">
+                            <b>Sales Report By User</b>
+                        </div>
+                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
+                        <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
+                        <div class="col-md-3">User Name  {{ Form::select('user_id', $Users, null, ['class' => 'form-control add', 'id' => 'user_id2']) }}
+                        </div>
+
+                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                    </div>
+                    {!! Form::close() !!}
+
+@endcan
+
+@can('sale_report_by_payment')
+
+
+                        {!! Form::open(array('url'=> 'report2/sale-report-payment', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                    <div class="row form-group">
+                        <div class="col-md-2 mt-4">
+                            <b>Sales Report By Payment Method</b>
+                        </div>
+                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
+                        <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
+                        <div class="col-md-3">Payment Method  {{ Form::select('payment_id', $payment_method, null, ['class' => 'form-control add', 'id' => 'user_id2']) }}
+                        </div>
+
+                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                    </div>
+                    {!! Form::close() !!}
+                    @endcan
+
+                    @can('sale_report_details')
+                    {!! Form::open(array('url'=> 'report2/sale-report-details', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                    <div class="row form-group">
+                        <div class="col-md-2 mt-4">
+                            <b>Sales Report Details</b>
+                        </div>
+                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
+                        <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
+
+
+                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                    </div>
+                    {!! Form::close() !!}
+
+                     @endcan
                 </div>
             </div>
         </div>
@@ -169,6 +220,8 @@
                     }
 
                 });
+
+
         } );
 
 

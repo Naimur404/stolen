@@ -85,11 +85,17 @@ class RoleSeeder extends Seeder
 
             'stock_request',
 
+            'warehouse-stock.report',
+            'warehouse-stock.search',
+
             'sale-return.management',
             'sale-return.store',
             'sale-return.show',
             'sale-return.delete',
             'sale-return.detail',
+
+            'purchase.report',
+          'purchase_report.search',
 
         ];
 
@@ -118,6 +124,20 @@ class RoleSeeder extends Seeder
             'sale-return.show',
             'sale-return.delete',
             'sale-return.detail',
+
+            'sale_report_by_payment',
+            'sale_report_by_payment.search',
+
+            'sale_report_details',
+            'sale_report_details.search',
+
+            'sale_report_by_user',
+            'sale_report_by_user.search',
+            'outlet-stock.report',
+            'outlet-stock.search',
+            'sale.report',
+            'sale_report.search',
+
         ];
 
         $sales_permissions = [

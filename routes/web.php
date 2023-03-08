@@ -180,6 +180,8 @@ Route::get('get-user2', [Select2Controller::class,'get_user2']);
 Route::get('get-payment', [Select2Controller::class,'get_payment']);
 Route::get('get-user-details/{id}', [Select2Controller::class,'get_user_details']);
 
+
+
 //stock route
 Route::get('/get-outlet-stock/{id}',[OutletStockController::class,'outletStock'])->name('outletstock');
 Route::get('/get-warehouse-stock/{id}',[WarehouseStockController::class,'warehouseStock'])->name('warehouseStock');
@@ -248,7 +250,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report'],function () {
 Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
 
 
-    Route::view('all-report', 'admin.report.report')->name('all-report');
+    Route::get('all-report', [ReportController2::class,'index'])->name('all-report');
 
     Route::post('sale-report-submit', [ReportController2::class,'medicine_sale_report_submit'])->name('sale-report-submit');
 
@@ -261,7 +263,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
 
     Route::post('warehouse-stock-submit', [ReportController2::class,'warehouse_stock_report_submit'])->name('warehouse-stock-submit');
 
-
+    Route::post('sale-report-user', [ReportController2::class,'medicine_sale_report_by_user'])->name('sale-report-user');
+    Route::post('sale-report-payment', [ReportController2::class,'medicine_sale_report_by_payment'])->name('sale-report-payment');
+    Route::post('sale-report-details', [ReportController2::class,'medicine_sale_report_details'])->name('sale-report-details');
+    Route::get('/sale-report-details1/{id}', [ReportController2::class,'medicine_sale_report_details1'])->name('sale-report-details1');
 });
 
 

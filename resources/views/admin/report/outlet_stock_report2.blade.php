@@ -105,9 +105,15 @@
         </table>
 
         <p class="text-center">Total Quantity {{ $grand_quantity }} | Total Price {{ $total_price }}</p>
+        <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
 
     </div>
 </div>
 
+@section('custom-js')
+<script>
+    setTimeout(function() { window.print(); }, 1000);
+</script>
 
+@endsection
 @endsection
