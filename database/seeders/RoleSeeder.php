@@ -94,6 +94,9 @@ class RoleSeeder extends Seeder
             'sale-return.delete',
             'sale-return.detail',
 
+            'purchase.report',
+          'purchase_report.search',
+
         ];
 
         $manager_permissions = [
@@ -132,6 +135,9 @@ class RoleSeeder extends Seeder
             'sale_report_by_user.search',
             'outlet-stock.report',
             'outlet-stock.search',
+            'sale.report',
+            'sale_report.search',
+
         ];
 
         $sales_permissions = [
