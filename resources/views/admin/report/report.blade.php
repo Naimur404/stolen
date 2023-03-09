@@ -27,6 +27,49 @@
                     {{-- {!! Form::close() !!} --}}
 
                     {{-- attendance report form --}}
+                    @can('purchase.report')
+                    {!! Form::open(array('url'=> 'report2/purchase-report-submit', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                    <div class="row form-group">
+                        <div class="col-md-2 mt-4">
+                            <b>Medicine Purchase Report</b>
+                        </div>
+                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
+                        <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
+
+                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                    </div>
+                    {!! Form::close() !!}
+                    @endcan
+                    @can('sale_report_details')
+                    {!! Form::open(array('url'=> 'report2/sale-report-details', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                    <div class="row form-group">
+                        <div class="col-md-2 mt-4">
+                            <b>Sales Report Details</b>
+                        </div>
+                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
+                        <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
+
+
+                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                    </div>
+                    {!! Form::close() !!}
+                    @can('sale_return_report')
+
+                    {!! Form::open(array('url'=> 'report2/sale-return-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                    <div class="row form-group">
+                        <div class="col-md-2 mt-4">
+                            <b>Sales Return Report</b>
+                        </div>
+                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
+                        <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
+
+
+                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                    </div>
+                    {!! Form::close() !!}
+                    @endcan
+
+                     @endcan
                     @can('warehouse-stock.report')
                     {!! Form::open(array('url'=> 'report2/warehouse-stock-submit', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
@@ -73,19 +116,6 @@
                     </div>
                     {!! Form::close() !!}
                     @endcan
-                    @can('purchase.report')
-                    {!! Form::open(array('url'=> 'report2/purchase-report-submit', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-                    <div class="row form-group">
-                        <div class="col-md-2 mt-4">
-                            <b>Medicine Purchase Report</b>
-                        </div>
-                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
-                        <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
-
-                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-                    </div>
-                    {!! Form::close() !!}
-                    @endcan
 
 @can('sale_report_by_user')
                     {!! Form::open(array('url'=> 'report2/sale-report-user', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
@@ -121,22 +151,118 @@
                     </div>
                     {!! Form::close() !!}
                     @endcan
+                    @can('stock_request_report_for_warehouse')
 
-                    @can('sale_report_details')
-                    {!! Form::open(array('url'=> 'report2/sale-report-details', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+
+                    {!! Form::open(array('url'=> 'report2/stock-request-report2', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
                         <div class="col-md-2 mt-4">
-                            <b>Sales Report Details</b>
+                            <b>Stock Request Report</b>
                         </div>
                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
                         <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
 
-
+                        <div class="col-md-3">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id25']) }}
+                       </div>
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                     </div>
                     {!! Form::close() !!}
 
+                    @endcan
+                    @can('distribute_medicine_report_for_warehouse')
+
+                    {{-- for warehouse manager --}}
+                                         {!! Form::open(array('url'=> 'report2/distribute-medicine-report2', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                                         <div class="row form-group">
+                                             <div class="col-md-2 mt-4">
+                                                 <b>Distribute Medicine Report</b>
+                                             </div>
+                                             <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
+                                             <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
+
+                                             <div class="col-md-3">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id24']) }}
+                                            </div>
+                                             <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                                         </div>
+                                         {!! Form::close() !!}
+
+                      @endcan
+
+                    @can('distribute_medicine_report_for_outlet')
+
+
+                     {!! Form::open(array('url'=> 'report2/distribute-medicine-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                     <div class="row form-group">
+                         <div class="col-md-2 mt-4">
+                             <b>Distribute Medicine Report</b>
+                         </div>
+                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
+                         <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
+                         <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
+                        </div>
+                         <div class="col-md-2">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id23']) }}
+                        </div>
+                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                     </div>
+                     {!! Form::close() !!}
                      @endcan
+
+
+  @can('stock_request_report_for_outlet')
+
+                     {!! Form::open(array('url'=> 'report2/stock-request-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                     <div class="row form-group">
+                         <div class="col-md-2 mt-4">
+                             <b>Stock Request Report</b>
+                         </div>
+                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
+                         <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
+                         <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
+                        </div>
+                         <div class="col-md-2">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id22']) }}
+                        </div>
+                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                     </div>
+                     {!! Form::close() !!}
+                     @endcan
+{{-- for warehouse manager --}}
+
+                     @can('return_medicine_report_for_outlet')
+
+                     {!! Form::open(array('url'=> 'report2/return-meidicine-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                     <div class="row form-group">
+                         <div class="col-md-2 mt-4">
+                             <b>Return Medicine Report</b>
+                         </div>
+                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
+                         <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
+                         <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
+                        </div>
+                         <div class="col-md-2">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id26']) }}
+                        </div>
+                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                     </div>
+                     {!! Form::close() !!}
+                     @endcan
+                     {{-- for warehouse --}}
+                     @can('return_medicine_report_for_warehouse')
+                     {!! Form::open(array('url'=> 'report2/return-meidicine-report2', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                     <div class="row form-group">
+                         <div class="col-md-2 mt-4">
+                             <b>Return Medicine Report</b>
+                         </div>
+                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::date('start_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control', 'required']) }}</div>
+                         <div class="col-md-2">End Date {{ Form::date('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'form-control ']) }}</div>
+
+                         <div class="col-md-2">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id27']) }}
+                        </div>
+                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                     </div>
+                     {!! Form::close() !!}
+                     @endcan
+
+
+
                 </div>
             </div>
         </div>
@@ -173,6 +299,126 @@
                     });
 
                     $("#medicine_id2").select2({
+                        ajax: {
+                            url: "{!! url('get-all-medicine') !!}",
+                            type: "get",
+                            dataType: 'json',
+                            //   delay: 250,
+                            data: function(params) {
+                                return {
+                                    _token: CSRF_TOKEN,
+                                    search: params.term, // search term
+                                    // manufacturer: manufacturer_id, // search term
+
+                                };
+                            },
+                            processResults: function(response) {
+                                return {
+                                    results: response
+                                };
+                            },
+                            cache: true
+                        }
+
+                    });
+
+
+
+                    $("#medicine_id22").select2({
+                        ajax: {
+                            url: "{!! url('get-all-medicine') !!}",
+                            type: "get",
+                            dataType: 'json',
+                            //   delay: 250,
+                            data: function(params) {
+                                return {
+                                    _token: CSRF_TOKEN,
+                                    search: params.term, // search term
+                                    // manufacturer: manufacturer_id, // search term
+
+                                };
+                            },
+                            processResults: function(response) {
+                                return {
+                                    results: response
+                                };
+                            },
+                            cache: true
+                        }
+
+                    });
+
+
+                    $("#medicine_id24").select2({
+                        ajax: {
+                            url: "{!! url('get-all-medicine') !!}",
+                            type: "get",
+                            dataType: 'json',
+                            //   delay: 250,
+                            data: function(params) {
+                                return {
+                                    _token: CSRF_TOKEN,
+                                    search: params.term, // search term
+                                    // manufacturer: manufacturer_id, // search term
+
+                                };
+                            },
+                            processResults: function(response) {
+                                return {
+                                    results: response
+                                };
+                            },
+                            cache: true
+                        }
+
+                    });
+                    $("#medicine_id25").select2({
+                        ajax: {
+                            url: "{!! url('get-all-medicine') !!}",
+                            type: "get",
+                            dataType: 'json',
+                            //   delay: 250,
+                            data: function(params) {
+                                return {
+                                    _token: CSRF_TOKEN,
+                                    search: params.term, // search term
+                                    // manufacturer: manufacturer_id, // search term
+
+                                };
+                            },
+                            processResults: function(response) {
+                                return {
+                                    results: response
+                                };
+                            },
+                            cache: true
+                        }
+
+                    });
+                    $("#medicine_id23").select2({
+                        ajax: {
+                            url: "{!! url('get-all-medicine') !!}",
+                            type: "get",
+                            dataType: 'json',
+                            //   delay: 250,
+                            data: function(params) {
+                                return {
+                                    _token: CSRF_TOKEN,
+                                    search: params.term, // search term
+                                    // manufacturer: manufacturer_id, // search term
+
+                                };
+                            },
+                            processResults: function(response) {
+                                return {
+                                    results: response
+                                };
+                            },
+                            cache: true
+                        }
+
+                    });
+                    $("#medicine_id26").select2({
                         ajax: {
                             url: "{!! url('get-all-medicine') !!}",
                             type: "get",

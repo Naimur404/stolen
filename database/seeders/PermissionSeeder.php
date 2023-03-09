@@ -85,6 +85,27 @@ class PermissionSeeder extends Seeder
             'sale_report.search',
             'purchase_report.search',
 
+            'distribute_medicine_report_for_outlet',
+            'distribute_medicine_report_for_outlet.search',
+
+            'distribute_medicine_report_for_warehouse',
+            'distribute_medicine_report_for_warehouse.search',
+
+             'stock_request_report_for_outlet',
+            'stock_request_report_for_outlet.search',
+
+            'stock_request_report_for_warehouse',
+            'stock_request_report_for_warehouse.search',
+
+             'return_medicine_report_for_outlet',
+            'return_medicine_report_for_outlet.search',
+
+            'return_medicine_report_for_warehouse',
+            'return_medicine_report_for_warehouse.search',
+
+            'sale_return_report',
+            'sale_return_report.search',
+
             'outlet-stock.report',
             'outlet-stock.search',
             'warehouse-stock.report',
