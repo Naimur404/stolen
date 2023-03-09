@@ -35,5 +35,9 @@ class MedicineDistribute extends Model
     public function user() {
         return $this->hasOne(User::class, 'id', 'added_by');
     }
+    public function medicinedistributesdetails()
+    {
+        return $this->hasMany(MedicineDistributeDetail::class);
+    }
 
 }

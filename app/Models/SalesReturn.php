@@ -39,4 +39,12 @@ class SalesReturn extends Model
     {
         return $this->hasOne(Customer::class, 'id', 'customer_id');
     }
+    public function payment()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'payment_method_id', 'id');
+    }
+    public function user()
+    {
+        return $this->hasOne(User::class, 'id', 'added_by');
+    }
 }

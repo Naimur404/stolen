@@ -264,7 +264,19 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
     Route::post('warehouse-stock-submit', [ReportController2::class,'warehouse_stock_report_submit'])->name('warehouse-stock-submit');
 
     Route::post('sale-report-user', [ReportController2::class,'medicine_sale_report_by_user'])->name('sale-report-user');
+
+    Route::post('distribute-medicine-report', [ReportController2::class,'distribute_medicine_report'])->name('distribute-medicine-report');
+    Route::post('stock-request-report', [ReportController2::class,'stock_request_report'])->name('stock-request-report');
+
+    Route::post('distribute-medicine-report2', [ReportController2::class,'distribute_medicine_report2'])->name('distribute-medicine-report2');
+    Route::post('stock-request-report2', [ReportController2::class,'stock_request_report2'])->name('stock-request-report2');
+
+    Route::post('return-meidicine-report', [ReportController2::class,'return_medicine_report'])->name('return-meidicine-report');
+
+    Route::post('return-meidicine-report2', [ReportController2::class,'return_medicine_report2'])->name('return-meidicine-report2');
     Route::post('sale-report-payment', [ReportController2::class,'medicine_sale_report_by_payment'])->name('sale-report-payment');
+
+    Route::post('sale-return-report', [ReportController2::class,'medicine_sale_return'])->name('sale-return-report');
     Route::post('sale-report-details', [ReportController2::class,'medicine_sale_report_details'])->name('sale-report-details');
     Route::get('/sale-report-details1/{id}', [ReportController2::class,'medicine_sale_report_details1'])->name('sale-report-details1');
 });
