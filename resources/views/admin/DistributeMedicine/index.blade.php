@@ -56,7 +56,7 @@
                                         $data = App\Models\MedicineDistributeDetail::where('medicine_distribute_id',$productPurchase->id)->get();
                                     @endphp --}}
                                     <tr>
-                                        <td>{{ $productPurchase->date }}</td>
+                                        <td>{{ \Carbon\Carbon::parse($productPurchase->date)->format('d-m-Y')}}</td>
                                         @if ( $productPurchase->outlet_id == null)
 
                                             <td> N/A</td>
@@ -112,7 +112,7 @@
 
 
                                                 <a href="{{ route('distribute-medicine.checkIn', $productPurchase->id) }}"
-                                                   class="btn btn-info btn-xs " title="CheckIn" style="margin-left:5px"><i
+                                                   class="btn btn-info btn-xs " title="Distribute" style="margin-left:5px"><i
                                                         class="fa fa-eye" aria-hidden="true"></i></a>
 
 
