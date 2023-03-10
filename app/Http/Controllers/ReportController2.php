@@ -9,9 +9,11 @@ use App\Models\OutletInvoiceDetails;
 use App\Models\OutletStock;
 use App\Models\PaymentMethod;
 use App\Models\SalesReturn;
+use App\Models\Supplier;
 use App\Models\User;
 use App\Models\Warehouse;
 use App\Models\WarehouseStock;
+use App\Models\SupplierHasManufacturer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -42,6 +44,7 @@ class ReportController2 extends Controller
         $this->middleware('permission:return_medicine_report_for_outlet.search', ['only' => ['return_medicine_report']]);
         $this->middleware('permission:return_medicine_report_for_warehouse.search', ['only' => ['return_medicine_report2']]);
         $this->middleware('permission:sale_return_report.search', ['only' => [' medicine_sale_return']]);
+        $this->middleware('permission:supplier_wise_sale_report.search', ['only' => ['supplier_wise_sale']]);
     }
     public function medicine_sale_report_submit(Request $request)
     {
@@ -244,20 +247,21 @@ class ReportController2 extends Controller
 
     public function index(Request $request){
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
-
+        $supplier = Supplier::pluck('supplier_name','id');
         $search = $request->search;
             if(Auth::user()->hasRole(['Super Admin', 'Admin'])){
-                $outlet = Outlet::limit(10)->pluck('outlet_name', 'id');
-                    $Users = User::limit(10)->pluck('name', 'id');
+                $outlet = Outlet::pluck('outlet_name', 'id');
+                    $Users = User::pluck('name', 'id');
+
 
             }else{
 
-                    $Users = User::where('outlet_id',$outlet_id)->where('name', 'like', '%' . $search . '%')->limit(10)->pluck('name', 'id');
-                    $outlet = Outlet::where('id',$outlet_id)->limit(10)->pluck('outlet_name', 'id');
+                    $Users = User::where('outlet_id',$outlet_id)->where('name', 'like', '%' . $search . '%')->pluck('name', 'id');
+                    $outlet = Outlet::where('id',$outlet_id)->pluck('outlet_name', 'id');
             }
              $payment_method = PaymentMethod::pluck('method_name','id');
 
-            return view('admin.report.report',compact('Users','payment_method','outlet'));
+            return view('admin.report.report',compact('Users','payment_method','outlet','supplier'));
 
     }
 
@@ -624,7 +628,7 @@ class ReportController2 extends Controller
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])){
 
             $productSales = DB::table('warehouse_returns')->whereDate('warehouse_returns.created_at', '>=', $start_date)
-            ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details','warehouse_returns.id','=' ,'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid' ,'warehouse_returns.*','warehouse_return_details.*')->where('warehouse_return_details.has_received',1);;
+            ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details','warehouse_returns.id','=' ,'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid' ,'warehouse_returns.*','warehouse_return_details.*')->where('warehouse_return_details.has_received',1);
             if($request->medicine_id == '' || $request->medicine_id == null){
                 $productSales = $productSales->get();
             }else{
@@ -635,7 +639,7 @@ class ReportController2 extends Controller
         }else{
             $warehouse_id = Auth::user()->warehouse_id != null  ?  Auth::user()->warehouse_id : Warehouse::orderby('id','desc')->first('id');
             $productSales = DB::table('warehouse_returns')->where('warehouse_id',$warehouse_id)->whereDate('warehouse_returns.created_at', '>=', $start_date)
-            ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details','warehouse_returns.id','=' ,'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid' ,'warehouse_returns.*','warehouse_return_details.*')->where('warehouse_return_details.has_received',1);;
+            ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details','warehouse_returns.id','=' ,'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid' ,'warehouse_returns.*','warehouse_return_details.*')->where('warehouse_return_details.has_received',1);
             if($request->medicine_id == '' || $request->medicine_id == null){
                 $productSales = $productSales->get();
             }else{
@@ -682,6 +686,41 @@ public function medicine_sale_return(Request $request)
 
 
       return view('admin.report.slaes_return_report', compact('start_date', 'end_date', 'productSales','title'));
+}
+
+public function supplier_wise_sale(Request $request)
+{
+    $input = $request->all();
+    dump($input);
+    $start_date = Carbon::parse($input['start_date']);
+    $end_date = Carbon::parse($input['end_date']);
+
+    // if (Auth::user()->hasRole(['Super Admin', 'Admin'])){
+
+
+    //         $productSales = SalesReturn::whereDate('created_at', '>=', $start_date)
+    //         ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
+    //         $title = 'All Outlet Sale Return Report';
+
+
+
+    // }else{
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
+
+            // $outlet =  Outlet::where('id',$outlet_id)->orderby('id','desc')->first('outlet_name');
+            // $title = 'All Sale Return Report For '.$outlet->outlet_name;
+            $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
+    ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)
+
+              ->leftJoin('medicines','medicines.id','=','outlet_invoice_details.medicine_id')
+
+            ->get();
+
+               $manu = SupplierHasManufacturer::where('supplier_id',$request->supplier_id)->get();
+    // }
+
+
+     return view('admin.report.supplier_wise_sales_report', compact('start_date', 'end_date', 'productSales','manu'));
 }
 
 

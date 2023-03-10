@@ -1,5 +1,5 @@
 @extends('layouts.admin.master')
-@section('title') Add Distribute Medicine to Outlet Checkin
+@section('title') Distribute Medicine to Outlet
 @endsection
 @push('css')
 <style>
@@ -18,7 +18,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-10">
-			<h3> Add Distribute Medicine to Outlet Checkin</h3>
+			<h3> Distribute Medicine to Outlet</h3>
         </div>
 
         </div>

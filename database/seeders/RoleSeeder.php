@@ -151,6 +151,8 @@ class RoleSeeder extends Seeder
             'return_medicine_report_for_outlet.search',
             'sale_return_report',
             'sale_return_report.search',
+            'supplier_wise_sale_report',
+            'supplier_wise_sale_report.search',
 
         ];
 
