@@ -717,10 +717,11 @@ public function supplier_wise_sale(Request $request)
             ->get();
 
                $manu = SupplierHasManufacturer::where('supplier_id',$request->supplier_id)->get();
+               $supplier = Supplier::where('id',$request->supplier_id)->first('supplier_name');
     // }
+ $title = $supplier->supplier_name.' Suppler Sales Report';
 
-
-     return view('admin.report.supplier_wise_sales_report', compact('start_date', 'end_date', 'productSales','manu'));
+     return view('admin.report.supplier_wise_sales_report', compact('start_date', 'end_date', 'productSales','manu','title'));
 }
 
 

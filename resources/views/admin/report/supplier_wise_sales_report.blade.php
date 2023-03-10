@@ -1,5 +1,5 @@
 @extends('layouts.admin.public_layouts')
-@section('title','Medicine Sales Report')
+@section('title','Supplier Wise Sales Report')
 @section('main-content')
 <style>
     .space{
@@ -40,7 +40,7 @@
 </div>
 
 <div class="row all-content">
-    <p align="center"><b> Medicine Sales Report -
+    <p align="center"><b> Supplier Wise Sales Report -
         @if ($start_date && $end_date !=null )
            From {{Carbon\Carbon::parse($start_date)->format('d-m-Y')}}
            To {{Carbon\Carbon::parse($end_date)->format('d-m-Y') }}
@@ -50,7 +50,7 @@
         <table class="table table-hover table-bordered">
             <thead class="">
                 <tr>
-                    <th>SL</th>
+
 
 
                                 {{-- <th>Outlet Name</th> --}}
@@ -72,8 +72,9 @@
                 @endphp
                      @foreach ($productSales as $productPurchase)
 
-                     <td>{{ $loop->index + 1 }}</td>
+                     <tr>
                      @foreach($manu as $check)
+
                      @if ($check->manufacturer_id == $productPurchase->manufacturer_id)
 
 
@@ -93,18 +94,18 @@
 
 
 
-                   
+
                     @else
                     @break
                      @endif
-
-                     @endforeach
-                    </tr>
                      @php
                      $grand_total = $grand_total + $productPurchase->total_price;
                      $total_quantity = $total_quantity + $productPurchase->quantity;
                      $total_discount = $total_discount + $productPurchase->discount;
                      @endphp
+                     @endforeach
+                    </tr>
+
                  @endforeach
 
 
