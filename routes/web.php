@@ -277,7 +277,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
     Route::post('sale-report-payment', [ReportController2::class,'medicine_sale_report_by_payment'])->name('sale-report-payment');
 
     Route::post('sale-return-report', [ReportController2::class,'medicine_sale_return'])->name('sale-return-report');
-    Route::post('supplier-wise-report', [ReportController2::class,'supplier_wise_sale'])->name('supplier-wise-report');
     Route::post('sale-report-details', [ReportController2::class,'medicine_sale_report_details'])->name('sale-report-details');
     Route::get('/sale-report-details1/{id}', [ReportController2::class,'medicine_sale_report_details1'])->name('sale-report-details1');
 });
