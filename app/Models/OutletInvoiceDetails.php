@@ -26,7 +26,4 @@ class OutletInvoiceDetails extends Model
     public function medicine(){
         return $this->belongsTo(Medicine::class, 'medicine_id', 'id');
    }
-   public function invoice(){
-    return $this->belongsTo(OutletInvoice::class, 'outlet_invoice_id', 'id');
-}
 }
