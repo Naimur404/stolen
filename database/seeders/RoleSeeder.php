@@ -153,6 +153,7 @@ class RoleSeeder extends Seeder
             'sale_return_report.search',
             'supplier_wise_sale_report',
             'supplier_wise_sale_report.search',
+            'sales-details',
 
         ];
 

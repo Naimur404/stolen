@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\Outlet;
 use App\Models\OutletInvoice;
 use App\Models\OutletInvoiceDetails;
+use App\Models\OutletPayment;
 use App\Models\OutletStock;
 use App\Models\PaymentMethod;
 use App\Models\SalesReturn;
@@ -201,5 +202,14 @@ class SalesReturnController extends Controller
         $salesReturn = SalesReturn::where('id',$id)->first();
         $salesreturndetails = SalesReturnDetails::where('sales_return_id',$salesReturn->id)->get();
         return view('admin.Pos.sales_return_details',compact('salesreturndetails','salesReturn'));
+    }
+
+    public function sales_details($id)
+    {
+        $salesReturn = OutletInvoice::where('id',$id)->first();
+        $salesreturndetails = OutletInvoiceDetails::where('outlet_invoice_id',$salesReturn->id)->get();
+        $saledetails = OutletPayment::where('invoice_id',$id)->get();
+
+        return view('admin.Pos.sale_details',compact('salesreturndetails','salesReturn','saledetails'));
     }
 }

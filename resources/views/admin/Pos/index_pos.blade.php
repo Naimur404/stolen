@@ -112,8 +112,11 @@
                                             <a href="{{ route('sale-return.show', $productPurchase->id) }}"
                                                class="btn btn-success btn-xs" title="Return"
                                                style="margin-right:3px"><i class="fa fa-retweet" aria-hidden="true"></i></a>
-
-
+                                               @can('sales-details')
+                                            <a href="{{ route('sale.details', $productPurchase->id) }}"
+                                                class="btn btn-primary btn-xs" title="Details" style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i>
+                                             </a>
+                                             @endcan
                                         </td>
 
                                     </tr>
