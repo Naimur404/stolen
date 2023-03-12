@@ -94,6 +94,34 @@
                 @endforeach
 
             </table>
+            @if (count($saledetails) !=0)
+
+  <br>
+  <h5>Due Payment Details</h5>
+
+            <table class="table table-bordered mt-2">
+                <tr>
+                    <th>Invoice Id</th>
+                    <th>Customer Name</th>
+                    <th>Amount</th>
+                    <th>Pay</th>
+                    <th>Due</th>
+
+                </tr>
+
+                @foreach ($saledetails as $data)
+                    <tr>
+                        <td>{{ $data->invoice_id }}</td>
+                        <td>{{ $data->customer->name }}</td>
+                        <td>{{ $data->amount }}</td>
+                        <td>{{ $data->pay }}</td>
+                        <td>{{ $data->due }}</td>
+
+                    </tr>
+                @endforeach
+
+            </table>
+            @endif
 
             <div class="row">
                 <div class="col-md-7">
@@ -113,10 +141,38 @@
                                 </td>
                             </tr>
                             <tr>
+                                <th>Grand Total</th>
+                                <td>
+
+                                    <input class="form-control" type="number" name="total" id="total" value="0" readonly>
+
+                                </td>
+                            </tr>
+                            <tr>
                                 <th>Pay Now</th>
                                 <td>
 
-                                    <input class="form-control" type="number" name="amount" id="paid_amount" value="{{ $outletInvoice->due_amount }}">
+                                    <input class="form-control" type="number" name="paid_amount" id="paid_amount" value="" placeholder="0.00" required>
+
+                                </td>
+                            </tr>
+
+
+                            <tr>
+                                <th>Due</th>
+                                <td>
+
+                                    <input class="form-control" type="number" name="due" id="due" value="0" onkeyup="prevent_due_amount()" placeholder="0.00"
+                                    onchange="prevent_due_amount()" readonly>
+
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <th>Payment Method</th>
+                                <td>
+
+                                    {{ Form::select( 'payment_method_id', $payment, null, ['class' => 'form-control', 'required' ,'required'], ) }}
 
                                 </td>
                             </tr>
@@ -127,6 +183,7 @@
                                 </td>
                                 <td>{{ Form::button('Update', ['type' => 'submit', 'class' => 'btn btn-warning btn-sm'] )  }}</td>
                             </tr>
+
                         </table>
 
                     @else
@@ -189,14 +246,25 @@ function prevent_paid_amount() {
                 }
             }
 $(document).ready(function () {
-
+let subTotal = $("#due_amount").val();
+$("#total").val(subTotal);
 
 $("#discount").bind('keypress keyup keydown mouseup', function () {
 let discount = $(this).val();
 let subTotal = $("#due_amount").val();
 let finalpay = (subTotal - discount);
-finalpay = finalpay.toFixed(2);
-$("#paid_amount").val(finalpay);
+finalpay = finalpay.toFixed();
+$("#total").val(finalpay);
+$("#due").val(finalpay);
+                //    console.log(calResult);
+
+});
+$("#paid_amount").bind('keypress keyup keydown mouseup', function () {
+let total = $(this).val();
+let subTotal = $("#total").val();
+let finaldue = (subTotal - total);
+finaldue = finaldue.toFixed(2);
+$("#due").val(finaldue);
                 //    console.log(calResult);
 
 });

@@ -73,7 +73,7 @@
                                               $customer = App\Models\Customer::where('id',$productPurchase->customer_id)->first();
                                           @endphp
 
-                                          {{ $customer->mobile }}
+                                          {{-- {{ $customer->mobile }} --}}
                                           @if ($customer->mobile == null || $customer->mobile == '')
 
                                           @else
@@ -102,7 +102,7 @@
                                         <td class="form-inline">
 
                                             <a href="{{ route('sale-return.details', $productPurchase->id) }}"
-                                               class="btn btn-primary btn-xs" title="Pay Now" style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i>
+                                               class="btn btn-primary btn-xs" title="Details" style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i>
                                             </a>
 
                                             {!! Form::open(['method' => 'DELETE', 'route' => ['sale-return.destroy', $productPurchase->id]]) !!}

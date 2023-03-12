@@ -103,6 +103,8 @@ class PermissionSeeder extends Seeder
             'return_medicine_report_for_warehouse',
             'return_medicine_report_for_warehouse.search',
 
+            'sales-details',
+
             'sale_return_report',
             'sale_return_report.search',
 

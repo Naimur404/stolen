@@ -7,6 +7,7 @@ use App\Models\Outlet;
 use App\Models\OutletHasUser;
 use App\Models\OutletInvoice;
 use App\Models\OutletInvoiceDetails;
+use App\Models\OutletPayment;
 use App\Models\OutletStock;
 use App\Models\PaymentMethod;
 use App\Models\RedeemPointLog;
@@ -390,9 +391,11 @@ class OutletInvoiceController extends Controller
 
 
     {
+        $payment = PaymentMethod::pluck('method_name','id');
         $outletInvoice = OutletInvoice::findOrFail($id);
         $outletInvoiceDetails = OutletInvoiceDetails::where('outlet_invoice_id', $id)->get();
-        return view('admin.Pos.due_payment', compact('outletInvoice', 'outletInvoiceDetails'));
+        $saledetails = OutletPayment::where('invoice_id',$id)->get();
+        return view('admin.Pos.due_payment', compact('outletInvoice', 'outletInvoiceDetails','saledetails','payment'));
 
     }
 
@@ -408,10 +411,25 @@ class OutletInvoiceController extends Controller
         try{
             $arra = array(
                 'total_discount' => $invoiceData->total_discount + $request->discount,
-                'paid_amount' => $invoiceData->paid_amount + $request->amount,
-                'due_amount'   => $invoiceData->due_amount - ($request->discount + $request->amount),
+                'paid_amount' => $invoiceData->paid_amount + $request->paid_amount,
+                'due_amount'   => $invoiceData->due_amount - ($request->discount + $request->paid_amount),
 
              );
+
+             $array2 = array(
+
+                'amount' => $request->total,
+                'pay' => $request->paid_amount,
+                'due'   => $request->due,
+                'customer_id'  => $invoiceData->customer_id,
+                'invoice_id' => $invoiceData->id,
+                'payment_method_id' => $request->payment_method_id,
+                'outlet_id' => $invoiceData->outlet_id,
+                'collected_by' => Auth::user()->id,
+
+
+             );
+             OutletPayment::create($array2);
 
          OutletInvoice::where('id',$request->outlet_invoice_id)->update($arra);
          return redirect()->back()->with('success', 'Due Payment Successfull.');
