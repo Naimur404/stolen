@@ -12,7 +12,8 @@ class Category extends Model
     use SoftDeletes;
     protected $table = 'categories';
     protected $fillable = [
-        'category_name'
+        'category_name',
+        'alert_limit',
     ];
 
 
