@@ -108,7 +108,13 @@
                                href="{{route('warehouseRequest')}}"><i data-feather="box"></i><span>Stock Request</span></a>
                         </li>
                     @endcan
+                     @can('category-wise-report-alert')
 
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('category-wise-report-alert')}}"
+                           href="{{route('category-wise-report-alert')}}"><i data-feather="box"></i><span>Category wise Alert</span></a>
+                    </li>
+                    @endcan
 
                     @can('medicine.management')
                         <li class="dropdown">

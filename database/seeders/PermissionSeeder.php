@@ -114,6 +114,15 @@ class PermissionSeeder extends Seeder
             'warehouse-stock.search',
             'pay-due.payment',
 
+            'category-wise-report-outlet',
+            'category-wise-report-warehouse',
+            'category-wise-report',
+
+            'category-wise-report-alert-outlet',
+            'category-wise-report-alert-warehouse',
+            'category-wise-report-alert-submit',
+            'category-wise-report-alert',
+
             'warehouse-return.management',
             'warehouse-return.create',
             'warehouse-return.edit',
