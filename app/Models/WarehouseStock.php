@@ -14,6 +14,7 @@ class WarehouseStock extends Model
         'medicine_id',
         'expiry_date',
         'quantity',
+        'purchase_price',
         'price',
     ];
     public function medicine(){
