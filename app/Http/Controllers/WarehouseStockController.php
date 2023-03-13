@@ -84,7 +84,7 @@ class WarehouseStockController extends Controller
             'medicine_id'    => $request->medicine_id,
             'expiry_date'    => $request->expiry_date,
             'quantity'    => $request->quantity,
-             'checked_by' => Auth::user()->id,
+            'checked_by' => Auth::user()->id,
 
 
           );
@@ -247,7 +247,7 @@ if(count($check)  < 1  ){
         foreach($medicine_stock as $stock){
             $s_no = $sl++;
             $medicine_name = Medicine::get_medicine_name($stock->medicine_id);
-            $manufacturer_price = '৳&nbsp;' .Medicine::get_manufacturer_prices($stock->medicine_id,$stock->expiry_date);;
+            $manufacturer_price = '৳&nbsp;' .$stock->purchase_price;
              $medicine = Medicine::where('id',$stock->medicine_id)->first();
             $category = Category::get_category_name($medicine->category_id);
             $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);
@@ -298,24 +298,24 @@ if(count($check)  < 1  ){
             ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
             ->select('warehouse_stocks.medicine_id as id','warehouse_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name' ,'medicines.id as medicine_id')->where('medicine_name', 'like', '%' .$search . '%')->get();
 
-
-
          }
 
          $response = array();
          foreach($medicines as $medicine){
             $response[] = array(
-                 "id"=>$medicine->medicine_id,
+                 "id"=>$medicine->medicine_id.','.$medicine->expiry_date,
                  "text"=>$medicine->medicine_name.' - '.' EX '.$medicine->expiry_date,
             );
          }
+
          return response()->json($response);
       }
 
       public function get_medicine_details_warehouse($id,$id2){
+        $data = explode(",", $id);
 
 
-        $product_details = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id2 )->where('warehouse_stocks.medicine_id' ,'=' , $id)
+        $product_details = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id2 )->where('warehouse_stocks.medicine_id' ,'=' , $data[0])->whereDate('expiry_date','=',$data[1])
         ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
         ->select('warehouse_stocks.*','medicines.medicine_name as medicine_name')->first();
 

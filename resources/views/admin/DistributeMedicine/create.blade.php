@@ -159,6 +159,9 @@
                                         <nobr>Stock<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
+                                        <nobr>Manufacturer Price<i class="text-danger">*</i></nobr>
+                                    </th>
+                                    <th class="text-center">
                                         <nobr>MRP<i class="text-danger">*</i></nobr>
                                     </th>
 
@@ -364,8 +367,9 @@ function clearInput1(target){
                                 $('.stock').val(data.quantity);
 
                                 $('#product_name').val(data.medicine_name);
-                                $('#box_price').val(data.price);
 
+                                $('#box_price').val(data.price);
+                                $('#manu_price').val(data.purchase_price);
                                 $('#expiry_date').val(data.expiry_date);
 
                             } else {

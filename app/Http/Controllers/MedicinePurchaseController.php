@@ -33,7 +33,7 @@ class MedicinePurchaseController extends Controller
     public function index()
     {
         $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
-        if (Auth::user()->hasRole('Super Admin','Admin')) {
+        if (Auth::user()->hasRole(['Super Admin','Admin'])) {
             $productPurchases = MedicinePurchase::orderBy('id', 'desc')->get();
         } else {
             $productPurchases = MedicinePurchase::where('warehouse_id', $warehouse_id)->orderBy('id', 'desc')->get();

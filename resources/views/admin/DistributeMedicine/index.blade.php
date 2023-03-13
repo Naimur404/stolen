@@ -56,7 +56,8 @@
                                         $data = App\Models\MedicineDistributeDetail::where('medicine_distribute_id',$productPurchase->id)->get();
                                     @endphp --}}
                                     <tr>
-                                        <td>{{ $productPurchase->date }}</td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($productPurchase->date)->format('d-m-Y')}}</td>
                                         @if ( $productPurchase->outlet_id == null)
 
                                             <td> N/A</td>
@@ -152,7 +153,7 @@
             $(document).ready(function () {
                 $('.data-table').DataTable(
                     {
-                        order: [[0, 'desc']],
+                        order: [[1, 'desc']],
 });
             });
 

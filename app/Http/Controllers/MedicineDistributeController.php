@@ -5,15 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\MedicineDistribute;
 use App\Models\MedicineDistributeDetail;
 use App\Models\Outlet;
-use App\Models\OutletHasUser;
-use App\Models\StockRequestDetails;
 use App\Models\Warehouse;
-use App\Models\WarehouseStock;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Spatie\LaravelIgnition\Recorders\DumpRecorder\Dump;
+
 
 class MedicineDistributeController extends Controller
 {
