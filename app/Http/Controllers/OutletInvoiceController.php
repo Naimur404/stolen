@@ -327,7 +327,7 @@ class OutletInvoiceController extends Controller
         $response = array();
         foreach ($medicines as $medicine) {
             $response[] = array(
-                "id" => $medicine->medicine_id,
+                "id"=>$medicine->medicine_id.','.$medicine->expiry_date,
                 "text" => $medicine->medicine_name . ' - ' . ' EX ' . $medicine->expiry_date,
             );
         }
@@ -336,9 +336,9 @@ class OutletInvoiceController extends Controller
 
     public function get_medicine_details_for_sale($id)
     {
-
+        $data = explode(",", $id);
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
-        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.medicine_id', '=', $id)
+        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.medicine_id', '=', $data[0])->whereDate('expiry_date','=',$data[1])
             ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
             ->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->first();
 

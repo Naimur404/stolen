@@ -97,8 +97,10 @@
                             </td>
                             <td>{{ Form::number('price', $data->rate, ['class' => 'form-control', 'readonly']) }}
                             </td>
+
                         <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
                             <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
+
                            </td>
                         <td>
 
@@ -122,6 +124,8 @@
 
                           <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
                           <input type="hidden" name="medicine_distribute_id" value="{{ $productPurchase->id }}">
+                          <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
+                          
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name }}</td>
                         <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
@@ -131,7 +135,7 @@
                             <td>{{ Form::number('price', $data->rate, ['class' => 'form-control', 'readonly']) }}
                             </td>
                         <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
-                            <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
+
                            </td>
                         <td>
 

@@ -69,8 +69,18 @@ class OutletStockController extends Controller
     {
 
 
-        $input = $request->all();
 
+        $manu_price = WarehouseStock::where('warehouse_id',$request->warehouse_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->first();
+        $data = array(
+            'quantity' => (int)$request->quantity,
+            'price'  => $request->price,
+            'outlet_id' => $request->outlet_id,
+            'medicine_id' => $request->medicine_id,
+            'expiry_date' => $request->expiry_date,
+            'purchase_price' => $manu_price->purchase_price,
+            'price'  => $request->price,
+
+        );
 
 
 
@@ -82,6 +92,7 @@ class OutletStockController extends Controller
 
                 'quantity' => (int)$check->quantity + (int)$request->quantity,
                 'price'  => $request->price,
+                'purchase_price' => $manu_price->purchase_price,
             );
             $has_received2 = array(
 
@@ -98,7 +109,7 @@ class OutletStockController extends Controller
 
             );
            MedicineDistributeDetail::where('medicine_distribute_id',$request->medicine_distribute_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($has_received2);
-            $check =  OutletStock::create($input);
+            $check =  OutletStock::create($data);
 
 
         }
@@ -253,7 +264,7 @@ class OutletStockController extends Controller
         foreach($medicine_stock as $stock){
             $s_no = $sl++;
             $medicine_name = Medicine::get_medicine_name($stock->medicine_id);
-            $manufacturer_price = '৳&nbsp;' .Medicine::get_manufacturer_price($stock->medicine_id);;
+            $manufacturer_price = '৳&nbsp;' .$stock->purchase_price;
             $medicine = Medicine::where('id',$stock->medicine_id)->first();
             $category = Category::get_category_name($medicine->category_id);
             $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);
