@@ -155,7 +155,7 @@ $total_pay = 0;
                             <tr>
 
 
-                                
+
                                 <td></td>
                                 <td></td>
                                 <td></td>
@@ -222,61 +222,6 @@ $(document).ready(function() {
         ]
     } );
 
-    let CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
-
-
-
-            // $("#supplier_id").select2({
-            //     ajax: {
-            //         url: "{!! url('get-outlet') !!}",
-            //         type: "get",
-            //         dataType: 'json',
-            //         //   delay: 250,
-            //         data: function(params) {
-            //             return {
-            //                 _token: CSRF_TOKEN,
-            //                 search: params.term,
-            //             };
-            //         },
-            //         processResults: function(response) {
-            //             return {
-            //                 results: response
-            //             };
-            //         },
-            //         cache: true
-            //     }
-
-            // });
-
-              // get manufacturer id
-            //   $("#supplier_id").on('change', function() {
-            //     supplier_id = $(this).val();
-            // })
-
-            // manufacturer wise medicine selection
-//             $("#medicine_id").select2({
-//                 ajax: {
-//                     url: "{!! url('get-all-medicine') !!}",
-//                     type: "get",
-//                     dataType: 'json',
-//                     //   delay: 250,
-//                     data: function(params) {
-//                         return {
-//                             _token: CSRF_TOKEN,
-//                             search: params.term, // search term
-//                             // manufacturer: manufacturer_id, // search term
-
-//                         };
-//                     },
-//                     processResults: function(response) {
-//                         return {
-//                             results: response
-//                         };
-//                     },
-//                     cache: true
-//                 }
-
-//             });
  } );
 
 

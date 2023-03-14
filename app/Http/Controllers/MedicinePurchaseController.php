@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\MedicinePurchase;
 use App\Models\MedicinePurchaseDetails;
 use App\Models\PaymentMethod;
@@ -228,23 +229,25 @@ class MedicinePurchaseController extends Controller
             $sale_medicines = MedicinePurchaseDetails::distinct()->orderby('id', 'asc'
             )
                 ->where('medicine_type', '=', $request->medicineType)
-                ->select('medicine_id', 'medicine_name', 'medicine_type')
+                ->select('medicine_id', 'medicine_name', 'medicine_type','category_id')
                 ->get();
         } else {
             $sale_medicines = medicinePurchaseDetails::distinct()->orderby('id', 'asc')
                 ->where('medicine_type', '=', $request->medicineType)
-                ->select('medicine_id', 'medicine_name', 'medicine_type')
+                ->select('medicine_id', 'medicine_name', 'medicine_type','category_id')
                 ->where('medicine_name', 'like', '%' . $search . '%')
                 ->get();
         }
 
         $response = array();
-        foreach ($sale_medicines as $medicine) {
+        foreach($sale_medicines as $medicine){
+            $category = Category::where('id',$medicine->category_id)->first();
+
             $response[] = array(
-                "id" => $medicine->medicine_id,
-                "text" => $medicine->medicine_name . '(' . $medicine->medicine_type . ')'
+                 "id"=>$medicine->id,
+                 "text"=>$medicine->medicine_name . ' - '. $category->category_name,
             );
-        }
+          }
 
         return response()->json($response);
     }

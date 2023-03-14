@@ -52,7 +52,7 @@
                 <tr>
                     <th>SL</th>
 
-                                {{-- <th>Outlet Name</th> --}}
+                             
                                 <th>Medicine Name</th>
                                 <th>Expiry Date</th>
 
@@ -70,14 +70,7 @@
                     @foreach ($productSales as $productPurchase)
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
-                        {{-- @if ( $productPurchase->outlet_id == null)
 
-
-                            <td> N/A </td>
-                        @elseif ($productPurchase->outlet_id != null)
-
-                            <td>{{ $productPurchase->outlet->outlet_name }}</td>
-                        @endif --}}
 
 
                         <td>{{ $productPurchase->medicine_name }}</td>
