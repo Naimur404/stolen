@@ -290,21 +290,22 @@ if(count($check)  < 1  ){
 
             $medicines = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id )->where('warehouse_stocks.quantity' ,'>' ,'0')
             ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
-            ->select('warehouse_stocks.medicine_id as id','warehouse_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name','medicines.id as medicine_id')->limit(20)->get();
+            ->select('warehouse_stocks.medicine_id as id','medicines.category_id as category_id','warehouse_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name','medicines.id as medicine_id')->limit(20)->get();
 
          }else{
 
             $medicines = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id )->where('warehouse_stocks.quantity' ,'>' ,'0')
             ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
-            ->select('warehouse_stocks.medicine_id as id','warehouse_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name' ,'medicines.id as medicine_id')->where('medicine_name', 'like', '%' .$search . '%')->get();
+            ->select('warehouse_stocks.medicine_id as id','medicines.category_id as category_id','warehouse_stocks.expiry_date as expiry_date','medicines.medicine_name as medicine_name' ,'medicines.id as medicine_id')->where('medicine_name', 'like', '%' .$search . '%')->get();
 
          }
 
          $response = array();
          foreach($medicines as $medicine){
+             $category = Category::where('id',$medicine->category_id)->first();
             $response[] = array(
                  "id"=>$medicine->medicine_id.','.$medicine->expiry_date,
-                 "text"=>$medicine->medicine_name.' - '.' EX '.$medicine->expiry_date,
+                 "text"=>$medicine->medicine_name.' - '.$category->category_name.' - '.' EX '.$medicine->expiry_date,
             );
          }
 

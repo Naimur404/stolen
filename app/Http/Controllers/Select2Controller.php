@@ -176,13 +176,13 @@ class Select2Controller extends Controller
           if($search == ''){
 
              $medicines = Medicine::orderby('id','asc')
-             ->select('id','medicine_name')
+             ->select('id','medicine_name','category_id')
              ->limit(10)
              ->get();
           }else{
 
              $medicines = Medicine::orderby('id','asc')
-             ->select('id','medicine_name')
+             ->select('id','medicine_name','category_id')
              ->where('medicine_name', 'like', '%' .$search . '%')
              ->limit(10)
              ->get();
@@ -190,11 +190,14 @@ class Select2Controller extends Controller
 
           $response = array();
           foreach($medicines as $medicine){
-             $response[] = array(
-                  "id"=>$medicine->id,
-                  "text"=>$medicine->medicine_name
-             );
+            $category = Category::where('id',$medicine->category_id)->first();
+
+            $response[] = array(
+                 "id"=>$medicine->id,
+                 "text"=>$medicine->medicine_name . ' - '. $category->category_name,
+            );
           }
+
 
           return response()->json($response);
       }

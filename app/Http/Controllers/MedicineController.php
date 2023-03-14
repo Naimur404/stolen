@@ -185,24 +185,26 @@ class MedicineController extends Controller
             ->pluck('manufacturer_id');
              $medicines = Medicine::orderby('id','asc')
              ->whereIn('manufacturer_id', $manufacturer_ids)
-             ->select('id','medicine_name')
+             ->select('id','medicine_name','category_id')->limit(20)
              ->get();
           }else{
             $manufacturer_ids = SupplierHasManufacturer::whereIn('supplier_id', [$request->supplier])
             ->pluck('manufacturer_id');
              $medicines = Medicine::orderby('id','asc')
              ->whereIn('manufacturer_id', $manufacturer_ids)
-             ->select('id','medicine_name')
-             ->where('medicine_name', 'like', '%' .$search . '%')
+             ->select('id','medicine_name','category_id')
+             ->where('medicine_name', 'like', '%' .$search . '%')->limit(20)
              ->get();
           }
 
           $response = array();
           foreach($medicines as $medicine){
-             $response[] = array(
-                  "id"=>$medicine->id,
-                  "text"=>$medicine->medicine_name
-             );
+            $category = Category::where('id',$medicine->category_id)->first();
+
+            $response[] = array(
+                 "id"=>$medicine->id,
+                 "text"=>$medicine->medicine_name . ' - '. $category->category_name,
+            );
           }
 
           return response()->json($response);
