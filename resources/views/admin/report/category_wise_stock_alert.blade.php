@@ -31,11 +31,7 @@ $total_pay = 0;
             <div class="card ">
                 <div class="card-header py-2">
                     <div class="d-flex justify-content-between align-items-center">
-                        {{-- <h4>Outlet Stock report
-                            @isset($start_date)
-                                  From : {{ \Carbon\Carbon::parse($start_date)->format('d-m-Y') }} To {{ \Carbon\Carbon::parse($end_date)->format('d-m-Y') }}
-                            @endisset
-                        </h4> --}}
+
                     </div>
                 </div>
                 <div class="card-body">
@@ -121,24 +117,11 @@ $total_pay = 0;
                             @foreach ($productSales as $productPurchase)
                                 <tr>
                                     <td>{{ $loop->index + 1 }}</td>
-                                    {{-- @if ( $productPurchase->outlet_id == null)
-
-
-                                        <td> N/A </td>
-                                    @elseif ($productPurchase->outlet_id != null)
-
-                                        <td>{{ $productPurchase->outlet->outlet_name }}</td>
-                                    @endif --}}
 
 
                                     <td>{{ $productPurchase->medicine_name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($productPurchase->expiry_date)->format('d-m-Y') }}
                                     </td>
-
-
-
-
-
                                     <td>{{ $productPurchase->price }}</td>
                                     <td>{{ $productPurchase->quantity }}</td>
                                     <td>{{ $productPurchase->price * $productPurchase->quantity }}</td>
@@ -166,12 +149,6 @@ $total_pay = 0;
                                     @else
                                     <h5><span class="badge bg-danger">{{ $total_quantity }}</span></h5>
                                     @endif
-
-
-
-                                    {{-- <b>{{ $total_quantity }}</b></td> --}}
-
-
                             </tr>
                         </tfoot>
                         @endisset
@@ -184,7 +161,7 @@ $total_pay = 0;
 
 
 @push('scripts')
-{{-- <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script> --}}
+
 <script src="https://cdn.datatables.net/buttons/2.3.4/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.4/js/dataTables.buttons.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>

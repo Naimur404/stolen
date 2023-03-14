@@ -35,24 +35,19 @@
     <div class="col-md-7 text-right">
         <br>
         <h4>{{ $title }}</h4>
-        {{-- <p>{{ $business->address }} <br> {{ $business->mobile }}</p> --}}
+ 
     </div>
 </div>
 
 <div class="row all-content">
-    {{-- <p align="center"><b> Outlet Stock -
-        @if ($start_date && $end_date !=null )
-           From {{Carbon\Carbon::parse($start_date)->format('d-m-Y')}}
-           To {{Carbon\Carbon::parse($end_date)->format('d-m-Y') }}
-       @endif
-   </b></p> --}}
+
     <div class="col-md-12">
         <table class="table table-hover table-bordered">
             <thead class="">
                 <tr>
                     <th>SL</th>
 
-                             
+
                                 <th>Medicine Name</th>
                                 <th>Expiry Date</th>
 
