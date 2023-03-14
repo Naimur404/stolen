@@ -42,6 +42,7 @@
 	                                <tr>
                                         <th>SI</th>
 	                                    <th>Category Name</th>
+                                        <th>Alert Limit</th>
 
 	                                    <th>Action</th>
 
@@ -63,6 +64,9 @@
                                         <div class="modal-body">
 
 
+
+
+
                                                 <div class="form-group">
                                                     <label for="inputLink" class="col-sm-4 control-label">Category *</label>
                                                     <div class="col-sm-10">
@@ -71,7 +75,14 @@
                                                                <div class="invalid-feedback">Please Type Category Name</div>
                                                     </div>
                                                 </div>
-
+                                                <div class="form-group">
+                                                    <label for="inputLink" class="col-sm-4 control-label">Alert QTY *</label>
+                                                    <div class="col-sm-10">
+                                                        <input type="number" class="form-control" id="alert_limit" name="alert_limit"
+                                                               placeholder="Enter Qty" value="" required>
+                                                               <div class="invalid-feedback">Please Enter Alert QTY</div>
+                                                    </div>
+                                                </div>
 
 
                                         </div>
@@ -110,6 +121,7 @@
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'category_name', name: 'category_name'},
+            {data: 'alert_limit', name: 'alert_limit'},
 
             {data: 'action', name: 'action', orderable: false, searchable: false, className: "uniqueClassName"},
         ],
@@ -131,6 +143,7 @@ $(document).ready(function($){
         $.get('category/' + link_id+ '/edit', function (data) {
             $('#link_id').val(data.id);
             $('#category_name').val(data.category_name);
+            $('#alert_limit').val(data.alert_limit);
             $('#btn-save').val("update");
             $('#linkEditorModal').modal('show');
         })
@@ -148,6 +161,7 @@ $(document).ready(function($){
         e.preventDefault();
         var formData = {
             category_name: $('#category_name').val(),
+            alert_limit: $('#alert_limit').val(),
 
         };
         var state = $('#btn-save').val();

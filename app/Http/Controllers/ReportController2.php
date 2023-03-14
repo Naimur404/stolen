@@ -712,7 +712,7 @@ public function category_wise_report(Request $request)
 
 
 
-     if($request->outlet_id != null || $request->outlet_id != ''){
+     if($request->outlet_id != null && $request->outlet_id != ''){
         $productSales = DB::table('outlet_stocks')->where('outlet_stocks.quantity','>','0')->where('outlet_stocks.outlet_id',$request->outlet_id)
         ->leftjoin('medicines','outlet_stocks.medicine_id','=','medicines.id')->where('medicines.category_id',$request->category_id)
        ->select('outlet_stocks.*','medicines.category_id','medicines.medicine_name')->get();
@@ -722,9 +722,10 @@ public function category_wise_report(Request $request)
      }else{
         $productSales = DB::table('warehouse_stocks')->where('warehouse_stocks.quantity','>','0')->where('warehouse_stocks.warehouse_id',$request->warehouse_id)
         ->leftjoin('medicines','warehouse_stocks.medicine_id','=','medicines.id')->where('medicines.category_id',$request->category_id)
-        ->select('outlet_stocks.*','medicines.category_id','medicines.medicine_name')->get();
+        ->select('warehouse_stocks.*','medicines.category_id','medicines.medicine_name')->get();
        $category = Category::where('id',$request->category_id)->first();
        $title = 'Stock Report For '.$category->category_name;
+
 
      }
 
@@ -807,7 +808,7 @@ public function category_wise_report_alert_submit(Request $request)
      }else{
         $productSales = DB::table('warehouse_stocks')->where('warehouse_stocks.quantity','>','0')->where('warehouse_stocks.warehouse_id',$request->warehouse_id)
         ->leftjoin('medicines','warehouse_stocks.medicine_id','=','medicines.id')->where('medicines.category_id',$request->category_id)
-        ->select('outlet_stocks.*','medicines.category_id','medicines.medicine_name')->get();
+        ->select('warehouse_stocks.*','medicines.category_id','medicines.medicine_name')->get();
        $category = Category::where('id',$request->category_id)->first();
        $title = 'Stock Report For '.$category->category_name;
 
