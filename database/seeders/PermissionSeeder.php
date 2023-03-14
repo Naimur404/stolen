@@ -122,6 +122,13 @@ class PermissionSeeder extends Seeder
             'category-wise-report-alert-warehouse',
             'category-wise-report-alert-submit',
             'category-wise-report-alert',
+            'supplier_wise_sale_report',
+            'supplier_wise_sale_report.search',
+
+            'supplier_wise_stock_report_outlet',
+            'supplier_wise_stock_report_outlet.search',
+            'supplier_wise_stock_report_warehouse',
+            'supplier_wise_stock_report_warehouse.search',
 
             'warehouse-return.management',
             'warehouse-return.create',

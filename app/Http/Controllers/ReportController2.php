@@ -12,6 +12,8 @@ use App\Models\SalesReturn;
 use App\Models\User;
 use App\Models\Warehouse;
 use App\Models\WarehouseStock;
+use App\Models\SupplierHasManufacturer;
+use App\Models\Supplier;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -47,6 +49,12 @@ class ReportController2 extends Controller
 
         $this->middleware('permission:category-wise-report-alert', ['only' => ['category_wise_report_alert']]);
         $this->middleware('permission:category-wise-report-alert-submit', ['only' => ['category_wise_report_alert_submit']]);
+        $this->middleware('permission:supplier_wise_sale_report.search', ['only' => ['supplier_wise_sale']]);
+
+
+        $this->middleware('permission:supplier_wise_stock_report_outlet.search', ['only' => ['supplier_wise_stock_outlet']]);
+        $this->middleware('permission:supplier_wise_stock_report_warehouse.search', ['only' => [' supplier_wise_stock_warehouse']]);
+
 
     }
     public function medicine_sale_report_submit(Request $request)
@@ -251,7 +259,7 @@ class ReportController2 extends Controller
     public function index(Request $request){
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
         $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
-
+        $supplier = Supplier::pluck('supplier_name','id');
 
         $search = $request->search;
             if(Auth::user()->hasRole('Super Admin')){
@@ -278,7 +286,7 @@ class ReportController2 extends Controller
             }
              $payment_method = PaymentMethod::pluck('method_name','id');
 
-             return view('admin.report.report',compact('Users','payment_method','outlet','warehouse','category'));
+             return view('admin.report.report',compact('Users','payment_method','outlet','warehouse','category','supplier'));
 
     }
 
@@ -819,6 +827,69 @@ public function category_wise_report_alert_submit(Request $request)
       return view('admin.report.category_wise_stock_alert', compact('productSales','title','outlet','category','warehouse','category1'));
 }
 
+public function supplier_wise_sale(Request $request)
+{
+    $input = $request->all();
+
+    $start_date = Carbon::parse($input['start_date']);
+    $end_date = Carbon::parse($input['end_date']);
+
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
+
+
+            $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
+    ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)
+
+              ->leftJoin('medicines','medicines.id','=','outlet_invoice_details.medicine_id')
+
+            ->get();
+
+               $manu = SupplierHasManufacturer::where('supplier_id',$request->supplier_id)->get();
+               $sup = Supplier::where('id',$request->supplier_id)->first();
+
+               $title = $sup->supplier_name.' Supplier Sale report';
+
+     return view('admin.report.supplier_wise_sales_report', compact('start_date', 'end_date', 'productSales','manu','title'));
+}
+
+public function supplier_wise_stock_outlet(Request $request)
+{
+    $input = $request->all();
+
+    $start_date = Carbon::parse($input['start_date']);
+    $end_date = Carbon::parse($input['end_date']);
+
+            $productSales = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id',$request->outlet_id)->whereDate('outlet_stocks.created_at', '>=', $start_date)
+    ->whereDate('outlet_stocks.created_at', '<=', $end_date)->where('outlet_stocks.quantity','>','0')->leftJoin('medicines','medicines.id','=','outlet_stocks.medicine_id') ->get();
+
+               $manu = SupplierHasManufacturer::where('supplier_id',$request->supplier_id)->get();
+               $sup = Supplier::where('id',$request->supplier_id)->first();
+
+               $title = $sup->supplier_name.' Supplier Medicine Stock report';
+
+
+  return view('admin.report.supplier_wise_stock_report', compact('start_date', 'end_date', 'productSales','manu','title'));
+}
+public function supplier_wise_stock_warehouse(Request $request)
+{
+    $input = $request->all();
+
+    $start_date = Carbon::parse($input['start_date']);
+    $end_date = Carbon::parse($input['end_date']);
+
+            $productSales = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id',$request->warehouse_id)->whereDate('warehouse_stocks.created_at', '>=', $start_date)
+    ->whereDate('warehouse_stocks.created_at', '<=', $end_date)->where('warehouse_stocks.quantity','>','0')->leftJoin('medicines','medicines.id','=','warehouse_stocks.medicine_id')->get();
+
+               $manu = SupplierHasManufacturer::where('supplier_id',$request->supplier_id)->get();
+               $sup = Supplier::where('id',$request->supplier_id)->first();
+
+               $title = $sup->supplier_name.' Supplier Medicine Stock report';
+
+
+      return view('admin.report.supplier_wise_stock_report', compact('start_date', 'end_date', 'productSales','manu','title'));
+}
+
 
 }
+
 
