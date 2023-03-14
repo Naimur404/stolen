@@ -16,6 +16,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Category;
 
 class ReportController2 extends Controller
 {
@@ -42,6 +43,11 @@ class ReportController2 extends Controller
         $this->middleware('permission:return_medicine_report_for_outlet.search', ['only' => ['return_medicine_report']]);
         $this->middleware('permission:return_medicine_report_for_warehouse.search', ['only' => ['return_medicine_report2']]);
         $this->middleware('permission:sale_return_report.search', ['only' => [' medicine_sale_return']]);
+        $this->middleware('permission:category-wise-report', ['only' => ['category_wise_report']]);
+
+        $this->middleware('permission:category-wise-report-alert', ['only' => ['category_wise_report_alert']]);
+        $this->middleware('permission:category-wise-report-alert-submit', ['only' => ['category_wise_report_alert_submit']]);
+
     }
     public function medicine_sale_report_submit(Request $request)
     {
@@ -244,20 +250,35 @@ class ReportController2 extends Controller
 
     public function index(Request $request){
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+        $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
+
 
         $search = $request->search;
-            if(Auth::user()->hasRole(['Super Admin', 'Admin'])){
+            if(Auth::user()->hasRole('Super Admin')){
                 $outlet = Outlet::limit(10)->pluck('outlet_name', 'id');
-                    $Users = User::limit(10)->pluck('name', 'id');
+                    $Users = User::pluck('name', 'id');
+                    $warehouse = Warehouse::pluck('warehouse_name','id');
+                    $category = Category::pluck('category_name','id');
 
-            }else{
+            }
+            elseif(Auth::user()->hasRole('Admin')){
+
+                $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name','id');
+                $Users = User::pluck('name', 'id');
+                $category = Category::pluck('category_name','id');
+                $outlet = Outlet::where('id',$outlet_id)->limit(10)->pluck('outlet_name', 'id');
+
+            }
+            else{
 
                     $Users = User::where('outlet_id',$outlet_id)->where('name', 'like', '%' . $search . '%')->limit(10)->pluck('name', 'id');
                     $outlet = Outlet::where('id',$outlet_id)->limit(10)->pluck('outlet_name', 'id');
+                    $category = Category::pluck('category_name','id');
+                    $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name','id');
             }
              $payment_method = PaymentMethod::pluck('method_name','id');
 
-            return view('admin.report.report',compact('Users','payment_method','outlet'));
+             return view('admin.report.report',compact('Users','payment_method','outlet','warehouse','category'));
 
     }
 
@@ -682,6 +703,119 @@ public function medicine_sale_return(Request $request)
 
 
       return view('admin.report.slaes_return_report', compact('start_date', 'end_date', 'productSales','title'));
+}
+
+public function category_wise_report(Request $request)
+{
+    $input = $request->all();
+
+
+
+
+     if($request->outlet_id != null || $request->outlet_id != ''){
+        $productSales = DB::table('outlet_stocks')->where('outlet_stocks.quantity','>','0')->where('outlet_stocks.outlet_id',$request->outlet_id)
+        ->leftjoin('medicines','outlet_stocks.medicine_id','=','medicines.id')->where('medicines.category_id',$request->category_id)
+       ->select('outlet_stocks.*','medicines.category_id','medicines.medicine_name')->get();
+       $category = Category::where('id',$request->category_id)->first();
+       $title = 'Stock Report For '.$category->category_name;
+
+     }else{
+        $productSales = DB::table('warehouse_stocks')->where('warehouse_stocks.quantity','>','0')->where('warehouse_stocks.warehouse_id',$request->warehouse_id)
+        ->leftjoin('medicines','warehouse_stocks.medicine_id','=','medicines.id')->where('medicines.category_id',$request->category_id)
+        ->select('outlet_stocks.*','medicines.category_id','medicines.medicine_name')->get();
+       $category = Category::where('id',$request->category_id)->first();
+       $title = 'Stock Report For '.$category->category_name;
+
+     }
+
+
+
+
+      return view('admin.report.category_stock_report', compact('productSales','title'));
+}
+
+
+
+public function category_wise_report_alert()
+
+
+{
+    $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+    $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
+    if(Auth::user()->hasRole('Super Admin')){
+        $outlet = Outlet::limit(10)->pluck('outlet_name', 'id');
+
+            $warehouse = Warehouse::pluck('warehouse_name','id');
+            $category1 = Category::pluck('category_name','id');
+
+    }
+    elseif(Auth::user()->hasRole('Admin')){
+
+        $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name','id');
+
+        $category1 = Category::pluck('category_name','id');
+        $outlet = Outlet::where('id',$outlet_id)->limit(10)->pluck('outlet_name', 'id');
+
+    }
+    else{
+
+
+            $outlet = Outlet::where('id',$outlet_id)->limit(10)->pluck('outlet_name', 'id');
+            $category1 = Category::pluck('category_name','id');
+            $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name','id');
+    }
+    $title = 'Medicine Purchase Report';
+    return view('admin.report.category_wise_stock_alert',compact('title','outlet','category1','warehouse'));
+}
+public function category_wise_report_alert_submit(Request $request)
+{
+    $input = $request->all();
+    $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+    $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
+    if(Auth::user()->hasRole('Super Admin')){
+        $outlet = Outlet::limit(10)->pluck('outlet_name', 'id');
+
+            $warehouse = Warehouse::pluck('warehouse_name','id');
+            $category1 = Category::pluck('category_name','id');
+
+    }
+    elseif(Auth::user()->hasRole('Admin')){
+
+        $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name','id');
+
+        $category1 = Category::pluck('category_name','id');
+        $outlet = Outlet::where('id',$outlet_id)->limit(10)->pluck('outlet_name', 'id');
+
+    }
+    else{
+
+
+            $outlet = Outlet::where('id',$outlet_id)->limit(10)->pluck('outlet_name', 'id');
+            $category1 = Category::pluck('category_name','id');
+            $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name','id');
+    }
+    // $start_date = Carbon::parse($input['start_date']);
+    // $end_date = Carbon::parse($input['end_date']);
+
+    if($request->outlet_id != null || $request->outlet_id != ''){
+        $productSales = DB::table('outlet_stocks')->where('outlet_stocks.quantity','>','0')->where('outlet_stocks.outlet_id',$request->outlet_id)
+        ->leftjoin('medicines','outlet_stocks.medicine_id','=','medicines.id')->where('medicines.category_id',$request->category_id)
+        ->select('outlet_stocks.*','medicines.category_id','medicines.medicine_name')->get();
+       $category = Category::where('id',$request->category_id)->first();
+       $title = 'Stock Report For '.$category->category_name;
+
+     }else{
+        $productSales = DB::table('warehouse_stocks')->where('warehouse_stocks.quantity','>','0')->where('warehouse_stocks.warehouse_id',$request->warehouse_id)
+        ->leftjoin('medicines','warehouse_stocks.medicine_id','=','medicines.id')->where('medicines.category_id',$request->category_id)
+        ->select('outlet_stocks.*','medicines.category_id','medicines.medicine_name')->get();
+       $category = Category::where('id',$request->category_id)->first();
+       $title = 'Stock Report For '.$category->category_name;
+
+     }
+
+
+
+      return view('admin.report.category_wise_stock_alert', compact('productSales','title','outlet','category','warehouse','category1'));
 }
 
 

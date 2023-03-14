@@ -53,6 +53,7 @@
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                     </div>
                     {!! Form::close() !!}
+                    @endcan
                     @can('sale_return_report')
 
                     {!! Form::open(array('url'=> 'report2/sale-return-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
@@ -69,7 +70,47 @@
                     {!! Form::close() !!}
                     @endcan
 
-                     @endcan
+
+                       @can('category-wise-report-outlet')
+
+                    {!! Form::open(array('url'=> 'report2/category-wise-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                    <div class="row form-group">
+                        <div class="col-md-2 mt-4">
+                            <b>Category Wise Stock Report</b>
+                        </div>
+                        <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
+                       </div>
+
+                        <div class="col-md-2">Category {{ Form::select('category_id', $category, null, ['class' => 'form-control', 'placeholder' => 'Select Category', 'id' => '' ,'required']) }}
+                       </div>
+                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                    </div>
+                    {!! Form::close() !!}
+                    @endcan
+
+                    @can('category-wise-report-warehouse')
+
+
+                    {!! Form::open(array('url'=> 'report2/category-wise-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                    <div class="row form-group">
+                        <div class="col-md-2 mt-4">
+                            <b>Category Wise Stock Report</b>
+                        </div>
+                        <div class="col-md-2">Warehouse Name {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'placeholder' => 'Select Warehouse', 'id' => 'outlet']) }}
+                       </div>
+
+                        <div class="col-md-2">Category {{ Form::select('category_id', $category, null, ['class' => 'form-control', 'placeholder' => 'Select Category', 'id' => '' ,'required']) }}
+                       </div>
+                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                    </div>
+                    {!! Form::close() !!}
+                    @endcan
+
+
+
+
+
+
                     @can('warehouse-stock.report')
                     {!! Form::open(array('url'=> 'report2/warehouse-stock-submit', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
@@ -260,9 +301,6 @@
                      </div>
                      {!! Form::close() !!}
                      @endcan
-
-
-
                 </div>
             </div>
         </div>

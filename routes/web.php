@@ -218,6 +218,11 @@ Route::get('/sale-due/list',[OutletInvoiceController::class,'dueList'])->name('d
 Route::get('/pay-due/{id}',[OutletInvoiceController::class,'payDue'])->name('payDue');
 Route::post('/pay-due',[OutletInvoiceController::class,'paymentDue'])->name('paymentDue');
 
+
+
+Route::get('/category-wise-report-alert', [ReportController2::class,'category_wise_report_alert'])->name('category-wise-report-alert');
+Route::post('/category-wise-report-alert-submit', [ReportController2::class,'category_wise_report_alert_submit'])->name('category-wise-report-alert-submit');
+
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {
@@ -281,6 +286,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
     Route::post('sale-return-report', [ReportController2::class,'medicine_sale_return'])->name('sale-return-report');
     Route::post('sale-report-details', [ReportController2::class,'medicine_sale_report_details'])->name('sale-report-details');
     Route::get('/sale-report-details1/{id}', [ReportController2::class,'medicine_sale_report_details1'])->name('sale-report-details1');
+
+    Route::post('/category-wise-report', [ReportController2::class,'category_wise_report'])->name('category-wise-report');
+
+
 });
 
 

@@ -102,6 +102,11 @@ class RoleSeeder extends Seeder
             'stock_request_report_for_warehouse.search',
             'return_medicine_report_for_warehouse',
             'return_medicine_report_for_warehouse.search',
+            'category-wise-report-warehouse',
+            'category-wise-report',
+            'category-wise-report-alert-warehouse',
+            'category-wise-report-alert-submit',
+            'category-wise-report-alert'
 
         ];
 
@@ -154,6 +159,11 @@ class RoleSeeder extends Seeder
             'supplier_wise_sale_report',
             'supplier_wise_sale_report.search',
             'sales-details',
+            'category-wise-report-outlet',
+            'category-wise-report',
+            'category-wise-report-alert-outlet',
+            'category-wise-report-alert-submit',
+            'category-wise-report-alert'
 
         ];
 
