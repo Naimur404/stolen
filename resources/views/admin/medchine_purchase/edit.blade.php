@@ -50,7 +50,7 @@
                         <p class="text-center"><b>Invoice No : {{ $productPurchase->medicine_purchase_id }}</b></p>
                     </div>
                     <div class="col-md-4">Purchase Date :
-                        <b>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y') }}</b></div>
+                        <b>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d/m/Y') }}</b></div>
                 </div>
 
                 <div class="row">

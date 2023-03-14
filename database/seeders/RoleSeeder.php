@@ -106,7 +106,9 @@ class RoleSeeder extends Seeder
             'category-wise-report',
             'category-wise-report-alert-warehouse',
             'category-wise-report-alert-submit',
-            'category-wise-report-alert'
+            'category-wise-report-alert',
+            'supplier_wise_stock_report_outlet_warehouse',
+            'supplier_wise_stock_report_outlet_warehouse.search',
 
         ];
 
@@ -163,7 +165,11 @@ class RoleSeeder extends Seeder
             'category-wise-report',
             'category-wise-report-alert-outlet',
             'category-wise-report-alert-submit',
-            'category-wise-report-alert'
+            'category-wise-report-alert',
+            'supplier_wise_sale_report',
+            'supplier_wise_sale_report.search',
+            'supplier_wise_stock_report_outlet',
+            'supplier_wise_stock_report_outlet.search'
 
         ];
 
