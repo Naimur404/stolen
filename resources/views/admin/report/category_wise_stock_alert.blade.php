@@ -82,7 +82,7 @@ $total_pay = 0;
                                 {{ Form::select('category_id', $category1, null, ['class' => 'form-control', 'placeholder' => 'Select Category', 'id' => '' ,'required']) }}
                               </div>
                          </div>
-
+                         <input type="hidden" name="outlet_id" value="">
                          <div class="col-md-2">
                             <button type="submit" class="btn btn-info">
                                 Search

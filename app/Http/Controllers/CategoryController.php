@@ -65,7 +65,7 @@ class CategoryController extends Controller
         $request->validate([
             'category_name' => 'required|string',
 
-
+            'alert_limit' => 'required',
         ]);
 
 
@@ -107,7 +107,7 @@ class CategoryController extends Controller
     {
         $request->validate([
             'category_name' => 'required|string',
-
+            'alert_limit' => 'required',
 
         ]);
         $input = $request->all();
@@ -129,5 +129,5 @@ class CategoryController extends Controller
       $category->delete();
         return redirect()->route('category.index')->with('success','Delete successfully');
     }
- 
+
 }
