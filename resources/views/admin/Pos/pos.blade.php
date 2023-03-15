@@ -796,9 +796,9 @@
                                     $('#expiry_date').first().val(data.expiry_date);
                                     $('#product_name').first().val(data.medicine_name);
                                     $('.stock-qty').first().val(data.quantity);
-                                    $('.qty').val('1');
+                                    $('.qty').first().val('1');
                                     $('#price').val(data.price);
-                                    $('.total').val(1*data.price);
+                                    $('.total').first().val(1*data.price);
 
 
 

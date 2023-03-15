@@ -91,7 +91,7 @@
                 <label for="date" class="col-md-2 text-right col-form-label">Date <i class="text-danger">
                             * </i>:</label>
                 <div class="col-md-4">
-                    <input class="datepicker-here form-control digits" type="text" data-language="en" data-bs-original-title="" title="" name="purchase_date" value="{{ Carbon\Carbon::today()->format('d/m/Y') }}" tabindex="2" required>
+                    <input class="datepicker-here form-control digits" type="text" data-language="en" data-bs-original-title="" title="" name="purchase_date" value="{{ Carbon\Carbon::today()->format('d-m-Y') }}" tabindex="2" required>
                 </div>
                 {!! Form::label('remarks', 'Remarks:', array('class' => 'col-md-2 text-right')) !!}
                 <div class="col-md-4">
@@ -394,7 +394,7 @@
                 //   let multiply = leaf*qty;
                 let qty = $('#qty').val();
                 // clear input text after click
-                $('#qty').val('');
+                // $('#qty').val('');
 
 
                 if (medicine_id) {
@@ -410,7 +410,7 @@
                             if (data != null) {
                                 $('.pr_id').first().val(data.medicine_id);
                                 $('.stock').val(data.quantity);
-
+                                $('#qty').first().val('1');
                                 $('#product_name').val(data.medicine_name);
 
                                 $('#expiry_date').val(data.expiry_date);

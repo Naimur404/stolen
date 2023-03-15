@@ -331,9 +331,9 @@ class OutletStockController extends Controller
       }
 
       public function get_medicine_details_outlet($id,$id2){
+        $data = explode(",", $id);
 
-
-        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $id2 )->where('outlet_stocks.medicine_id' ,'=' , $id)
+        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $id2 )->where('outlet_stocks.medicine_id' ,'=' , $data[0])->whereDate('outlet_stocks.expiry_date','=',$data[1])
         ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
         ->select('outlet_stocks.*','medicines.medicine_name as medicine_name')->first();
 

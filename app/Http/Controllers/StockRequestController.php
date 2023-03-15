@@ -24,7 +24,7 @@ class StockRequestController extends Controller
     {
         $this->middleware('permission:sent_stock_request', ['only' => ['index','store','update','destroy','edit','stockRequestDelete','details']]);
         $this->middleware('permission:stock_request', ['only' => ['warehouseRequest','store','hasSent','hasAccepted','hasAcceptedMedicine','detailsRequestWarehouse']]);
-        
+
     }
     public function index()
     {
@@ -34,7 +34,7 @@ class StockRequestController extends Controller
     }else{
         $stockrequets = StockRequest::where('outlet_id',$outlet_id)->get();
     }
-   
+
 
     return view('admin.stockrequest.outlet_stock_request_index', compact('stockrequets'));
     }
@@ -76,7 +76,7 @@ class StockRequestController extends Controller
         $purchase_input = [
             'warehouse_id' => $input['warehouse_id'],
             'outlet_id' => $input['outlet_id'],
-            'date' => $input['purchase_date'],
+            'date' => Carbon::parse($input['purchase_date'])->toDateString(),
 
             'added_by' => Auth::user()->id,
 
@@ -180,7 +180,7 @@ class StockRequestController extends Controller
         $purchase_input = [
             'warehouse_id' => $input['warehouse_id'],
             'outlet_id' => $input['outlet_id'],
-            'date' => $input['purchase_date'],
+            'date' => Carbon::parse($input['purchase_date'])->toDateString(),
 
 
 
@@ -269,7 +269,7 @@ class StockRequestController extends Controller
             $stockrequets = StockRequest::where('warehouse_id', $warehouse_id)->get();
         }
 
-  
+
 
     return view('admin.stockrequest.warehouse_stock_request', compact('stockrequets'));
 
