@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col-md-4">Invoice Id : <b>{{ $productPurchase->id }}</b></div>
                     <div class="col-md-4">
-                        <p class="text-center"><b>Invoice No : {{ $productPurchase->medicine_purchase_id }}</b></p>
+                        <p class="text-center"><b>Invoice No : {{ $productPurchase->invoice_no}}</b></p>
                     </div>
                     <div class="col-md-4">Purchase Date :
                         <b>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y') }}</b></div>
@@ -65,7 +65,7 @@
 
 
                 </div>
-                <div class="row">
+                {{-- <div class="row">
                     <div class="col-md-3">Manufacturer Name : </div>
                     <div class="col-md-4"><b>
                             @if ($productPurchase->manufacturer_id == null)
@@ -75,7 +75,7 @@
                             @endif
                         </b></div>
 
-                </div>
+                </div> --}}
                 <div class="row">
                     <div class="col-md-3">Invoice Image :</div>
                     <div class="col-md-2 mt-1">

@@ -178,6 +178,7 @@ Route::get('/get-all-medicine',[Select2Controller::class,'get_all_medicine'])->n
 Route::get('get-user', [Select2Controller::class,'get_user']);
 Route::get('get-user2', [Select2Controller::class,'get_user2']);
 Route::get('get-payment', [Select2Controller::class,'get_payment']);
+Route::get('get-category', [Select2Controller::class,'get_category']);
 Route::get('get-user-details/{id}', [Select2Controller::class,'get_user_details']);
 
 

@@ -289,6 +289,33 @@ class Select2Controller extends Controller
       return response()->json($response);
   }
 
+  public function get_category(Request $request){
+
+    $search = $request->search;
+      if($search == ''){
+         $categories = Category::orderby('id','asc')
+         ->select('id','category_name')
+         ->limit(20)
+         ->get();
+      }else{
+
+         $categories = Category::orderby('id','asc')
+         ->select('id','category_name')
+         ->where('category_name', 'like', '%' .$search . '%')
+         ->limit(20)
+         ->get();
+      }
+
+      $response = array();
+      foreach($categories as $category){
+         $response[] = array(
+              "id"=>$category->id,
+              "text"=>$category->category_name
+         );
+      }
+
+      return response()->json($response);
+  }
 
 
 }
