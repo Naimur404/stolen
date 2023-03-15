@@ -8,6 +8,7 @@ use App\Models\Warehouse;
 use App\Models\WarehouseReturn;
 use App\Models\WarehouseReturnDetails;
 use App\Models\WarehouseStock;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -72,7 +73,7 @@ class WarehouseReturnController extends Controller
         $purchase_input = [
             'warehouse_id' => $input['warehouse_id'],
             'outlet_id' => $input['outlet_id'],
-            'date' => $input['purchase_date'],
+            'date' => Carbon::parse($input['purchase_date'])->toDateString(),
 
             'added_by' => Auth::user()->id,
 
@@ -171,7 +172,7 @@ class WarehouseReturnController extends Controller
         $purchase_input = [
             'warehouse_id' => $input['warehouse_id'],
             'outlet_id' => $input['outlet_id'],
-            'date' => $input['purchase_date'],
+            'date' => Carbon::parse($input['purchase_date'])->toDateString(),
             'remarks' => $input['remarks'],
         ];
         try{

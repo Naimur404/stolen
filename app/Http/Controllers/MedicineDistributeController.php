@@ -6,6 +6,7 @@ use App\Models\MedicineDistribute;
 use App\Models\MedicineDistributeDetail;
 use App\Models\Outlet;
 use App\Models\Warehouse;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -82,7 +83,7 @@ class MedicineDistributeController extends Controller
         $purchase_input = [
             'warehouse_id' => $input['warehouse_id'],
             'outlet_id' => $input['outlet_id'],
-            'date' => $input['purchase_date'],
+            'date' => Carbon::parse($input['purchase_date'])->toDateString(),
 
             'added_by' => Auth::user()->id,
 
@@ -178,7 +179,7 @@ class MedicineDistributeController extends Controller
         $purchase_input = [
             'warehouse_id' => $input['warehouse_id'],
             'outlet_id' => $input['outlet_id'],
-            'date' => $input['purchase_date'],
+            'date' => Carbon::parse($input['purchase_date'])->toDateString(),
             'remarks' => $input['remarks'],
         ];
         try{

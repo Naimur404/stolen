@@ -316,7 +316,7 @@ if(count($check)  < 1  ){
         $data = explode(",", $id);
 
 
-        $product_details = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id2 )->where('warehouse_stocks.medicine_id' ,'=' , $data[0])->whereDate('expiry_date','=',$data[1])
+        $product_details = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id2 )->where('warehouse_stocks.medicine_id' ,'=' , $data[0])->whereDate('warehouse_stocks.expiry_date','=',$data[1])
         ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
         ->select('warehouse_stocks.*','medicines.medicine_name as medicine_name')->first();
 
