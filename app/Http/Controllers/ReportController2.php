@@ -835,14 +835,14 @@ public function category_wise_report_alert_submit(Request $request)
 
            }
            $data = $productSales->sum('outlet_stocks.quantity');
-           if($data < $total ){
+           if($data <= $total ){
              $productSales = $productSales->get();
            }else{
              $productSales = array();
            }
 
        $category = Category::where('id',$request->category_id)->first();
-       $title = 'Category Stock Report';
+       $title = 'Category Stock Report Alert';
 
 
     }else{
@@ -874,7 +874,7 @@ public function category_wise_report_alert_submit(Request $request)
             }
 
           $data = $productSales->sum('warehouse_stocks.quantity');
-          if($data < $total ){
+          if($data <= $total ){
             $productSales = $productSales->get();
           }else{
             $productSales = array();
@@ -882,7 +882,7 @@ public function category_wise_report_alert_submit(Request $request)
 
 
        $category = Category::where('id',$request->category_id)->first();
-       $title = 'Category Stock Report';
+       $title = 'Category Stock Report Alert';
 
      }
 
