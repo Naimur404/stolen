@@ -38,24 +38,29 @@ $total_pay = 0;
                       @can('category-wise-report-alert-outlet')
                     {!! Form::open(['url' => 'category-wise-report-alert-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
                      <div class="row">
-                         <div class="col-md-4">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                  <label class="input-group-text" for="inputGroupSelect01" style="margin-right: 10px">Outlet Name </label>
-                                </div>
-                                {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
-                              </div>
+                         <div class="col-md-3">
+
+                                  <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Outlet Name* </label>
+
+                                {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet','required']) }}
+
                          </div>
                          <div class="col-md-3">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                  <label class="input-group-text" for="inputGroupSelect01" style="margin-right: 10px">Category</label>
-                                </div>
-                                {{ Form::select('category_id', $category1, null, ['class' => 'form-control', 'placeholder' => 'Select Category', 'id' => '' ,'required']) }}
-                              </div>
+
+                                  <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Category</label>
+
+
+                                {{ Form::select('category_id[]', $category1, null, ['class' => 'form-control', 'multiple'=>'multiple', 'id' => 'sel_emp' ]) }}
+
+                         </div>
+                         <div class="col-md-3">
+
+                                  <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Manufacturar</label>
+                                  {{ Form::select('manufacturer_id[]', [''], null,['class' => 'form-control', 'id' => 'sel_emp2','multiple'=>'multiple', ]) }}
+
                          </div>
 
-                         <div class="col-md-2">
+                         <div class="col-md-2 mt-4">
                             <button type="submit" class="btn btn-info">
                                 Search
                             </button>
@@ -65,25 +70,28 @@ $total_pay = 0;
                      @endcan
                      @can('category-wise-report-alert-warehouse')
                      {!! Form::open(['url' => 'category-wise-report-alert-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
-                     <div class="row">
-                         <div class="col-md-4">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                  <label class="input-group-text" for="inputGroupSelect01" style="margin-right: 10px">warehouse Name </label>
-                                </div>
+                     <div class="row mt-3">
+                         <div class="col-md-3">
+                            <label class="input-group"  style="margin-right: 10px">Warehouse Name </label>
                                 {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
-                              </div>
+
                          </div>
                          <div class="col-md-3">
-                            <div class="input-group mb-3">
-                                <div class="input-group-prepend">
-                                  <label class="input-group-text" for="inputGroupSelect01" style="margin-right: 10px">Category</label>
-                                </div>
-                                {{ Form::select('category_id', $category1, null, ['class' => 'form-control', 'placeholder' => 'Select Category', 'id' => '' ,'required']) }}
-                              </div>
-                         </div>
+
+                            <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Category</label>
+
+
+                          {{ Form::select('category_id[]', $category1, null, ['class' => 'form-control', 'multiple'=>'multiple', 'id' => 'sel_emp4' ]) }}
+
+                   </div>
+                   <div class="col-md-3">
+
+                            <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Manufacturar</label>
+                            {{ Form::select('manufacturer_id[]', [''], null,['class' => 'form-control', 'id' => 'sel_emp3','multiple'=>'multiple']) }}
+
+                   </div>
                          <input type="hidden" name="outlet_id" value="">
-                         <div class="col-md-2">
+                         <div class="col-md-2 mt-4">
                             <button type="submit" class="btn btn-info">
                                 Search
                             </button>
@@ -93,7 +101,7 @@ $total_pay = 0;
                      @endcan
 
 
-                    <div class="table-responsive">
+                    <div class="table-responsive mt-3">
                         <table class="table display table-bordered table-striped table-hover custom-table"
                         id="product_purchase">
                         <thead>
@@ -144,7 +152,7 @@ $total_pay = 0;
                                 <td></td>
                                 <td class="text-right"><b>Total Quantity</b></td>
                                 <td>
-                                    @if ($total_quantity >= $category->alert_limit)
+                                    @if ($total_quantity >= $total)
                                     <h5> <span class="badge bg-success">{{ $total_quantity }}</span></h5>
                                     @else
                                     <h5><span class="badge bg-danger">{{ $total_quantity }}</span></h5>
@@ -171,7 +179,7 @@ $total_pay = 0;
 <script src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.colVis.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.4/js/buttons.print.min.js"></script>
 <script type="text/javascript">
-
+ var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
 $(document).ready(function() {
     $('#product_purchase').DataTable( {
         dom: 'Bfrtip',
@@ -198,6 +206,102 @@ $(document).ready(function() {
             'colvis'
         ]
     } );
+
+
+
+
+          $( "#sel_emp2" ).select2({
+
+             ajax: {
+               url: "{{route('get-manufacturer')}}",
+               type: "post",
+               dataType: 'json',
+
+               data: function (params) {
+                 return {
+                    _token: CSRF_TOKEN,
+                    search: params.term // search term
+                 };
+               },
+               processResults: function (response) {
+                 return {
+                   results: response
+                 };
+               },
+               cache: true
+             }
+
+          });
+
+          $( "#sel_emp" ).select2({
+
+             ajax: {
+               url: "{{route('get-category')}}",
+               type: "post",
+               dataType: 'json',
+
+               data: function (params) {
+                 return {
+                    _token: CSRF_TOKEN,
+                    search: params.term // search term
+                 };
+               },
+               processResults: function (response) {
+                 return {
+                   results: response
+                 };
+               },
+               cache: true
+             }
+
+          });
+
+
+          $( "#sel_emp3" ).select2({
+
+ajax: {
+  url: "{{route('get-manufacturer')}}",
+  type: "post",
+  dataType: 'json',
+
+  data: function (params) {
+    return {
+       _token: CSRF_TOKEN,
+       search: params.term // search term
+    };
+  },
+  processResults: function (response) {
+    return {
+      results: response
+    };
+  },
+  cache: true
+}
+
+});
+
+$( "#sel_emp4" ).select2({
+
+ajax: {
+  url: "{{route('get-category')}}",
+  type: "post",
+  dataType: 'json',
+
+  data: function (params) {
+    return {
+       _token: CSRF_TOKEN,
+       search: params.term // search term
+    };
+  },
+  processResults: function (response) {
+    return {
+      results: response
+    };
+  },
+  cache: true
+}
+
+});
 
  } );
 
