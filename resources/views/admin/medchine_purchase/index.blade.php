@@ -85,10 +85,22 @@
 
                                         @if (auth()->user()->can('medchine_purchase.edit') || auth()->user()->can('medchine_purchase.delete'))
                                         <td class="form-inline">
-                                            @can('medchine_purchase.edit')
-                                                <a href="{{ route('medicine-purchase.edit', $productPurchase->id) }}"
-                                                    class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                            @endcan
+                                            @php
+                                             $data1 = App\Models\MedicinePurchaseDetails::where('medicine_purchase_id',$productPurchase->id)->get();
+                                            $data = App\Models\WarehouseCheckIn::where('purchase_id',$productPurchase->id)->get();
+                                        @endphp
+                                        @if (count($data1) == count($data))
+                                        <a href="javscript:void()"
+                                        class="btn btn-warning btn-xs" title="Sent"
+                                        style="margin-right:5px"><i class="fa fa-check"
+                                                                    aria-hidden="true"></i></a>
+                                        @else
+                                        @can('medchine_purchase.edit')
+                                        <a href="{{ route('medicine-purchase.edit', $productPurchase->id) }}"
+                                            class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                    @endcan
+                                        @endif
+
 
                                             {{-- @can('product_purchase.print')
                                             <a href="{{ route('medicine-purchase.show', $productPurchase->id) }}" class="btn btn-info btn-xs"  title="Print Invoice" target="__blank" style="margin-right:3px"><i class="fas fa-print"></i></a>
