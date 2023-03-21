@@ -306,7 +306,7 @@ try{
   if($data3->paid_amount > $check1){
     $check = 0;
   }else{
-    $check = round($data3->grand_total - $data3->paid_amount,2);
+    $check = round($total-($data3->vat+$data3->total_discount) - ($data3->paid_amount),2);
   }
   $update2 = array(
 'sub_total' => $total,
