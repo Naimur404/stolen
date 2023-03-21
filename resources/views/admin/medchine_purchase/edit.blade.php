@@ -54,14 +54,13 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3">Supplier Name : </div>
-                    <div class="col-md-4"> <b>
-                            @if ($productPurchase->supplier_id == null)
-                                N/A
-                            @elseif ($productPurchase->supplier_id != null)
-                                {{ $productPurchase->supplier->supplier_name }}
-                            @endif
-                        </b></div>
+                    <div class="col-md-3">Supplier Name :  @if ($productPurchase->supplier_id == null)
+                      <b>  N/A
+                    @elseif ($productPurchase->supplier_id != null)
+                        {{ $productPurchase->supplier->supplier_name }}
+                    @endif
+                </b> </div>
+
 
 
                 </div>
@@ -76,16 +75,7 @@
                         </b></div>
 
                 </div> --}}
-                <div class="row">
-                    <div class="col-md-3">Invoice Image :</div>
-                    <div class="col-md-2 mt-1">
-                        <div class="filtr-item col-sm-2" data-category="1" data-sort="white sample">
-                            <a href="{{ $productPurchase->invoice_image }}" data-toggle="lightbox" data-title="Invoice">
-                              <img src="{{ $productPurchase->invoice_image }}" height="60" width="100" alt=""/>
-                            </a>
-                          </div>
-                    </div>
-                </div>
+
             </div>
 
 
@@ -96,6 +86,7 @@
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Amount</th>
+                    <th>Action</th>
                 </tr>
 
                 @foreach ($productPurchaseDetails as $data)
@@ -105,6 +96,8 @@
                         <td>{{ $data->quantity }}</td>
                         <td>{{ $data->manufacturer_price }}</td>
                         <td>{{ $data->quantity*$data->manufacturer_price}}</td>
+                        <td><a href="{{ route('edit-purchase',$data->id) }}"
+                            class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
                     </tr>
                 @endforeach
 
@@ -162,12 +155,12 @@
                             <td>{{ $productPurchase->total_discount }}</td>
                         </tr>
                         <tr>
-                            <td>Drand Total</td>
+                            <td>Grand Total</td>
                             <td>{{ $productPurchase->grand_total }}</td>
                         </tr>
                         <tr>
                             <td>Paid Amount</td>
-                            <td>{{ $productPurchase->grand_total - $productPurchase->due_amount }}</td>
+                            <td>{{ $productPurchase->paid_amount }}</td>
                         </tr>
                         <tr>
                             <td>Due Amount</td>
