@@ -312,6 +312,7 @@ try{
 'sub_total' => $total,
 'grand_total' => round($total-($data3->vat+$data3->total_discount),2),
 'due_amount' => $check,
+'paid_amount' => $data3->paid_amount,
   );
   MedicinePurchase::where('id',$request->pid)->update($update2);
   return redirect()->route('medicine-purchase.edit', $request->pid)->with('succes', 'Updated');

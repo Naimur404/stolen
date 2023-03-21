@@ -160,7 +160,7 @@
                         </tr>
                         <tr>
                             <td>Paid Amount</td>
-                            <td>{{ $productPurchase->grand_total - $productPurchase->due_amount }}</td>
+                            <td>{{ $productPurchase->paid_amount }}</td>
                         </tr>
                         <tr>
                             <td>Due Amount</td>
