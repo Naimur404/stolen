@@ -295,17 +295,23 @@ try{
 
     );
     $updatepurchase =  MedicinePurchaseDetails::where('id',$request->pdid)->update($update);
-    $data2 = MedicinePurchaseDetails::where('id',$request->pdid)->get();
+    $data2 = MedicinePurchaseDetails::where('medicine_purchase_id',$request->pid)->get();
     $total = 0;
   foreach($data2  as $final){
-   $total = $total+ $final->total_price;
+   $total = $total+$final->total_price;
   }
-  $data3 = MedicinePurchase::where('id',$request->pid)->first();
 
+  $data3 = MedicinePurchase::where('id',$request->pid)->first();
+  $check1 = round($total-($data3->vat+$data3->total_discount),2);
+  if($data3->paid_amount > $check1){
+    $check = 0;
+  }else{
+    $check = round($data3->grand_total - $data3->paid_amount,2);
+  }
   $update2 = array(
 'sub_total' => $total,
 'grand_total' => round($total-($data3->vat+$data3->total_discount),2),
-'due_amount' => round($data3->sub_total - $data3->paid_amount,2),
+'due_amount' => $check,
   );
   MedicinePurchase::where('id',$request->pid)->update($update2);
   return redirect()->route('medicine-purchase.edit', $request->pid)->with('succes', 'Updated');
