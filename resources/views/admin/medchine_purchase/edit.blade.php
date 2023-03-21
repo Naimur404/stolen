@@ -96,6 +96,7 @@
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Amount</th>
+                    <th>Action</th>
                 </tr>
 
                 @foreach ($productPurchaseDetails as $data)
@@ -105,6 +106,8 @@
                         <td>{{ $data->quantity }}</td>
                         <td>{{ $data->manufacturer_price }}</td>
                         <td>{{ $data->quantity*$data->manufacturer_price}}</td>
+                        <td><a href="{{ route('edit-purchase',$data->id) }}"
+                            class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a></td>
                     </tr>
                 @endforeach
 

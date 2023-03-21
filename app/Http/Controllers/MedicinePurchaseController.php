@@ -133,7 +133,7 @@ class MedicinePurchaseController extends Controller
                     'box_mrp' => (double)$input['box_mrp'][$i],
                     'total_price' => (double)$input['total_price'][$i],
                     'rate' => round($input['total_price'][$i] / $input['quantity'][$i], 2),
-                    'total_amount' => (double)$purchase->grand_total,
+                    'total_amount' => (double)$input['total_price'][$i],
                     'total_discount' => (double)$input['total_discount'],
                     'vat' => (double)$purchase->vat,
 
@@ -276,6 +276,44 @@ class MedicinePurchaseController extends Controller
 
         return view('admin.medchine_purchase.checkin', compact('productPurchase', 'productPurchaseDetails'));
     }
+public function editPurchase($id){
+    $data = MedicinePurchaseDetails::where('id',$id)->first();
+    $productPurchase = MedicinePurchase::where('id',$data->medicine_purchase_id)->first();
+    return view('admin.medchine_purchase.edit_purchase',compact('data','productPurchase'));
+}
+public function purchaseUpdate(Request $request){
 
+// dump($request->all());
+$data = MedicinePurchaseDetails::where('id',$request->pdid)->first();
+try{
+
+    $update = array(
+    'quantity' => $request->qty,
+    'manufacturer_price' => $request->price,
+    'total_price' => round($request->qty*$request->price,2),
+    'total_amount' => round($request->qty*$request->price,2),
+
+    );
+    $updatepurchase =  MedicinePurchaseDetails::where('id',$request->pdid)->update($update);
+    $data2 = MedicinePurchaseDetails::where('id',$request->pdid)->get();
+    $total = 0;
+  foreach($data2  as $final){
+   $total = $total+ $final->total_price;
+  }
+  $data3 = MedicinePurchase::where('id',$request->pid)->first();
+
+  $update2 = array(
+'sub_total' => $total,
+'grand_total' => round($total-($data3->vat+$data3->total_discount),2),
+'due_amount' => round($data3->sub_total - $data3->paid_amount,2),
+  );
+  MedicinePurchase::where('id',$request->pid)->update($update2);
+  return redirect()->route('medicine-purchase.edit', $request->pid)->with('succes', 'Updated');
+}catch(Exception $e){
+    return redirect()->back()->with('error', $e->getMessage());
+}
+
+
+}
 
 }

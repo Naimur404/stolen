@@ -111,7 +111,7 @@ class CategoryController extends Controller
 
         ]);
         $input = $request->all();
-            $category_name =$category->update($input);
+            $category_name = $category->update($input);
 
 
 

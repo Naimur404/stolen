@@ -121,8 +121,14 @@ Route::resource('customer',CustomerManagementController::class);
 Route::resource('stock-request',StockRequestController::class);
 Route::resource('invoice', OutletInvoiceController::class);
 
+
+//purchase
+Route::get('edit-purchase/{id}',[MedicinePurchaseController::class,'editPurchase'])->name('edit-purchase');
+Route::post('purchase-update',[MedicinePurchaseController::class,'purchaseUpdate'])->name('purchase-update');
+
 //checkin route
 Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
+
 Route::get('distribute-medicine/{id}/check-in',[MedicineDistributeController::class,'checkIn'])->name('distribute-medicine.checkIn');
 Route::get('medicine-return/{id}/check-in',[WarehouseReturnController::class,'checkIn'])->name('medicine-return.checkIn');
 
