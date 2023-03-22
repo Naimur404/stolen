@@ -96,10 +96,10 @@
                     <tr>
 
                         <td>{{ $data->medicine_name }}</td>
-                        <td> <input type="number" name="qty" id="qty" value="{{ $data->quantity }}"></td>
-                        <td><input type="number" name="price" id="price" value="{{ $data->manufacturer_price }}">
+                        <td> <input type="number" name="qty" id="qty" value="{{ $data->quantity }}" class="form-control" required></td>
+                        <td><input type="number" name="price" id="price" value="{{ $data->manufacturer_price }}" step="any" class="form-control" required>
                            </td>
-                        <td><input type="number" name="final" id="final" value="{{ $data->quantity*$data->manufacturer_price}}" readonly>
+                        <td><input type="number" name="final" id="final" value="{{ $data->quantity*$data->manufacturer_price}}" class="form-control" readonly>
                             </td>
 
                     </tr>
