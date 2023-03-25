@@ -84,27 +84,25 @@
 
             <table class="table table-bordered mt-2">
                 <tr>
-
                     <th>Name Of Investigation</th>
+                    <th>Expiry Date</th>
                     <th>Quantity</th>
                     <th>Price</th>
+                    <th>Box Mrp</th>
                     <th>Amount</th>
-
                 </tr>
-
-
                     <tr>
-
                         <td>{{ $data->medicine_name }}</td>
+                        <td><input class="datepicker-here form-control digits" type="text" data-language="en" data-bs-original-title="" title="" name="purchase_date" value="{{  \Carbon\Carbon::parse($data->expiry_date)->format('d-m-Y') }}" tabindex="2" required>
+                        </td>
                         <td> <input type="number" name="qty" id="qty" value="{{ $data->quantity }}" class="form-control" required></td>
                         <td><input type="number" name="price" id="price" value="{{ $data->manufacturer_price }}" step="any" class="form-control" required>
                            </td>
+                           <td><input type="number" name="box_mrp" id="box_mrp" value="{{ $data->rate }}" step="any" class="form-control" required>
+                           </td>
                         <td><input type="number" name="final" id="final" value="{{ $data->quantity*$data->manufacturer_price}}" class="form-control" readonly>
                             </td>
-
                     </tr>
-
-
             </table>
 
             {{ Form::button('Update', ['type' => 'submit', 'class' => 'btn btn-warning btn-sm mt-5'] )  }}

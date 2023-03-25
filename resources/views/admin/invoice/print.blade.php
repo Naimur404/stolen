@@ -13,7 +13,6 @@
             box-sizing: border-box;
 
         }
-
         .receipt {
             width: 4in;
             display: block;
