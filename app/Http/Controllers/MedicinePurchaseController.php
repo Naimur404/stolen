@@ -288,8 +288,10 @@ $data = MedicinePurchaseDetails::where('id',$request->pdid)->first();
 try{
 
     $update = array(
+    'expiry_date' => Carbon::parse($request->purchase_date)->toDateString(),
     'quantity' => $request->qty,
     'manufacturer_price' => $request->price,
+    'rate' => $request->box_mrp,
     'total_price' => round($request->qty*$request->price,2),
     'total_amount' => round($request->qty*$request->price,2),
 
@@ -321,6 +323,32 @@ try{
 }
 
 
+}
+
+public function purchaseDelete($id){
+    $data = MedicinePurchaseDetails::where('id',$id)->first();
+    $data2 = MedicinePurchase::where('id',$data->medicine_purchase_id)->first();
+    $subtotal = $data2->sub_total-$data->total_price;
+    $grand_total = $subtotal - ($data2->vat + $data2->total_discoun);
+    $due_amount =  $grand_total - $data2->paid_amount;
+    if($due_amount <= 0){
+        $due_amount = 0;
+    }else{
+        $due_amount =  $grand_total - $data2->paid_amount;
+
+    }
+
+    $data3 = array(
+             'sub_total' => $subtotal,
+             'grand_total' => $grand_total,
+             'due_amount' => $due_amount,
+
+    );
+    MedicinePurchase::where('id',$data->medicine_purchase_id)->update($data3);
+
+     MedicinePurchaseDetails::where('id',$id)->delete();
+
+    return redirect()->back()->with('success', 'Data has been Deteled.');
 }
 
 }

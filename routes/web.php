@@ -125,6 +125,7 @@ Route::resource('invoice', OutletInvoiceController::class);
 //purchase
 Route::get('edit-purchase/{id}',[MedicinePurchaseController::class,'editPurchase'])->name('edit-purchase');
 Route::post('purchase-update',[MedicinePurchaseController::class,'purchaseUpdate'])->name('purchase-update');
+Route::get('purchase-delete/{id}',[MedicinePurchaseController::class,'purchaseDelete'])->name('purchase-delete');
 
 //checkin route
 Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
