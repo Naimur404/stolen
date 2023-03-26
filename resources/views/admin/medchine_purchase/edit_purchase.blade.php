@@ -88,7 +88,7 @@
                     <th>Expiry Date</th>
                     <th>Quantity</th>
                     <th>Price</th>
-                    <th>Box Mrp</th>
+                    <th>MRP</th>
                     <th>Amount</th>
                 </tr>
                     <tr>
@@ -98,7 +98,7 @@
                         <td> <input type="number" name="qty" id="qty" value="{{ $data->quantity }}" class="form-control" required></td>
                         <td><input type="number" name="price" id="price" value="{{ $data->manufacturer_price }}" step="any" class="form-control" required>
                            </td>
-                           <td><input type="number" name="box_mrp" id="box_mrp" value="{{ $data->rate }}" step="any" class="form-control" required>
+                           <td><input type="number" name="box_mrp" id="box_mrp" value="{{ $data->box_mrp }}" step="any" class="form-control" required>
                            </td>
                         <td><input type="number" name="final" id="final" value="{{ $data->quantity*$data->manufacturer_price}}" class="form-control" readonly>
                             </td>
