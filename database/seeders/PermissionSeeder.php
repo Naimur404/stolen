@@ -130,6 +130,9 @@ class PermissionSeeder extends Seeder
             'supplier_wise_stock_report_warehouse',
             'supplier_wise_stock_report_warehouse.search',
 
+            'profit_loss',
+            'profit_loss.report',
+
             'warehouse-return.management',
             'warehouse-return.create',
             'warehouse-return.edit',

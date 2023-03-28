@@ -229,7 +229,7 @@ class OutletInvoiceController extends Controller
                     'quantity' => $input['quantity'][$i],
                     'rate' => $input['box_mrp'][$i],
                     'discount' => $input['totaldis'][$i],
-                    'total_price' => $input['total'][$i],
+                    'total_price' => $input['total'][$i] - $input['totaldis'][$i],
 
                 );
                 OutletInvoiceDetails::create($invoicedetails);

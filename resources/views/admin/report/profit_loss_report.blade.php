@@ -60,22 +60,25 @@
                                 <th>Medicine Name</th>
                                 <th>Expiry Date</th>
                                 <th>Quantity</th>
-                                <th>Price</th>
+                                <th>Sell Price</th>
                                 <th>Discount</th>
+                                <th>Total Price</th>
+                                <th>Purchase Price</th>
 
                 </tr>
             </thead>
             <tbody>
                 @php
                 $grand_quantity = 0;
-                $total_price = 0;
+                $total = 0;
                 $total_discount = 0;
+                $total_buy = 0;
 
                 @endphp
                      @foreach ($productSales as $productPurchase)
                      <tr>
                         <td>{{ $loop->index + 1 }}</td>
-                         <td>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y') }}
+                         <td>{{ \Carbon\Carbon::parse($productPurchase->created_at)->format('d-m-Y') }}
                          </td>
                          <td>{{ $productPurchase->medicine_name }}</td>
 
@@ -88,12 +91,16 @@
                          <td>{{ $productPurchase->rate }}</td>
 
                          <td>{{ $productPurchase->discount }}</td>
+                         <td>{{ $productPurchase->total_price }}</td>
+                         <td>{{ $productPurchase->purchase_price }}</td>
                      </tr>
                      @php
                     $grand_quantity = $grand_quantity + $productPurchase->quantity;
 
-                    $total_price = $total_price + $productPurchase->rate * $productPurchase->quantity;
+                    $total = $total + $productPurchase->total_price;
                     $total_discount = $total_discount + $productPurchase->discount;
+                    $total_buy =  $total_buy + $productPurchase->purchase_price * $productPurchase->quantity;
+
                     @endphp
                 @endforeach
 
@@ -101,7 +108,16 @@
             </tbody>
         </table>
 
-        <p class="text-center">Grand Total {{ $total_price }} | Total Quantity {{ $grand_quantity }} | Total Discount {{ $total_discount }}</p>
+        <p class="text-center">Total Profit  @if($total>$total_buy)
+            {{ $total}}
+@else
+0
+@endif
+           | Total Quantity {{ $grand_quantity }} | Total Loss  @if($total<$total_buy)
+           {{ $total_buy }}
+@else
+0
+@endif</p>
         <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
 
     </div>
@@ -111,3 +127,4 @@
     setTimeout(function() { window.print(); }, 1000);
 </script>
 @endsection
+
