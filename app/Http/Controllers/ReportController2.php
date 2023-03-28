@@ -44,7 +44,7 @@ class ReportController2 extends Controller
         $this->middleware('permission:stock_request_report_for_warehouse.search', ['only' => ['stock_request_report2']]);
         $this->middleware('permission:return_medicine_report_for_outlet.search', ['only' => ['return_medicine_report']]);
         $this->middleware('permission:return_medicine_report_for_warehouse.search', ['only' => ['return_medicine_report2']]);
-        $this->middleware('permission:sale_return_report.search', ['only' => [' medicine_sale_return']]);
+        $this->middleware('permission:sale_return_report.search', ['only' => ['medicine_sale_return']]);
         $this->middleware('permission:category-wise-report', ['only' => ['category_wise_report']]);
 
         $this->middleware('permission:category-wise-report-alert', ['only' => ['category_wise_report_alert']]);
@@ -53,8 +53,8 @@ class ReportController2 extends Controller
 
 
         $this->middleware('permission:supplier_wise_stock_report_outlet.search', ['only' => ['supplier_wise_stock_outlet']]);
-        $this->middleware('permission:supplier_wise_stock_report_warehouse.search', ['only' => [' supplier_wise_stock_warehouse']]);
-
+        $this->middleware('permission:supplier_wise_stock_report_warehouse.search', ['only' => ['supplier_wise_stock_warehouse']]);
+        $this->middleware('permission:profit_loss.report', ['only' => ['profit_loss']]);
 
     }
     public function medicine_sale_report_submit(Request $request)
@@ -955,6 +955,55 @@ public function supplier_wise_stock_warehouse(Request $request)
       return view('admin.report.supplier_wise_stock_report', compact('start_date', 'end_date', 'productSales','manu','title'));
 }
 
+
+public function profit_loss(Request $request)
+{
+    $input = $request->all();
+    $start_date = Carbon::parse($input['start_date']);
+    $end_date = Carbon::parse($input['end_date']);
+
+    // $productSales = MedicineDistribute::where('outlet_id',$request->outlet_id)->whereDate('created_at', '>=', $start_date)
+    // ->whereDate('created_at', '<=', $end_date)->with(['medicinedistributesdetails'])->get();
+
+ if (Auth::user()->hasRole(['Super Admin', 'Admin'])){
+
+    $productdate = DB::table('outlet_invoice_details')->pluck('expiry_date');
+        $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
+        ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks','outlet_invoice_details.medicine_id','=' ,'outlet_stocks.medicine_id')->whereIn('outlet_stocks.expiry_date', $productdate)->select('outlet_invoice_details.*','outlet_stocks.purchase_price','outlet_stocks.expiry_date as edate');
+        $title = 'Profit & Loss Report';
+        // dump($productSales);
+        if($request->medicine_id == '' || $request->medicine_id == null){
+            $productSales = $productSales->distinct()->get();
+        }else{
+            $productSales = $productSales->where('outlet_invoice_details.medicine_id',$request->medicine_id)->distinct()->get();
+        }
+
+
+    }
+    else{
+
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : outlet::orderby('id','desc')->first('id');
+
+        $productdate = DB::table('outlet_invoice_details')->pluck('expiry_date');
+        $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
+        ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks','outlet_invoice_details.medicine_id','=' ,'outlet_stocks.medicine_id')->whereIn('outlet_stocks.expiry_date', $productdate)->select('outlet_invoice_details.*','outlet_stocks.purchase_price','outlet_stocks.expiry_date as edate','outlet_stocks.outlet_id')->where('outlet_stocks.outlet_id',$outlet_id)->distinct();
+        $title = 'Profit & Loss Report';
+        // dump($productSales);
+        if($request->medicine_id == '' || $request->medicine_id == null){
+            $productSales = $productSales->distinct()->get();
+        }else{
+            $productSales = $productSales->where('outlet_invoice_details.medicine_id',$request->medicine_id)->distinct()->get();
+        }
+
+
+        }
+
+
+
+
+
+       return view('admin.report.profit_loss_report', compact('start_date', 'end_date', 'productSales','title'));
+}
 
 }
 
