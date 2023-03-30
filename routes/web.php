@@ -298,6 +298,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
     Route::get('/sale-report-details1/{id}', [ReportController2::class,'medicine_sale_report_details1'])->name('sale-report-details1');
 
     Route::post('/category-wise-report', [ReportController2::class,'category_wise_report'])->name('category-wise-report');
+
+    Route::post('/expiry-wise-report', [ReportController2::class,'expiryDate'])->name('expiry-wise-report.warehouse');
+    Route::post('/expiry-wise-report1', [ReportController2::class,'expiryDate1'])->name('expiry-wise-report.outlet');
     Route::post('supplier-wise-report', [ReportController2::class,'supplier_wise_sale'])->name('supplier-wise-report');
 
     Route::post('supplier-stock-report-outlet', [ReportController2::class,'supplier_wise_stock_outlet'])->name('supplier-stock-report-outlet');

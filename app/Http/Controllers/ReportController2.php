@@ -56,6 +56,10 @@ class ReportController2 extends Controller
         $this->middleware('permission:supplier_wise_stock_report_warehouse.search', ['only' => ['supplier_wise_stock_warehouse']]);
         $this->middleware('permission:profit_loss.report', ['only' => ['profit_loss']]);
 
+        $this->middleware('permission:expiry-wise-report-outlet.submit', ['only' => ['expiryDate1']]);
+        $this->middleware('permission:expiry-wise-report-warehouse.submit', ['only' => ['expiryDate']]);
+
+
     }
     public function medicine_sale_report_submit(Request $request)
     {
@@ -1003,6 +1007,52 @@ public function profit_loss(Request $request)
 
 
        return view('admin.report.profit_loss_report', compact('start_date', 'end_date', 'productSales','title'));
+}
+
+
+
+public function expiryDate(Request $request)
+{
+    $input = $request->all();
+
+    $start_date = Carbon::parse($input['start_date']);
+
+
+            $productSales = WarehouseStock::whereDate('expiry_date', '<', $start_date)
+    ->where('quantity','>','0')->get();
+
+
+
+
+               $title = 'Expiry Wise Report';
+
+
+      return view('admin.report.expiry_wise_report_warehouse', compact('start_date', 'productSales','title'));
+}
+
+public function expiryDate1(Request $request)
+{
+    $input = $request->all();
+
+    $start_date = Carbon::parse($input['start_date']);
+    if (Auth::user()->hasRole(['Super Admin', 'Admin']))
+    {
+        $productSales = OutletStock::whereDate('expiry_date', '<', $start_date)
+        ->where('quantity','>','0')->get();
+
+
+    }else{
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : outlet::orderby('id','desc')->first('id');
+        $productSales = OutletStock::where('outlet_id',$outlet_id)->whereDate('expiry_date', '<', $start_date)
+        ->where('quantity','>','0')->get();
+    }
+
+
+
+               $title = 'Expiry Wise Report';
+
+
+      return view('admin.report.expiry_wise_report_outlet', compact('start_date', 'productSales','title'));
 }
 
 }

@@ -72,6 +72,12 @@ class PermissionSeeder extends Seeder
             'warehouseStock-price-update',
             'warehousetStock-price-edit',
 
+            'expiry-wise-report-outlet',
+            'expiry-wise-report-outlet.submit',
+
+            'expiry-wise-report-warehouse',
+            'expiry-wise-report-warehouse.submit',
+
             'sale.report',
             'purchase.report',
             'sale_report.search',
