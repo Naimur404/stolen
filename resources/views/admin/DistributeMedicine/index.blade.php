@@ -12,7 +12,7 @@
         @slot('breadcrumb_title')
             <div class="row">
                 <div class="col-sm-8 mt-3">
-                    <h3>All Distribute Medicine to Outlet</h3>
+                     <h3>All Distribute Medicine to Outlet</h3>
                 </div>
 
             </div>

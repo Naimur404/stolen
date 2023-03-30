@@ -1,5 +1,5 @@
 @extends('layouts.admin.master')
-@section('title')Edit Purchase
+@section('title')Edit Outlet Stock Price
 @endsection
 @push('css')
 <style>
@@ -18,7 +18,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-6">
-			<h3>Edit Purchase</h3>
+			<h3>Edit Outlet Stock Price</h3>
         </div>
 
         </div>
@@ -39,32 +39,11 @@
         </div>
 
         <div class="card-body">
-            {!! Form::open(['route' => 'purchase-update', 'method' => 'POST', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
-
-            <div class="service_invoice_header">
-                <div class="row">
-                    <div class="col-md-4">Invoice Id : <b>{{ $productPurchase->id }}</b></div>
-                    <div class="col-md-4">
-                        <p class="text-center"><b>Invoice No : {{ $productPurchase->invoice_no}}</b></p>
-                    </div>
-                    <div class="col-md-4">Purchase Date :
-                        <b>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y') }}</b></div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">Supplier Name : </div>
-                    <div class="col-md-4"> <b>
-                            @if ($productPurchase->supplier_id == null)
-                                N/A
-                            @elseif ($productPurchase->supplier_id != null)
-                                {{ $productPurchase->supplier->supplier_name }}
-                            @endif
-                        </b></div>
+            {!! Form::open(['route' => ['outlet-stock.update',$outletStock->id], 'method' => 'PUT', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
 
 
-                </div>
-                <input type="hidden" name="pid" value="{{ $productPurchase->id }}">
-                <input type="hidden" name="pdid" value="{{ $data->id }}">
+                <input type="hidden" name="id" value="{{ $outletStock->id }}">
+
                 {{-- <div class="row">
                     <div class="col-md-3">Manufacturer Name : </div>
                     <div class="col-md-4"><b>
@@ -85,28 +64,35 @@
                     <th>Name Of Investigation</th>
                     <th>Expiry Date</th>
                     <th>Quantity</th>
-                    <th>Price</th>
+                    <th>Purchase Price</th>
                     <th>MRP</th>
-                    <th>Amount</th>
+
                 </tr>
                     <tr>
-                        <td>{{ $data->medicine_name }}</td>
-                        <td><input class="datepicker-here form-control digits" type="text" data-language="en" data-bs-original-title="" title="" name="purchase_date" value="{{  \Carbon\Carbon::parse($data->expiry_date)->format('d-m-Y') }}" tabindex="2" required>
+                        <td>{{ App\Models\Medicine::get_medicine_name($outletStock->medicine_id) }}
+                               <input type="hidden" name="medicine_id" id="" value="{{ $outletStock->medicine_id }}">
                         </td>
-                        <td> <input type="number" name="qty" id="qty" value="{{ $data->quantity }}" class="form-control" required></td>
-                        <td><input type="number" name="price" id="price" value="{{ $data->manufacturer_price }}" step="any" class="form-control" required>
+                        <td><input class="datepicker-here form-control digits" type="text" data-language="en" data-bs-original-title="" title="" name="expiry_date" value="{{  \Carbon\Carbon::parse($outletStock->expiry_date)->format('d-m-Y') }}" tabindex="2" required readonly>
+                        </td>
+                        <td> <input type="number" name="quantity" id="qty" value="{{ $outletStock->quantity }}" class="form-control" required readonly></td>
+                        <td><input type="number" name="purchase_price" id="price" value="{{ $outletStock->purchase_price }}" step="any" class="form-control" required readonly>
                            </td>
-                           <td><input type="number" name="box_mrp" id="box_mrp" value="{{ $data->box_mrp }}" step="any" class="form-control" required>
+                           <td><input type="number" name="price" id="box_mrp" value="{{ $outletStock->price }}" step="any" class="form-control" required>
                            </td>
-                        <td><input type="number" name="final" id="final" value="{{ $data->quantity*$data->manufacturer_price}}" class="form-control" readonly>
-                            </td>
+
                     </tr>
             </table>
 
+
+
+        </div>
+        <div class="col-md-6"></div>
+        <div class="col-md-6">
             {{ Form::button('Update', ['type' => 'submit', 'class' => 'btn btn-warning btn-sm mt-5'] )  }}
             {!! Form::close() !!}
 
         </div>
+
     </div>
 </div>
 

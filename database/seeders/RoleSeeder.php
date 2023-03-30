@@ -109,6 +109,8 @@ class RoleSeeder extends Seeder
             'category-wise-report-alert',
             'supplier_wise_stock_report_outlet_warehouse',
             'supplier_wise_stock_report_outlet_warehouse.search',
+            'warehouseStock-price-update',
+            'warehousetStock-price-edit',
 
         ];
 
@@ -169,7 +171,9 @@ class RoleSeeder extends Seeder
             'supplier_wise_sale_report',
             'supplier_wise_sale_report.search',
             'supplier_wise_stock_report_outlet',
-            'supplier_wise_stock_report_outlet.search'
+            'supplier_wise_stock_report_outlet.search',
+            'outletStock-price-update',
+            'outletStock-price-edit',
 
         ];
 

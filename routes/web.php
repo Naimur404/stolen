@@ -120,7 +120,7 @@ Route::resource('warehouse-return',WarehouseReturnController::class);
 Route::resource('customer',CustomerManagementController::class);
 Route::resource('stock-request',StockRequestController::class);
 Route::resource('invoice', OutletInvoiceController::class);
-
+Route::post('warehouse-stock-update',[WarehouseStockController::class,'warehouse_Stock_Update'])->name('warehouse-stock-update');
 
 //purchase
 Route::get('edit-purchase/{id}',[MedicinePurchaseController::class,'editPurchase'])->name('edit-purchase');
