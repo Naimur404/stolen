@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class WarehouseStockController extends Controller
@@ -23,6 +24,9 @@ class WarehouseStockController extends Controller
     function __construct()
     {
         $this->middleware('permission:warehouseStock', ['only' => ['warehouseStock']]);
+        $this->middleware('permission:warehousetStock-price-edit', ['only' => ['edit']]);
+        $this->middleware('permission:warehousetStock-price-update', ['only' => ['warehouse_Stock_Update']]);
+
 
     }
     /**
@@ -117,7 +121,7 @@ class WarehouseStockController extends Controller
      */
     public function edit(WarehouseStock $warehouseStock)
     {
-        //
+        return view('admin.medicinestock.edit_warehouse_stock',compact('warehouseStock'));
     }
 
     /**
@@ -254,7 +258,9 @@ if(count($check)  < 1  ){
             $price = '৳&nbsp'.$stock->price;
             $expiry_date = $stock->expiry_date;
 
-            $stock = $stock->quantity;
+            $stocks = $stock->quantity;
+            $ul = route('warehouse-stock.edit',$stock->id);
+            $url = '<a href="'.$ul.'"class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
 
             $data_arr[] = array(
               "id" => $s_no,
@@ -264,8 +270,9 @@ if(count($check)  < 1  ){
               "manufacturer_name" => $manufacturer_name,
               "price" => $price,
               "manufacturer_price" => $manufacturer_price,
-              "quantity" => $stock,
+              "quantity" => $stocks,
               "expiry_date" => $expiry_date,
+              "action"     => $url,
             );
          }
 
@@ -322,5 +329,16 @@ if(count($check)  < 1  ){
 
         // $product_details = Medicine::where('id', $id)->select('id','medicine_name','price','manufacturer_price')->first();
         return json_encode($product_details);
+  }
+
+  public function warehouse_Stock_Update(Request $request) {
+
+    $data = array(
+        'price' => $request->price,
+
+      );
+
+      WarehouseStock::where('id',$request->id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',Carbon::parse($request->expiry_date)->toDateString())->update($data);
+        return redirect()->back()->with('success', ' Successfully Medicne Price Update.');
   }
 }

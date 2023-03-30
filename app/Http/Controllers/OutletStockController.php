@@ -12,6 +12,7 @@ use App\Models\OutletCheckIn;
 use App\Models\OutletStock;
 use App\Models\Unit;
 use App\Models\WarehouseStock;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -30,6 +31,8 @@ class OutletStockController extends Controller
      function __construct()
      {
          $this->middleware('permission:outletStock', ['only' => ['outletStock']]);
+         $this->middleware('permission:outletStock-price-edit', ['only' => ['edit']]);
+         $this->middleware('permission:outletStock-price-update', ['only' => ['update']]);
 
      }
 
@@ -56,7 +59,9 @@ class OutletStockController extends Controller
      */
     public function create()
     {
-        //
+
+
+
     }
 
     /**
@@ -166,7 +171,7 @@ class OutletStockController extends Controller
      */
     public function edit(OutletStock $outletStock)
     {
-        //
+        return view('admin.medicinestock.edit_outlet_stock',compact('outletStock'));
     }
 
     /**
@@ -178,7 +183,14 @@ class OutletStockController extends Controller
      */
     public function update(Request $request, OutletStock $outletStock)
     {
-        //
+      $data = array(
+        'price' => $request->price,
+
+      );
+
+      OutletStock::where('id',$request->id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',Carbon::parse($request->expiry_date)->toDateString())->update($data);
+        return redirect()->back()->with('success', ' Successfully Medicne Price Update.');
+
     }
 
     /**
@@ -235,7 +247,7 @@ class OutletStockController extends Controller
 
            }else{
             $totalRecords = OutletStock::where('quantity', '>', '0')->select('count(*) as allcount')->where('outlet_id', '=', Auth::user()->outlet_id)->count();
-            $medicine_stock =    DB::table('outlet_stocks')->orderBy($columnName,$columnSortOrder)->where('outlet_id', '=', Auth::user()->outlet_id)->where('quantity', '>', '0')->leftjoin('medicines' ,'outlet_stocks.medicine_id' ,'=' ,'medicines.id')->where('medicines.medicine_name', 'like', '%' .$searchValue . '%')->select('outlet_stocks.*', 'medicines.medicine_name')
+            $medicine_stock = DB::table('outlet_stocks')->orderBy($columnName,$columnSortOrder)->where('outlet_id', '=', Auth::user()->outlet_id)->where('quantity', '>', '0')->leftjoin('medicines' ,'outlet_stocks.medicine_id' ,'=' ,'medicines.id')->where('medicines.medicine_name', 'like', '%' .$searchValue . '%')->select('outlet_stocks.*', 'medicines.medicine_name')
 
             ->skip($start)
             ->take($row_per_page)
@@ -254,9 +266,6 @@ class OutletStockController extends Controller
 
         // fetch records with search
 
-
-
-
         $data_arr = array();
 
         $sl = 1;
@@ -271,7 +280,9 @@ class OutletStockController extends Controller
             $price = '৳&nbsp;'.$stock->price;
             $expiry_date = $stock->expiry_date;
 
-            $stock = $stock->quantity;
+            $stocks = $stock->quantity;
+            $ul = route('outlet-stock.edit',$stock->id);
+            $url = '<a href="'.$ul.'"class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
 
             $data_arr[] = array(
               "id" => $s_no,
@@ -281,8 +292,10 @@ class OutletStockController extends Controller
               "manufacturer_name" => $manufacturer_name,
               "price" => $price,
               "manufacturer_price" => $manufacturer_price,
-              "quantity" => $stock,
+              "quantity" => $stocks,
               "expiry_date" => $expiry_date,
+              "action"  => $url,
+
             );
          }
 

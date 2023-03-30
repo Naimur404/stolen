@@ -52,6 +52,7 @@
                                         <th>Sale Price</th>
 
                                         <th>Stock</th>
+                                        <th>Action</th>
 
 
 
@@ -99,6 +100,7 @@
             {data: 'manufacturer_price', name: 'Manufacturer price'},
             {data: 'price', name: 'sale price'},
             {data: 'quantity', name: 'stock'},
+            {data: 'action', name: 'action'},
 
         ]
     });

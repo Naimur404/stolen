@@ -66,7 +66,11 @@ class PermissionSeeder extends Seeder
             'payment-method.delete',
 
             'outletStock',
+            'outletStock-price-update',
+            'outletStock-price-edit',
             'warehouseStock',
+            'warehouseStock-price-update',
+            'warehousetStock-price-edit',
 
             'sale.report',
             'purchase.report',
