@@ -25,7 +25,7 @@ class WarehouseStockController extends Controller
     {
         $this->middleware('permission:warehouseStock', ['only' => ['warehouseStock']]);
         $this->middleware('permission:warehousetStock-price-edit', ['only' => ['edit']]);
-        $this->middleware('permission:warehousetStock-price-update', ['only' => ['warehouse_Stock_Update']]);
+        $this->middleware('permission:warehouseStock-price-update', ['only' => ['warehouse_Stock_Update']]);
 
 
     }
