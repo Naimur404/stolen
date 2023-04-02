@@ -46,12 +46,12 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 Route::get('/', [SettingController::class, 'index']);
 
-Route::get('/dashboard', [DashBoardController::class,'index'])->middleware(['auth'])->name('index');
+Route::get('/dashboard', [DashBoardController::class, 'index'])->middleware(['auth'])->name('index');
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'admin'],function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
@@ -59,260 +59,247 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'],function () {
     Route::view('/role', 'admin.role.role')->name('role');
     //user route
 
-    Route::get('/user', [UserRoleController::class,'users'])->name('user');
-    Route::get('/add_user', [UserRoleController::class,'addUsers'])->name('add_user');
-    Route::post('/add-user-store', [UserRoleController::class,'addUsersStore'])->name('add_user_store');
-    Route::get('/delete-user/{id}', [UserRoleController::class,'deleteUser'])->name('delete_user');
-    Route::get('/edit-user/{id}', [UserRoleController::class,'editUser'])->name('edit_user');
-    Route::post('/update/user', [UserRoleController::class,'updateUser'])->name('updateuser');
-    Route::get('/add/user/org/{id}', [UserRoleController::class,'addUserOrg'])->name('adduserorg');
-    Route::post('/store/user/org', [UserRoleController::class,'storeUserOrg'])->name('storeuserorg');
+    Route::get('/user', [UserRoleController::class, 'users'])->name('user');
+    Route::get('/add_user', [UserRoleController::class, 'addUsers'])->name('add_user');
+    Route::post('/add-user-store', [UserRoleController::class, 'addUsersStore'])->name('add_user_store');
+    Route::get('/delete-user/{id}', [UserRoleController::class, 'deleteUser'])->name('delete_user');
+    Route::get('/edit-user/{id}', [UserRoleController::class, 'editUser'])->name('edit_user');
+    Route::post('/update/user', [UserRoleController::class, 'updateUser'])->name('updateuser');
+    Route::get('/add/user/org/{id}', [UserRoleController::class, 'addUserOrg'])->name('adduserorg');
+    Route::post('/store/user/org', [UserRoleController::class, 'storeUserOrg'])->name('storeuserorg');
 
 
 //permission route
 
-    Route::get('/permission', [PermissionController::class,'permission'])->name('permission');
-    Route::get('/add-permission', [PermissionController::class,'addPermission'])->name('add_permission');
-    Route::post('/store-permission', [PermissionController::class,'storePermission'])->name('store_permission');
-    Route::post('/update-permission', [PermissionController::class,'updatePermission'])->name('update_permission');
-    Route::get('/edit-permission/{id}', [PermissionController::class,'editPermission'])->name('edit_permission');
-    Route::get('/delete-permission/{id}', [PermissionController::class,'deletePermission'])->name('delete_permission');
+    Route::get('/permission', [PermissionController::class, 'permission'])->name('permission');
+    Route::get('/add-permission', [PermissionController::class, 'addPermission'])->name('add_permission');
+    Route::post('/store-permission', [PermissionController::class, 'storePermission'])->name('store_permission');
+    Route::post('/update-permission', [PermissionController::class, 'updatePermission'])->name('update_permission');
+    Route::get('/edit-permission/{id}', [PermissionController::class, 'editPermission'])->name('edit_permission');
+    Route::get('/delete-permission/{id}', [PermissionController::class, 'deletePermission'])->name('delete_permission');
 
     //role route
 
-    Route::get('/role', [RoleController::class,'role'])->name('role');
-    Route::get('/add-role', [RoleController::class,'addRole'])->name('add_role');
-    Route::post('/store-role', [RoleController::class,'storeRole'])->name('store_role');
-    Route::post('/update-role', [RoleController::class,'updateRole'])->name('update_role');
-    Route::get('/edit-role/{id}', [RoleController::class,'editRole'])->name('edit_role');
-    Route::get('/delete-role/{id}', [RoleController::class,'deleteRole'])->name('delete_role');
+    Route::get('/role', [RoleController::class, 'role'])->name('role');
+    Route::get('/add-role', [RoleController::class, 'addRole'])->name('add_role');
+    Route::post('/store-role', [RoleController::class, 'storeRole'])->name('store_role');
+    Route::post('/update-role', [RoleController::class, 'updateRole'])->name('update_role');
+    Route::get('/edit-role/{id}', [RoleController::class, 'editRole'])->name('edit_role');
+    Route::get('/delete-role/{id}', [RoleController::class, 'deleteRole'])->name('delete_role');
 
-    Route::post('/get-role', [RoleController::class,'getRole'])->name('get_role');
+    Route::post('/get-role', [RoleController::class, 'getRole'])->name('get_role');
 
     //add role in permission
 
-    Route::get('/add/role/permission', [RoleController::class,'addRolePermission'])->name('rolepermission');
-    Route::post('/store/role/permission', [RoleController::class,'storeRolePermission'])->name('add_role_permission');
-    Route::get('/all/role/permission', [RoleController::class,'allRolePermission'])->name('allrolepermission');
-    Route::get('/edit/role/permission/{id}', [RoleController::class,'editRolePermission'])->name('editrolepermission');
-    Route::post('/update/role/permission/{id}', [RoleController::class,'updateRolePermission'])->name('update_role_permission');
-    Route::get('/delete/role/permission/{id}', [RoleController::class,'deleteRolePermission'])->name('deleterolepermission');
+    Route::get('/add/role/permission', [RoleController::class, 'addRolePermission'])->name('rolepermission');
+    Route::post('/store/role/permission', [RoleController::class, 'storeRolePermission'])->name('add_role_permission');
+    Route::get('/all/role/permission', [RoleController::class, 'allRolePermission'])->name('allrolepermission');
+    Route::get('/edit/role/permission/{id}', [RoleController::class, 'editRolePermission'])->name('editrolepermission');
+    Route::post('/update/role/permission/{id}', [RoleController::class, 'updateRolePermission'])->name('update_role_permission');
+    Route::get('/delete/role/permission/{id}', [RoleController::class, 'deleteRolePermission'])->name('deleterolepermission');
 
     //setting route
 
-    Route::get('/site/setting', [SettingController::class,'setting'])->name('setting');
-    Route::post('/update/setting', [SettingController::class,'updateSetting'])->name('updatesetting');
+    Route::get('/site/setting', [SettingController::class, 'setting'])->name('setting');
+    Route::post('/update/setting', [SettingController::class, 'updateSetting'])->name('updatesetting');
 
 
 });
 
-Route::group(['middleware' => ['auth']],function () {
+Route::group(['middleware' => ['auth']], function () {
 //resource route
-Route::resource('payment-method',PaymentMethodController::class);
-Route::resource('supplier',SupplierController::class);
-Route::resource('warehouse',WarehouseController::class);
-Route::resource('outlet',OutletController::class);
-Route::resource('medicine-purchase',MedicinePurchaseController::class);
-Route::resource('warehouse-stock',WarehouseStockController::class);
-Route::resource('outlet-stock',OutletStockController::class);
-Route::resource('distribute-medicine',MedicineDistributeController::class);
-Route::resource('warehouse-return',WarehouseReturnController::class);
-Route::resource('customer',CustomerManagementController::class);
-Route::resource('stock-request',StockRequestController::class);
-Route::resource('invoice', OutletInvoiceController::class);
-Route::post('warehouse-stock-update',[WarehouseStockController::class,'warehouse_Stock_Update'])->name('warehouse-stock-update');
+    Route::resource('payment-method', PaymentMethodController::class);
+    Route::resource('supplier', SupplierController::class);
+    Route::resource('warehouse', WarehouseController::class);
+    Route::resource('outlet', OutletController::class);
+    Route::resource('medicine-purchase', MedicinePurchaseController::class);
+    Route::resource('warehouse-stock', WarehouseStockController::class);
+    Route::resource('outlet-stock', OutletStockController::class);
+    Route::resource('distribute-medicine', MedicineDistributeController::class);
+    Route::resource('warehouse-return', WarehouseReturnController::class);
+    Route::resource('customer', CustomerManagementController::class);
+    Route::resource('stock-request', StockRequestController::class);
+    Route::resource('invoice', OutletInvoiceController::class);
+    Route::post('warehouse-stock-update', [WarehouseStockController::class, 'warehouse_Stock_Update'])->name('warehouse-stock-update');
 
 //purchase
-Route::get('edit-purchase/{id}',[MedicinePurchaseController::class,'editPurchase'])->name('edit-purchase');
-Route::post('purchase-update',[MedicinePurchaseController::class,'purchaseUpdate'])->name('purchase-update');
-Route::get('purchase-delete/{id}',[MedicinePurchaseController::class,'purchaseDelete'])->name('purchase-delete');
+    Route::get('edit-purchase/{id}', [MedicinePurchaseController::class, 'editPurchase'])->name('edit-purchase');
+    Route::post('purchase-update', [MedicinePurchaseController::class, 'purchaseUpdate'])->name('purchase-update');
+    Route::get('purchase-delete/{id}', [MedicinePurchaseController::class, 'purchaseDelete'])->name('purchase-delete');
 
 //checkin route
-Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
+    Route::get('medicine-purchase/{id}/check-in', [MedicinePurchaseController::class, 'checkIn'])->name('medicine-purchase.checkIn');
 
-Route::get('distribute-medicine/{id}/check-in',[MedicineDistributeController::class,'checkIn'])->name('distribute-medicine.checkIn');
-Route::get('medicine-return/{id}/check-in',[WarehouseReturnController::class,'checkIn'])->name('medicine-return.checkIn');
+    Route::get('distribute-medicine/{id}/check-in', [MedicineDistributeController::class, 'checkIn'])->name('distribute-medicine.checkIn');
+    Route::get('medicine-return/{id}/check-in', [WarehouseReturnController::class, 'checkIn'])->name('medicine-return.checkIn');
 
 //medicine route
-Route::get('all-medicines-lists', [MedicineController::class ,'get_all_medicines'])->name('medicine.all-medicines');
+    Route::get('all-medicines-lists', [MedicineController::class, 'get_all_medicines'])->name('medicine.all-medicines');
 
 //active status route
-Route::get('/delete/{medicineid}/{distributeid}', [MedicineDistributeController::class,'medicineDistributeDetailDelete'])->name('delete.medicineDistributeDetailDelete');
-Route::get('/status-supplier/{id}/{status}', [SupplierController::class,'active'])->name('supplier.active');
-Route::get('/status-warehouse/{id}/{status}', [WarehouseController::class,'active'])->name('warehouse.active');
-Route::get('/status-outlet/{id}/{status}', [OutletController::class,'active'])->name('outlet.active');
-Route::get('/status-customer/{id}/{status}', [CustomerManagementController::class,'active'])->name('customer.active');
+    Route::get('/delete/{medicineid}/{distributeid}', [MedicineDistributeController::class, 'medicineDistributeDetailDelete'])->name('delete.medicineDistributeDetailDelete');
+    Route::get('/status-supplier/{id}/{status}', [SupplierController::class, 'active'])->name('supplier.active');
+    Route::get('/status-warehouse/{id}/{status}', [WarehouseController::class, 'active'])->name('warehouse.active');
+    Route::get('/status-outlet/{id}/{status}', [OutletController::class, 'active'])->name('outlet.active');
+    Route::get('/status-customer/{id}/{status}', [CustomerManagementController::class, 'active'])->name('customer.active');
 
-Route::get('/has-sent/{id}/{status}', [StockRequestController::class,'hasSent'])->name('hasSent');
-Route::Post('/has_accepted', [StockRequestController::class,'hasAccepted'])->name('hasAccepted');
-Route::get('/has_accepted/{id}/{status}/{medicineid}/medicine', [StockRequestController::class,'hasAcceptedMedicine'])->name('hasAcceptedMedicine');
+    Route::get('/has-sent/{id}/{status}', [StockRequestController::class, 'hasSent'])->name('hasSent');
+    Route::Post('/has_accepted', [StockRequestController::class, 'hasAccepted'])->name('hasAccepted');
+    Route::get('/has_accepted/{id}/{status}/{medicineid}/medicine', [StockRequestController::class, 'hasAcceptedMedicine'])->name('hasAcceptedMedicine');
 //assing outlet to user
-Route::get('/add-user-outlet/{id}', [OutletController::class,'addUser'])->name('addusers');
-Route::post('/store-user-outlet', [OutletController::class,'storeUser'])->name('storeuser');
+    Route::get('/add-user-outlet/{id}', [OutletController::class, 'addUser'])->name('addusers');
+    Route::post('/store-user-outlet', [OutletController::class, 'storeUser'])->name('storeuser');
 
 //medicine purchase
 
-Route::get('get-medicine',[MedicineController::class,'get_medicine']);
-Route::get('get-medicine-details-for-purchase/{id}',[MedicineController::class,'get_medicine_details_for_purchase']);
-Route::get('get-manufacture-wise-medicine',[MedicineController::class,'get_manufacturer_wise_medicine']);
-Route::get('get-product-for-sale', [SupplierController::class,'get_product_for_sale']);
+    Route::get('get-medicine', [MedicineController::class, 'get_medicine']);
+    Route::get('get-medicine-details-for-purchase/{id}', [MedicineController::class, 'get_medicine_details_for_purchase']);
+    Route::get('get-manufacture-wise-medicine', [MedicineController::class, 'get_manufacturer_wise_medicine']);
+    Route::get('get-product-for-sale', [SupplierController::class, 'get_product_for_sale']);
 
 //outlet invoice route
 
-Route::get('get-medicine-details-for-sale/{id}',[OutletInvoiceController::class,'get_medicine_details_for_sale']);
-Route::get('/get-outlet-Stock',[OutletInvoiceController::class,'getoutletStock'])->name('getoutletStock');
-Route::get('/print-invoice/{id}', [OutletInvoiceController::class,'printInvoice'])->name('print-invoice');
+    Route::get('get-medicine-details-for-sale/{id}', [OutletInvoiceController::class, 'get_medicine_details_for_sale']);
+    Route::get('/get-outlet-Stock', [OutletInvoiceController::class, 'getoutletStock'])->name('getoutletStock');
+    Route::get('/print-invoice/{id}', [OutletInvoiceController::class, 'printInvoice'])->name('print-invoice');
 
 //get warehuse stock
 
-Route::get('get-medicine-details-warehouse/{id}/{wid}',[WarehouseStockController::class,'get_medicine_details_warehouse']);
-Route::get('/get-warehouse-Stock/{id}',[WarehouseStockController::class,'getwarehouseStock'])->name('getwarehouseStock');
+    Route::get('get-medicine-details-warehouse/{id}/{wid}', [WarehouseStockController::class, 'get_medicine_details_warehouse']);
+    Route::get('/get-warehouse-Stock/{id}', [WarehouseStockController::class, 'getwarehouseStock'])->name('getwarehouseStock');
 
 //get warehouse stock for return
 
-Route::get('get-medicine-details-outlet/{id}/{wid}',[OutletStockController::class,'get_medicine_details_outlet']);
-Route::get('/get-oulet-Stockss/{id}',[OutletStockController::class,'getoutletStocks'])->name('getoutletStocks');
+    Route::get('get-medicine-details-outlet/{id}/{wid}', [OutletStockController::class, 'get_medicine_details_outlet']);
+    Route::get('/get-oulet-Stockss/{id}', [OutletStockController::class, 'getoutletStocks'])->name('getoutletStocks');
 //select2 route
 
-Route::post('/get-category',[Select2Controller::class,'getCategory'])->name('get-category');
-Route::post('/get-unit',[Select2Controller::class,'getUnit'])->name('get-unit');
-Route::post('/get_type',[Select2Controller::class,'getType'])->name('get-type');
-Route::post('/get-manufacturer',[Select2Controller::class,'getManufacturer'])->name('get-manufacturer');
-Route::get('get-supplier', [Select2Controller::class,'get_supplier']);
-Route::get('/get-outlet',[Select2Controller::class,'getOutlet'])->name('get-outlet');
+    Route::post('/get-category', [Select2Controller::class, 'getCategory'])->name('get-category');
+    Route::post('/get-unit', [Select2Controller::class, 'getUnit'])->name('get-unit');
+    Route::post('/get_type', [Select2Controller::class, 'getType'])->name('get-type');
+    Route::post('/get-manufacturer', [Select2Controller::class, 'getManufacturer'])->name('get-manufacturer');
+    Route::get('get-supplier', [Select2Controller::class, 'get_supplier']);
+    Route::get('/get-outlet', [Select2Controller::class, 'getOutlet'])->name('get-outlet');
 
-Route::get('/get-all-medicine',[Select2Controller::class,'get_all_medicine'])->name('get-all-medicine');
-Route::get('get-user', [Select2Controller::class,'get_user']);
-Route::get('get-user2', [Select2Controller::class,'get_user2']);
-Route::get('get-payment', [Select2Controller::class,'get_payment']);
-Route::get('get-category', [Select2Controller::class,'get_category']);
-Route::get('get-user-details/{id}', [Select2Controller::class,'get_user_details']);
-
+    Route::get('/get-all-medicine', [Select2Controller::class, 'get_all_medicine'])->name('get-all-medicine');
+    Route::get('get-user', [Select2Controller::class, 'get_user']);
+    Route::get('get-user2', [Select2Controller::class, 'get_user2']);
+    Route::get('get-payment', [Select2Controller::class, 'get_payment']);
+    Route::get('get-category', [Select2Controller::class, 'get_category']);
+    Route::get('get-user-details/{id}', [Select2Controller::class, 'get_user_details']);
 
 
 //stock route
-Route::get('/get-outlet-stock/{id}',[OutletStockController::class,'outletStock'])->name('outletstock');
-Route::get('/get-warehouse-stock/{id}',[WarehouseStockController::class,'warehouseStock'])->name('warehouseStock');
+    Route::get('/get-outlet-stock/{id}', [OutletStockController::class, 'outletStock'])->name('outletstock');
+    Route::get('/get-warehouse-stock/{id}', [WarehouseStockController::class, 'warehouseStock'])->name('warehouseStock');
 //profile route
-Route::get('/my-profile', [ProfileController::class,'myProfile'])->name('myprofile');
-Route::Post('/my-profile/update', [ProfileController::class,'updateMyProfile'])->name('updatemyprofile');
-
+    Route::get('/my-profile', [ProfileController::class, 'myProfile'])->name('myprofile');
+    Route::Post('/my-profile/update', [ProfileController::class, 'updateMyProfile'])->name('updatemyprofile');
 
 
 //medicine return  route
-Route::get('/delete/{medicineid}/{returnid}/return', [WarehouseReturnController::class,'medicineReturnlDelete'])->name('delete.medicineReturnlDelete');
-Route::post('/return-recieve', [WarehouseReturnController::class,'returnRecieve'])->name('returnRecieve');
+    Route::get('/delete/{medicineid}/{returnid}/return', [WarehouseReturnController::class, 'medicineReturnlDelete'])->name('delete.medicineReturnlDelete');
+    Route::post('/return-recieve', [WarehouseReturnController::class, 'returnRecieve'])->name('returnRecieve');
 //stock request route
 
-Route::get('/stock-request/{id}/details', [StockRequestController::class,'details'])->name('stock-request.details');
-Route::get('/stock-request/{id}/details/warehouse', [StockRequestController::class,'detailsRequestWarehouse'])->name('detailsRequestWarehouse');
-Route::get('/stock-request-details/{medicineid}/{requestid}/delete', [StockRequestController::class,'stockRequestDelete'])->name('stockRequestDelete');
-Route::get('/stock/warehouse-request', [StockRequestController::class,'warehouseRequest'])->name('warehouseRequest');
+    Route::get('/stock-request/{id}/details', [StockRequestController::class, 'details'])->name('stock-request.details');
+    Route::get('/stock-request/{id}/details/warehouse', [StockRequestController::class, 'detailsRequestWarehouse'])->name('detailsRequestWarehouse');
+    Route::get('/stock-request-details/{medicineid}/{requestid}/delete', [StockRequestController::class, 'stockRequestDelete'])->name('stockRequestDelete');
+    Route::get('/stock/warehouse-request', [StockRequestController::class, 'warehouseRequest'])->name('warehouseRequest');
 
 //invoice print
-Route::post('/last-invoice', [OutletInvoiceController::class,'print'])->name('last-invoice.print');
-Route::get('/print-invoice/{id}', [OutletInvoiceController::class,'printInvoice'])->name('print-invoice');
+    Route::post('/last-invoice', [OutletInvoiceController::class, 'print'])->name('last-invoice.print');
+    Route::get('/print-invoice/{id}', [OutletInvoiceController::class, 'printInvoice'])->name('print-invoice');
 
 //sales return route
 
-Route::resource('sale-return', SalesReturnController::class);
-Route::get('sale/{id}/details', [SalesReturnController::class,'sales_details'])->name('sale.details');
-Route::get('sale-return/{id}/details', [SalesReturnController::class,'details'])->name('sale-return.details');
+    Route::resource('sale-return', SalesReturnController::class);
+    Route::get('sale/{id}/details', [SalesReturnController::class, 'sales_details'])->name('sale.details');
+    Route::get('sale-return/{id}/details', [SalesReturnController::class, 'details'])->name('sale-return.details');
 
 
-Route::get('/get-customer/{id}',[CustomerManagementController::class,'customer'])->name('get-customer');
+    Route::get('/get-customer/{id}', [CustomerManagementController::class, 'customer'])->name('get-customer');
 
-Route::get('/sale-due/list',[OutletInvoiceController::class,'dueList'])->name('duelist');
-Route::get('/pay-due/{id}',[OutletInvoiceController::class,'payDue'])->name('payDue');
-Route::post('/pay-due',[OutletInvoiceController::class,'paymentDue'])->name('paymentDue');
+    Route::get('/sale-due/list', [OutletInvoiceController::class, 'dueList'])->name('duelist');
+    Route::get('/pay-due/{id}', [OutletInvoiceController::class, 'payDue'])->name('payDue');
+    Route::post('/pay-due', [OutletInvoiceController::class, 'paymentDue'])->name('paymentDue');
 
 
-
-Route::get('/category-wise-report-alert', [ReportController2::class,'category_wise_report_alert'])->name('category-wise-report-alert');
-Route::post('/category-wise-report-alert-submit', [ReportController2::class,'category_wise_report_alert_submit'])->name('category-wise-report-alert-submit');
+    Route::get('/category-wise-report-alert', [ReportController2::class, 'category_wise_report_alert'])->name('category-wise-report-alert');
+    Route::post('/category-wise-report-alert-submit', [ReportController2::class, 'category_wise_report_alert_submit'])->name('category-wise-report-alert-submit');
 
 });
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'], function () {
 
 
-
-    Route::resource('category',CategoryController::class);
-    Route::resource('unit',UnitController::class);
-    Route::resource('manufacturer',ManufacturerController::class);
-    Route::resource('medicine',MedicineController::class);
-    Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class,'active'])->name('manufacturer.active');
+    Route::resource('category', CategoryController::class);
+    Route::resource('unit', UnitController::class);
+    Route::resource('manufacturer', ManufacturerController::class);
+    Route::resource('medicine', MedicineController::class);
+    Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class, 'active'])->name('manufacturer.active');
 });
-Route::group(['middleware' => ['auth'], 'prefix' => 'report'],function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'report'], function () {
 
 
+    Route::get('sale-report', [ReportController::class, 'medicine_sale_report_form'])->name('sale-report');
+    Route::post('sale-report-submit', [ReportController::class, 'medicine_sale_report_submit'])->name('sale-report-submit');
 
-    Route::get('sale-report', [ReportController::class,'medicine_sale_report_form'])->name('sale-report');
-    Route::post('sale-report-submit', [ReportController::class,'medicine_sale_report_submit'])->name('sale-report-submit');
+    Route::get('purchase-report', [ReportController::class, 'medicine_purchase_report_form'])->name('purchase-report');
+    Route::post('purchase-report-submit', [ReportController::class, 'medicine_purchase_report_submit'])->name('purchase-report-submit');
 
-    Route::get('purchase-report', [ReportController::class,'medicine_purchase_report_form'])->name('purchase-report');
-    Route::post('purchase-report-submit', [ReportController::class,'medicine_purchase_report_submit'])->name('purchase-report-submit');
+    Route::get('outlet-stock', [ReportController::class, 'outlet_stock_report_form'])->name('outlet-stock-report');
+    Route::post('outlet-stock-submit', [ReportController::class, 'outlet_stock_report_submit'])->name('outlet-stock-submit');
 
-    Route::get('outlet-stock', [ReportController::class,'outlet_stock_report_form'])->name('outlet-stock-report');
-    Route::post('outlet-stock-submit', [ReportController::class,'outlet_stock_report_submit'])->name('outlet-stock-submit');
-
-    Route::get('warehouse-stock', [ReportController::class,'warehouse_stock_report_form'])->name('warehouse-stock-report');
-    Route::post('warehouse-stock-submit', [ReportController::class,'warehouse_stock_report_submit'])->name('warehouse-stock-submit');
+    Route::get('warehouse-stock', [ReportController::class, 'warehouse_stock_report_form'])->name('warehouse-stock-report');
+    Route::post('warehouse-stock-submit', [ReportController::class, 'warehouse_stock_report_submit'])->name('warehouse-stock-submit');
 
 
 });
 
-Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
+Route::group(['middleware' => ['auth'], 'prefix' => 'report2'], function () {
 
 
-    Route::get('all-report', [ReportController2::class,'index'])->name('all-report');
+    Route::get('all-report', [ReportController2::class, 'index'])->name('all-report');
 
-    Route::post('sale-report-submit', [ReportController2::class,'medicine_sale_report_submit'])->name('sale-report-submit');
-
-
-    Route::post('purchase-report-submit', [ReportController2::class,'medicine_purchase_report_submit'])->name('purchase-report-submit');
+    Route::post('sale-report-submit', [ReportController2::class, 'medicine_sale_report_submit'])->name('sale-report-submit');
 
 
-    Route::post('outlet-stock-submit', [ReportController2::class,'outlet_stock_report_submit'])->name('outlet-stock-submit');
+    Route::post('purchase-report-submit', [ReportController2::class, 'medicine_purchase_report_submit'])->name('purchase-report-submit');
 
 
-    Route::post('warehouse-stock-submit', [ReportController2::class,'warehouse_stock_report_submit'])->name('warehouse-stock-submit');
+    Route::post('outlet-stock-submit', [ReportController2::class, 'outlet_stock_report_submit'])->name('outlet-stock-submit');
 
-    Route::post('sale-report-user', [ReportController2::class,'medicine_sale_report_by_user'])->name('sale-report-user');
 
-    Route::post('distribute-medicine-report', [ReportController2::class,'distribute_medicine_report'])->name('distribute-medicine-report');
-    Route::post('stock-request-report', [ReportController2::class,'stock_request_report'])->name('stock-request-report');
+    Route::post('warehouse-stock-submit', [ReportController2::class, 'warehouse_stock_report_submit'])->name('warehouse-stock-submit');
 
-    Route::post('distribute-medicine-report2', [ReportController2::class,'distribute_medicine_report2'])->name('distribute-medicine-report2');
-    Route::post('stock-request-report2', [ReportController2::class,'stock_request_report2'])->name('stock-request-report2');
+    Route::post('sale-report-user', [ReportController2::class, 'medicine_sale_report_by_user'])->name('sale-report-user');
 
-    Route::post('return-meidicine-report', [ReportController2::class,'return_medicine_report'])->name('return-meidicine-report');
+    Route::post('distribute-medicine-report', [ReportController2::class, 'distribute_medicine_report'])->name('distribute-medicine-report');
+    Route::post('stock-request-report', [ReportController2::class, 'stock_request_report'])->name('stock-request-report');
 
-    Route::post('return-meidicine-report2', [ReportController2::class,'return_medicine_report2'])->name('return-meidicine-report2');
-    Route::post('sale-report-payment', [ReportController2::class,'medicine_sale_report_by_payment'])->name('sale-report-payment');
+    Route::post('distribute-medicine-report2', [ReportController2::class, 'distribute_medicine_report2'])->name('distribute-medicine-report2');
+    Route::post('stock-request-report2', [ReportController2::class, 'stock_request_report2'])->name('stock-request-report2');
 
-    Route::post('profit-loss-report', [ReportController2::class,'profit_loss'])->name('profit-loss-report');
+    Route::post('return-meidicine-report', [ReportController2::class, 'return_medicine_report'])->name('return-meidicine-report');
 
-    Route::post('sale-return-report', [ReportController2::class,'medicine_sale_return'])->name('sale-return-report');
-    Route::post('sale-report-details', [ReportController2::class,'medicine_sale_report_details'])->name('sale-report-details');
-    Route::get('/sale-report-details1/{id}', [ReportController2::class,'medicine_sale_report_details1'])->name('sale-report-details1');
+    Route::post('return-meidicine-report2', [ReportController2::class, 'return_medicine_report2'])->name('return-meidicine-report2');
+    Route::post('sale-report-payment', [ReportController2::class, 'medicine_sale_report_by_payment'])->name('sale-report-payment');
 
-    Route::post('/category-wise-report', [ReportController2::class,'category_wise_report'])->name('category-wise-report');
+    Route::post('profit-loss-report', [ReportController2::class, 'profit_loss'])->name('profit-loss-report');
 
-    Route::post('/expiry-wise-report', [ReportController2::class,'expiryDate'])->name('expiry-wise-report.warehouse');
-    Route::post('/expiry-wise-report1', [ReportController2::class,'expiryDate1'])->name('expiry-wise-report.outlet');
-    Route::post('supplier-wise-report', [ReportController2::class,'supplier_wise_sale'])->name('supplier-wise-report');
+    Route::post('sale-return-report', [ReportController2::class, 'medicine_sale_return'])->name('sale-return-report');
+    Route::post('sale-report-details', [ReportController2::class, 'medicine_sale_report_details'])->name('sale-report-details');
+    Route::get('/sale-report-details1/{id}', [ReportController2::class, 'medicine_sale_report_details1'])->name('sale-report-details1');
 
-    Route::post('supplier-stock-report-outlet', [ReportController2::class,'supplier_wise_stock_outlet'])->name('supplier-stock-report-outlet');
-    Route::post('supplier-stock-report-warehouse', [ReportController2::class,'supplier_wise_stock_warehouse'])->name('supplier-stock-report-warehouse');
+    Route::post('/category-wise-report', [ReportController2::class, 'category_wise_report'])->name('category-wise-report');
+
+    Route::post('/expiry-wise-report', [ReportController2::class, 'expiryDate'])->name('expiry-wise-report.warehouse');
+    Route::post('/expiry-wise-report1', [ReportController2::class, 'expiryDate1'])->name('expiry-wise-report.outlet');
+    Route::post('supplier-wise-report', [ReportController2::class, 'supplier_wise_sale'])->name('supplier-wise-report');
+
+    Route::post('supplier-stock-report-outlet', [ReportController2::class, 'supplier_wise_stock_outlet'])->name('supplier-stock-report-outlet');
+    Route::post('supplier-stock-report-warehouse', [ReportController2::class, 'supplier_wise_stock_warehouse'])->name('supplier-stock-report-warehouse');
 
 
 });
-
-
-
-
-
-
-
-
