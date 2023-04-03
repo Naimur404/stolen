@@ -271,6 +271,7 @@
 
 
 
+@can('best_selling')
 
 {!! Form::open(array('url'=> 'report2/slow-selling', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
 <div class="row form-group">
@@ -283,7 +284,9 @@
 </div>
 {!! Form::close() !!}
 
+@endcan
 
+@can('slow_selling')
 
 {!! Form::open(array('url'=> 'report2/expiry-wise-report1', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
 <div class="row form-group">
@@ -295,7 +298,7 @@
     <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
 </div>
 {!! Form::close() !!}
-
+@endcan
 
 
 
