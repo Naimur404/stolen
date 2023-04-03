@@ -86,6 +86,12 @@ class PermissionSeeder extends Seeder
             'sale_report_by_payment',
             'sale_report_by_payment.search',
 
+            'best_selling',
+            'best_selling.search',
+
+            'slow_selling',
+            'slow_selling.search',
+
             'sale_report_details',
             'sale_report_details.search',
 

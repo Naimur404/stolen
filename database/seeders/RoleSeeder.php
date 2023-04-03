@@ -178,6 +178,11 @@ class RoleSeeder extends Seeder
             'outletStock-price-edit',
             'expiry-wise-report-outlet',
             'expiry-wise-report-outlet.submit',
+            'best_selling',
+            'best_selling.search',
+
+            'slow_selling',
+            'slow_selling.search',
 
 
         ];

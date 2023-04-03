@@ -116,7 +116,7 @@
                                  <td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required="" value="{{ $details->expiry_date }}"></td>
                                  <td><input class="form-control qty" type="number" name="quantity[]" placeholder="Quantity" required="" value="{{ $details->quantity }}" readonly></td>
 
-                                 <td><input class="form-control returnqty" type="number" name="returnqty[]" placeholder="" required="" value="" onkeyup="prevent_stock_amount()"
+                                 <td><input class="form-control qty2" type="number" name="returnqty[]" placeholder="" required="" value="0" onkeyup="prevent_stock_amount()"
                                     onchange="prevent_stock_amount()" ></td>
                                  <td><input class="form-control price" name="box_mrp[]" type="number" step="any" id="box_price" required="" value="{{ $details->rate }}" readonly></td>
                                  <input class="form-control" type="hidden" name="returnamount[]"  readonly="" id="returnamount" value="">
@@ -138,8 +138,8 @@
                             <tr>
                                 <td class="text-right" colspan="5"><b>Deduct Amount :</b></td>
                                 <td class="text-right">
-                                    <input type="number" class="form-control text-right" name="deduct_amount"
-                                           id="deduct_amount"  onkeyup="prevent_amount()"
+                                    <input type="number" class="form-control text-right deduct_amount" name="deduct_amount"
+                                           id="deduct_amount"  onkeyup="prevent_amount()" value="0"
                                            onchange="prevent_amount()" required>
                                 </td>
 
@@ -236,17 +236,17 @@ function prevent_amount() {
 
     function prevent_stock_amount() {
         var stockqty = $(".qty").val();
-        var qty = $(".returnqty").val();
+        var qty = $(".qty2").val();
         if (parseFloat(qty) > parseFloat(stockqty)) {
             alert("Return quantity not more than  purchase quantity.");
-            $(".returnqty").val("");
+            $(".qty2").val("");
         }
     }
 
 
     $(document).ready(function () {
 
-        $(".clearVat,#discount,#pay,#manufacturer_price").on('click', function () {
+        $(".clearVat,.qty2,.deduct_amount,#discount,#pay,#manufacturer_price").on('click', function () {
             let input = $(this).val();
             if (input == 0) {
                 $(this).val('');
@@ -267,11 +267,14 @@ function prevent_amount() {
             });
         });
         let grandTotal = '';
-        $("#pay").on('click', function () {
+        $("#deduct_amount").on('mouseover', function () {
+
             grandTotal = $("#grandTotal").val();
-            $("#pay").attr({
-                max: grandTotal,
-            });
+
+            $("#pay").val(grandTotal);
+            // $("#pay").attr({
+            //     max: grandTotal,
+            // });
         });
 
         //   percentage live calculations
@@ -304,6 +307,7 @@ function prevent_amount() {
 
             price: ".price",
             qty: ".qty",
+            qty2: ".qty2",
             Quantity: "#Quantity",
             total: ".total",
             // totalQty: "#totalQty",
