@@ -185,9 +185,8 @@ Route::get('/get-all-medicine',[Select2Controller::class,'get_all_medicine'])->n
 Route::get('get-user', [Select2Controller::class,'get_user']);
 Route::get('get-user2', [Select2Controller::class,'get_user2']);
 Route::get('get-payment', [Select2Controller::class,'get_payment']);
-Route::post('get-category1', [Select2Controller::class,'get_category'])->name('get-category1');
 Route::get('get-user-details/{id}', [Select2Controller::class,'get_user_details']);
-
+Route::post('get-category1', [Select2Controller::class,'get_category'])->name('get-category1');
 
 
 //stock route
@@ -294,8 +293,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
     Route::post('profit-loss-report', [ReportController2::class,'profit_loss'])->name('profit-loss-report');
 
     Route::post('sale-return-report', [ReportController2::class,'medicine_sale_return'])->name('sale-return-report');
-    Route::post('best-selling', [ReportController2::class,'bestSelling'])->name('best-selling');
-    Route::post('slow-selling', [ReportController2::class,'slowSelling'])->name('slow-selling');
+
     Route::post('sale-report-details', [ReportController2::class,'medicine_sale_report_details'])->name('sale-report-details');
     Route::get('/sale-report-details1/{id}', [ReportController2::class,'medicine_sale_report_details1'])->name('sale-report-details1');
 
@@ -307,7 +305,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
 
     Route::post('supplier-stock-report-outlet', [ReportController2::class,'supplier_wise_stock_outlet'])->name('supplier-stock-report-outlet');
     Route::post('supplier-stock-report-warehouse', [ReportController2::class,'supplier_wise_stock_warehouse'])->name('supplier-stock-report-warehouse');
-
+    Route::post('best-selling', [ReportController2::class,'bestSelling'])->name('best-selling');
+    Route::post('slow-selling', [ReportController2::class,'slowSelling'])->name('slow-selling');
 
 });
 
