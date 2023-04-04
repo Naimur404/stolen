@@ -102,7 +102,7 @@ Invoice.prototype = {
     calcTotal: function() {
         jQuery($.opt.parentClass).each(function(i) {
             var row = jQuery(this);
-            var total = row.find($.opt.price).val() * row.find($.opt.qty).val();
+            var total = row.find($.opt.price).val() * row.find($.opt.qty2).val();
 
             total = self.roundNumber(total, 2);
 
@@ -167,6 +167,7 @@ Invoice.prototype = {
         //  console.log('sub total '+subtotal);
 
         jQuery($.opt.subtotal).val(subtotal);
+
         // jQuery($.opt.subtotal).html(subtotal);
 
         // $('#subtotal').val(subtotal);
@@ -214,8 +215,10 @@ Invoice.prototype = {
 
             var grandTotal = Number(jQuery($.opt.subtotal).val())
             - Number(jQuery($.opt.deduct_amount).val());
+
        grandTotal = self.roundNumber(grandTotal, 2);
        jQuery($.opt.grandTotal).val(grandTotal);
+
        return 1;
 
 
@@ -333,6 +336,7 @@ jQuery.fn.invoice.defaults = {
     parentClass: ".item-row",
     price: ".price",
     qty: ".qty",
+    nqty2: ".qty2",
     Quantity: "#Quantity",
     total: ".total",
     // totalQty: "#totalQty",

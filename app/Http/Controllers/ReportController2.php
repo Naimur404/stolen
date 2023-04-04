@@ -59,6 +59,10 @@ class ReportController2 extends Controller
         $this->middleware('permission:expiry-wise-report-outlet.submit', ['only' => ['expiryDate1']]);
         $this->middleware('permission:expiry-wise-report-warehouse.submit', ['only' => ['expiryDate']]);
 
+        $this->middleware('permission:best_selling.search', ['only' => ['bestSelling']]);
+        $this->middleware('permission:slow_selling.search', ['only' => ['slowSelling']]);
+
+
 
     }
     public function medicine_sale_report_submit(Request $request)
@@ -1053,6 +1057,31 @@ public function expiryDate1(Request $request)
 
 
       return view('admin.report.expiry_wise_report_outlet', compact('start_date', 'productSales','title'));
+}
+
+public function bestSelling(Request $request)
+{
+
+    $input = $request->all();
+    $start_date = Carbon::parse($input['start_date']);
+    $end_date = Carbon::parse($input['end_date']);
+
+    $data = OutletInvoiceDetails::whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->orderby('quantity','desc')->get();
+    return view('admin.report.best_selling',compact('data'));
+
+
+}
+public function slowSelling(Request $request)
+{
+
+    $input = $request->all();
+    $start_date = Carbon::parse($input['start_date']);
+    $end_date = Carbon::parse($input['end_date']);
+
+    $data = OutletInvoiceDetails::whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->where('quantity','>','1')->orderby('quantity','asc')->get();
+    return view('admin.report.slow_selling',compact('data'));
+
+
 }
 
 }

@@ -83,6 +83,7 @@ class SalesReturnController extends Controller
              'grand_total'  => $input['grand_total'],
              'paid_amount' => $input['paid_amount'],
              'deduct_point' => $points,
+             'due_amount' => $input['due_amount'],
              'payment_method_id' => $input['payment_method_id'],
              'added_by'   =>  Auth::user()->id,
 

@@ -236,7 +236,7 @@ $(document).ready(function() {
           $( "#sel_emp" ).select2({
 
              ajax: {
-               url: "{{route('get-category')}}",
+               url: "{{route('get-category1')}}",
                type: "post",
                dataType: 'json',
 
@@ -257,9 +257,9 @@ $(document).ready(function() {
           });
 
 
-          $( "#sel_emp3" ).select2({
+$( "#sel_emp3" ).select2({
 
-ajax: {
+ ajax: {
   url: "{{route('get-manufacturer')}}",
   type: "post",
   dataType: 'json',
@@ -283,7 +283,7 @@ ajax: {
 $( "#sel_emp4" ).select2({
 
 ajax: {
-  url: "{{route('get-category')}}",
+  url: "{{route('get-category1')}}",
   type: "post",
   dataType: 'json',
 

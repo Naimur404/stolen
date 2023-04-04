@@ -295,14 +295,14 @@ class Select2Controller extends Controller
       if($search == ''){
          $categories = Category::orderby('id','asc')
          ->select('id','category_name')
-         ->limit(20)
+         ->limit(10)
          ->get();
       }else{
 
          $categories = Category::orderby('id','asc')
          ->select('id','category_name')
          ->where('category_name', 'like', '%' .$search . '%')
-         ->limit(20)
+         ->limit(10)
          ->get();
       }
 
