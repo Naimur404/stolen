@@ -10,6 +10,7 @@ use App\Http\Controllers\MedicinePurchaseController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\OutletInvoiceController;
 use App\Http\Controllers\OutletStockController;
+use App\Http\Controllers\OutletWriteoffController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\ProfileController;
@@ -27,6 +28,7 @@ use App\Http\Controllers\UserRoleController;
 use App\Http\Controllers\WarehouseController;
 use App\Http\Controllers\WarehouseReturnController;
 use App\Http\Controllers\WarehouseStockController;
+use App\Http\Controllers\WarehouseWriteoffController;
 use App\Models\Customer;
 use App\Models\MedicineDistribute;
 use App\Models\OutletInvoice;
@@ -34,6 +36,7 @@ use App\Models\OutletStock;
 use App\Models\SalesReturn;
 use App\Models\StockRequest;
 use App\Models\WarehouseReturn;
+use App\Models\WarehouseWriteoff;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -107,6 +110,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'],function () {
 });
 
 Route::group(['middleware' => ['auth']],function () {
+
+
 //resource route
 Route::resource('payment-method',PaymentMethodController::class);
 Route::resource('supplier',SupplierController::class);
@@ -120,6 +125,8 @@ Route::resource('warehouse-return',WarehouseReturnController::class);
 Route::resource('customer',CustomerManagementController::class);
 Route::resource('stock-request',StockRequestController::class);
 Route::resource('invoice', OutletInvoiceController::class);
+Route::resource('outlet-writeoff', OutletWriteoffController::class);
+Route::resource('warehouse-writeoff', WarehouseWriteoffController::class);
 Route::post('warehouse-stock-update',[WarehouseStockController::class,'warehouse_Stock_Update'])->name('warehouse-stock-update');
 
 //purchase
@@ -308,4 +315,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
     Route::post('best-selling', [ReportController2::class,'bestSelling'])->name('best-selling');
     Route::post('slow-selling', [ReportController2::class,'slowSelling'])->name('slow-selling');
 
+});
+Route::group(['middleware' => ['auth'], 'prefix' => 'writeoff'],function () {
+Route::resource('outlet-writeoff', OutletWriteoffController::class);
+Route::resource('warehouse-writeoff', WarehouseWriteoffController::class);
 });
