@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('outlet_stock_id')->references('id')->on('outlet_stocks');
             $table->bigInteger('medicine_id')->unsigned();
             $table->string('medicine_name')->nullable();
+            $table->integer('previous_stock')->default(1);
             $table->integer('quantity')->default(1);
             $table->enum('reason', ['Expired', 'Damage', 'Lost', 'Adjust', 'Others'])->nullable();
             $table->string('remarks')->nullable();
