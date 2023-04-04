@@ -7,8 +7,8 @@
         <meta name="description" content="Pharmacy POS" />
         <meta name="keywords" content="pharmacy POS, Pigeon Soft" />
         <meta name="author" content="Pigeon Soft" />
-        <link rel="icon" href="{{asset('assets/images/favicon.png')}}" type="image/x-icon" />
-        <link rel="shortcut icon" href="{{asset('assets/images/favicon.png')}}" type="image/x-icon" />
+        <link rel="icon" href="{{asset('uploads/'.$app_setting->logo)}}" type="image/x-icon" />
+        <link rel="shortcut icon" href="{{asset('uploads/'.$app_setting->logo)}}" type="image/x-icon" />
         <title>@yield('title')</title>
         <!-- Google font-->
         @includeIf('layouts.admin.partials.css')

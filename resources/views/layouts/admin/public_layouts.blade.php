@@ -6,7 +6,7 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="../../assets/images/logo.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="{{asset('uploads/'.$app_setting->logo)}}">
     @yield('custom-css')
 
     <title> @yield('title')</title>
