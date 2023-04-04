@@ -15,6 +15,7 @@ class WarehouseWriteoff extends Model
         'warehouse_stock_id',
         'medicine_id',
         'medicine_name',
+        'previous_stock',
         'quantity',
         'reason',
         'remarks',

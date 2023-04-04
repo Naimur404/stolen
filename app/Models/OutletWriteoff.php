@@ -15,6 +15,7 @@ class OutletWriteoff extends Model
         'outlet_stock_id',
         'medicine_id',
         'medicine_name',
+        'previous_stock',
         'quantity',
         'reason',
         'remarks',
