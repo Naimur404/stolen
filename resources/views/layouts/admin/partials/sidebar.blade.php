@@ -194,6 +194,58 @@
                             </ul>
                         </li>
 
+                         @can('writeoff')
+
+                        <li class="dropdown">
+                            <a class="nav-link menu-title {{ prefixActive('/writeoff') }} "
+                               href="javascript:void(0)"><i data-feather="anchor"></i><span>Writeoff</span></a>
+                            <ul class="nav-submenu menu-content"
+                                style="display:{{ prefixBlock('/writeoff') }};">
+                                <li>
+                                {{-- @can('sale.report')
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('sale-report')}}"
+                                       href="{{route('sale-report')}}"><i data-feather="filter"></i><span>Sales</span></a>
+                                </li>
+
+                                @endcan
+                                @can('purchase.report')
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('purchase-report')}}"
+                                       href="{{route('purchase-report')}}"><i data-feather="filter"></i><span>Purchase</span></a>
+                                </li>
+
+
+                                @endcan
+                                @can('outlet-stock.report')
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('outlet-stock-report')}}"
+                                       href="{{route('outlet-stock-report')}}"><i data-feather="filter"></i><span><h10>Outlet Stock</h10></span></a>
+                                </li>
+
+
+                                @endcan
+
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('outlet-stock-report')}}"
+                                       href="{{route('outlet-stock-report')}}"><i data-feather="filter"></i><span><h10>Outlet</h10></span></a>
+                                </li>
+                                @can('warehouse-stock.report') --}}
+
+
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('warehouse-writeoff')}}"
+                                       href="{{route('warehouse-writeoff.index')}}"><i data-feather="filter"></i><span><h10>Warehouse</h10></span></a>
+                                </li>
+
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('outlet-writeoff')}}"
+                                       href="{{route('outlet-writeoff.index')}}"><i data-feather="filter"></i><span><h10>Outlet</h10></span></a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        @endcan
                     @can('payment-method.management')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('payment-method.index')}}"
