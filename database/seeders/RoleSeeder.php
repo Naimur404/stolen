@@ -113,6 +113,9 @@ class RoleSeeder extends Seeder
             'warehousetStock-price-edit',
             'expiry-wise-report-warehouse',
             'expiry-wise-report-warehouse.submit',
+            'writeoff',
+            'outlet-writeoff',
+            'warehouse-writeoff',
 
         ];
 

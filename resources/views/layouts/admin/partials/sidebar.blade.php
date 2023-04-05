@@ -234,12 +234,12 @@
 
 
                                 <li class="">
-                                    <a class="submenu-title {{routeActive('warehouse-writeoff')}}"
+                                    <a class="submenu-title {{routeActive('warehouse-writeoff.index')}}"
                                        href="{{route('warehouse-writeoff.index')}}"><i data-feather="filter"></i><span><h10>Warehouse</h10></span></a>
                                 </li>
 
                                 <li class="">
-                                    <a class="submenu-title {{routeActive('outlet-writeoff')}}"
+                                    <a class="submenu-title {{routeActive('outlet-writeoff.index')}}"
                                        href="{{route('outlet-writeoff.index')}}"><i data-feather="filter"></i><span><h10>Outlet</h10></span></a>
                                 </li>
 

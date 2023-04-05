@@ -53,7 +53,7 @@
 
 @extends('auth.master')
 
-@section('title')login
+@section('title')login- {{ env('APP_NAME') }}
 
 @endsection
 
@@ -70,7 +70,7 @@
                     {!! Form::open(['route'=>'login', 'method'=>'POST','role' => 'form','class' => 'theme-form login-form']) !!}
                     {!! Form::token(); !!}
 
-                        <h4>Login</h4>
+                        <h4>Login - {{ env('APP_NAME') }}</h4>
                         <h6>Welcome back! Log in to your account.</h6>
                         <div class="form-group">
                             {!! Form::label('', 'Email address') !!}

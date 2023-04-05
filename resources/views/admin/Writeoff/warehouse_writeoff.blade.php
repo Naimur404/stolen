@@ -33,7 +33,7 @@
 	                    <div class="card-body">
                             {!! Form::open(['route'=>'warehouse-writeoff.store', 'method'=>'POST', 'role' => 'form', 'class' => 'needs-validation', 'novalidate'=> '','files' => true]) !!}
 
-                            <label for="supplier" class="col-md-2 text-right col-form-label">Outlet:</label>
+                            <label for="supplier" class="col-md-2 text-right col-form-label">Warehouse:</label>
                             <div class="mb-3 mt-2">
                                 {{ Form::select( 'warehouse_id', $warehouse, null, ['class' => 'form-control', 'required', 'placeholder' => 'Select Warehouse', 'id' => 'warehouse'] ) }}
                                 <div class="invalid-feedback">Please Add Warehouse</div>

@@ -39,12 +39,9 @@ class OutletWriteoffController extends Controller
     public function create()
     {
 
-        if (Auth::user()->hasRole('Super Admin')) {
+
         $outlets = Outlet::pluck('outlet_name', 'id');
-    }else{
-        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-        $outlets = Outlet::where('id',$outlet_id)->pluck('outlet_name', 'id');
-    }
+ 
         return view('admin.Writeoff.outlet_writeoff',compact('outlets'));
     }
 
