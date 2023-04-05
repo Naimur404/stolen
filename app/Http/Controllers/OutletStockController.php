@@ -269,7 +269,7 @@ class OutletStockController extends Controller
         $data_arr = array();
 
         $sl = 1;
-
+        $total = 0;
         foreach($medicine_stock as $stock){
             $s_no = $sl++;
             $medicine_name = Medicine::get_medicine_name($stock->medicine_id);
@@ -283,7 +283,7 @@ class OutletStockController extends Controller
             $stocks = $stock->quantity;
             $ul = route('outlet-stock.edit',$stock->id);
             $url = '<a href="'.$ul.'"class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
-
+            $total = $total + $stock->price*$stock->quantity;
             $data_arr[] = array(
               "id" => $s_no,
               "medicine_name" => $medicine_name,
@@ -303,14 +303,62 @@ class OutletStockController extends Controller
             "draw" => intval($draw),
             "iTotalRecords" => $totalRecords,
             "iTotalDisplayRecords" => $total_record_switch_filter,
-            "aaData" => $data_arr
+            "aaData" => $data_arr,
+            "total" => $total,
          );
 
-         return json_encode($response);
+      return response()->json($response);
 
 
 
     }
+
+
+    public function outletStock2(Request $request, $id )
+
+    {
+   // total records count
+        if($id == 'all'){
+
+           $medicine_stock  = DB::table('outlet_stocks')->where('quantity', '>', '0')->leftjoin('medicines' ,'outlet_stocks.medicine_id' ,'=' ,'medicines.id')->select('outlet_stocks.*', 'medicines.medicine_name')
+
+              ->get();
+
+        }else{
+           if(auth()->user()->hasrole('Super Admin')){
+
+            $medicine_stock =    DB::table('outlet_stocks')->where('outlet_id', '=', $id)->where('quantity', '>', '0')->leftjoin('medicines' ,'outlet_stocks.medicine_id' ,'=' ,'medicines.id')->select('outlet_stocks.*', 'medicines.medicine_name')
+              ->get();
+
+           }else{
+
+            $medicine_stock = DB::table('outlet_stocks')->where('outlet_id', '=', Auth::user()->outlet_id)->where('quantity', '>', '0')->leftjoin('medicines' ,'outlet_stocks.medicine_id' ,'=' ,'medicines.id')->select('outlet_stocks.*', 'medicines.medicine_name')
+            ->get();
+
+
+           }
+
+        }
+
+
+        $total = 0;
+        foreach($medicine_stock as $stock){
+
+            $total = $total + $stock->purchase_price*$stock->quantity;
+
+         }
+
+         $response = array(
+
+            "total" => $total,
+         );
+
+      return response()->json($response);
+
+
+
+    }
+
 
     public function getoutletStocks(Request $request,$id){
 

@@ -198,7 +198,9 @@ Route::post('get-category1', [Select2Controller::class,'get_category'])->name('g
 
 //stock route
 Route::get('/get-outlet-stock/{id}',[OutletStockController::class,'outletStock'])->name('outletstock');
+Route::get('/get-outlet-stock2/{id}',[OutletStockController::class,'outletStock2'])->name('outletstock2');
 Route::get('/get-warehouse-stock/{id}',[WarehouseStockController::class,'warehouseStock'])->name('warehouseStock');
+Route::get('/get-warehouse-stock2/{id}',[WarehouseStockController::class,'warehouseStock2'])->name('warehouseStock2 ');
 //profile route
 Route::get('/my-profile', [ProfileController::class,'myProfile'])->name('myprofile');
 Route::Post('/my-profile/update', [ProfileController::class,'updateMyProfile'])->name('updatemyprofile');

@@ -23,6 +23,11 @@
         @slot('button')
 <div class="row">
     <div class="col-md-8">
+        <p style="display:inline;">
+            <span style="font-size: 1.5rem; color:red">Total Value =</span>
+            <span id="hello2" style="font-size: 1.5rem ;color:red" ></span>
+            <span style="font-size: 1.5rem ;color:red" >TK</span>
+     </p>
     </div>
     <div class="col-md-4">
             {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'id' => 'supplier_id']) }}
@@ -103,10 +108,38 @@
             {data: 'action', name: 'action'},
 
         ]
+
+
     });
+
+    $.ajax({
+    "url": "/get-warehouse-stock2/" + warehouse_id,
+    "type": "GET",
+    "datatype": 'json',
+    "success": function (data) {
+
+        let ok = '';
+        ok +=  data.total;
+
+        document.getElementById('hello2').innerHTML = ok;
+    }
+});
     $('#supplier_id').on('change', function(){
     warehouse_id = $(this).val();
     table.ajax.url("/get-warehouse-stock/" + warehouse_id).load();
+
+    $.ajax({
+    "url": "/get-warehouse-stock2/" + warehouse_id,
+    "type": "GET",
+    "datatype": 'json',
+    "success": function (data) {
+
+        let ok = '';
+                   ok +=  data.total;
+
+                document.getElementById('hello2').innerHTML = ok;
+    }
+});
 });
 });
 

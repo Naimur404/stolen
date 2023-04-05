@@ -287,6 +287,43 @@ if(count($check)  < 1  ){
 
     }
 
+    public function warehouseStock2(Request $request, $id )
+
+    {
+        // total records count
+        if($id == 'all'){
+
+           $medicine_stock  = DB::table('warehouse_stocks')->where('quantity', '>', '0')->leftjoin('medicines' ,'warehouse_stocks.medicine_id' ,'=' ,'medicines.id')->select('warehouse_stocks.*', 'medicines.medicine_name')
+              ->get();
+        }else{
+           if(auth()->user()->hasrole('Super Admin')){
+
+            $medicine_stock =    DB::table('warehouse_stocks')->where('warehouse_id', '=', $id)->where('quantity', '>', '0')->leftjoin('medicines' ,'warehouse_stocks.medicine_id' ,'=' ,'medicines.id')->select('warehouse_stocks.*', 'medicines.medicine_name')
+              ->get();
+
+           }else{
+
+            $medicine_stock =    DB::table('warehouse_stocks')->where('warehouse_id', '=', Auth::user()->warehouse_id)->where('quantity', '>', '0')->leftjoin('medicines' ,'warehouse_stocks.medicine_id' ,'=' ,'medicines.id')->select('warehouse_stocks.*', 'medicines.medicine_name')
+            ->get();
+
+           }
+        }
+
+
+        $total = 0;
+        foreach($medicine_stock as $stock){
+
+            $total = $total + $stock->purchase_price*$stock->quantity;
+
+         }
+         $response = array(
+
+            "total" => $total,
+         );
+
+      return response()->json($response);
+
+    }
 
 
     public function getwarehouseStock(Request $request,$id){
