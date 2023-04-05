@@ -22,7 +22,12 @@
 
         @slot('button')
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-8" style="  display: inline-block;">
+        <p style="display:inline;">
+            <span style="font-size: 1.5rem; color:red">Total Value =</span>
+            <span id="hello2" style="font-size: 1.5rem ;color:red" ></span>
+            <span style="font-size: 1.5rem ;color:red" >TK</span>
+     </p>
     </div>
     <div class="col-md-4">
             {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'id' => 'supplier_id']) }}
@@ -88,7 +93,16 @@
         serverSide: true,
         "filter": true,
 
-        ajax: "/get-outlet-stock/" + outlet_id,
+
+        "ajax": {
+        "url": "/get-outlet-stock/" + outlet_id,
+        "type": "GET",   // you can probably remove this
+        "datatype": 'json',
+
+
+           // you can probably remove this
+    },
+
         columns: [
             {data: 'id', name: 'si'},
             {data: 'medicine_name', name: 'medicine Name'},
@@ -101,11 +115,43 @@
             {data: 'quantity', name: 'stock'},
             {data: 'action', name: 'action'},
 
-        ]
+        ],
+
+
     });
+
+    $.ajax({
+    "url": "/get-outlet-stock2/" + outlet_id,
+    "type": "GET",
+    "datatype": 'json',
+    "success": function (data) {
+
+        let ok = '';
+                   ok +=  data.total;
+
+                document.getElementById('hello2').innerHTML = ok;
+    }
+});
+
+
+
+
     $('#supplier_id').on('change', function(){
     outlet_id = $(this).val();
     table.ajax.url("/get-outlet-stock/" + outlet_id).load();
+
+    $.ajax({
+    "url": "/get-outlet-stock2/" + outlet_id,
+    "type": "GET",
+    "datatype": 'json',
+    "success": function (data) {
+
+        let ok = '';
+         ok +=  data.total;
+
+     document.getElementById('hello2').innerHTML = ok;
+    }
+});
 });
 });
 
