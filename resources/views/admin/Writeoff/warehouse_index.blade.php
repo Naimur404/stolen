@@ -61,7 +61,7 @@
 
 
                                         <a href="{{ route('warehouse-writeoff.show', $data->id) }}"
-                                            class="btn btn-success btn-xs" title="Show" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                                            class="btn btn-success btn-xs" title="Show" style="margin-right:3px"><i class="fa fa-eye" aria-hidden="true"></i></a>
 
 
 

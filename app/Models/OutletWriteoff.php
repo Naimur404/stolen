@@ -21,4 +21,11 @@ class OutletWriteoff extends Model
         'remarks',
         'added_by',
     ];
+
+    public function stock(){
+        return $this->belongsTo(OutletStock::class, 'outlet_stock_id', 'id');
+ }
+ public function user(){
+    return $this->belongsTo(User::class, 'added_by', 'id');
+}
 }
