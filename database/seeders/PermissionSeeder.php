@@ -104,6 +104,9 @@ class PermissionSeeder extends Seeder
             'writeoff',
             'outlet-writeoff',
             'warehouse-writeoff',
+            'summary',
+            'outlet-summary',
+            'warehouse-summary',
 
             'distribute_medicine_report_for_outlet',
             'distribute_medicine_report_for_outlet.search',
