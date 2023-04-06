@@ -27,4 +27,7 @@ class WarehouseWriteoff extends Model
  public function user(){
     return $this->belongsTo(User::class, 'added_by', 'id');
 }
+public function warehouse(){
+    return $this->belongsTo(Warehouse::class, 'warehouse_id', 'id');
+}
 }

@@ -130,6 +130,7 @@ Route::resource('warehouse-writeoff', WarehouseWriteoffController::class);
 Route::post('warehouse-stock-update',[WarehouseStockController::class,'warehouse_Stock_Update'])->name('warehouse-stock-update');
 
 //purchase
+
 Route::get('edit-purchase/{id}',[MedicinePurchaseController::class,'editPurchase'])->name('edit-purchase');
 Route::post('purchase-update',[MedicinePurchaseController::class,'purchaseUpdate'])->name('purchase-update');
 Route::get('purchase-delete/{id}',[MedicinePurchaseController::class,'purchaseDelete'])->name('purchase-delete');
@@ -321,4 +322,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
 Route::group(['middleware' => ['auth'], 'prefix' => 'writeoff'],function () {
 Route::resource('outlet-writeoff', OutletWriteoffController::class);
 Route::resource('warehouse-writeoff', WarehouseWriteoffController::class);
+});
+Route::group(['middleware' => ['auth'], 'prefix' => 'summary'],function () {
+Route::get('outlet',[DashBoardController::class,'summaryOutlet'])->name('outlet');
+Route::get('warehouse',[DashBoardController::class,'summaryWarehouse'])->name('warehouse');
 });

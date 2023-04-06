@@ -116,6 +116,9 @@ class RoleSeeder extends Seeder
             'writeoff',
             'outlet-writeoff',
             'warehouse-writeoff',
+            'summary',
+            'outlet-summary',
+            'warehouse-summary',
 
         ];
 

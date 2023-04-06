@@ -32,39 +32,41 @@
 	                    </div>
 	                    <div class="card-body">
 
-
                             <div class="mb-3 mt-2">
-                                <p style="text-align: center"><b>Medicine Name:&nbsp;&nbsp; </b> {{ $warehouseWriteoff->medicine_name }}</p>
+                                <p style="text-align: left"><b>Warehouse Name:&nbsp;&nbsp; </b> {{ $warehouseWriteoff->warehouse->warehouse_name }}</p>
+                            </div>
+                            <div class="mb-3 mt-2">
+                                <p style="text-align: left"><b>Medicine Name:&nbsp;&nbsp; </b> {{ $warehouseWriteoff->medicine_name }}</p>
                             </div>
 
                             <div class="mb-3 mt-2">
 
 
-                                <p style="text-align: center"><b>Expiry Date:&nbsp;&nbsp;</b> {{ $warehouseWriteoff->stock->expiry_date }}</p>
+                                <p style="text-align: left"><b>Expiry Date:&nbsp;&nbsp;</b> {{ $warehouseWriteoff->stock->expiry_date }}</p>
                             </div>
                             <div class="mb-3 mt-2">
-                                <p style="text-align: center"><b>warehouse Name:&nbsp;&nbsp;</b> {{ $warehouseWriteoff->stock->warehouse->warehouse_name }}</p>
+                                <p style="text-align: left"><b>warehouse Name:&nbsp;&nbsp;</b> {{ $warehouseWriteoff->stock->warehouse->warehouse_name }}</p>
                         </div>
                             <div class="mb-3 mt-2">
-                                <p style="text-align: center"><b>Previous Quantity :&nbsp;&nbsp;</b> {{ $warehouseWriteoff->previous_stock }}</p>
+                                <p style="text-align: left"><b>Previous Quantity :&nbsp;&nbsp;</b> {{ $warehouseWriteoff->previous_stock }}</p>
                         </div>
                         <div class="mb-3 mt-2">
-                            <p style="text-align: center"><b>Writeoff Quantity :&nbsp;&nbsp;</b> {{ $warehouseWriteoff->quantity }}</p>
+                            <p style="text-align: left"><b>Writeoff Quantity :&nbsp;&nbsp;</b> {{ $warehouseWriteoff->quantity }}</p>
                         </div>
 
 
                     <div class="mb-3 mt-2">
-                        <p style="text-align: center"><b>Writeoff Date :&nbsp;&nbsp;</b> {{ \Carbon\Carbon::parse($warehouseWriteoff->created_at)->format('d-m-Y') }}</p>
+                        <p style="text-align: left"><b>Writeoff Date :&nbsp;&nbsp;</b> {{ \Carbon\Carbon::parse($warehouseWriteoff->created_at)->format('d-m-Y') }}</p>
                 </div>
                 <div class="mb-3 mt-2">
-                    <p style="text-align: center"><b>Reason :&nbsp;&nbsp;</b> {{ $warehouseWriteoff->reason }}</p>
+                    <p style="text-align: left"><b>Reason :&nbsp;&nbsp;</b> {{ $warehouseWriteoff->reason }}</p>
             </div>
             <div class="mb-3 mt-2">
-                <p style="text-align: center"><b>Remarks :&nbsp;&nbsp;</b>@if($warehouseWriteoff->remarks != null) N/A @else{{ $warehouseWriteoff->remarks }}
+                <p style="text-align: left"><b>Remarks :&nbsp;&nbsp;</b>@if($warehouseWriteoff->remarks != '') {{ $warehouseWriteoff->remarks }}  @else N/A
                     @endif</p>
         </div>
         <div class="mb-3 mt-2">
-            <p style="text-align: center"><b>Added By :&nbsp;&nbsp;</b> {{ $warehouseWriteoff->user->name }}</p>
+            <p style="text-align: left"><b>Added By :&nbsp;&nbsp;</b> {{ $warehouseWriteoff->user->name }}</p>
     </div>
 	                    </div>
 	                </div>

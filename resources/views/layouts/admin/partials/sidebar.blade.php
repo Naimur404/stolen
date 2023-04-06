@@ -246,6 +246,29 @@
                             </ul>
                         </li>
                         @endcan
+
+
+                     @can('summary')
+                        <li class="dropdown">
+                            <a class="nav-link menu-title {{ prefixActive('/summary') }} "
+                               href="javascript:void(0)"><i data-feather="anchor"></i><span>Summary</span></a>
+                            <ul class="nav-submenu menu-content"
+                                style="display:{{ prefixBlock('/summary') }};">
+                                <li>
+
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('warehouse')}}"
+                                       href="{{route('warehouse')}}"><i data-feather="filter"></i><span><h10>Warehouse</h10></span></a>
+                                </li>
+
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('outlet')}}"
+                                       href="{{route('outlet')}}"><i data-feather="filter"></i><span><h10>Outlet</h10></span></a>
+                                </li>
+
+                            </ul>
+                        </li>
+                        @endcan
                     @can('payment-method.management')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('payment-method.index')}}"
