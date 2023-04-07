@@ -49,76 +49,60 @@
     <div class="col-md-12">
         <table class="table table-hover table-bordered">
             <thead class="">
-                <tr>
-                    <th>SL</th>
-
-                    <th>Outlet Name</th>
-                    <th>Purchase Date</th>
-                    <th>Payment Method</th>
-                    <th>Purchased By</th>
-                    <th>Total</th>
-                    <th>Pay</th>
-                    <th>Due</th>
-                    <th>Sale By</th>
-                </tr>
+            <tr>
+                <th>SL</th>
+                <th>Outlet Name</th>
+                <th>Sale Date</th>
+                <th>Method</th>
+                <th>Sold By</th>
+                <th>Total</th>
+                <th>Pay</th>
+                <th>Due</th>
+            </tr>
             </thead>
             <tbody>
-                @php
+            @php
                 $grand_total = 0;
                 $total_due = 0;
                 $total_pay = 0;
+            @endphp
+            @foreach ($productSales as $productSale)
+                <tr>
+                    <td>{{ $loop->index + 1 }}</td>
+                    <td>{{ $productSale->outlet->outlet_name ?? '' }}</td>
+                    <td>{{ \Carbon\Carbon::parse($productSale->sale_date)->format('d-m-Y') }}
+                    </td>
+                    <td>{{ $productSale->payment->method_name ?? '' }}</td>
+
+
+                    <td>{{ $productSale->user->name ?? '' }}</td>
+
+
+                    <td>{{ $productSale->grand_total }}</td>
+                    <td>{{ $productSale->paid_amount }}</td>
+                    <td>
+                        {{ $productSale->due_amount > 0 ? $productSale->due_amount : 'Paid' }}
+                    </td>
+
+                </tr>
+                @php
+                    $grand_total = $grand_total + $productSale->grand_total;
+                    $total_due = $total_due + $productSale->due_amount;
+                    $total_pay = $total_pay + $productSale->paid_amount;
                 @endphp
-                    @foreach ($productSales as $productPurchase)
-                    <tr>
-                        <td>{{ $loop->index + 1 }}</td>
-                        @if ($productPurchase->outlet_id == null )
-
-                            <td> N/A </td>
-                        @elseif ($productPurchase->outlet_id != null )
-                            <td>{{ $productPurchase->outlet->outlet_name }}</td>
-
-                        @endif
-
-                        <td>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y') }}
-                        </td>
-                        <td>{{ $productPurchase->payment->method_name }}</td>
-                        @if ($productPurchase->customer_id == null )
-
-                        <td> Walking Customer </td>
-                    @elseif ($productPurchase->customer_id != null )
-                    <td>{{ $productPurchase->customer->name  }}</td>
-
-                    @endif
-
-                        <td>{{ $productPurchase->grand_total }}</td>
-                        <td>{{ $productPurchase->paid_amount }}</td>
-                        @if ($productPurchase->due_amount > 0)
-                            <td> {{ $productPurchase->due_amount }} </td>
-                        @else
-                            <td>Paid</td>
-                        @endif
-                        <td>{{ $productPurchase->user->name }}</td>
-                    </tr>
-                    @php
-                    $grand_total = $grand_total + $productPurchase->grand_total;
-                    $total_due = $total_due + $productPurchase->paid_amount;
-                    $total_pay = $total_pay + $productPurchase->due_amount;
-                    @endphp
-                @endforeach
+            @endforeach
 
 
             </tbody>
         </table>
 
-        <p class="text-center">Grand Total {{ $grand_total }} | Total Pay {{ $total_pay }} | Total Due {{ $total_due }}</p>
-        <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
+        <p class="text-center">Grand Total {{ $grand_total }} | Total Pay {{ $total_pay }} | Total
+            Due {{ $total_due }}</p>
 
     </div>
 </div>
 @section('custom-js')
-<script>
-    setTimeout(function() { window.print(); }, 1000);
-</script>
+
 
 @endsection
 

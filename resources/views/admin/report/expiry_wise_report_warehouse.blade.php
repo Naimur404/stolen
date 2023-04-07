@@ -111,9 +111,6 @@
 </div>
 
 @section('custom-js')
-<script>
-    setTimeout(function() { window.print(); }, 1000);
-</script>
 
 @endsection
 @endsection
