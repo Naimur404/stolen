@@ -31,7 +31,7 @@ class OutletInvoice extends Model
 
     public function outlet()
     {
-        return $this->belongsTo(Outlet::class, 'outlet_id', 'id');
+        return $this->hasOne(Outlet::class, 'id', 'outlet_id');
     }
 
     public function warehouse()

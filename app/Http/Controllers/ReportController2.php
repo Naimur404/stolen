@@ -125,20 +125,13 @@ class ReportController2 extends Controller
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
                 $title = 'All Outlet Sale Report';
 
-
-
-
-
         }else{
             $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-
-
 
                 $productSales = OutletInvoice::where('outlet_id', '=', $outlet_id)->whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
                 $outlet =  Outlet::where('id',$outlet_id)->orderby('id','desc')->first('outlet_name');
                 $title = 'All Sale Report For '.$outlet->outlet_name;
-
 
 
         }
