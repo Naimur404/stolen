@@ -1,5 +1,6 @@
 @extends('admin.Pos.pos_master')
-@section('title')POS
+@section('title')
+    POS
 @endsection
 @push('css')
     <style>
@@ -10,12 +11,34 @@
         .custom-td {
             padding: 5px !important;
             vertical-align: middle !important;
+        }
 
         input:focus, textarea:focus, select:focus {
             outline: none;
         }
-
+        .card .card-header{
+            padding: 6px !important;
         }
+        .card .card-body{
+            padding: 10px !important;
+        }
+        .form-control, .form-select{
+            border-color: #d22d3d !important;
+        }
+        .form-control:disabled, .form-control[readonly]{
+            border-color: #efeff1 !important;
+        }
+
+        .page-main-header{
+            max-height: 80px !important;
+        }
+
+
+        main-header-left
+        {
+            padding: 15px 40px !important;
+        }
+
     </style>
 @endpush
 @section('content')
@@ -29,7 +52,6 @@
             </div>
 
         @endslot
-
 
     @endcomponent
     {!! Form::open(['id' => 'my-form', 'class' => 'needs-validation', 'novalidate'=> '', 'autocomplete' => 'off', 'autocomplete' => 'off', 'files' => true]) !!}
@@ -173,7 +195,6 @@
                             {{ Form::select('mobile', [], null, ['class' => 'form-control add', 'placeholder' => 'Walking Customer', 'id' => 'user_id']) }}
 
 
-
                         </div>
                         <div class="col-md-1">
                             <!-- Button trigger modal -->
@@ -205,7 +226,7 @@
 
                 <div class="card">
 
-                    <div class="card-header bg-primary mt-4">
+                    <div class="card-header bg-primary">
                         <i class="fa fa-table"></i> Invoice
                     </div>
 
@@ -242,14 +263,16 @@
                                     <td class="text-right" colspan="7"><b>Flat Discount :</b></td>
                                     <td class="text-right">
 
-                                        <input type="number" id="discount_percent" max="100" class="text-right form-control"
+                                        <input type="number" id="discount_percent" max="100"
+                                               class="text-right form-control"
                                                placeholder="%"/>
 
                                     </td>
 
                                     <td>
-                                        <input type="number" id="flatdiscount" class="text-right form-control flatdiscount"
-                                               name="flatdiscount" value="0" tabindex="17" step="any" placeholder="Tk" />
+                                        <input type="number" id="flatdiscount"
+                                               class="text-right form-control flatdiscount"
+                                               name="flatdiscount" value="0" tabindex="17" step="any" placeholder="Tk"/>
                                     </td>
 
                                 </tr>
@@ -257,8 +280,10 @@
                                     <td class="text-right" colspan="8"><b>Point Redeem:</b></td>
                                     {{-- <td></td> --}}
                                     <td class="text-right">
-                                        <input type="number" class="form-control text-right redeem_points" name="redeem_points"
-                                               id="redeem_points" onkeyup="prevent_points_amount()"onchange="prevent_points_amount()">
+                                        <input type="number" class="form-control text-right redeem_points"
+                                               name="redeem_points"
+                                               id="redeem_points" onkeyup="prevent_points_amount()"
+                                               onchange="prevent_points_amount()">
                                     </td>
 
                                 </tr>
@@ -350,13 +375,13 @@
                                 <div class="invalid-feedback">Please Add Payment Type</div>
 
                                 <div class="card-footer text-end">
-
-                                    <button type="button" class="btn btn-info" onclick="lastprint()">Last Invoice print
-                                    </button>
-                                    <button type="button" class="btn btn-primary" onclick="submitForm()">Save & Print
-                                    </button>
-
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-info" onclick="lastprint()">Last Invoice print</button>
+                                        &nbsp;
+                                        <button type="button" class="btn btn-primary" onclick="submitForm()">Save & Print</button>
+                                    </div>
                                 </div>
+
                             </div>
                         </div>
 
@@ -366,7 +391,7 @@
             </div>
         </div>
     </div>
-    {{ Form::close(); }}
+    {{ Form::close() }}
     </div>
 
     @push('scripts')
@@ -383,26 +408,27 @@
                 time = a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds();
                 document.getElementById('time').innerHTML = time;
             }, 1000);
-            function prevent_stock_amount(){
+
+            function prevent_stock_amount() {
                 var stock = $("#stock").val();
-            var qty = $("#qty").val();
-            if (parseInt(qty) > parseInt(stock)) {
-                alert("Quantity not more than Stock amount.");
-                $("#qty").val("");
-               }
+                var qty = $("#qty").val();
+                if (parseInt(qty) > parseInt(stock)) {
+                    alert("Quantity not more than Stock amount.");
+                    $("#qty").val("");
+                }
             }
 
-            function prevent_points_amount(){
-            var cuspoint = $("#points").val();
-            var point = $("#redeem_points").val();
-            if (parseInt(point) > parseInt(cuspoint)) {
-                alert("Redeem Points not more than Customer Point.");
-                $("#redeem_points").val("");
-               }else if(cuspoint == '' || cuspoint == 0){
-                $("#redeem_points").val("");
-                alert("Redeem Points not more than Customer Point.");
+            function prevent_points_amount() {
+                var cuspoint = $("#points").val();
+                var point = $("#redeem_points").val();
+                if (parseInt(point) > parseInt(cuspoint)) {
+                    alert("Redeem Points not more than Customer Point.");
+                    $("#redeem_points").val("");
+                } else if (cuspoint == '' || cuspoint == 0) {
+                    $("#redeem_points").val("");
+                    alert("Redeem Points not more than Customer Point.");
 
-               }
+                }
             }
 
             function clearInput1(target) {
@@ -431,37 +457,37 @@
 
             function submitForm() {
                 var pay = $("#pay").val();
-                if(pay == 0 || pay == ''){
+                if (pay == 0 || pay == '') {
                     alert("Given Amount Can Not Be Zero Or Empty.");
-                }else{
-                    if(confirm('Do You Want To Submit?')){
-                const form = document.getElementById('my-form');
-                const formData = new FormData(form);
+                } else {
+                    if (confirm('Do You Want To Submit?')) {
+                        const form = document.getElementById('my-form');
+                        const formData = new FormData(form);
 
-                // Send AJAX request
-                $.ajax({
-                    url: "{{ route('invoice.store') }}",
-                    method: "POST",
-                    data: formData,
-                    contentType: false,
-                    processData: false,
-                    success: function (response) {
-                        var datas = response.data;
-                        var url = "{{ route('print-invoice', ':id') }}";
-                        url = url.replace(':id', datas.id);
-                        window.open(url, "_blank");
-                        window.location.href = "{{ route('invoice.create') }}";
+                        // Send AJAX request
+                        $.ajax({
+                            url: "{{ route('invoice.store') }}",
+                            method: "POST",
+                            data: formData,
+                            contentType: false,
+                            processData: false,
+                            success: function (response) {
+                                var datas = response.data;
+                                var url = "{{ route('print-invoice', ':id') }}";
+                                url = url.replace(':id', datas.id);
+                                window.open(url, "_blank");
+                                window.location.href = "{{ route('invoice.create') }}";
 
-                    },
-                    error: function (xhr) {
-                        // Handle error response
+                            },
+                            error: function (xhr) {
+                                // Handle error response
+                            }
+                        });
+
+                    } else {
+                        return false;
                     }
-                });
-
-                }else{
-                    return false;
                 }
-                    }
 
                 // Get form data
 
@@ -798,8 +824,7 @@
                                     $('.stock-qty').first().val(data.quantity);
                                     $('.qty').first().val('1');
                                     $('#price').val(data.price);
-                                    $('.total').first().val(1*data.price);
-
+                                    $('.total').first().val(1 * data.price);
 
 
                                 } else {
