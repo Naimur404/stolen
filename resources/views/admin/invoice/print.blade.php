@@ -254,7 +254,7 @@
 
     $(window).on('afterprint', function () {
         // Redirect back to the original page
-        window.location.href = "{{ route('invoice.create') }}";
+        setTimeout (function() {window.close();},500);
     });
 </script>
 
