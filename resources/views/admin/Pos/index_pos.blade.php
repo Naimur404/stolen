@@ -41,7 +41,7 @@
                                     <th>Customer</th>
                                     {{-- <th>Product Type</th> --}}
 
-                                    <th>Payment Method</th>
+                                    <th>Method</th>
                                     <th>Total</th>
                                     <th>Pay</th>
 
@@ -55,68 +55,46 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($datas as $productPurchase)
+                                @foreach ($invoices as $invoice)
                                     <tr>
-                                      <td>{{ $productPurchase->id }}</td>
+                                        <td>{{ $invoice->id }}</td>
 
-                                        <td>{{ \Carbon\Carbon::parse($productPurchase->sale_date)->format('d-m-Y')}}
+                                        <td>{{ \Carbon\Carbon::parse($invoice->sale_date)->format('d-m-Y')}}
                                         </td>
-                                        @if ( $productPurchase->outlet_id == null)
-
-                                            <td> N/A</td>
-                                        @elseif ( $productPurchase->outlet_id
-                                            != null)
-
-                                            <td>{{ $productPurchase->outlet->outlet_name }}</td>
-                                        @endif
+                                        <td>{{ $invoice->outlet->outlet_name ?? 'N/A' }}</td>
                                         <td>
-                                            @if($productPurchase->customer_id != '' || $productPurchase->customer_id != null)
-                                              @php
-                                                $customer = App\Models\Customer::where('id',$productPurchase->customer_id)->first();
-                                            @endphp
-                                            @if ($customer->mobile == null || $customer->mobile == '')
-
-                                              @else
-                                              {{ $customer->mobile }}
-                                            @endif
-
-
-
-                                            @endif
-
+                                            {{ $invoice->customer->mobile ?? '' }}
                                         </td>
 
-                                        <td>@php
-                                                $data = App\Models\PaymentMethod::where('id',$productPurchase->payment_method_id)->first();
-                                            @endphp
-                                            {{ $data->method_name }}</td>
+                                        <td>
+                                            {{ $invoice->payment->method_name ?? '' }}
+                                        </td>
 
-                                        <td>{{ $productPurchase->grand_total }}</td>
-                                        <td>{{ $productPurchase->paid_amount }}</td>
+                                        <td>{{ $invoice->grand_total }}</td>
+                                        <td>{{ $invoice->paid_amount }}</td>
 
 
                                         <td>
-                                            @php
-                                                $user = App\Models\User::where('id',$productPurchase->added_by)->first();
-                                            @endphp
-                                            {{ $user->name }}
+                                            {{ $invoice->user->name ?? '' }}
                                         </td>
 
 
                                         <td class="form-inline">
 
-                                            <a href="{{ route('print-invoice', $productPurchase->id) }}" target="_blank"
+                                            <a href="{{ route('print-invoice', $invoice->id) }}" target="_blank"
                                                class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i
                                                     class="fa fa-print" aria-hidden="true"></i></a>
 
-                                            <a href="{{ route('sale-return.show', $productPurchase->id) }}"
+                                            <a href="{{ route('sale-return.show', $invoice->id) }}"
                                                class="btn btn-success btn-xs" title="Return"
                                                style="margin-right:3px"><i class="fa fa-retweet" aria-hidden="true"></i></a>
-                                               @can('sales-details')
-                                            <a href="{{ route('sale.details', $productPurchase->id) }}"
-                                                class="btn btn-primary btn-xs" title="Details" style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i>
-                                             </a>
-                                             @endcan
+                                            @can('sales-details')
+                                                <a href="{{ route('sale.details', $invoice->id) }}"
+                                                   class="btn btn-primary btn-xs" title="Details"
+                                                   style="margin-right:3px"><i class="fa fa-info"
+                                                                               aria-hidden="true"></i>
+                                                </a>
+                                            @endcan
                                         </td>
 
                                     </tr>
@@ -137,11 +115,10 @@
 
         <script type="text/javascript">
             $(document).ready(function () {
-                $('.data-table').DataTable(                  {
-                        order: [[0, 'desc']],
-});
+                $('.data-table').DataTable({
+                    order: [[0, 'desc']],
+                });
             });
-
 
 
         </script>

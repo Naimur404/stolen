@@ -20,6 +20,7 @@ class OutletInvoice extends Model
         'vat',
         'total_discount',
         'grand_total',
+        'given_amount',
         'paid_amount',
         'due_amount',
         'earn_point',
@@ -39,7 +40,7 @@ class OutletInvoice extends Model
     }
     public function payment()
     {
-        return $this->belongsTo(PaymentMethod::class, 'payment_method_id', 'id');
+        return $this->hasOne(PaymentMethod::class, 'id', 'payment_method_id');
     }
 
     public function customer()

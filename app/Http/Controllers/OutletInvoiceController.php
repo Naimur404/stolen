@@ -35,7 +35,7 @@ class OutletInvoiceController extends Controller
         $this->middleware('permission:invoice.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:invoice.delete', ['only' => ['destroy']]);
 
-        $this->middleware('permission:pay-due.payment', ['only' => ['dueList','payDue','paymentDue']]);
+        $this->middleware('permission:pay-due.payment', ['only' => ['dueList', 'payDue', 'paymentDue']]);
 
     }
 
@@ -47,12 +47,12 @@ class OutletInvoiceController extends Controller
 
         if (Auth::user()->hasRole('Super Admin')) {
 
-            $datas = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->orderby('id', 'desc')->get();
-            return view('admin.Pos.index_pos', compact('datas'));
+            $invoices = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->orderby('id', 'desc')->get();
+            return view('admin.Pos.index_pos', compact('invoices'));
         } else {
 
-            $datas = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)->orderby('id', 'desc')->get();
-            return view('admin.Pos.index_pos', compact('datas'));
+            $invoices = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)->orderby('id', 'desc')->get();
+            return view('admin.Pos.index_pos', compact('invoices'));
 
         }
 
@@ -100,8 +100,8 @@ class OutletInvoiceController extends Controller
 
         ]);
 
-        if($request->mobile == '' || $request->mobile == null){
-            $customer = Customer::where('outlet_id', $request->outlet_id)->where('mobile','LIKE','%00000%')->first();
+        if ($request->mobile == '' || $request->mobile == null) {
+            $customer = Customer::where('outlet_id', $request->outlet_id)->where('mobile', 'LIKE', '%00000%')->first();
             if (is_null($customer)) {
 
                 $customerdetails = array(
@@ -116,7 +116,7 @@ class OutletInvoiceController extends Controller
             }
 
 
-        }else{
+        } else {
 
 
             $customerCheck = Customer::where('mobile', $request->mobile)->first();
@@ -135,11 +135,11 @@ class OutletInvoiceController extends Controller
 
             } else {
                 $points = $customerCheck->points;
-                if($request->redeem_points > 0){
+                if ($request->redeem_points > 0) {
 
-                  $points = $customerCheck->points - $request->redeem_points;
+                    $points = $customerCheck->points - $request->redeem_points;
 
-                  }
+                }
                 $customerdetails = array(
                     'name' => $input['name'],
                     'mobile' => $input['mobile'],
@@ -155,22 +155,20 @@ class OutletInvoiceController extends Controller
 
         }
         $discount = 0;
-        if($request->discount > 0 && $request->flatdiscount > 0){
+        if ($request->discount > 0 && $request->flatdiscount > 0) {
             $discount = $request->discount + $request->flatdiscount;
-        }elseif($request->discount == 0 && $request->flatdiscount == 0){
+        } elseif ($request->discount == 0 && $request->flatdiscount == 0) {
 
             $discount = 0;
-        }
-
-            else{
-            if($request->discount > 0){
+        } else {
+            if ($request->discount > 0) {
                 $discount = $request->discount;
-              }else{
+            } else {
 
-              }
-              if($request->flatdiscount > 0){
+            }
+            if ($request->flatdiscount > 0) {
                 $discount = $request->flatdiscount;
-              }
+            }
 
         }
 
@@ -184,7 +182,8 @@ class OutletInvoiceController extends Controller
             'vat' => $input['vat'],
             'total_discount' => $discount,
             'grand_total' => $input['grand_total'],
-            'paid_amount' => $input['paid_amount'],
+            'given_amount' => $input['paid_amount'],
+            'paid_amount' => $input['paid_amount'] > $input['grand_total'] ? round($input['grand_total']) : $input['paid_amount'],
             'due_amount' => $input['due_amount'],
             'redeem_point' => $input['redeem_points'],
             'earn_point' => round(($input['grand_total'] / 100), 2),
@@ -198,7 +197,7 @@ class OutletInvoiceController extends Controller
             $outletinvoice = OutletInvoice::create($invoice);
 
 
-            if(isset($request->redeem_points) && ($request->redeem_points > 0)){
+            if (isset($request->redeem_points) && ($request->redeem_points > 0)) {
 
                 $redeem = array(
 
@@ -314,24 +313,24 @@ class OutletInvoiceController extends Controller
 
             $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                ->select('outlet_stocks.medicine_id as id','medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
+                ->select('outlet_stocks.medicine_id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
 
         } else {
 
             $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                ->select('outlet_stocks.medicine_id as id','medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
+                ->select('outlet_stocks.medicine_id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
 
 
         }
 
         $response = array();
-        foreach($medicines as $medicine){
-            $category = Category::where('id',$medicine->category_id)->first();
-           $response[] = array(
-                "id"=>$medicine->medicine_id.','.$medicine->expiry_date,
-                "text"=>$medicine->medicine_name.' - '.$category->category_name.' - '.' EX '.$medicine->expiry_date,
-           );
+        foreach ($medicines as $medicine) {
+            $category = Category::where('id', $medicine->category_id)->first();
+            $response[] = array(
+                "id" => $medicine->medicine_id . ',' . $medicine->expiry_date,
+                "text" => $medicine->medicine_name . ' - ' . $category->category_name . ' - ' . ' EX ' . $medicine->expiry_date,
+            );
         }
         return response()->json($response);
     }
@@ -340,7 +339,7 @@ class OutletInvoiceController extends Controller
     {
         $data = explode(",", $id);
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
-        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.medicine_id', '=', $data[0])->whereDate('expiry_date','=',$data[1])
+        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.medicine_id', '=', $data[0])->whereDate('expiry_date', '=', $data[1])
             ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
             ->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->first();
 
@@ -358,13 +357,14 @@ class OutletInvoiceController extends Controller
 
     }
 
-    public function print(Request $request){
+    public function print(Request $request)
+    {
 
-        $outletinvoice = OutletInvoice::where('outlet_id',$request->outlet_id)->orderBy('id','desc')->first();
+        $outletinvoice = OutletInvoice::where('outlet_id', $request->outlet_id)->orderBy('id', 'desc')->first();
 
-              return response()->json([
-                'data' => $outletinvoice
-            ]);
+        return response()->json([
+            'data' => $outletinvoice
+        ]);
     }
 
 
@@ -376,11 +376,11 @@ class OutletInvoiceController extends Controller
 
         if (Auth::user()->hasRole('Super Admin')) {
 
-            $datas = OutletInvoice::where('due_amount','>','0')->whereDate('sale_date', '>=', Carbon::now()->month())->orderby('id', 'desc')->get();
+            $datas = OutletInvoice::where('due_amount', '>', '0')->whereDate('sale_date', '>=', Carbon::now()->month())->orderby('id', 'desc')->get();
             return view('admin.Pos.sale_due_index', compact('datas'));
         } else {
 
-            $datas = OutletInvoice::where('due_amount','>','0')->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)->orderby('id', 'desc')->get();
+            $datas = OutletInvoice::where('due_amount', '>', '0')->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)->orderby('id', 'desc')->get();
             return view('admin.Pos.sale_due_index', compact('datas'));
 
         }
@@ -388,16 +388,15 @@ class OutletInvoiceController extends Controller
     }
 
 
-
     public function payDue($id)
 
 
     {
-        $payment = PaymentMethod::pluck('method_name','id');
+        $payment = PaymentMethod::pluck('method_name', 'id');
         $outletInvoice = OutletInvoice::findOrFail($id);
         $outletInvoiceDetails = OutletInvoiceDetails::where('outlet_invoice_id', $id)->get();
-        $saledetails = OutletPayment::where('invoice_id',$id)->get();
-        return view('admin.Pos.due_payment', compact('outletInvoice', 'outletInvoiceDetails','saledetails','payment'));
+        $saledetails = OutletPayment::where('invoice_id', $id)->get();
+        return view('admin.Pos.due_payment', compact('outletInvoice', 'outletInvoiceDetails', 'saledetails', 'payment'));
 
     }
 
@@ -407,36 +406,36 @@ class OutletInvoiceController extends Controller
     {
 
 
-        $invoiceData = OutletInvoice::where('id',$request->outlet_invoice_id)->first();
+        $invoiceData = OutletInvoice::where('id', $request->outlet_invoice_id)->first();
 
 
-        try{
+        try {
             $arra = array(
                 'total_discount' => $invoiceData->total_discount + $request->discount,
                 'paid_amount' => $invoiceData->paid_amount + $request->paid_amount,
-                'due_amount'   => $invoiceData->due_amount - ($request->discount + $request->paid_amount),
+                'due_amount' => $invoiceData->due_amount - ($request->discount + $request->paid_amount),
 
-             );
+            );
 
-             $array2 = array(
+            $array2 = array(
 
                 'amount' => $request->total,
                 'pay' => $request->paid_amount,
-                'due'   => $request->due,
-                'customer_id'  => $invoiceData->customer_id,
+                'due' => $request->due,
+                'customer_id' => $invoiceData->customer_id,
                 'invoice_id' => $invoiceData->id,
                 'payment_method_id' => $request->payment_method_id,
                 'outlet_id' => $invoiceData->outlet_id,
                 'collected_by' => Auth::user()->id,
 
 
-             );
-             OutletPayment::create($array2);
+            );
+            OutletPayment::create($array2);
 
-         OutletInvoice::where('id',$request->outlet_invoice_id)->update($arra);
-         return redirect()->back()->with('success', 'Due Payment Successfull.');
+            OutletInvoice::where('id', $request->outlet_invoice_id)->update($arra);
+            return redirect()->back()->with('success', 'Due Payment Successfull.');
 
-        }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
 
