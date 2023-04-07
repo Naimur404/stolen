@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -35,7 +36,8 @@ class AdminNotificationEmail extends Mailable
     public function build()
     {
         return $this->view('emails.notification')
-            ->subject('Admin Notification '.$this->summary_date)
+            ->from(ENV('FROM_MAIL', ''), ENV('APP_NAME', ''))
+            ->subject('Admin Notification '.Carbon::parse($this->summary_date)->format('d-m-Y'))
             ->with([
                 'summary_date' => $this->summary_date,
                 'warehouseSummaries' => $this->warehouseSummaries,
