@@ -33,7 +33,7 @@
 <body>
 <div class="container">
     <h1 style="text-align: center">{{ ENV('APP_NAME', 'Pharmassist') }}</h1>
-    <h2 class="title">Daily Summary Report of {{$summary_date}}</h2>
+    <h2 class="title">Daily Summary Report of {{ \Carbon\Carbon::parse($summary_date)->format('d-m-Y')}}</h2>
 
     <h3>Warehouse Summary</h3>
         @foreach ($warehouseSummaries as $data)
