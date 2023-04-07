@@ -108,6 +108,9 @@ class PermissionSeeder extends Seeder
             'outlet-summary',
             'warehouse-summary',
 
+            'customer-due',
+            'customer-due-payment',
+
             'distribute_medicine_report_for_outlet',
             'distribute_medicine_report_for_outlet.search',
 

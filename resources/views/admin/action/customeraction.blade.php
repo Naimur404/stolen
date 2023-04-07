@@ -43,6 +43,14 @@
       </div>
     </div>
   </div>
+@php
+    $check = App\Models\Customer::where('id',$id)->first();
+@endphp
+@if($check->due_balance > 0)
+<a href="{{ route('customer-due', $id) }}"
+    class="btn btn-success btn-xs" title="Pay Now"
+    style="margin-right:3px"><i class="fa fa-paypal"></i></a>
+@endif
 
  {{-- <a href="{{ $delete }}" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-pill btn-danger btn-sm">Delete</a> --}}
 

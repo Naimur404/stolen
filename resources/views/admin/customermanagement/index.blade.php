@@ -46,9 +46,10 @@
                                         <th>SI</th>
 	                                    <th>Name</th>
                                         <th>Mobile</th>
-                                        <th>Address</th>
+
                                         <th>Outlet Name</th>
                                         <th>Points</th>
+                                        <th>Due</th>
                                         <th>Active</th>
                                         <th>Action</th>
 
@@ -91,10 +92,11 @@
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'name', name: 'Name'},
             {data: 'mobile', name: 'mobile'},
-            {data: 'address', name: 'Address'},
+           
 
             {data: 'outlet_name', name: 'outlet name'},
             {data: 'points', name: 'Points'},
+            {data: 'due_balance', name: 'due'},
             {data: 'is_active', name: 'Is Active'},
             {data: 'action', name: 'action'},
 

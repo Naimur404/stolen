@@ -39,23 +39,21 @@
         </div>
 
         <div class="card-body">
-            {!! Form::open(['route' => ['medicine-purchase.update', $productPurchase->id], 'method' => 'PUT', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
-
+            {!! Form::open(['route' => ['customer-due-payment'], 'method' => 'POST', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
+              <input type="hidden" name="customer_id" value="{{ $customer->id }}">
             <div class="service_invoice_header">
                 <div class="row">
-                    <div class="col-md-4">Invoice Id : <b>{{ $productPurchase->id }}</b></div>
-                    <div class="col-md-4">
-                        <p class="text-center"><b>Invoice No : {{ $productPurchase->invoice_no}}</b></p>
-                    </div>
-                    <div class="col-md-4">Purchase Date :
-                        <b>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y') }}</b></div>
+                    <div class="col-md-4">Customer Name: {{ $customer->name }}</div>
+
+                    <div class="col-md-4">Customer Address :
+                        {{ $customer->address }}</div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3">Supplier Name :  @if ($productPurchase->supplier_id == null)
+                    <div class="col-md-3">Customer Mobile :  @if ($customer->mobile == null)
                       <b>  N/A
-                    @elseif ($productPurchase->supplier_id != null)
-                        {{ $productPurchase->supplier->supplier_name }}
+                    @elseif ($customer->mobile != null)
+                        {{ $customer->mobile }}
                     @endif
                 </b> </div>
 
@@ -79,26 +77,22 @@
 
             <table class="table table-bordered mt-2">
                 <tr>
-                    <th>SL</th>
-                    <th>Name Of Investigation</th>
-                    <th>Quantity</th>
-                    <th>Price</th>
-                    <th>Amount</th>
-                    <th>Action</th>
+                    <th>Invoice</th>
+                    <th>Date</th>
+                    <th>Total Amount</th>
+                    <th>Paid</th>
+                    <th>Due</th>
+
                 </tr>
 
-                @foreach ($productPurchaseDetails as $data)
+                @foreach ($invoices as $data)
                     <tr>
-                        <td>{{ $loop->index + 1 }}</td>
-                        <td>{{ $data->medicine_name }}</td>
-                        <td>{{ $data->quantity }}</td>
-                        <td>{{ $data->manufacturer_price }}</td>
-                        <td>{{ $data->quantity*$data->manufacturer_price}}</td>
-                        <td><a href="{{ route('edit-purchase',$data->id) }}"
-                            class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                            <a href="{{ route('purchase-delete',$data->id) }}"
-                                class="btn btn-danger btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-trash"></i></a>
-                        </td>
+                        <td>{{ $data->id }}</td>
+                        <td> {{ \Carbon\Carbon::parse($data->sale_date)->format('d-m-Y') }} </td>
+                        <td>{{ $data->grand_total }}</td>
+                        <td>{{ $data->paid_amount }}</td>
+                        <td>{{ $data->due_amount}}</td>
+
                     </tr>
                 @endforeach
 
@@ -107,16 +101,16 @@
             <div class="row">
                 <div class="col-md-7">
                     <br>
-                    @if ($productPurchase->due_amount > 0)
+
                         <table class="table table-borderless">
                             <tr>
                                 <th>Payable</th>
-                                <td>{{ Form::number('due_amount', $productPurchase->due_amount, ['class' => 'form-control', 'readonly']) }}
+                                <td>{{ Form::number('due_amount', $customer->due_balance, ['class' => 'form-control', 'readonly']) }}
                                 </td>
                             </tr>
                             <tr>
                                 <th>Pay Now</th>
-                                <td>{{ Form::number('paid_amount', $productPurchase->due_amount, ['class' => 'form-control', 'required']) }}
+                                <td>{{ Form::number('paid_amount', $customer->due_balance, ['class' => 'form-control', 'required']) }}
                                     @error('paid_amount')
                                     <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -134,38 +128,17 @@
                             </tr>
                         </table>
 
-                    @else
-                        <h2 class="paid">Paid</h2>
-                    @endif
+
 
 
 
                 </div>
                 <div class="col-md-5">
                     <table class="table table-borderless">
-                        <tr>
-                            <td>Sub Total</td>
-                            <td>{{ $productPurchase->sub_total }}</td>
-                        </tr>
-                        <tr>
-                            <td>Vat</td>
-                            <td>{{ $productPurchase->vat }}</td>
-                        </tr>
-                        <tr>
-                            <td>Discount</td>
-                            <td>{{ $productPurchase->total_discount }}</td>
-                        </tr>
-                        <tr>
-                            <td>Grand Total</td>
-                            <td>{{ $productPurchase->grand_total }}</td>
-                        </tr>
-                        <tr>
-                            <td>Paid Amount</td>
-                            <td>{{ $productPurchase->paid_amount }}</td>
-                        </tr>
+
                         <tr>
                             <td>Due Amount</td>
-                            <td>{{ $productPurchase->due_amount }}</td>
+                            <td>{{ $customer->due_balance }}</td>
                         </tr>
                     </table>
                 </div>
