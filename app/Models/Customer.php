@@ -19,5 +19,14 @@ class Customer extends Model
         'points',
         'is_active',
     ];
+
+    public static function getCustomer($id)
+    {
+        if ($id != null) {
+            return Customer::find($id)->mobile ?? '';
+        }
+        else
+            return null;
+    }
 }
 

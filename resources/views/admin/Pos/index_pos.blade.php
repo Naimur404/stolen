@@ -55,50 +55,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($invoices as $invoice)
-                                    <tr>
-                                        <td>{{ $invoice->id }}</td>
 
-                                        <td>{{ \Carbon\Carbon::parse($invoice->sale_date)->format('d-m-Y')}}
-                                        </td>
-                                        <td>{{ $invoice->outlet->outlet_name ?? 'N/A' }}</td>
-                                        <td>
-                                            {{ $invoice->customer->mobile ?? '' }}
-                                        </td>
-
-                                        <td>
-                                            {{ $invoice->payment->method_name ?? '' }}
-                                        </td>
-
-                                        <td>{{ $invoice->grand_total }}</td>
-                                        <td>{{ $invoice->paid_amount }}</td>
-
-
-                                        <td>
-                                            {{ $invoice->user->name ?? '' }}
-                                        </td>
-
-
-                                        <td class="form-inline">
-
-                                            <a href="{{ route('print-invoice', $invoice->id) }}" target="_blank"
-                                               class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i
-                                                    class="fa fa-print" aria-hidden="true"></i></a>
-
-                                            <a href="{{ route('sale-return.show', $invoice->id) }}"
-                                               class="btn btn-success btn-xs" title="Return"
-                                               style="margin-right:3px"><i class="fa fa-retweet" aria-hidden="true"></i></a>
-                                            @can('sales-details')
-                                                <a href="{{ route('sale.details', $invoice->id) }}"
-                                                   class="btn btn-primary btn-xs" title="Details"
-                                                   style="margin-right:3px"><i class="fa fa-info"
-                                                                               aria-hidden="true"></i>
-                                                </a>
-                                            @endcan
-                                        </td>
-
-                                    </tr>
-                                @endforeach
                                 </tbody>
                             </table>
                         </div>
@@ -114,12 +71,35 @@
         <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
 
         <script type="text/javascript">
-            $(document).ready(function () {
-                $('.data-table').DataTable({
-                    order: [[0, 'desc']],
-                });
-            });
 
+        $(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
+
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        ajax: "/ajax-invoice",
+
+        columns: [
+            {data: 'id', name: 'id'},
+            {data: 'sale_date', name: 'Sale Date'},
+            {data: 'outlet_name', name: 'Outlet Name'},
+            {data: 'customer', name: 'customer'},
+            {data: 'payment', name: 'Method'},
+            {data: 'total', name: 'total'},
+            {data: 'pay', name: 'pay'},
+            {data: 'sold_by', name: 'Sold By'},
+            {data: 'action', name: 'action'},
+
+        ]
+    });
+
+});
 
         </script>
 

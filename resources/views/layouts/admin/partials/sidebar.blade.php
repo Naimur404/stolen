@@ -72,8 +72,8 @@
                     @endphp
 
                         <li class="dropdown">
-                            <a class="nav-link menu-title {{routeActive('get-customer',$id)}}"
-                               href="{{route('get-customer',$id)}}"><i data-feather="users"></i><span>Customer Management</span></a>
+                            <a class="nav-link menu-title {{routeActive('customer.index')}}"
+                               href="{{route('customer.index')}}"><i data-feather="users"></i><span>Customer Management</span></a>
                         </li>
                     @endcan
 
@@ -153,35 +153,7 @@
                             <ul class="nav-submenu menu-content"
                                 style="display:{{ prefixBlock('/report2') }};">
                                 <li>
-                                {{-- @can('sale.report')
-                                <li class="">
-                                    <a class="submenu-title {{routeActive('sale-report')}}"
-                                       href="{{route('sale-report')}}"><i data-feather="filter"></i><span>Sales</span></a>
-                                </li>
 
-                                @endcan
-                                @can('purchase.report')
-                                <li class="">
-                                    <a class="submenu-title {{routeActive('purchase-report')}}"
-                                       href="{{route('purchase-report')}}"><i data-feather="filter"></i><span>Purchase</span></a>
-                                </li>
-
-
-                                @endcan
-                                @can('outlet-stock.report')
-                                <li class="">
-                                    <a class="submenu-title {{routeActive('outlet-stock-report')}}"
-                                       href="{{route('outlet-stock-report')}}"><i data-feather="filter"></i><span><h10>Outlet Stock</h10></span></a>
-                                </li>
-
-
-                                @endcan
-
-                                <li class="">
-                                    <a class="submenu-title {{routeActive('outlet-stock-report')}}"
-                                       href="{{route('outlet-stock-report')}}"><i data-feather="filter"></i><span><h10>Outlet</h10></span></a>
-                                </li>
-                                @can('warehouse-stock.report') --}}
 
 
                                 <li class="">
@@ -202,35 +174,7 @@
                             <ul class="nav-submenu menu-content"
                                 style="display:{{ prefixBlock('/writeoff') }};">
                                 <li>
-                                {{-- @can('sale.report')
-                                <li class="">
-                                    <a class="submenu-title {{routeActive('sale-report')}}"
-                                       href="{{route('sale-report')}}"><i data-feather="filter"></i><span>Sales</span></a>
-                                </li>
 
-                                @endcan
-                                @can('purchase.report')
-                                <li class="">
-                                    <a class="submenu-title {{routeActive('purchase-report')}}"
-                                       href="{{route('purchase-report')}}"><i data-feather="filter"></i><span>Purchase</span></a>
-                                </li>
-
-
-                                @endcan
-                                @can('outlet-stock.report')
-                                <li class="">
-                                    <a class="submenu-title {{routeActive('outlet-stock-report')}}"
-                                       href="{{route('outlet-stock-report')}}"><i data-feather="filter"></i><span><h10>Outlet Stock</h10></span></a>
-                                </li>
-
-
-                                @endcan
-
-                                <li class="">
-                                    <a class="submenu-title {{routeActive('outlet-stock-report')}}"
-                                       href="{{route('outlet-stock-report')}}"><i data-feather="filter"></i><span><h10>Outlet</h10></span></a>
-                                </li>
-                                @can('warehouse-stock.report') --}}
 
 
                                 <li class="">

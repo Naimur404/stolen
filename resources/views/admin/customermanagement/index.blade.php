@@ -83,20 +83,18 @@
     });
     let outlet_id = $('#supplier_id').val();
     var table = $('.data-table').DataTable({
-        responsive: true,
-
         processing: true,
+        serverSide: true,
+        "filter": true,
 
         ajax: "/get-customer/" + outlet_id,
         columns: [
-            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'id', name: 'si'},
             {data: 'name', name: 'Name'},
             {data: 'mobile', name: 'mobile'},
-           
-
             {data: 'outlet_name', name: 'outlet name'},
             {data: 'points', name: 'Points'},
-            {data: 'due_balance', name: 'due'},
+            {data: 'due', name: 'due'},
             {data: 'is_active', name: 'Is Active'},
             {data: 'action', name: 'action'},
 

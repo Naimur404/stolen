@@ -9,8 +9,8 @@ use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+
 
 class CustomerManagementController extends Controller
 {
@@ -31,7 +31,18 @@ class CustomerManagementController extends Controller
     }
     public function index()
     {
-        //
+          if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
+
+            $outlet = Outlet::pluck('outlet_name', 'id');
+            $outlet = new Collection($outlet);
+            $outlet->prepend('All Outlet Customer', 'all');
+
+        } else {
+            $outlet = Outlet::where('id', Auth::user()->outlet_id)->pluck('outlet_name', 'id');
+        }
+
+
+        return view('admin.customermanagement.index', compact('outlet'));
     }
 
     /**
@@ -147,92 +158,141 @@ class CustomerManagementController extends Controller
         Customer::where('id', $id)->delete();
         return redirect()->back()->with('success', 'Data has been Deleted.');
     }
+
+    public function customerDelete($id)
+    {
+        try{
+        $customer = Customer::find($id);
+
+          $customer->delete();
+
+          return redirect()->back()->with('success', 'Data has been Deleted.');
+
+        }catch(Exception $e){
+         return redirect()->back()->with('success', $e->getMessage());
+        }
+
+    }
     public function customer(Request $request, $id)
 
     {
-        if ($id != 'all') {
-            if ($request->ajax()) {
 
-                $data = Customer::where("outlet_id", $id)->get();
-                return  DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('address', function ($row) {
-                        $address = Str::limit($row->address, 15);
-                        return $address;
-                    })
-                    ->addColumn('outlet_name', function ($row) {
-                        $id = $row->outlet_id;
-                        return view('admin.action.outlet', compact('id'));
-                    })
-                    ->addColumn('is_active', function ($row) {
-                        $active = route('customer.active', [$row->id, 0]);
-                        $inactive = route('customer.active', [$row->id, 1]);
-                        return view('admin.action.active', compact('active', 'inactive', 'row'));
-                    })
-                    ->addColumn('action', function ($row) {
-                        $id = $row->id;
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $row_per_page = $request->get("length"); // rows display per page
 
-                        $edit = route('customer.edit', $id);
-                        $delete = route('customer.destroy', $id);
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
 
-                        // $permission = 'customer.edit';
-                        // $permissiondelete = 'customer.delete';
-                        return view('admin.action.customeraction', compact('id', 'edit', 'delete', 'pay'));
-                    })
-                    ->rawColumns(['address'])
-                    ->rawColumns(['outlet_name'])
+        $columnIndex = (isset($columnIndex_arr[0]['column']))? $columnIndex_arr[0]['column'] : false; // column index
+        $columnName = (isset($columnName_arr[$columnIndex]['data']))? $columnName_arr[$columnIndex]['data'] : false; // column name
+        $columnSortOrder = (isset($order_arr[0]['dir']))? $order_arr[0]['dir'] : false; // asc or desc
+        $searchValue = (isset($search_arr['value'])) ? $search_arr['value'] : false; // Search value
 
-                    ->rawColumns(['is_active'])
-                    ->rawColumns(['action'])
-                    ->make(true);
-            }
-            $outlet = Outlet::where('id', Auth::user()->outlet_id)->pluck('outlet_name', 'id');
-        } else {
-            if ($request->ajax()) {
-                $data = Customer::all();
-                return  DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('address', function ($row) {
-                        $address = Str::limit($row->address, 15);
-                        return $address;
-                    })
-                    ->addColumn('outlet_name', function ($row) {
-                        $id = $row->outlet_id;
-                        return view('admin.action.outlet', compact('id'));
-                    })
-                    ->addColumn('is_active', function ($row) {
-                        $active = route('customer.active', [$row->id, 0]);
-                        $inactive = route('customer.active', [$row->id, 1]);
-                        return view('admin.action.active', compact('active', 'inactive', 'row'));
-                    })
-                    ->addColumn('action', function ($row) {
-                        $id = $row->id;
 
-                        $edit = route('customer.edit', $id);
-                        $delete = route('customer.destroy', $id);
-                        $pay =  route('payDue', $id);
-                        // $permission = 'customer.edit';
-                        // $permissiondelete = 'customer.delete';
-                        return view('admin.action.customeraction', compact('id', 'edit', 'delete', 'pay'));
-                    })
-                    ->rawColumns(['address'])
-                    ->rawColumns(['outlet_name'])
 
-                    ->rawColumns(['is_active'])
-                    ->rawColumns(['action'])
-                    ->make(true);
-            }
-            $outlet = Outlet::pluck('outlet_name', 'id');
+        // total records count
+        if($id == 'all'){
 
-            $outlet = new Collection($outlet);
-            $outlet->prepend('All Outlet Customer', 'all');
+
+            $totalRecords = Customer::where('deleted_at', '=', NULL)->select('count(*) as allcount')
+            ->count();
+           $customers  = DB::table('customers')->orderBy($columnName,$columnSortOrder)->where('name', 'like', '%' .$searchValue . '%')->where('deleted_at', '=', NULL)->skip($start)->take($row_per_page)->get();
+
+        }else{
+           if(auth()->user()->hasrole('Super Admin')){
+            $totalRecords = Customer::where('deleted_at', '=', NULL)->select('count(*) as allcount')->where('outlet_id', '=', $id)->count();
+            $customers =    DB::table('customers')->orderBy($columnName,$columnSortOrder)->where('name', 'like', '%' .$searchValue . '%')->where('deleted_at', '=', NULL)->where('outlet_id', '=', $id)
+              ->skip($start)
+              ->take($row_per_page)
+              ->get();
+
+           }else{
+            $totalRecords = Customer::where('deleted_at', '=', NULL)->select('count(*) as allcount')->where('outlet_id', '=', Auth::user()->outlet_id)->count();
+            $customers = DB::table('customers')->orderBy($columnName,$columnSortOrder)->where('name', 'like', '%' .$searchValue . '%')->where('outlet_id', '=', Auth::user()->outlet_id)->where('deleted_at', '=', NULL)
+            ->skip($start)
+            ->take($row_per_page)
+            ->get();
+           }
+
+
         }
 
+        $total_record_switch_filter = $totalRecords;
+
+        // fetch records with search
+
+        $data_arr = array();
+
+
+        foreach($customers as $customer){
 
 
 
 
-        return view('admin.customermanagement.index', compact('outlet'));
+            $active = route('customer.active', [$customer->id, 0]);
+            $inactive = route('customer.active', [$customer->id, 1]);
+            $edit = route('customer.edit',  $customer->id);
+            $delete = route('customer-delete',  $customer->id);
+            $pay =  route('payDue',  $customer->id);
+            $duepay = route('customer-due', $customer->id);
+
+if ($customer->is_active == 1 ){
+    $active = '<div class="media-body text-end icon-state"><label class="switch"><a href="'.$active.'"><input type="checkbox" checked><span class="switch-state"></span></a></label></div>';
+}
+
+
+elseif ($customer->is_active == 0) {
+
+    $active =  '<div class="media-body text-end icon-state"><label class="switch"><a href="'.$inactive.'"><input type="checkbox"><span class="switch-state"></span></a></label></div>';
+}
+
+
+
+
+
+
+            $s_no = $customer->id;
+            $name = $customer->name;
+            $mobile = $customer->mobile;
+            $outlet_name = Outlet::getOutletName($customer->outlet_id);
+            $points =  $customer->points;
+            $due = $customer->due_balance;
+            $is_active = $active;
+            $action = '<div class="btn-group" style="text-align: center"><form action="'.$edit.'" method="GET"><button type="submit" class="btn btn-primary btn-xs open-modal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></form><button type="button" class="btn btn-danger btn-xs" data-bs-toggle="modal" data-bs-target="#staticBackdrop'.$s_no.'" ><i class="fa fa-trash"></i></button><div class="modal fade" id="staticBackdrop'.$s_no.'" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="staticBackdropLabel">Are You Sure want To Delete?</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-footer"><button type="button" class="btn btn-primary btn-xs" data-bs-dismiss="modal">Close</button><form action="'.$delete.'" method="get"><button type="submit" class="btn btn-danger btn-xs">Permanent Delete</button></form></div></div></div></div>';
+            $check = Customer::where('id',$customer->id)->first();
+            if($customer->due_balance > 0){
+                $action .= '<a href="'.$duepay.'"class="btn btn-success btn-xs" title="Pay Now"style="margin-right:3px"><i class="fa fa-paypal"></i></a>';
+            }
+
+
+
+            $data_arr[] = array(
+              "id" => $s_no,
+              "name" => $name,
+
+              "mobile" => $mobile,
+              "outlet_name" => $outlet_name,
+              "points" => $points,
+              "due" => $due,
+              "is_active" => $is_active,
+              "action" => $action,
+
+            );
+         }
+
+         $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $total_record_switch_filter,
+            "aaData" => $data_arr,
+
+         );
+
+      return response()->json($response);
+
     }
     public function active($id, $status)
     {
