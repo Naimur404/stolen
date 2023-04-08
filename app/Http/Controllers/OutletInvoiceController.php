@@ -128,6 +128,7 @@ class OutletInvoiceController extends Controller
                     'mobile' => $input['mobile'],
                     'address' => $input['address'],
                     'outlet_id' => $input['outlet_id'],
+                    'due_balance' =>  $input['due_amount'],
                     'points' => round(($input['grand_total'] / 100), 2),
 
                 );
@@ -140,15 +141,16 @@ class OutletInvoiceController extends Controller
                     $points = $customerCheck->points - $request->redeem_points;
 
                 }
+                $customer = Customer::where('mobile', $request->mobile)->first();
                 $customerdetails = array(
                     'name' => $input['name'],
                     'mobile' => $input['mobile'],
-
+                    'due_balance' => $customer->due_balance + $input['due_amount'],
                     'address' => $input['address'],
                     'points' => round(($input['grand_total'] / 100), 2) + $points,
 
                 );
-                $customer = Customer::where('mobile', $request->mobile)->first();
+
                 Customer::where('mobile', $request->mobile)->update($customerdetails);
 
             }
@@ -407,7 +409,7 @@ class OutletInvoiceController extends Controller
 
 
         $invoiceData = OutletInvoice::where('id', $request->outlet_invoice_id)->first();
-
+        $customer = Customer::where('id', $invoiceData->customer_id)->first();
 
         try {
             $arra = array(
@@ -415,6 +417,10 @@ class OutletInvoiceController extends Controller
                 'paid_amount' => $invoiceData->paid_amount + $request->paid_amount,
                 'due_amount' => $invoiceData->due_amount - ($request->discount + $request->paid_amount),
 
+            );
+
+            $due = array(
+                'due_balance' => $customer->due_balance - $request->paid_amount,
             );
 
             $array2 = array(
@@ -431,7 +437,7 @@ class OutletInvoiceController extends Controller
 
             );
             OutletPayment::create($array2);
-
+            Customer::where('id', $invoiceData->customer_id)->update($due);
             OutletInvoice::where('id', $request->outlet_invoice_id)->update($arra);
             return redirect()->back()->with('success', 'Due Payment Successfull.');
 

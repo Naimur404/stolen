@@ -119,6 +119,8 @@ class RoleSeeder extends Seeder
             'summary',
             'outlet-summary',
             'warehouse-summary',
+            'customer-due',
+            'customer-due-payment',
 
         ];
 
