@@ -14,5 +14,13 @@ class PaymentMethod extends Model
     protected $fillable = [
         'method_name',
     ];
-  
+    public static function getPayment($id)
+    {
+        if ($id != null) {
+            return PaymentMethod::find($id)->method_name;
+        }
+        else
+            return null;
+    }
+
 }

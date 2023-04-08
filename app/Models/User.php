@@ -56,5 +56,13 @@ class User extends Authenticatable
     }
         return $hasPermisison;
     }
+    public static function getUser($id)
+    {
+        if ($id != null) {
+            return User::find($id)->name;
+        }
+        else
+            return null;
+    }
 
 }

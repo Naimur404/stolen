@@ -43,18 +43,10 @@ class OutletInvoiceController extends Controller
 
 
     {
-        $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
 
-        if (Auth::user()->hasRole('Super Admin')) {
+            return view('admin.Pos.index_pos');
 
-            $invoices = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->orderby('id', 'desc')->get();
-            return view('admin.Pos.index_pos', compact('invoices'));
-        } else {
 
-            $invoices = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)->orderby('id', 'desc')->get();
-            return view('admin.Pos.index_pos', compact('invoices'));
-
-        }
 
     }
 
@@ -444,6 +436,107 @@ class OutletInvoiceController extends Controller
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
+
+    }
+
+    public function ajaxInvoice(Request $request){
+
+
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $row_per_page = $request->get("length"); // rows display per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = (isset($columnIndex_arr[0]['column']))? $columnIndex_arr[0]['column'] : false; // column index
+        $columnName = (isset($columnName_arr[$columnIndex]['data']))? $columnName_arr[$columnIndex]['data'] : false; // column name
+        $columnSortOrder = (isset($order_arr[0]['dir']))? $order_arr[0]['dir'] : false; // asc or desc
+        $searchValue = (isset($search_arr['value'])) ? $search_arr['value'] : false; // Search value
+
+        $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+
+        // total records count
+
+           if(auth()->user()->hasrole('Super Admin')){
+            $totalRecords = OutletInvoice::select('count(*) as allcount')->count();
+            $invoices =    DB::table('outlet_invoices')->orderBy($columnName,$columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())
+            ->leftJoin('customers','outlet_invoices.customer_id','=', 'customers.id')->where('customers.mobile', 'like', '%' .$searchValue . '%')->orwhere('outlet_invoices.id', 'like', '%' .$searchValue . '%')->select('outlet_invoices.*','customers.mobile')
+              ->skip($start)
+              ->take($row_per_page)
+              ->get();
+
+           }else{
+            $totalRecords = OutletStock::where('outlet_id', '=', $outlet_id)->select('count(*) as allcount')->count();
+            $invoices =  DB::table('outlet_invoices')->orderBy($columnName,$columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)
+            ->leftJoin('customers','outlet_invoices.customer_id','=', 'customers.id')->where('customers.mobile', 'like', '%' .$searchValue . '%')->orwhere('outlet_invoices.id', 'like', '%' .$searchValue . '%')->select('outlet_invoices.*','customers.mobile')
+            ->skip($start)
+            ->take($row_per_page)
+            ->get();
+
+
+           }
+
+
+
+
+
+
+
+        $total_record_switch_filter = $totalRecords;
+
+        // fetch records with search
+
+        $data_arr = array();
+
+        $sl = 1;
+        $total = 0;
+        foreach($invoices as $invoice){
+
+            $print = route('print-invoice', $invoice->id);
+            $return = route('sale-return.show', $invoice->id);
+            $details = route('sale.details', $invoice->id);
+
+            $s_no = $invoice->id;
+            $sale_date = Carbon::parse($invoice->sale_date)->format('d-m-Y');
+            $outlet_name = Outlet::getOutletName($invoice->outlet_id);
+            $customer = $invoice->mobile;
+            $payment = PaymentMethod::getPayment($invoice->payment_method_id);
+            $total = $invoice->grand_total;
+            $pay = $invoice->paid_amount;
+            $sold_by = User::getUser($invoice->added_by);
+            $action ='<a href="'.$print.'" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
+<a href="'.$return.'"class="btn btn-success btn-xs" title="Return" style="margin-right:3px"><i class="fa fa-retweet" aria-hidden="true"></i></a>
+            <a href="'.$details.'"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>';
+
+
+            $data_arr[] = array(
+              "id" => $s_no,
+              "sale_date" => $sale_date,
+
+              "outlet_name" => $outlet_name,
+              "customer" => $customer,
+              "payment" => $payment,
+              "total" => $total,
+              "pay" => $pay,
+              "sold_by" => $sold_by,
+              "action" => $action,
+
+            );
+         }
+
+         $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $total_record_switch_filter,
+            "aaData" => $data_arr,
+
+         );
+
+      return response()->json($response);
+
 
     }
 }

@@ -238,12 +238,6 @@ if(count($check)  < 1  ){
         }
 
         $total_record_switch_filter = $totalRecords;
-
-        // fetch records with search
-
-
-
-
         $data_arr = array();
 
         $sl = 1;

@@ -1,6 +1,4 @@
 
-
-
 <div class="btn-group" style="text-align: center">
 
 

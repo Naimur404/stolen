@@ -128,10 +128,11 @@ Route::resource('invoice', OutletInvoiceController::class);
 Route::resource('outlet-writeoff', OutletWriteoffController::class);
 Route::resource('warehouse-writeoff', WarehouseWriteoffController::class);
 Route::post('warehouse-stock-update',[WarehouseStockController::class,'warehouse_Stock_Update'])->name('warehouse-stock-update');
-
+Route::get('/ajax-invoice',[OutletInvoiceController::class,'ajaxInvoice'])->name('ajax-invoice');
 //customer
 Route::get('customer-due/{id}',[CustomerManagementController::class,'customerDue'])->name('customer-due');
 Route::post('customer-due-payment',[CustomerManagementController::class,'customerDuePayment'])->name('customer-due-payment');
+Route::get('customer-delete/{id}',[CustomerManagementController::class,'customerDelete'])->name('customer-delete');
 //purchase
 
 Route::get('edit-purchase/{id}',[MedicinePurchaseController::class,'editPurchase'])->name('edit-purchase');
