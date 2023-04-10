@@ -931,6 +931,7 @@ class ReportController2 extends Controller
         $input = $request->all();
         $start_date = Carbon::parse($input['start_date']);
         $end_date = Carbon::parse($input['end_date']);
+        $total_discount = 0;
 
         // $productSales = MedicineDistribute::where('outlet_id',$request->outlet_id)->whereDate('created_at', '>=', $start_date)
         // ->whereDate('created_at', '<=', $end_date)->with(['medicinedistributesdetails'])->get();
@@ -944,8 +945,12 @@ class ReportController2 extends Controller
             // dump($productSales);
             if ($request->medicine_id == '' || $request->medicine_id == null) {
                 $productSales = $productSales->distinct()->get();
+                $total_discount = OutletInvoice::whereDate('created_at', '>=', $start_date)
+                    ->whereDate('created_at', '<=', $end_date)->sum('total_discount');
             } else {
                 $productSales = $productSales->where('outlet_invoice_details.medicine_id', $request->medicine_id)->distinct()->get();
+                $total_discount = OutletInvoiceDetails::whereDate('created_at', '>=', $start_date)
+                    ->whereDate('created_at', '<=', $end_date)->sum('discount');
             }
 
 
@@ -960,6 +965,8 @@ class ReportController2 extends Controller
             // dump($productSales);
             if ($request->medicine_id == '' || $request->medicine_id == null) {
                 $productSales = $productSales->distinct()->get();
+                $total_discount = OutletInvoice::whereDate('created_at', '>=', $start_date)
+                    ->whereDate('created_at', '<=', $end_date)->where('outlet_id', $outlet_id)->sum('total_discount');
             } else {
                 $productSales = $productSales->where('outlet_invoice_details.medicine_id', $request->medicine_id)->distinct()->get();
             }
@@ -968,7 +975,7 @@ class ReportController2 extends Controller
         }
 
 
-        return view('admin.report.profit_loss_report', compact('start_date', 'end_date', 'productSales', 'title'));
+        return view('admin.report.profit_loss_report', compact('start_date', 'end_date', 'productSales', 'title', 'total_discount'));
     }
 
 

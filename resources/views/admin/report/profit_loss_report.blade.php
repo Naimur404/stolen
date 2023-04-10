@@ -56,7 +56,6 @@
                 <th>Purchase Price</th>
                 <th>Sell Price</th>
                 <th>Quantity</th>
-                <th>Discount</th>
                 <th>Total Price</th>
             </tr>
             </thead>
@@ -64,7 +63,6 @@
             @php
                 $grand_quantity = 0;
                 $total_sale = 0;
-                $total_discount = 0;
                 $total_buy = 0;
 
             @endphp
@@ -78,13 +76,11 @@
                     <td>{{ $sale->purchase_price }}</td>
                     <td>{{ $sale->rate }}</td>
                     <td>{{ $sale->quantity }}</td>
-                    <td>{{ $sale->discount }}</td>
                     <td>{{ $sale->total_price }}</td>
                 </tr>
                 @php
                     $grand_quantity = $grand_quantity + $sale->quantity;
                     $total_sale = $total_sale + $sale->total_price;
-                    $total_discount = $total_discount + $sale->discount;
                     $total_buy =  $total_buy + ($sale->purchase_price * $sale->quantity);
                 @endphp
             @endforeach
@@ -93,8 +89,8 @@
             </tbody>
         </table>
 
-        <p class="text-center">Total Sale(Include Discount) {{ $total_sale-$total_discount}}
-            | Total Quantity {{ $grand_quantity }} | Total Profit/Loss: {{ $total_sale-$total_discount-$total_buy }} | Total Discount {{ $total_discount}}
+        <p class="text-center">Total Sale {{ $total_sale}} | Total Discount {{ $total_discount}}
+            | Total Quantity {{ $grand_quantity }} | Total Profit/Loss: {{ $total_sale-$total_discount-$total_buy }}
 
         </p>
         <p class="text-center" style="font-size: 12px">Software by Pigeon Soft</p>
