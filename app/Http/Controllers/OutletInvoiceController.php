@@ -212,7 +212,7 @@ class OutletInvoiceController extends Controller
                 $invoicedetails = array(
 
                     'outlet_invoice_id' => $outletinvoice->id,
-
+                    'stock_id'  => $input['stock_id'][$i],
                     'medicine_id' => $input['product_id'][$i],
                     'medicine_name' => $input['product_name'][$i],
                     'expiry_date' => $input['expiry_date'][$i],
@@ -307,13 +307,13 @@ class OutletInvoiceController extends Controller
 
             $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                ->select('outlet_stocks.medicine_id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
+                ->select('outlet_stocks.id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
 
         } else {
 
             $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                ->select('outlet_stocks.medicine_id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
+                ->select('outlet_stocks.id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
 
 
         }
@@ -322,7 +322,7 @@ class OutletInvoiceController extends Controller
         foreach ($medicines as $medicine) {
             $category = Category::where('id', $medicine->category_id)->first();
             $response[] = array(
-                "id" => $medicine->medicine_id . ',' . $medicine->expiry_date,
+                "id" => $medicine->id,
                 "text" => $medicine->medicine_name . ' - ' . $category->category_name . ' - ' . ' EX ' . $medicine->expiry_date,
             );
         }
@@ -331,9 +331,9 @@ class OutletInvoiceController extends Controller
 
     public function get_medicine_details_for_sale($id)
     {
-        $data = explode(",", $id);
+
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
-        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.medicine_id', '=', $data[0])->whereDate('expiry_date', '=', $data[1])
+        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.id', '=', $id)
             ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
             ->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->first();
 
@@ -461,7 +461,7 @@ class OutletInvoiceController extends Controller
         // total records count
 
            if(auth()->user()->hasrole('Super Admin')){
-            $totalRecords = OutletInvoice::select('count(*) as allcount')->count();
+            $totalRecords = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->select('count(*) as allcount')->count();
             $invoices =    DB::table('outlet_invoices')->orderBy($columnName,$columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())
             ->leftJoin('customers','outlet_invoices.customer_id','=', 'customers.id')->where('customers.mobile', 'like', '%' .$searchValue . '%')->orwhere('outlet_invoices.id', 'like', '%' .$searchValue . '%')->select('outlet_invoices.*','customers.mobile')
               ->skip($start)
@@ -469,8 +469,8 @@ class OutletInvoiceController extends Controller
               ->get();
 
            }else{
-            $totalRecords = OutletStock::where('outlet_id', '=', $outlet_id)->select('count(*) as allcount')->count();
-            $invoices =  DB::table('outlet_invoices')->orderBy($columnName,$columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)
+            $totalRecords = OutletInvoice::where('outlet_id', '=', $outlet_id)->whereDate('sale_date', '>=', Carbon::now()->month())->select('count(*) as allcount')->count();
+            $invoices =  DB::table('outlet_invoices')->orderBy($columnName,$columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_invoices.outlet_id', $outlet_id)
             ->leftJoin('customers','outlet_invoices.customer_id','=', 'customers.id')->where('customers.mobile', 'like', '%' .$searchValue . '%')->orwhere('outlet_invoices.id', 'like', '%' .$searchValue . '%')->select('outlet_invoices.*','customers.mobile')
             ->skip($start)
             ->take($row_per_page)
@@ -478,12 +478,6 @@ class OutletInvoiceController extends Controller
 
 
            }
-
-
-
-
-
-
 
         $total_record_switch_filter = $totalRecords;
 

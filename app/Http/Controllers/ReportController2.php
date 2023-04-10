@@ -937,9 +937,9 @@ class ReportController2 extends Controller
 
         if (Auth::user()->hasAnyRole(['Super Admin', 'Admin'])) {
 
-            $productdate = DB::table('outlet_invoice_details')->pluck('expiry_date');
+
             $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
-                ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks', 'outlet_invoice_details.medicine_id', '=', 'outlet_stocks.medicine_id')->whereIn('outlet_stocks.expiry_date', $productdate)->select('outlet_invoice_details.*', 'outlet_stocks.purchase_price', 'outlet_stocks.expiry_date as edate');
+                ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks', 'outlet_invoice_details.stock_id', '=', 'outlet_stocks.id')->select('outlet_invoice_details.*', 'outlet_stocks.purchase_price');
             $title = 'Profit & Loss Report';
             // dump($productSales);
             if ($request->medicine_id == '' || $request->medicine_id == null) {
@@ -953,9 +953,9 @@ class ReportController2 extends Controller
 
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : outlet::orderby('id', 'desc')->first('id');
 
-            $productdate = DB::table('outlet_invoice_details')->pluck('expiry_date');
+
             $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
-                ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks', 'outlet_invoice_details.medicine_id', '=', 'outlet_stocks.medicine_id')->whereIn('outlet_stocks.expiry_date', $productdate)->select('outlet_invoice_details.*', 'outlet_stocks.purchase_price', 'outlet_stocks.expiry_date as edate', 'outlet_stocks.outlet_id')->where('outlet_stocks.outlet_id', $outlet_id)->distinct();
+                ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks', 'outlet_invoice_details.stock_id', '=', 'outlet_stocks.id')->select('outlet_invoice_details.*', 'outlet_stocks.purchase_price', 'outlet_stocks.outlet_id')->where('outlet_stocks.outlet_id', $outlet_id);
             $title = 'Profit & Loss Report';
             // dump($productSales);
             if ($request->medicine_id == '' || $request->medicine_id == null) {
