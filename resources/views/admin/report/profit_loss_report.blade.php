@@ -93,8 +93,8 @@
             </tbody>
         </table>
 
-        <p class="text-center">Total Sale {{ $total_sale-$total_discount}}
-            | Total Quantity {{ $grand_quantity }} | Total Profit/Loss: {{ $total_sale-$total_discount-$total_buy }}
+        <p class="text-center">Total Sale(Include Discount) {{ $total_sale-$total_discount}}
+            | Total Quantity {{ $grand_quantity }} | Total Profit/Loss: {{ $total_sale-$total_discount-$total_buy }} | Total Discount {{ $total_discount}}
 
         </p>
         <p class="text-center" style="font-size: 12px">Software by Pigeon Soft</p>
