@@ -98,7 +98,7 @@
                         </td>
                     </tr>
                     @php
-                        $grand_total = $grand_total + $productSale->grand_total;
+                        $grand_total = $grand_total + $productSale->sub_total;
                         $total_due = $total_due + $productSale->due_amount > 0.5 ? $productSale->due_amount : 0;
                         $total_pay = $total_pay + $productSale->paid_amount;
                     @endphp
@@ -108,7 +108,7 @@
                 </tbody>
             </table>
 
-            <p class="text-center">Grand Total {{ $grand_total }} | Total Pay {{ $total_pay }} | Total
+            <p class="text-center">Grand Total(Without Discount) {{ $grand_total }} | Total Pay {{ $total_pay }} | Total
                 Due {{ $total_due }}
 
                 </p>
