@@ -127,7 +127,7 @@
     "success": function (data) {
 
         let ok = '';
-                   ok +=  data.total;
+                   ok +=  Math.round(data.total);
 
                 document.getElementById('hello2').innerHTML = ok;
     }
@@ -147,7 +147,7 @@
     "success": function (data) {
 
         let ok = '';
-         ok +=  data.total;
+         ok +=  Math.round(data.total);
 
      document.getElementById('hello2').innerHTML = ok;
     }

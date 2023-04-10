@@ -85,7 +85,7 @@
                         <td>{{ $productSale->grand_total }}</td>
                         <td>{{ $productSale->paid_amount }}</td>
                         <td>
-                            {{ $productSale->due_amount > 0 ? $productSale->due_amount : 'Paid' }}
+                            {{ $productSale->due_amount > 0.5 ? $productSale->due_amount : 'Paid' }}
                         </td>
 
                         <td class="">
@@ -99,7 +99,7 @@
                     </tr>
                     @php
                         $grand_total = $grand_total + $productSale->grand_total;
-                        $total_due = $total_due + $productSale->due_amount;
+                        $total_due = $total_due + $productSale->due_amount > 0.5 ? $productSale->due_amount : 0;
                         $total_pay = $total_pay + $productSale->paid_amount;
                     @endphp
                 @endforeach
@@ -109,7 +109,9 @@
             </table>
 
             <p class="text-center">Grand Total {{ $grand_total }} | Total Pay {{ $total_pay }} | Total
-                Due {{ $total_due }}</p>
+                Due {{ $total_due }}
+
+                </p>
 
         </div>
     </div>
