@@ -90,8 +90,14 @@
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name }}</td>
-                        <td>{{ $data->sold_qty }}</td>
-                        <td>{{ $data->return_qty }}</td>
+                        <td>{{ $data->quantity }}</td>
+                        @php
+                            $data1 = App\Models\SalesReturn::where('invoice_id', $data->outlet_invoice_id ?? false)->first();
+                            $return = App\Models\SalesReturnDetails::where('sales_return_id', $data1->id ?? false)->where('medicine_id', $data->medicine_id)->whereDate('expiry_date','=', $data->expiry_date)->first();
+
+                        @endphp
+                        <td>{{ $return->return_qty ?? '0' }}</td>
+
                         <td>{{ $data->rate }}</td>
                         <td>{{ $data->total_price }}</td>
                     </tr>

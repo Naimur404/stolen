@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\MedicinePurchase;
 use App\Models\Outlet;
 use App\Models\OutletInvoice;
@@ -61,8 +60,6 @@ class ReportController2 extends Controller
 
         $this->middleware('permission:best_selling.search', ['only' => ['bestSelling']]);
         $this->middleware('permission:slow_selling.search', ['only' => ['slowSelling']]);
-
-
     }
 
     public function medicine_sale_report_submit(Request $request)
@@ -82,8 +79,6 @@ class ReportController2 extends Controller
                     ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
                 $title = 'All Outlet Sale Report';
             }
-
-
         } else {
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
             if ($request->customer_id == '' || $request->customer_id == null) {
@@ -99,10 +94,7 @@ class ReportController2 extends Controller
                     ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
                 $outlet = Outlet::where('id', $outlet_id)->orderby('id', 'desc')->first('outlet_name');
                 $title = 'All Sale Report For ' . $outlet->outlet_name;
-
             }
-
-
         }
 
 
@@ -122,7 +114,6 @@ class ReportController2 extends Controller
             $productSales = OutletInvoice::whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
             $title = 'All Outlet Sale Report';
-
         } else {
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
 
@@ -130,8 +121,6 @@ class ReportController2 extends Controller
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
             $outlet = Outlet::where('id', $outlet_id)->orderby('id', 'desc')->first('outlet_name');
             $title = 'All Sale Report For ' . $outlet->outlet_name;
-
-
         }
 
 
@@ -149,15 +138,12 @@ class ReportController2 extends Controller
             $productSales = MedicinePurchase::whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
             $title = 'All Warehouse Purchase Report';
-
-
         } else {
             $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
             $productSales = MedicinePurchase::where('warehouse_id', '=', $warehouse_id)->whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
             $warehouse = Warehouse::where('id', $warehouse_id)->orderby('id', 'desc')->first('warehouse_name');
             $title = 'All Purchase Report For ' . $warehouse->warehouse_name;
-
         }
 
 
@@ -181,8 +167,6 @@ class ReportController2 extends Controller
                     ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
                 $title = 'All Warehouse Stock Report';
             }
-
-
         } else {
             $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
 
@@ -200,8 +184,6 @@ class ReportController2 extends Controller
                 $outlet = Warehouse::where('id', $warehouse_id)->orderby('id', 'desc')->first('warehouse_name');
                 $title = 'All Stock Report ' . $outlet->warehouse_name;
             }
-
-
         }
 
 
@@ -225,8 +207,6 @@ class ReportController2 extends Controller
                     ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
                 $title = 'All Outlet Stock Report';
             }
-
-
         } else {
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : outlet::orderby('id', 'desc')->first('id');
 
@@ -244,7 +224,6 @@ class ReportController2 extends Controller
                 $outlet = outlet::where('id', $outlet_id)->orderby('id', 'desc')->first('outlet_name');
                 $title = 'All Stock Report ' . $outlet->outlet_name;
             }
-
         }
 
         return view('admin.report.outlet_stock_report2', compact('start_date', 'end_date', 'productSales', 'title'));
@@ -262,14 +241,12 @@ class ReportController2 extends Controller
             $Users = User::pluck('name', 'id');
             $warehouse = Warehouse::pluck('warehouse_name', 'id');
             $category = Category::pluck('category_name', 'id');
-
         } elseif (Auth::user()->hasRole('Admin')) {
 
             $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name', 'id');
             $Users = User::pluck('name', 'id');
             $category = Category::pluck('category_name', 'id');
             $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
-
         } else {
 
             $Users = User::where('outlet_id', $outlet_id)->where('name', 'like', '%' . $search . '%')->limit(10)->pluck('name', 'id');
@@ -280,7 +257,6 @@ class ReportController2 extends Controller
         $payment_method = PaymentMethod::pluck('method_name', 'id');
 
         return view('admin.report.report', compact('Users', 'payment_method', 'outlet', 'warehouse', 'category', 'supplier'));
-
     }
 
 
@@ -292,7 +268,6 @@ class ReportController2 extends Controller
         $title = 'Invoice Report Details';
 
         return view('admin.report.sale_report_details', compact('title', 'productSales'));
-
     }
 
     public function medicine_sale_report_by_user(Request $request)
@@ -310,11 +285,8 @@ class ReportController2 extends Controller
             $productSales = OutletInvoice::where('outlet_id', $outlet_id)->where('added_by', $request->user_id)->whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
             $title = 'Sale By ' . $user->name;
-
         }
         return view('admin.report.medicine_sale_report_by_user', compact('start_date', 'end_date', 'productSales', 'title'));
-
-
     }
 
     public function medicine_sale_report_by_payment(Request $request)
@@ -334,7 +306,6 @@ class ReportController2 extends Controller
             $productSales = OutletInvoice::where('outlet_id', $outlet_id)->where('payment_method_id', $request->payment_id)->whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
             $title = 'Sale By ' . $paymnt;
-
         }
 
         return view('admin.report.medicine_sale_report_by_payment', compact('start_date', 'end_date', 'productSales', 'title'));
@@ -362,7 +333,6 @@ class ReportController2 extends Controller
                     $productSales = $productSales->where('medicine_distribute_details.medicine_id', $request->medicine_id)->get();
                 }
                 $title = 'Distribute Medicine Report';
-
             } else {
                 $productSales = DB::table('medicine_distributes')->where('medicine_distributes.has_sent', 1)->where('medicine_distributes.outlet_id', $request->outlet_id)->whereDate('medicine_distributes.created_at', '>=', $start_date)
                     ->whereDate('medicine_distributes.created_at', '<=', $end_date)->leftJoin('medicine_distribute_details', 'medicine_distributes.id', '=', 'medicine_distribute_details.medicine_distribute_id')->select('medicine_distributes.id as mdid', 'medicine_distributes.*', 'medicine_distribute_details.*');
@@ -373,8 +343,6 @@ class ReportController2 extends Controller
                 }
                 $title = 'Distribute Medicine Report';
             }
-
-
         } else {
 
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : outlet::orderby('id', 'desc')->first('id');
@@ -387,7 +355,6 @@ class ReportController2 extends Controller
                     $productSales = $productSales->where('medicine_distribute_details.medicine_id', $request->medicine_id)->get();
                 }
                 $title = 'All Distribute Medicine Report';
-
             } else {
                 $productSales = DB::table('medicine_distributes')->where('medicine_distributes.has_sent', 1)->where('medicine_distributes.outlet_id', $request->outlet_id)->whereDate('medicine_distributes.created_at', '>=', $start_date)
                     ->whereDate('medicine_distributes.created_at', '<=', $end_date)->leftJoin('medicine_distribute_details', 'medicine_distributes.id', '=', 'medicine_distribute_details.medicine_distribute_id')->select('medicine_distributes.id as mdid', 'medicine_distributes.*', 'medicine_distribute_details.*');
@@ -397,10 +364,7 @@ class ReportController2 extends Controller
                     $productSales = $productSales->where('medicine_distribute_details.medicine_id', $request->medicine_id)->get();
                 }
                 $title = 'All Distribute Medicine Report';
-
             }
-
-
         }
 
 
@@ -430,7 +394,6 @@ class ReportController2 extends Controller
                     $productSales = $productSales->where('stock_request_details.medicine_id', $request->medicine_id)->get();
                 }
                 $title = 'Stock Request Report';
-
             } else {
 
                 $productSales = DB::table('stock_requests')->where('stock_requests.has_sent', 1)->where('stock_requests.has_accepted', 1)->where('stock_requests.outlet_id', $request->outlet_id)->whereDate('stock_requests.created_at', '>=', $start_date)
@@ -442,8 +405,6 @@ class ReportController2 extends Controller
                 }
                 $title = 'Stock Request Report';
             }
-
-
         } else {
 
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : outlet::orderby('id', 'desc')->first('id');
@@ -456,7 +417,6 @@ class ReportController2 extends Controller
                     $productSales = $productSales->where('stock_request_details.medicine_id', $request->medicine_id)->get();
                 }
                 $title = 'All Stock Request Report';
-
             } else {
                 $productSales = DB::table('stock_requests')->where('stock_requests.has_accepted', 1)->where('stock_requests.has_sent', 1)->where('stock_requests.outlet_id', $request->outlet_id)->whereDate('stock_requests.created_at', '>=', $start_date)
                     ->whereDate('stock_requests.created_at', '<=', $end_date)->leftJoin('stock_request_details', 'stock_requests.id', '=', 'stock_request_details.stock_request_id')->select('stock_requests.id as mdid', 'stock_requests.*', 'stock_request_details.*');
@@ -466,10 +426,7 @@ class ReportController2 extends Controller
                     $productSales = $productSales->where('stock_request_details.medicine_id', $request->medicine_id)->get();
                 }
                 $title = 'All Stock Request Report';
-
             }
-
-
         }
 
 
@@ -477,7 +434,7 @@ class ReportController2 extends Controller
     }
 
 
-//for warehouse manager
+    //for warehouse manager
     public function distribute_medicine_report2(Request $request)
     {
         $input = $request->all();
@@ -499,7 +456,6 @@ class ReportController2 extends Controller
                 $productSales = $productSales->where('medicine_distribute_details.medicine_id', $request->medicine_id)->get();
             }
             $title = 'Distribute Medicine Report';
-
         } else {
 
             $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
@@ -511,7 +467,6 @@ class ReportController2 extends Controller
                 $productSales = $productSales->where('medicine_distribute_details.medicine_id', $request->medicine_id)->get();
             }
             $title = 'Distribute Medicine Report';
-
         }
 
 
@@ -538,7 +493,6 @@ class ReportController2 extends Controller
                 $productSales = $productSales->where('stock_request_details.medicine_id', $request->medicine_id)->get();
             }
             $title = 'Stock Request Report';
-
         } else {
             $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
             $productSales = DB::table('stock_requests')->where('warehouse_id', $warehouse_id)->where('stock_requests.has_sent', 1)->where('stock_requests.has_accepted', 1)->whereDate('stock_requests.created_at', '>=', $start_date)
@@ -580,7 +534,6 @@ class ReportController2 extends Controller
                     $productSales = $productSales->where('warehouse_return_details.medicine_id', $request->medicine_id)->get();
                 }
                 $title = 'Return Medicine Report';
-
             } else {
                 $productSales = DB::table('warehouse_returns')->where('warehouse_returns.outlet_id', $request->outlet_id)->whereDate('warehouse_returns.created_at', '>=', $start_date)
                     ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);;
@@ -591,8 +544,6 @@ class ReportController2 extends Controller
                 }
                 $title = 'Return Medicine Report';
             }
-
-
         } else {
 
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : outlet::orderby('id', 'desc')->first('id');
@@ -605,7 +556,6 @@ class ReportController2 extends Controller
                     $productSales = $productSales->where('warehouse_return_details.medicine_id', $request->medicine_id)->get();
                 }
                 $title = 'Return Medicine Report';
-
             } else {
                 $productSales = DB::table('warehouse_returns')->where('warehouse_returns.outlet_id', $request->outlet_id)->whereDate('warehouse_returns.created_at', '>=', $start_date)
                     ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);;
@@ -615,10 +565,7 @@ class ReportController2 extends Controller
                     $productSales = $productSales->where('warehouse_return_details.medicine_id', $request->medicine_id)->get();
                 }
                 $title = 'Return Medicine Report';
-
             }
-
-
         }
 
 
@@ -648,7 +595,6 @@ class ReportController2 extends Controller
                 $productSales = $productSales->where('warehouse_return_details.medicine_id', $request->medicine_id)->get();
             }
             $title = 'Return Medicine Report';
-
         } else {
             $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
             $productSales = DB::table('warehouse_returns')->where('warehouse_id', $warehouse_id)->whereDate('warehouse_returns.created_at', '>=', $start_date)
@@ -665,7 +611,7 @@ class ReportController2 extends Controller
         return view('admin.report.retun_medicine_report', compact('start_date', 'end_date', 'productSales', 'title'));
     }
 
-//outlet manager  sales return
+    //outlet manager  sales return
 
     public function medicine_sale_return(Request $request)
     {
@@ -679,16 +625,12 @@ class ReportController2 extends Controller
             $productSales = SalesReturn::whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
             $title = 'All Outlet Sale Return Report';
-
-
         } else {
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
             $productSales = SalesReturn::where('outlet_id', '=', $outlet_id)->whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
             $outlet = Outlet::where('id', $outlet_id)->orderby('id', 'desc')->first('outlet_name');
             $title = 'All Sale Return Report For ' . $outlet->outlet_name;
-
-
         }
 
 
@@ -707,15 +649,12 @@ class ReportController2 extends Controller
 
             $category = Category::where('id', $request->category_id)->first();
             $title = 'Stock Report For ' . $category->category_name;
-
         } else {
             $productSales = DB::table('warehouse_stocks')->where('warehouse_stocks.quantity', '>', '0')->where('warehouse_stocks.warehouse_id', $request->warehouse_id)
                 ->leftjoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')->where('medicines.category_id', $request->category_id)
                 ->select('warehouse_stocks.*', 'medicines.category_id', 'medicines.medicine_name')->get();
             $category = Category::where('id', $request->category_id)->first();
             $title = 'Stock Report For ' . $category->category_name;
-
-
         }
 
 
@@ -734,14 +673,12 @@ class ReportController2 extends Controller
 
             $warehouse = Warehouse::pluck('warehouse_name', 'id');
             $category1 = Category::pluck('category_name', 'id');
-
         } elseif (Auth::user()->hasRole('Admin')) {
 
             $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name', 'id');
 
             $category1 = Category::pluck('category_name', 'id');
             $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
-
         } else {
 
 
@@ -763,14 +700,12 @@ class ReportController2 extends Controller
 
             $warehouse = Warehouse::pluck('warehouse_name', 'id');
             $category1 = Category::pluck('category_name', 'id');
-
         } elseif (Auth::user()->hasRole('Admin')) {
 
             $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name', 'id');
 
             $category1 = Category::pluck('category_name', 'id');
             $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
-
         } else {
 
 
@@ -793,7 +728,6 @@ class ReportController2 extends Controller
                 }
 
                 $productSales = $productSales->whereIn('medicines.category_id', $request->category_id);
-
             } else {
                 $total = 0;
                 $categorys = Category::get();
@@ -805,7 +739,6 @@ class ReportController2 extends Controller
 
 
                 $productSales = $productSales->whereIn('medicines.manufacturer_id', $request->manufacturer_id);
-
             }
             $data = $productSales->sum('outlet_stocks.quantity');
             if ($data <= $total) {
@@ -816,8 +749,6 @@ class ReportController2 extends Controller
 
             $category = Category::where('id', $request->category_id)->first();
             $title = 'Category Stock Report Alert';
-
-
         } else {
             $productSales = DB::table('warehouse_stocks')->where('warehouse_stocks.quantity', '>', '0')->where('warehouse_stocks.warehouse_id', $request->warehouse_id)
                 ->leftjoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
@@ -831,7 +762,6 @@ class ReportController2 extends Controller
                 }
 
                 $productSales = $productSales->whereIn('medicines.category_id', $request->category_id);
-
             } else {
                 $total = 0;
                 $categorys = Category::get();
@@ -843,7 +773,6 @@ class ReportController2 extends Controller
             if ($request->manufacturer_id) {
 
                 $productSales = $productSales->whereIn('medicines.manufacturer_id', $request->manufacturer_id);
-
             }
 
             $data = $productSales->sum('warehouse_stocks.quantity');
@@ -856,7 +785,6 @@ class ReportController2 extends Controller
 
             $category = Category::where('id', $request->category_id)->first();
             $title = 'Category Stock Report Alert';
-
         }
 
 
@@ -945,15 +873,9 @@ class ReportController2 extends Controller
             // dump($productSales);
             if ($request->medicine_id == '' || $request->medicine_id == null) {
                 $productSales = $productSales->distinct()->get();
-                $total_discount = OutletInvoice::whereDate('created_at', '>=', $start_date)
-                    ->whereDate('created_at', '<=', $end_date)->sum('total_discount');
             } else {
                 $productSales = $productSales->where('outlet_invoice_details.medicine_id', $request->medicine_id)->distinct()->get();
-                $total_discount = OutletInvoiceDetails::whereDate('created_at', '>=', $start_date)
-                    ->whereDate('created_at', '<=', $end_date)->sum('discount');
             }
-
-
         } else {
 
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : outlet::orderby('id', 'desc')->first('id');
@@ -965,17 +887,13 @@ class ReportController2 extends Controller
             // dump($productSales);
             if ($request->medicine_id == '' || $request->medicine_id == null) {
                 $productSales = $productSales->distinct()->get();
-                $total_discount = OutletInvoice::whereDate('created_at', '>=', $start_date)
-                    ->whereDate('created_at', '<=', $end_date)->where('outlet_id', $outlet_id)->sum('total_discount');
             } else {
                 $productSales = $productSales->where('outlet_invoice_details.medicine_id', $request->medicine_id)->distinct()->get();
             }
-
-
         }
 
 
-        return view('admin.report.profit_loss_report', compact('start_date', 'end_date', 'productSales', 'title', 'total_discount'));
+        return view('admin.report.profit_loss_report', compact('start_date', 'end_date', 'productSales', 'title'));
     }
 
 
@@ -1004,8 +922,6 @@ class ReportController2 extends Controller
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
             $productSales = OutletStock::whereDate('expiry_date', '<', $start_date)
                 ->where('quantity', '>', '0')->get();
-
-
         } else {
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : outlet::orderby('id', 'desc')->first('id');
             $productSales = OutletStock::where('outlet_id', $outlet_id)->whereDate('expiry_date', '<', $start_date)
@@ -1028,8 +944,6 @@ class ReportController2 extends Controller
 
         $data = OutletInvoiceDetails::whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->orderby('quantity', 'desc')->get();
         return view('admin.report.best_selling', compact('data'));
-
-
     }
 
     public function slowSelling(Request $request)
@@ -1041,10 +955,5 @@ class ReportController2 extends Controller
 
         $data = OutletInvoiceDetails::whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->where('quantity', '>', '1')->orderby('quantity', 'asc')->get();
         return view('admin.report.slow_selling', compact('data'));
-
-
     }
-
 }
-
-

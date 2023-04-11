@@ -104,7 +104,7 @@ class SalesReturnController extends Controller
             for ($i = 0; $i < sizeof($medicines); $i++) {
                  if($input['returnqty'][$i] == 0 || $input['returnqty'][$i] == ''){
 
-                    break;
+                    continue;
 
                  }else{
 
