@@ -12,6 +12,7 @@ use App\Models\OutletPayment;
 use App\Models\OutletStock;
 use App\Models\PaymentMethod;
 use App\Models\RedeemPointLog;
+use App\Models\SalesReturn;
 use App\Models\User;
 use Carbon\Carbon;
 use Exception;
@@ -36,7 +37,6 @@ class OutletInvoiceController extends Controller
         $this->middleware('permission:invoice.delete', ['only' => ['destroy']]);
 
         $this->middleware('permission:pay-due.payment', ['only' => ['dueList', 'payDue', 'paymentDue']]);
-
     }
 
     public function index()
@@ -44,10 +44,7 @@ class OutletInvoiceController extends Controller
 
     {
 
-            return view('admin.Pos.index_pos');
-
-
-
+        return view('admin.Pos.index_pos');
     }
 
     /**
@@ -106,8 +103,6 @@ class OutletInvoiceController extends Controller
                 );
                 $customer = Customer::create($customerdetails);
             }
-
-
         } else {
 
 
@@ -125,13 +120,11 @@ class OutletInvoiceController extends Controller
 
                 );
                 $customer = Customer::create($customerdetails);
-
             } else {
                 $points = $customerCheck->points;
                 if ($request->redeem_points > 0) {
 
                     $points = $customerCheck->points - $request->redeem_points;
-
                 }
                 $customer = Customer::where('mobile', $request->mobile)->first();
                 $customerdetails = array(
@@ -144,9 +137,7 @@ class OutletInvoiceController extends Controller
                 );
 
                 Customer::where('mobile', $request->mobile)->update($customerdetails);
-
             }
-
         }
         $discount = 0;
         if ($request->discount > 0 && $request->flatdiscount > 0) {
@@ -158,12 +149,10 @@ class OutletInvoiceController extends Controller
             if ($request->discount > 0) {
                 $discount = $request->discount;
             } else {
-
             }
             if ($request->flatdiscount > 0) {
                 $discount = $request->flatdiscount;
             }
-
         }
 
 
@@ -172,7 +161,7 @@ class OutletInvoiceController extends Controller
             'outlet_id' => $input['outlet_id'],
             'customer_id' => $customer->id,
             'sale_date' => Carbon::now(),
-            'sub_total' => $input['sub_total'],
+            'sub_total' => $input['afterdis'],
             'vat' => $input['vat'],
             'total_discount' => $discount,
             'grand_total' => round($input['grand_total']),
@@ -204,7 +193,6 @@ class OutletInvoiceController extends Controller
                 );
 
                 RedeemPointLog::create($redeem);
-
             }
             $medicines = $input['product_name'];
 
@@ -237,19 +225,14 @@ class OutletInvoiceController extends Controller
                 );
 
                 OutletStock::where('outlet_id', $input['outlet_id'])->where('medicine_id', $input['product_id'][$i])->whereDate('expiry_date', '=', $input['expiry_date'][$i])->update($stock2);
-
-
             }
 
             return response()->json([
                 'data' => $outletinvoice
             ]);
-
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
-
-
     }
 
     /**
@@ -308,14 +291,11 @@ class OutletInvoiceController extends Controller
             $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                 ->select('outlet_stocks.id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
-
         } else {
 
             $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                 ->select('outlet_stocks.id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
-
-
         }
 
         $response = array();
@@ -347,8 +327,6 @@ class OutletInvoiceController extends Controller
         $outletInvoice = OutletInvoice::find($id);
         $outletInvoicedetails = OutletInvoiceDetails::where('outlet_invoice_id', $id)->get();
         return view('admin.invoice.print', compact('outletInvoice', 'outletInvoicedetails'));
-
-
     }
 
     public function print(Request $request)
@@ -376,9 +354,7 @@ class OutletInvoiceController extends Controller
 
             $datas = OutletInvoice::where('due_amount', '>', '0')->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_id', $outlet_id)->orderby('id', 'desc')->get();
             return view('admin.Pos.sale_due_index', compact('datas'));
-
         }
-
     }
 
 
@@ -391,7 +367,6 @@ class OutletInvoiceController extends Controller
         $outletInvoiceDetails = OutletInvoiceDetails::where('outlet_invoice_id', $id)->get();
         $saledetails = OutletPayment::where('invoice_id', $id)->get();
         return view('admin.Pos.due_payment', compact('outletInvoice', 'outletInvoiceDetails', 'saledetails', 'payment'));
-
     }
 
     public function paymentDue(Request $request)
@@ -432,14 +407,13 @@ class OutletInvoiceController extends Controller
             Customer::where('id', $invoiceData->customer_id)->update($due);
             OutletInvoice::where('id', $request->outlet_invoice_id)->update($arra);
             return redirect()->back()->with('success', 'Due Payment Successfull.');
-
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
-
     }
 
-    public function ajaxInvoice(Request $request){
+    public function ajaxInvoice(Request $request)
+    {
 
 
         $draw = $request->get('draw');
@@ -451,33 +425,30 @@ class OutletInvoiceController extends Controller
         $order_arr = $request->get('order');
         $search_arr = $request->get('search');
 
-        $columnIndex = (isset($columnIndex_arr[0]['column']))? $columnIndex_arr[0]['column'] : false; // column index
-        $columnName = (isset($columnName_arr[$columnIndex]['data']))? $columnName_arr[$columnIndex]['data'] : false; // column name
-        $columnSortOrder = (isset($order_arr[0]['dir']))? $order_arr[0]['dir'] : false; // asc or desc
+        $columnIndex = (isset($columnIndex_arr[0]['column'])) ? $columnIndex_arr[0]['column'] : false; // column index
+        $columnName = (isset($columnName_arr[$columnIndex]['data'])) ? $columnName_arr[$columnIndex]['data'] : false; // column name
+        $columnSortOrder = (isset($order_arr[0]['dir'])) ? $order_arr[0]['dir'] : false; // asc or desc
         $searchValue = (isset($search_arr['value'])) ? $search_arr['value'] : false; // Search value
 
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
 
         // total records count
 
-           if(auth()->user()->hasrole('Super Admin')){
-            $totalRecords = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->select('count(*) as allcount')->count();
-            $invoices =    DB::table('outlet_invoices')->orderBy($columnName,$columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())
-            ->leftJoin('customers','outlet_invoices.customer_id','=', 'customers.id')->where('customers.mobile', 'like', '%' .$searchValue . '%')->orwhere('outlet_invoices.id', 'like', '%' .$searchValue . '%')->select('outlet_invoices.*','customers.mobile')
-              ->skip($start)
-              ->take($row_per_page)
-              ->get();
-
-           }else{
+        if (auth()->user()->hasrole('Super Admin')) {
+            $totalRecords = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->orderBy('id', 'desc')->select('count(*) as allcount')->count();
+            $invoices =    DB::table('outlet_invoices')->orderBy($columnName, $columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())
+                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orwhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
+                ->skip($start)
+                ->take($row_per_page)
+                ->get();
+        } else {
             $totalRecords = OutletInvoice::where('outlet_id', '=', $outlet_id)->whereDate('sale_date', '>=', Carbon::now()->month())->select('count(*) as allcount')->count();
-            $invoices =  DB::table('outlet_invoices')->orderBy($columnName,$columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_invoices.outlet_id', $outlet_id)
-            ->leftJoin('customers','outlet_invoices.customer_id','=', 'customers.id')->where('customers.mobile', 'like', '%' .$searchValue . '%')->orwhere('outlet_invoices.id', 'like', '%' .$searchValue . '%')->select('outlet_invoices.*','customers.mobile')
-            ->skip($start)
-            ->take($row_per_page)
-            ->get();
-
-
-           }
+            $invoices =  DB::table('outlet_invoices')->orderBy($columnName, $columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_invoices.outlet_id', $outlet_id)
+                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orwhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
+                ->skip($start)
+                ->take($row_per_page)
+                ->get();
+        }
 
         $total_record_switch_filter = $totalRecords;
 
@@ -487,7 +458,7 @@ class OutletInvoiceController extends Controller
 
         $sl = 1;
         $total = 0;
-        foreach($invoices as $invoice){
+        foreach ($invoices as $invoice) {
 
             $print = route('print-invoice', $invoice->id);
             $return = route('sale-return.show', $invoice->id);
@@ -501,36 +472,34 @@ class OutletInvoiceController extends Controller
             $total = $invoice->grand_total;
             $pay = $invoice->paid_amount;
             $sold_by = User::getUser($invoice->added_by);
-            $action ='<a href="'.$print.'" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
-<a href="'.$return.'"class="btn btn-success btn-xs" title="Return" style="margin-right:3px"><i class="fa fa-retweet" aria-hidden="true"></i></a>
-            <a href="'.$details.'"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>';
+            $action = '<a href="' . $print . '" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
+<a href="' . $return . '"class="btn btn-success btn-xs" title="Return" style="margin-right:3px"><i class="fa fa-retweet" aria-hidden="true"></i></a><a href="' . $details . '"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>';
+
 
 
             $data_arr[] = array(
-              "id" => $s_no,
-              "sale_date" => $sale_date,
+                "id" => $s_no,
+                "sale_date" => $sale_date,
 
-              "outlet_name" => $outlet_name,
-              "customer" => $customer,
-              "payment" => $payment,
-              "total" => $total,
-              "pay" => $pay,
-              "sold_by" => $sold_by,
-              "action" => $action,
+                "outlet_name" => $outlet_name,
+                "customer" => $customer,
+                "payment" => $payment,
+                "total" => $total,
+                "pay" => $pay,
+                "sold_by" => $sold_by,
+                "action" => $action,
 
             );
-         }
+        }
 
-         $response = array(
+        $response = array(
             "draw" => intval($draw),
             "iTotalRecords" => $totalRecords,
             "iTotalDisplayRecords" => $total_record_switch_filter,
             "aaData" => $data_arr,
 
-         );
+        );
 
-      return response()->json($response);
-
-
+        return response()->json($response);
     }
 }

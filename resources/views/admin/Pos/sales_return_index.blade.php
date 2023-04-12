@@ -54,23 +54,23 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                @foreach ($datas as $productPurchase)
+                                @foreach ($datas as $sales_return)
                                     <tr>
 
 
-                                        <td>{{ \Carbon\Carbon::parse($productPurchase->sale_date)->format('d-m-Y')}}
+                                        <td>{{ \Carbon\Carbon::parse($sales_return->return_date)->format('d-m-Y')}}
                                         </td>
-                                        @if ( $productPurchase->outlet_id == null)
+                                        @if ( $sales_return->outlet_id == null)
 
                                             <td> N/A</td>
-                                        @elseif ( $productPurchase->outlet_id
+                                        @elseif ( $sales_return->outlet_id
                                             != null)
 
-                                            <td>{{ $productPurchase->outlet->outlet_name }}</td>
+                                            <td>{{ $sales_return->outlet->outlet_name }}</td>
                                         @endif
-                                        <td> @if($productPurchase->customer_id != '' || $productPurchase->customer_id != null)
+                                        <td> @if($sales_return->customer_id != '' || $sales_return->customer_id != null)
                                             @php
-                                              $customer = App\Models\Customer::where('id',$productPurchase->customer_id)->first();
+                                              $customer = App\Models\Customer::where('id',$sales_return->customer_id)->first();
                                           @endphp
 
                                           {{-- {{ $customer->mobile }} --}}
@@ -83,17 +83,17 @@
                                         </td>
 
                                         <td>@php
-                                                $data = App\Models\PaymentMethod::where('id',$productPurchase->payment_method_id)->first();
+                                                $data = App\Models\PaymentMethod::where('id',$sales_return->payment_method_id)->first();
                                             @endphp
                                             {{ $data->method_name }}</td>
 
-                                        <td>{{ $productPurchase->grand_total }}</td>
-                                        <td>{{ $productPurchase->paid_amount }}</td>
+                                        <td>{{ $sales_return->grand_total }}</td>
+                                        <td>{{ $sales_return->paid_amount }}</td>
 
 
                                         <td>
                                             @php
-                                                $user = App\Models\User::where('id',$productPurchase->added_by)->first();
+                                                $user = App\Models\User::where('id',$sales_return->added_by)->first();
                                             @endphp
                                             {{ $user->name }}
                                         </td>
@@ -101,11 +101,11 @@
 
                                         <td class="form-inline">
 
-                                            <a href="{{ route('sale-return.details', $productPurchase->id) }}"
+                                            <a href="{{ route('sale-return.details', $sales_return->id) }}"
                                                class="btn btn-primary btn-xs" title="Details" style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i>
                                             </a>
 
-                                            {!! Form::open(['method' => 'DELETE', 'route' => ['sale-return.destroy', $productPurchase->id]]) !!}
+                                            {!! Form::open(['method' => 'DELETE', 'route' => ['sale-return.destroy', $sales_return->id]]) !!}
                                             {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
                                             {!! Form::close() !!}
 

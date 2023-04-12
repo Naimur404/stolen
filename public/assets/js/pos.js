@@ -212,9 +212,9 @@ Invoice.prototype = {
 
     calcdisSubtotal: function() {
         var afterdis = 0;
-        if(Number(jQuery($.opt.flatdiscount).val()) > 0 && Number(jQuery($.opt.discount).val()) > 0  && Number(jQuery($.opt.points).val()) > 0){
+        if(Number(jQuery($.opt.flatdiscount).val()) > 0 || Number(jQuery($.opt.discount).val()) > 0  || Number(jQuery($.opt.points).val()) > 0){
             afterdis = Number(jQuery($.opt.subtotal).val())  -
-            Number(jQuery($.opt.discount).val()) - Number(jQuery($.opt.points).val());
+            Number(jQuery($.opt.discount).val()) - Number(jQuery($.opt.points).val())-Number(jQuery($.opt.flatdiscount).val());
         }
         else if(Number(jQuery($.opt.flatdiscount).val()) == 0 && Number(jQuery($.opt.discount).val()) == 0 && Number(jQuery($.opt.points).val()) == 0){
             afterdis = Number(jQuery($.opt.subtotal).val());
