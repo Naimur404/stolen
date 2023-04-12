@@ -115,6 +115,7 @@ Invoice.prototype = {
 
             var discount = row.find($.opt.discountt).val();
             var total = row.find($.opt.price).val() * row.find($.opt.qty).val();
+            var final = '';
 
          if(discount == 0 || discount == ''){
             total = self.roundNumber(total, 2);
@@ -125,8 +126,8 @@ Invoice.prototype = {
             total = self.roundNumber(total, 2);
            discount = ((discount/ 100) * total);
            row.find($.opt.totaldis).val(discount);
-
-           row.find($.opt.total).val(total);
+            final = total - discount;
+           row.find($.opt.total).val(self.roundNumber(final, 2));
          }
             //    total = ((discountt/ 100) * total)
 
@@ -193,6 +194,9 @@ Invoice.prototype = {
     calcSubtotal: function() {
         var subtotal = 0;
         jQuery($.opt.total).each(function(i) {
+
+
+
             var total = jQuery(this).val();
             // var total = jQuery(this).html();
             if (!isNaN(total)) subtotal += Number(total);
@@ -214,7 +218,7 @@ Invoice.prototype = {
         var afterdis = 0;
         if(Number(jQuery($.opt.flatdiscount).val()) > 0 || Number(jQuery($.opt.discount).val()) > 0  || Number(jQuery($.opt.points).val()) > 0){
             afterdis = Number(jQuery($.opt.subtotal).val())  -
-            Number(jQuery($.opt.discount).val()) - Number(jQuery($.opt.points).val())-Number(jQuery($.opt.flatdiscount).val());
+             - Number(jQuery($.opt.points).val())-Number(jQuery($.opt.flatdiscount).val());
         }
         else if(Number(jQuery($.opt.flatdiscount).val()) == 0 && Number(jQuery($.opt.discount).val()) == 0 && Number(jQuery($.opt.points).val()) == 0){
             afterdis = Number(jQuery($.opt.subtotal).val());
@@ -240,7 +244,7 @@ Invoice.prototype = {
             }
         }
 
-        jQuery($.opt.afterdis).val(afterdis);
+        jQuery($.opt.afterdis).val(self.roundNumber(afterdis, 2));
         return 1;
     },
 
