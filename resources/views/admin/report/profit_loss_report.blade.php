@@ -50,14 +50,12 @@
             <thead class="">
             <tr>
                 <th>SL</th>
-                <th>Invoice Id</th>
                 <th>Sales Date</th>
                 <th>Medicine Name</th>
                 <th>Expiry Date</th>
                 <th>Purchase Price</th>
                 <th>Sell Price</th>
                 <th>Quantity</th>
-                <th>Discount</th>
                 <th>Total Price</th>
             </tr>
             </thead>
@@ -71,7 +69,6 @@
             @foreach ($productSales as $sale)
                 <tr>
                     <td>{{ $loop->index + 1 }}</td>
-                    <td>{{ $sale->outlet_invoice_id}}</td>
                     <td>{{ \Carbon\Carbon::parse($sale->created_at)->format('d-m-Y') }}
                     </td>
                     <td>{{ $sale->medicine_name }}</td>
@@ -79,7 +76,6 @@
                     <td>{{ $sale->purchase_price }}</td>
                     <td>{{ $sale->rate }}</td>
                     <td>{{ $sale->quantity }}</td>
-                    <td>{{ $sale->discount }}</td>
                     <td>{{ $sale->total_price }}</td>
                 </tr>
                 @php
@@ -94,11 +90,11 @@
             </tbody>
         </table>
 
-        <p class="text-center">Total Sale {{ $total_sale}}
-            | Total Quantity {{ $grand_quantity }} | Total Profit/Loss: {{ $total_sale-$total_buy }}
+        <p class="text-center">Total Sale {{ $total_sale}} | Total Discount {{ $total_discount}}
+            | Total Quantity {{ $grand_quantity }} | Total Profit/Loss: {{ $total_sale-$total_discount-$total_buy }}
 
-        </p>
-        <p class="text-center" style="font-size: 12px">Software by Pigeon Soft</p>
+        </p>>
+        <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
 
     </div>
     </div>

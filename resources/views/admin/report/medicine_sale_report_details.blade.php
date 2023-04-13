@@ -114,10 +114,11 @@
                 </tbody>
             </table>
 
-            <p class="text-center">Sub Total {{ $sub_total }} | Grand Total {{ $grand_total }} | Total Discount {{ $total_discount }}| Total Pay {{ $total_pay }} | Total
+            <p class="text-center">Sub Total {{ $sub_total }} | Total Discount {{ $total_discount }} | Grand Total {{ $grand_total }} |  Total Pay {{ $total_pay }} | Total
                 Due {{ $total_due }}
 
                 </p>
+                <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
 
         </div>
     </div>

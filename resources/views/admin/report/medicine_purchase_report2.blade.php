@@ -1,5 +1,5 @@
 @extends('layouts.admin.public_layouts')
-@section('title','Medicine Sales Report')
+@section('title','Medicine Purchase Report')
 @section('main-content')
 <style>
     .space{
@@ -40,7 +40,7 @@
 </div>
 
 <div class="row all-content">
-    <p align="center"><b> Medicine Sales Report -
+    <p align="center"><b> Medicine Purchase Report -
         @if ($start_date && $end_date !=null )
            From {{Carbon\Carbon::parse($start_date)->format('d-m-Y')}}
            To {{Carbon\Carbon::parse($end_date)->format('d-m-Y') }}
@@ -66,7 +66,6 @@
                 @php
                 $grand_total = 0;
                 $total_due = 0;
-                $total_pay = 0;
                 @endphp
                      @foreach ($productSales as $productPurchase)
                      <tr>
@@ -99,8 +98,7 @@
                      </tr>
                      @php
                      $grand_total = $grand_total + $productPurchase->grand_total;
-                     $total_due = $total_due + $productPurchase->paid_amount;
-                     $total_pay = $total_pay + $productPurchase->due_amount;
+                     $total_due = $total_due + $productPurchase->due_amount;
                      @endphp
                  @endforeach
 
@@ -108,7 +106,7 @@
             </tbody>
         </table>
 
-        <p class="text-center">Grand Total {{ $grand_total }} | Total Pay {{ $total_pay }} | Total Due {{ $total_due }}</p>
+        <p class="text-center">Grand Total {{ $grand_total }}  | Total Due {{ $total_due }}</p>
         <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
 
     </div>

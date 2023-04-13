@@ -190,13 +190,13 @@
 
         </tr>
         <tr>
-            <td colspan="3" style="text-align: right; border: none;">Paid Amount:</td>
-            <td style="width: 50px; border: none; text-align: right;"> {{ round($outletInvoice->paid_amount) }} </td>
+            <td colspan="3" style="text-align: right; border: none;">Given Amount:</td>
+            <td style="width: 50px; border: none; text-align: right;"> {{ round($outletInvoice->given_amount) }} </td>
         </tr>
-        @if($outletInvoice->paid_amount > $outletInvoice->grand_total)
+        @if($outletInvoice->given_amount > $outletInvoice->paid_amount)
             <tr>
                 <td colspan="3" style="text-align: right; border: none;">Change Amount:</td>
-                <td style="width: 50px; border: none; text-align: right;"> {{ round($outletInvoice->paid_amount - $outletInvoice->grand_total) }} </td>
+                <td style="width: 50px; border: none; text-align: right;"> {{ round($outletInvoice->given_amount - $outletInvoice->paid_amount) }} </td>
             </tr>
         @endif
 
@@ -233,7 +233,7 @@
     </table>
     <br>
     <div class="row justify-content-center mt-3">
-        <img style="margin-left: 125px"
+        <img style="margin-left: 90px"
              src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$outletInvoice->id", 'C39+') !!}" alt="barcode"/>
     </div>
 
@@ -254,7 +254,7 @@
 
     $(window).on('afterprint', function () {
         // Redirect back to the original page
-        setTimeout (function() {window.close();},500);
+        setTimeout (function() {window.close();},250);
     });
 </script>
 

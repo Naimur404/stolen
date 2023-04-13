@@ -868,32 +868,24 @@ class ReportController2 extends Controller
 
 
             $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
-                ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks', 'outlet_invoice_details.stock_id', '=', 'outlet_stocks.id')->select('outlet_invoice_details.*', 'outlet_stocks.purchase_price');
+                ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks', 'outlet_invoice_details.stock_id', '=', 'outlet_stocks.id')->select('outlet_invoice_details.*', 'outlet_stocks.purchase_price')->distinct()->get();
             $title = 'Profit & Loss Report';
             // dump($productSales);
-            if ($request->medicine_id == '' || $request->medicine_id == null) {
-                $productSales = $productSales->distinct()->get();
-            } else {
-                $productSales = $productSales->where('outlet_invoice_details.medicine_id', $request->medicine_id)->distinct()->get();
-            }
+            $total_discount = OutletInvoice::whereDate('created_at', '>=', $start_date)
+            ->whereDate('created_at', '<=', $end_date)->sum('total_discount');
         } else {
 
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : outlet::orderby('id', 'desc')->first('id');
-
-
             $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
-                ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks', 'outlet_invoice_details.stock_id', '=', 'outlet_stocks.id')->select('outlet_invoice_details.*', 'outlet_stocks.purchase_price', 'outlet_stocks.outlet_id')->where('outlet_stocks.outlet_id', $outlet_id);
+                ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks', 'outlet_invoice_details.stock_id', '=', 'outlet_stocks.id')->select('outlet_invoice_details.*', 'outlet_stocks.purchase_price', 'outlet_stocks.outlet_id')->where('outlet_stocks.outlet_id', $outlet_id)->distinct()->get();
+             $total_discount = OutletInvoice::whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->where('outlet_id', $outlet_id)->sum('total_discount');
             $title = 'Profit & Loss Report';
             // dump($productSales);
-            if ($request->medicine_id == '' || $request->medicine_id == null) {
-                $productSales = $productSales->distinct()->get();
-            } else {
-                $productSales = $productSales->where('outlet_invoice_details.medicine_id', $request->medicine_id)->distinct()->get();
-            }
+
         }
 
 
-        return view('admin.report.profit_loss_report', compact('start_date', 'end_date', 'productSales', 'title'));
+        return view('admin.report.profit_loss_report', compact('start_date', 'end_date', 'productSales', 'title','total_discount'));
     }
 
 

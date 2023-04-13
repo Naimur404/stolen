@@ -69,6 +69,7 @@
                     $sub_total = 0;
                     $total_due = 0;
                     $total_pay = 0;
+                    $total_discount = 0;
                 @endphp
                 @foreach ($productSales as $productSale)
                     <tr>
@@ -94,6 +95,7 @@
                         $grand_total = $grand_total + $productSale->grand_total;
                         $total_due = $total_due + $productSale->due_amount > 0.5 ? $productSale->due_amount : 0;
                         $total_pay = $total_pay + $productSale->paid_amount;
+                        $total_discount = $total_discount + $productSale->total_discount;
                     @endphp
                 @endforeach
 
@@ -101,9 +103,9 @@
                 </tbody>
             </table>
 
-            <p class="text-center">Sub Total(Without Discount) {{ $sub_total }} | Grand Total {{ $grand_total }} | Total Pay {{ $total_pay }} | Total
+            <p class="text-center">Sub Total {{ $sub_total }} | Total Discount {{ $total_discount }} | Grand Total {{ $grand_total }} | Total Pay {{ $total_pay }} | Total
                 Due {{ $total_due }}</p>
-
+                <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
         </div>
     </div>
     @section('custom-js')
