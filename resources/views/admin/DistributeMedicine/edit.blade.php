@@ -187,9 +187,9 @@
                                         <nobr>MRP<i class="text-danger">*</i></nobr>
                                     </th>
 
-                                    <th class="text-center">
+                                    {{-- <th class="text-center">
                                         <nobr>Total Price</nobr>
-                                    </th>
+                                    </th> --}}
                                     <th class="text-center">
                                         <nobr>Action</nobr>
                                     </th>
@@ -208,7 +208,7 @@
                                      <td><input class="form-control qty" type="number"  placeholder="" required="" value="" readonly></td>
                                      <td><input class="form-control" name="box_mrp[]" type="number" step="any" id="box_price" required="" value="{{ $details->rate }}"</td>
 
-                                     <td><input class="form-control" name="total_price[]" type="text" id="product_type" readonly="" required="" value="{{ $details->rate * $details->quantity }}"></td>
+                                     {{-- <td><input class="form-control" name="total_price[]" type="text" id="product_type" readonly="" required="" value="{{ $details->rate * $details->quantity }}"></td> --}}
 
                                      <td>
 

@@ -160,7 +160,7 @@
                 <td class="product"> {{ $loop->index+1 }}. {{ $item->medicine_name }} </td>
                 <td>{{ $item->rate }} </td>
                 <td>{{ $item->quantity }} </td>
-                <td style="text-align: right; ">{{ $item->rate * $item->quantity }} </td>
+                <td style="text-align: right; ">{{ round($item->rate * $item->quantity) }} </td>
             </tr>
 
         @endforeach

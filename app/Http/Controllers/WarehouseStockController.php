@@ -142,6 +142,7 @@ class WarehouseStockController extends Controller
             $new_stock = array(
                 'quantity' => (int)$warehousetock->quantity - (int)$request->quantity,
 
+
           );
           $has_received2 = array(
 
@@ -365,11 +366,12 @@ if(count($check)  < 1  ){
   public function warehouse_Stock_Update(Request $request) {
 
     $data = array(
+        'purchase_price' => $request->purchase_price,
         'price' => $request->price,
 
       );
 
       WarehouseStock::where('id',$request->id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',Carbon::parse($request->expiry_date)->toDateString())->update($data);
-        return redirect()->back()->with('success', ' Successfully Medicne Price Update.');
+        return redirect()->back()->with('success', ' Successfully Medicine Price Update.');
   }
 }

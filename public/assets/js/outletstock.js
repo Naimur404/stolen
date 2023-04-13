@@ -101,7 +101,7 @@ Invoice.prototype = {
     calcTotal: function() {
         jQuery($.opt.parentClass).each(function(i) {
             var row = jQuery(this);
-            var total = row.find($.opt.price).val() * row.find($.opt.qty).val();
+            var total = row.find($.opt.manu_price).val() * row.find($.opt.qty).val();
 
             total = self.roundNumber(total, 2);
 
@@ -314,6 +314,7 @@ jQuery.fn.invoice.defaults = {
     delete: ".delete",
     parentClass: ".item-row",
     price: ".price",
+    manu_price: ".manu_price",
     qty: ".qty",
     stock: ".stock",
     Quantity: "#Quantity",
