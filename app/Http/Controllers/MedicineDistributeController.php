@@ -109,7 +109,7 @@ class MedicineDistributeController extends Controller
                     'expiry_date' => $input['expiry_date'][$i],
 
 
-                    'rate' => $input['total_price'][$i] / $input['quantity'][$i],
+                    'rate' => ($input['box_mrp'][$i]*$input['quantity'][$i]) / $input['quantity'][$i],
 
 
 
@@ -197,9 +197,7 @@ class MedicineDistributeController extends Controller
                     'quantity' => $input['quantity'][$i],
                     'rack_no' => $input['rack_no'][$i],
                     'expiry_date' => $input['expiry_date'][$i],
-
-
-                    'rate' => $input['total_price'][$i] / $input['quantity'][$i],
+                    'rate' => ($input['box_mrp'][$i]*$input['quantity'][$i]) / $input['quantity'][$i],
 
 
 

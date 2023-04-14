@@ -397,6 +397,7 @@ function clearInput1(target){
                 parentClass: ".item-row",
 
                 price: ".price",
+                manu_price: ".manu_price",
                 qty: ".qty",
                 stock: ".stock",
                 Quantity: "#Quantity",
