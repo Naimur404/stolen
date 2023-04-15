@@ -39,21 +39,21 @@
         </div>
 
         <div class="card-body">
-            {!! Form::open(['route' => ['customer-due-payment'], 'method' => 'POST', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
-              <input type="hidden" name="supplier_id" value="{{ $customer->id }}">
+            {!! Form::open(['route' => ['supplier-due-payment'], 'method' => 'POST', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
+              <input type="hidden" name="supplier_id" value="{{ $supplier->id }}">
             <div class="service_invoice_header">
                 <div class="row">
-                    <div class="col-md-4">Customer Name: {{ $customer->name }}</div>
+                    <div class="col-md-4">Customer Name: {{ $supplier->name }}</div>
 
                     <div class="col-md-4">Customer Address :
-                        {{ $customer->address }}</div>
+                        {{ $supplier->address }}</div>
                 </div>
 
                 <div class="row">
-                    <div class="col-md-3">Customer Mobile :  @if ($customer->mobile == null)
+                    <div class="col-md-3">Customer Mobile :  @if ($supplier->mobile == null)
                       <b>  N/A
-                    @elseif ($customer->mobile != null)
-                        {{ $customer->mobile }}
+                    @elseif ($supplier->mobile != null)
+                        {{ $supplier->mobile }}
                     @endif
                 </b> </div>
 
@@ -85,7 +85,7 @@
 
                 </tr>
 
-                @foreach ($invoices as $data)
+                @foreach ($purchase as $data)
                     <tr>
                         <td>{{ $data->id }}</td>
                         <td> {{ \Carbon\Carbon::parse($data->sale_date)->format('d-m-Y') }} </td>
@@ -105,12 +105,12 @@
                         <table class="table table-borderless">
                             <tr>
                                 <th>Payable</th>
-                                <td>{{ Form::number('due_amount', $customer->due_balance, ['class' => 'form-control', 'readonly']) }}
+                                <td>{{ Form::number('due_amount', $supplier->due_balance, ['class' => 'form-control', 'readonly']) }}
                                 </td>
                             </tr>
                             <tr>
                                 <th>Pay Now</th>
-                                <td>{{ Form::number('paid_amount', $customer->due_balance, ['class' => 'form-control', 'required']) }}
+                                <td>{{ Form::number('paid_amount', $supplier->due_balance, ['class' => 'form-control', 'required']) }}
                                     @error('paid_amount')
                                     <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -138,7 +138,7 @@
 
                         <tr>
                             <td>Due Amount</td>
-                            <td>{{ $customer->due_balance }}</td>
+                            <td>{{ $supplier->due_balance }}</td>
                         </tr>
                     </table>
                 </div>

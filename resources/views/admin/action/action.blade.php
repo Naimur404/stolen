@@ -127,3 +127,9 @@
 </div>
  {{-- <a href="{{ $delete }}" data-toggle="tooltip"  data-id="'.$row->id.'" data-original-title="Delete" class="btn btn-pill btn-danger btn-sm">Delete</a> --}}
  @endif
+
+@if(request()->routeIs('supplier.index'))
+@if($row->due_balance > 0)
+<a href="{{ route('supplier-due', $id) }}"class="btn btn-success btn-xs" title="Pay Now"style="margin-right:3px"><i class="fa fa-paypal"></i></a>
+@endif
+@endif
