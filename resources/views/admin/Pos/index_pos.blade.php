@@ -89,10 +89,10 @@
             {data: 'id', name: 'id'},
             {data: 'sale_date', name: 'Sale Date'},
             {data: 'outlet_name', name: 'Outlet Name'},
-            {data: 'customer', name: 'customer'},
+            {data: 'mobile', name: 'customer'},
             {data: 'payment', name: 'Method'},
-            {data: 'total', name: 'total'},
-            {data: 'pay', name: 'pay'},
+            {data: 'grand_total', name: 'total'},
+            {data: 'paid_amount', name: 'pay'},
             {data: 'sold_by', name: 'Sold By'},
             {data: 'action', name: 'action'},
 
