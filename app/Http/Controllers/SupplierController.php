@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Manufacturer;
+use App\Models\MedicinePurchase;
 use App\Models\Supplier;
 use App\Models\SupplierHasManufacturer;
+use Exception;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -21,6 +23,8 @@ class SupplierController extends Controller
         $this->middleware('permission:supplier.create', ['only' => ['create','store']]);
         $this->middleware('permission:supplier.edit', ['only' => ['edit','update']]);
         $this->middleware('permission:supplier.delete', ['only' => ['destroy']]);
+        $this->middleware('permission:supplier-due', ['only' => ['supplierDue']]);
+        $this->middleware('permission:supplier-due-payment', ['only' => ['supplierDuePayment']]);
     }
     public function index(Request $request)
     {
@@ -41,7 +45,8 @@ class SupplierController extends Controller
                         $id = $row->id;
                         $edit = route('supplier.edit',$id);
                         $delete = route('supplier.destroy',$id);
-                        return view('admin.action.action', compact('id','edit','delete'));
+
+                        return view('admin.action.action', compact('id','edit','delete', 'row'));
                     })
                     ->rawColumns(['manufacturer'])
                     ->rawColumns(['active'])
@@ -171,6 +176,68 @@ class SupplierController extends Controller
         $data->save();
         return redirect()->route('supplier.index')->with('success','Active Status Updated');
 
+    }
+
+    public function supplierDue($id)
+    {
+        $supplier = Supplier::where('id', $id)->first();
+        $purchase = MedicinePurchase::where('supplier_id', $id)->where('due_amount', '>', 0)->get();
+        return view('admin.supplier.due_management', compact('supplier', 'purchase'));
+    }
+
+    public function supplierDuePayment(Request $request)
+    {
+
+
+        $supplier = Supplier::where('id', $request->supplier_id)->first();
+        $purchases = MedicinePurchase::where('supplier_id', $request->supplier_id)->where('due_amount', '>', 0)->orderBy('id', 'asc')->get();
+        // dump($invoices);
+
+        try {
+
+
+            $due = array(
+
+                'due_balance' => $supplier->due_balance - $request->paid_amount
+
+            );
+            Supplier::where('id',$request->supplier_id)->update($due);
+            $pay = $request->paid_amount;
+            foreach ($purchases as $purchase) {
+
+
+                if ($pay >= 0) {
+                    if($pay == $purchase->due_amount){
+                        $data = array(
+                            'due_amount' => $purchase->due_amount - $pay,
+                            'paid_amount' => $purchase->paid_amount + $pay,
+                        );
+                        $pay = 0;
+                    }elseif($pay > $purchase->due_amount){
+                          $payment =  $purchase->due_amount;
+                          $data = array(
+                            'due_amount' => $purchase->due_amount - $payment,
+                            'paid_amount' =>  $payment + $pay,
+                        );
+                        $pay = $pay - $purchase->due_amount;
+                    }else{
+                        $data = array(
+                            'due_amount' => $purchase->due_amount - $pay,
+                            'paid_amount' => $purchase->paid_amount + $pay,
+                        );
+                        $pay = 0;
+                    }
+                    MedicinePurchase::where('supplier_id', $request->supplier_id)->where('id', $purchase->id)->update($data);
+
+
+                } else {
+                    break;
+                }
+            }
+            return redirect()->back()->with('success', 'Due Payment Successful.');
+        } catch (Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
 }

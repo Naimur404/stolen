@@ -133,6 +133,12 @@ Route::get('/ajax-invoice',[OutletInvoiceController::class,'ajaxInvoice'])->name
 Route::get('customer-due/{id}',[CustomerManagementController::class,'customerDue'])->name('customer-due');
 Route::post('customer-due-payment',[CustomerManagementController::class,'customerDuePayment'])->name('customer-due-payment');
 Route::get('customer-delete/{id}',[CustomerManagementController::class,'customerDelete'])->name('customer-delete');
+
+//supplier due
+
+Route::get('supplier-due/{id}',[SupplierController::class,'supplierDue'])->name('supplier-due');
+Route::post('supplier-due-payment',[SupplierController::class,'supplierDuePayment'])->name('supplier-due-payment');
+
 //purchase
 
 Route::get('edit-purchase/{id}',[MedicinePurchaseController::class,'editPurchase'])->name('edit-purchase');

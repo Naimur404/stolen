@@ -35,7 +35,6 @@ class OutletInvoiceController extends Controller
         $this->middleware('permission:invoice.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:invoice.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:invoice.delete', ['only' => ['destroy']]);
-
         $this->middleware('permission:pay-due.payment', ['only' => ['dueList', 'payDue', 'paymentDue']]);
     }
 
@@ -406,7 +405,7 @@ class OutletInvoiceController extends Controller
             OutletPayment::create($array2);
             Customer::where('id', $invoiceData->customer_id)->update($due);
             OutletInvoice::where('id', $request->outlet_invoice_id)->update($arra);
-            return redirect()->back()->with('success', 'Due Payment Successfull.');
+            return redirect()->back()->with('success', 'Due Payment Successful.');
         } catch (Exception $e) {
             return redirect()->back()->with('error', $e->getMessage());
         }
@@ -457,7 +456,6 @@ class OutletInvoiceController extends Controller
 
         $data_arr = array();
 
-        $sl = 1;
         $total = 0;
         foreach ($invoices as $invoice) {
 

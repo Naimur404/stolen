@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\MedicinePurchase;
 use App\Models\MedicinePurchaseDetails;
 use App\Models\PaymentMethod;
+use App\Models\Supplier;
 use App\Models\Warehouse;
 use App\Models\WarehouseCheckIn;
 use Carbon\Carbon;
@@ -114,8 +115,14 @@ class MedicinePurchaseController extends Controller
         ];
         try {
             Log::info($purchase_input);
-            $purchase = MedicinePurchase::create($purchase_input);
 
+            $supplier = Supplier::where('id', $input['supplier_id'])->first();
+            $supplier_due = array(
+              'due_balance' => $supplier->due_balance + $input['due_amount'],
+            );
+            Supplier::where('id', $input['supplier_id'])->update($supplier_due);
+
+            $purchase = MedicinePurchase::create($purchase_input);
             $medicines = $input['product_name'];
             Log::info($medicines);
 
@@ -316,8 +323,15 @@ try{
 'due_amount' => $check,
 'paid_amount' => $data3->paid_amount,
   );
-  MedicinePurchase::where('id',$request->pid)->update($update2);
-  return redirect()->route('medicine-purchase.edit', $request->pid)->with('succes', 'Updated');
+
+ $final_data = MedicinePurchase::where('id',$request->pid)->update($update2);
+ $suppler = Supplier::where('id', $final_data->supplier_id)->first();
+ $suppler_due = array(
+'due_amount' => $suppler->due_amount + $check,
+ );
+
+ Supplier::where('id', $suppler->id)->update($suppler_due);
+  return redirect()->route('medicine-purchase.edit', $request->pid)->with('success', 'Updated');
 }catch(Exception $e){
     return redirect()->back()->with('error', $e->getMessage());
 }
@@ -329,26 +343,24 @@ public function purchaseDelete($id){
     $data = MedicinePurchaseDetails::where('id',$id)->first();
     $data2 = MedicinePurchase::where('id',$data->medicine_purchase_id)->first();
     $subtotal = $data2->sub_total-$data->total_price;
-    $grand_total = $subtotal - ($data2->vat + $data2->total_discoun);
+    $grand_total = $subtotal - ($data2->vat + $data2->total_discount);
     $due_amount =  $grand_total - $data2->paid_amount;
+
     if($due_amount <= 0){
         $due_amount = 0;
     }else{
         $due_amount =  $grand_total - $data2->paid_amount;
-
     }
 
     $data3 = array(
              'sub_total' => $subtotal,
              'grand_total' => $grand_total,
              'due_amount' => $due_amount,
-
     );
-    MedicinePurchase::where('id',$data->medicine_purchase_id)->update($data3);
 
-     MedicinePurchaseDetails::where('id',$id)->delete();
-
-    return redirect()->back()->with('success', 'Data has been Deteled.');
+    MedicinePurchase::where('id', $data->medicine_purchase_id)->update($data3);
+    MedicinePurchaseDetails::where('id',$id)->delete();
+    return redirect()->back()->with('success', 'Data has been Deleted.');
 }
 
 }
