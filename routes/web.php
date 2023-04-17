@@ -325,6 +325,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
 
     Route::post('supplier-stock-report-outlet', [ReportController2::class,'supplier_wise_stock_outlet'])->name('supplier-stock-report-outlet');
     Route::post('supplier-stock-report-warehouse', [ReportController2::class,'supplier_wise_stock_warehouse'])->name('supplier-stock-report-warehouse');
+
+    Route::post('manufacturer-stock-report-outlet', [ReportController2::class,'manufacturer_wise_stock_outlet'])->name('manufacturer-stock-report-outlet');
+    Route::post('manufacturer-stock-report-warehouse', [ReportController2::class,'manufacturer_wise_stock_warehouse'])->name('manufacturer-stock-report-warehouse');
     Route::post('best-selling', [ReportController2::class,'bestSelling'])->name('best-selling');
     Route::post('slow-selling', [ReportController2::class,'slowSelling'])->name('slow-selling');
 

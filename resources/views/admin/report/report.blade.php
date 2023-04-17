@@ -452,6 +452,45 @@
                                         @endcan
 
 
+
+                                        @can('manufacturer_wise_stock_report_outlet')
+
+                                        {!! Form::open(array('url'=> 'report2/manufacturer-stock-report-outlet', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                                        <div class="row form-group">
+                                           <div class="col-md-2 mt-4">
+                                               <b>Manufacturer Wise Stock Report</b>
+                                           </div>
+                                           <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                                            <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                                            <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet','required']) }}
+                                           </div>
+                                           <div class="col-md-2">Manufacturer Name {{ Form::select('manufacturer_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Manufacturer', 'id' => 'manufacturer1']) }}
+                                           </div>
+                                           <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                                       </div>
+                                       {!! Form::close() !!}
+                                       @endcan
+
+                                       @can('manufacturer_wise_stock_report_warehouse')
+                                       {!! Form::open(array('url'=> 'report2/manufacturer-stock-report-warehouse', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                                       <div class="row form-group">
+                                           <div class="col-md-2 mt-4">
+                                               <b>Manufacturer Wise Stock Report</b>
+                                           </div>
+                                           <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                                            <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                                            <div class="col-md-2">Warehouse Name {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'placeholder' => 'Select Warehouse', 'id' => 'outlet','required']) }}
+                                           </div>
+                                           <div class="col-md-2">Manufacturer Name {{ Form::select('manufacturer_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Manufacturer', 'id' => 'manufacturer2']) }}
+                                           </div>
+                                           <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                                       </div>
+                                       {!! Form::close() !!}
+                                       @endcan
+
+
+
+
                 </div>
             </div>
         </div>
@@ -511,6 +550,56 @@
 
                     });
 
+
+
+
+$( "#manufacturer1" ).select2({
+
+ajax: {
+  url: "{{route('get-manufacturer')}}",
+  type: "post",
+  dataType: 'json',
+
+  data: function (params) {
+    return {
+       _token: CSRF_TOKEN,
+       search: params.term // search term
+    };
+  },
+  processResults: function (response) {
+    return {
+      results: response
+    };
+  },
+  cache: true
+}
+
+});
+
+
+
+$( "#manufacturer2" ).select2({
+
+ajax: {
+  url: "{{route('get-manufacturer')}}",
+  type: "post",
+  dataType: 'json',
+
+  data: function (params) {
+    return {
+       _token: CSRF_TOKEN,
+       search: params.term // search term
+    };
+  },
+  processResults: function (response) {
+    return {
+      results: response
+    };
+  },
+  cache: true
+}
+
+});
 
 
                     $("#medicine_id22").select2({

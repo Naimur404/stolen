@@ -159,6 +159,11 @@ class PermissionSeeder extends Seeder
             'supplier_wise_stock_report_warehouse',
             'supplier_wise_stock_report_warehouse.search',
 
+            'manufacturer_wise_stock_report_outlet',
+            'manufacturer_wise_stock_report_outlet.search',
+            'manufacturer_wise_stock_report_warehouse',
+            'manufacturer_wise_stock_report_warehouse.search',
+
             'profit_loss',
             'profit_loss.report',
 
