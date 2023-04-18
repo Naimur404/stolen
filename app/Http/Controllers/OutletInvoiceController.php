@@ -160,10 +160,10 @@ class OutletInvoiceController extends Controller
             'outlet_id' => $input['outlet_id'],
             'customer_id' => $customer->id,
             'sale_date' => Carbon::now(),
-            'sub_total' => $input['sub_total'] + $request->discount,
-            'vat' => $input['vat'],
-            'total_discount' => $discount,
-            'grand_total' => round($input['grand_total']),
+            'sub_total' => $input['sub_total'] + round($request->discount),
+            'vat' => round($input['vat']),
+            'total_discount' => round($discount),
+            'grand_total' => ($input['grand_total']),
             'given_amount' => round($input['paid_amount']),
             'paid_amount' => $input['paid_amount'] > $input['grand_total'] ? round($input['grand_total']) : $input['paid_amount'],
             'due_amount' => round($input['due_amount']),
@@ -208,8 +208,8 @@ class OutletInvoiceController extends Controller
 
                     'quantity' => $input['quantity'][$i],
                     'rate' => $input['box_mrp'][$i],
-                    'discount' => $input['totaldis'][$i],
-                    'total_price' => $input['total'][$i]  + $input['totaldis'][$i],
+                    'discount' => round($input['totaldis'][$i]),
+                    'total_price' => round($input['total'][$i])  + round($input['totaldis'][$i]),
 
                 );
                 OutletInvoiceDetails::create($invoicedetails);
