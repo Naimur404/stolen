@@ -123,6 +123,8 @@ class RoleSeeder extends Seeder
             'customer-due-payment',
             'supplier-due',
             'supplier-due-payment',
+            'manufacturer_wise_stock_report_warehouse',
+            'manufacturer_wise_stock_report_warehouse.search',
 
         ];
 
@@ -193,6 +195,8 @@ class RoleSeeder extends Seeder
 
             'slow_selling',
             'slow_selling.search',
+            'manufacturer_wise_stock_report_outlet',
+            'manufacturer_wise_stock_report_outlet.search',
 
 
         ];

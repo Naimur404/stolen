@@ -1,5 +1,5 @@
 @extends('layouts.admin.public_layouts')
-@section('title','Supplier Wise Medicine Stock Report')
+@section('title','Manufacturer Wise Medicine Stock Report')
 @section('main-content')
 <style>
     .space{
@@ -51,10 +51,17 @@
             <thead class="">
                 <tr>
 
+
+
+
+
                                 <th>Medicine Name</th>
+                                <th>Manufacturer</th>
                                 <th>Expiry Date</th>
                                 <th>Quantity</th>
-                                <th>Price</th>
+                                <th>Purchase Price</th>
+                                <th>Sell Price</th>
+
                                 <th>Total</th>
 
 
@@ -70,19 +77,17 @@
                      @foreach ($productStocks as $productStock)
 
 
-                     @foreach($manu as $check)
-                     @if ($check->manufacturer_id == $productStock->manufacturer_id)
 
 
 
 
 
                         <td>{{ $productStock->medicine_name }}</td>
-
+                        <td>{{ $manu->manufacturer_name }}</td>
                         <td>{{ $productStock->expiry_date }}</td>
                         <td>{{ $productStock->quantity }}</td>
 
-
+                        <td>{{ $productStock->purchase_price }}</td>
 
                         <td>{{ $productStock->price }}</td>
 
@@ -91,16 +96,14 @@
 
 
 
-                    @else
-                    @break
-                     @endif
+
                      @php
                      $grand_total = $grand_total + ($productStock->price*$productStock->quantity);
                      $total_quantity = $total_quantity + $productStock->quantity;
 
                      @endphp
 
-                     @endforeach
+
                     </tr>
 
                  @endforeach
