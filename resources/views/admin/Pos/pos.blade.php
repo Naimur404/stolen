@@ -23,7 +23,7 @@
             padding: 10px !important;
         }
         .form-control, .form-select{
-            border-color: #d22d3d !important;
+            border-color: #172d7b !important;
         }
         .form-control:disabled, .form-control[readonly]{
             border-color: #efeff1 !important;
@@ -242,7 +242,7 @@
                                     <td class="text-right" colspan="7"><b>Sub total:</b></td>
                                     <td></td>
                                     <td class="text-right">
-                                        <input type="number" class="form-control text-right" name="sub_total"
+                                        <input type="number" class="form-control text-right fw-bold text-primary" name="sub_total"
                                                id="subtotal" readonly>
                                     </td>
                                     <td>
@@ -291,7 +291,7 @@
                                     <td class="text-right" colspan="8"><b>After All Discount:</b></td>
 
                                     <td class="text-right">
-                                        <input type="number" class="form-control text-right afterdis" name="afterdis"
+                                        <input type="number" class="form-control text-right afterdis fw-bold text-primary" name="afterdis"
                                                id="afterdis" readonly>
                                     </td>
 
@@ -316,7 +316,7 @@
                                     <td class="text-right" colspan="8"><b>Grand Total:</b></td>
 
                                     <td class="text-right">
-                                        <input type="number" class="form-control text-right" name="grand_total"
+                                        <input type="number" class="form-control text-right text-success fw-bold" name="grand_total"
                                                id="grandTotal" readonly="readonly"
                                                required> {{-- <span id="grandTotal">0</span> --}}
                                     </td>
