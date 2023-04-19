@@ -107,7 +107,7 @@
 
                                             @foreach ($roles as $role)
                                             @if( $data->id == $roleuser->model_id && $role->id == $roleuser->role_id)
-                                            <option value="" selected>{{ $role->name  }}</option>
+                                            <option value="{{ $role->id  }}" selected>{{ $role->name  }}</option>
                                             @endif
                                             @endforeach
 

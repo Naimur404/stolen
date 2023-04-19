@@ -184,12 +184,14 @@ class OutletStockController extends Controller
     public function update(Request $request, OutletStock $outletStock)
     {
       $data = array(
+        'purchase_price' => $request->purchase_price,
         'price' => $request->price,
+        'quantity' => $request->quantity,
 
       );
 
       OutletStock::where('id',$request->id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',Carbon::parse($request->expiry_date)->toDateString())->update($data);
-        return redirect()->back()->with('success', ' Successfully Medicne Price Update.');
+        return redirect()->back()->with('success', ' Successfully Medicine stock Update.');
 
     }
 

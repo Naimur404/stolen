@@ -58,8 +58,10 @@
                     <th>Sale Date</th>
                     <th>Method</th>
                     <th>Sold By</th>
-                    <th>Total</th>
+                    <th>Sub Total</th>
                     <th>Discount</th>
+                    <th>Vat</th>
+                    <th>Grand Total</th>
                     <th>Pay</th>
                     <th>Due</th>
                     <th>Action</th>
@@ -85,8 +87,10 @@
                         <td>{{ $productSale->user->name ?? '' }}</td>
 
 
-                        <td>{{ $productSale->grand_total }}</td>
+                        <td>{{ $productSale->sub_total }}</td>
                         <td>{{ $productSale->total_discount }}</td>
+                        <td>{{ $productSale->vat }}</td>
+                        <td>{{ $productSale->grand_total }}</td>
                         <td>{{ $productSale->paid_amount }}</td>
                         <td>
                             {{ $productSale->due_amount > 0.5 ? $productSale->due_amount : 'Paid' }}
