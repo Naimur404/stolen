@@ -163,7 +163,7 @@ class OutletInvoiceController extends Controller
             'sub_total' => $input['sub_total'] + round($request->discount),
             'vat' => round($input['vat']),
             'total_discount' => round($discount),
-            'grand_total' => ($input['grand_total']),
+            'grand_total' => round($input['grand_total']),
             'given_amount' => round($input['paid_amount']),
             'paid_amount' => $input['paid_amount'] > $input['grand_total'] ? round($input['grand_total']) : $input['paid_amount'],
             'due_amount' => round($input['due_amount']),
@@ -436,7 +436,7 @@ class OutletInvoiceController extends Controller
         if (auth()->user()->hasrole('Super Admin')) {
             $totalRecords = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->orderBy('id', 'desc')->select('count(*) as allcount')->count();
             $invoices =    DB::table('outlet_invoices')->whereDate('sale_date', '>=', Carbon::now()->month())
-                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.sale_date' , 'like', '%' . Carbon::parse($searchValue)->format('Y-m-d') . '%')->select('outlet_invoices.*', 'customers.mobile')
+                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->orWhereDate('outlet_invoices.sale_date' , 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
                  ->orderBy($columnName, $columnSortOrder)
                 ->skip($start)
                 ->take($row_per_page)
@@ -444,7 +444,7 @@ class OutletInvoiceController extends Controller
         } else {
             $totalRecords = OutletInvoice::where('outlet_id', '=', $outlet_id)->whereDate('sale_date', '>=', Carbon::now()->month())->select('count(*) as allcount')->count();
             $invoices =  DB::table('outlet_invoices')->orderBy($columnName, $columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_invoices.outlet_id', $outlet_id)
-                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
+                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->orWhereDate('outlet_invoices.sale_date' , 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
                 ->skip($start)
                 ->take($row_per_page)
                 ->get();
