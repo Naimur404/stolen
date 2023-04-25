@@ -53,6 +53,9 @@
                         <div class="mb-3 mt-2">
                             <p style="text-align: left"><b>Writeoff Quantity :&nbsp;&nbsp;</b> {{ $outletWriteoff->quantity }}</p>
                         </div>
+                        <div class="mb-3 mt-2">
+                            <p style="text-align: left"><b>Writeoff Type :&nbsp;&nbsp;</b> {{ $outletWriteoff->type == 'sub' ? 'Subtraction': 'Addition'}}</p>
+                        </div>
 
 
                     <div class="mb-3 mt-2">

@@ -64,13 +64,25 @@ class WarehouseWriteoffController extends Controller
                 'reason'=> $input['reason'],
                 'remarks'=> $input['remarks'],
                 'added_by'=> Auth::user()->id,
+                'type' => $input['type']
             );
 
             WarehouseWriteoff::create($data);
-            $data1 = array(
-             'quantity' =>  $input['pre_quantity'] - $input['quantity'],
+            if($request->type == 'sub'){
+                $data1 = array(
+                    'quantity' =>  $input['pre_quantity'] - $input['quantity'],
 
-            );
+                   );
+                }
+
+                if($request->type == 'add'){
+
+                    $data1 = array(
+                        'quantity' =>  $input['pre_quantity'] + $input['quantity'],
+
+                       );
+                }
+
              WarehouseStock::where('id', $input['stock_id'])->where('warehouse_id',$input['warehouse_id'])->where('medicine_id',$input['medicine'])->update($data1);
              return redirect()->back()->with('success', 'WriteOff Added Sucessfully.');
         }catch(Exception $e){

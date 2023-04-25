@@ -54,7 +54,9 @@
                             <p style="text-align: left"><b>Writeoff Quantity :&nbsp;&nbsp;</b> {{ $warehouseWriteoff->quantity }}</p>
                         </div>
 
-
+                        <div class="mb-3 mt-2">
+                            <p style="text-align: left"><b>Writeoff Type :&nbsp;&nbsp;</b> {{ $warehouseWriteoff->type == 'sub' ? 'Subtraction': 'Addition'}}</p>
+                        </div>
                     <div class="mb-3 mt-2">
                         <p style="text-align: left"><b>Writeoff Date :&nbsp;&nbsp;</b> {{ \Carbon\Carbon::parse($warehouseWriteoff->created_at)->format('d-m-Y') }}</p>
                 </div>
