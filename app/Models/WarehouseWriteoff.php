@@ -20,6 +20,7 @@ class WarehouseWriteoff extends Model
         'reason',
         'remarks',
         'added_by',
+        'type'
     ];
     public function stock(){
         return $this->belongsTo(WarehouseStock::class, 'warehouse_stock_id', 'id');

@@ -41,7 +41,7 @@ class OutletWriteoffController extends Controller
 
 
         $outlets = Outlet::pluck('outlet_name', 'id');
- 
+
         return view('admin.Writeoff.outlet_writeoff',compact('outlets'));
     }
 
@@ -67,13 +67,24 @@ class OutletWriteoffController extends Controller
                 'reason'=> $input['reason'],
                 'remarks'=> $input['remarks'],
                 'added_by'=> Auth::user()->id,
+                'type' => $input['type']
             );
 
             OutletWriteoff::create($data);
-            $data1 = array(
-             'quantity' =>  $input['pre_quantity'] - $input['quantity'],
+            if($request->type == 'sub'){
+                $data1 = array(
+                    'quantity' =>  $input['pre_quantity'] - $input['quantity'],
 
-            );
+                   );
+                }
+
+                if($request->type == 'add'){
+
+                    $data1 = array(
+                        'quantity' =>  $input['pre_quantity'] + $input['quantity'],
+
+                       );
+                }
              OutletStock::where('id', $input['stock_id'])->where('outlet_id',$input['outlet_id'])->where('medicine_id',$input['medicine'])->update($data1);
              return redirect()->back()->with('success', ' WriteOff Added Sucessfully.');
         }catch(Exception $e){

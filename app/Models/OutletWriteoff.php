@@ -20,6 +20,7 @@ class OutletWriteoff extends Model
         'reason',
         'remarks',
         'added_by',
+        'type'
     ];
 
     public function stock(){

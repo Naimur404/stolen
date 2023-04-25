@@ -53,6 +53,15 @@
 
 
                             </div>
+                            <div class="mb-3">
+                                {{ Form::label('type', 'Type *') }}
+                                {{ Form::select('type', [ 'sub' =>'Subtraction','add' => 'Addition'], 'sub', ['class' => 'form-control', 'required']) }}
+                                @error('gender')
+                                <div class="invalid-feedback2"> {{ $message }}</div>
+                            @enderror
+                                {{-- <label class="form-label">Email-Address</label>
+                                <input class="form-control" placeholder=""  readonly value="{{ $Profile->email }}"/> --}}
+                            </div>
                             <div class="mb-3 mt-2">
                                 {{ Form::label('pre_quantity', 'Stock Quantity ') }}
                                 {{ Form::number('pre_quantity', null, ['class' => 'form-control' ,'id' => 'pre_quantity', 'readonly']) }}
