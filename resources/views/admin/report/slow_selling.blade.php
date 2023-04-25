@@ -86,7 +86,7 @@
                          <td>{{ $productPurchase->quantity }}</td>
                          <td>{{ $productPurchase->rate }}</td>
 
-                   
+
                      </tr>
                      @php
                     $grand_quantity = $grand_quantity + $productPurchase->quantity;
@@ -106,7 +106,9 @@
     </div>
 </div>
 
+@if ($app_setting->print == 1)
 <script>
     setTimeout(function() { window.print(); }, 1000);
 </script>
+@endif
 @endsection

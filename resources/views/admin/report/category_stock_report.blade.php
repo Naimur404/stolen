@@ -35,7 +35,7 @@
     <div class="col-md-7 text-right">
         <br>
         <h4>{{ $title }}</h4>
- 
+
     </div>
 </div>
 
@@ -99,9 +99,11 @@
 </div>
 
 @section('custom-js')
+@if ($app_setting->print == 1)
 <script>
     setTimeout(function() { window.print(); }, 1000);
 </script>
+@endif
 
 @endsection
 @endsection

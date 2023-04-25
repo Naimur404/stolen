@@ -55,7 +55,7 @@
                             </div>
                             <div class="mb-3">
                                 {{ Form::label('type', 'Type *') }}
-                                {{ Form::select('type', [ 'sub' =>'Subtraction','add' => 'Addition'], null, ['class' => 'form-control', 'required']) }}
+                                {{ Form::select('type', [ 'sub' =>'Subtraction','add' => 'Addition'], 'sub', ['class' => 'form-control', 'required']) }}
                                 @error('gender')
                                 <div class="invalid-feedback2"> {{ $message }}</div>
                             @enderror
