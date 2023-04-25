@@ -37,6 +37,7 @@ class SettingController extends Controller
           $data->description = $request->description;
           $data->website = $request->website;
           $data->footer_text = $request->footer_text;
+          $data->print = $request->print;
 
           //for upload logo
 

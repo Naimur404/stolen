@@ -18,6 +18,7 @@ class Settings extends Model
           'phone_no',
           'description',
           'website',
+          'print',
           'footer_text'
 
 

@@ -155,6 +155,11 @@ $total_pay = 0;
 
 
 @push('scripts')
+@if ($app_setting->print == 1)
+<script>
+    setTimeout(function() { window.print(); }, 1000);
+</script>
+@endif
 {{-- <script src="{{ asset('assets/js/datatable/datatables/jquery.dataTables.min.js') }}"></script> --}}
 <script src="https://cdn.datatables.net/buttons/2.3.4/js/dataTables.buttons.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/2.3.4/js/dataTables.buttons.min.js"></script>

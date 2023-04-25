@@ -118,10 +118,11 @@
     </div>
 </div>
 @section('custom-js')
+@if ($app_setting->print == 1)
 <script>
     setTimeout(function() { window.print(); }, 1000);
 </script>
-
+@endif
 @endsection
 
 @endsection
