@@ -90,7 +90,7 @@
             {data: 'sale_date', name: 'Sale Date'},
             {data: 'outlet_name', name: 'Outlet Name'},
             {data: 'mobile', name: 'customer'},
-            {data: 'payment', name: 'Method'},
+            {data: 'payment_method_id', name: 'Method'},
             {data: 'grand_total', name: 'total'},
             {data: 'paid_amount', name: 'pay'},
             {data: 'sold_by', name: 'Sold By'},
