@@ -788,10 +788,11 @@ class ReportController2 extends Controller
 
             $category = Category::where('id', $request->category_id)->first();
             $title = 'Category Stock Report Alert';
+
         }
 
 
-        return view('admin.report.category_wise_stock_alert', compact('productSales', 'title', 'outlet', 'category', 'warehouse', 'category1', 'total'));
+         return view('admin.report.category_wise_stock_alert', compact('productSales', 'title', 'outlet', 'category', 'warehouse', 'category1', 'total'));
     }
 
 

@@ -482,7 +482,7 @@ class OutletInvoiceController extends Controller
 
                 "outlet_name" => $outlet_name,
                 "mobile" => $customer,
-                "payment" => $payment,
+                "payment_method_id" => $payment,
                 "grand_total" => $total,
                 "paid_amount" => $pay,
                 "sold_by" => $sold_by,
