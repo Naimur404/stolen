@@ -40,11 +40,11 @@
 </div>
 
 <div class="row all-content">
-    <p align="center"><b> Medicine Stock Report -
-        @if ($start_date && $end_date !=null )
+    <p align="center"><b> Medicine Stock Report
+        {{-- @if ($start_date && $end_date !=null )
            From {{Carbon\Carbon::parse($start_date)->format('d-m-Y')}}
            To {{Carbon\Carbon::parse($end_date)->format('d-m-Y') }}
-       @endif
+       @endif --}}
    </b></p>
     <div class="col-md-12">
         <table class="table table-hover table-bordered">

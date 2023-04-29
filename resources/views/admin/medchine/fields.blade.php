@@ -82,7 +82,7 @@
                                 <div class="col-sm-12 col-md-12">
 	                                <div class="mb-3">
                                         {!! Form::label('price', 'Price *', array('class' => 'form-label')) !!}
-                                        {!! Form::number('price',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Medicine Price','step' => '0.1' ,'required']) !!}
+                                        {!! Form::number('price',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Medicine Price','step' => 'any' ,'required']) !!}
 
                                         @error('price')
                                         <div class="invalid-feedback2"> {{ $message }}</div>
@@ -235,7 +235,7 @@
                             <div class="col-sm-12 col-md-12">
                                 <div class="mb-3">
                                     {!! Form::label('manufacturer_price', 'Manufacturer Price', array('class' => 'form-label')) !!}
-                                    {!! Form::number('manufacturer_price',null,['class'=>'form-control', 'id' => 'age','placeholder'=>'0.00' ,'step' => '0.1' ]) !!}
+                                    {!! Form::number('manufacturer_price',null,['class'=>'form-control', 'id' => 'age','placeholder'=>'0.00' ,'step' => 'any' ]) !!}
                                     @error('manufacturer_price')
                                     <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -251,4 +251,3 @@
             </div>
             </div>
         </div>
-        
