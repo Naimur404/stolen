@@ -116,8 +116,7 @@
                         <div class="col-md-2 mt-4">
                             <b>Warehouse Stock Report</b>
                         </div>
-                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-                        <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+
                         <div class="col-md-3">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
                             </div>
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
@@ -130,8 +129,7 @@
                         <div class="col-md-2 mt-4">
                             <b>Outlet Stock Report</b>
                         </div>
-                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-                        <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                         
                         <div class="col-md-3">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id2']) }}
                             </div>
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
@@ -423,8 +421,7 @@
                                             <div class="col-md-2 mt-4">
                                                 <b>Supplier Wise Stock Report</b>
                                             </div>
-                                            <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-                                             <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+
                                              <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet','required']) }}
                                             </div>
                                             <div class="col-md-2">Supplier Name {{ Form::select('supplier_id', $supplier, null, ['class' => 'form-control', 'id' => 'supplier']) }}
@@ -440,8 +437,7 @@
                                             <div class="col-md-2 mt-4">
                                                 <b>Supplier Wise Stock Report</b>
                                             </div>
-                                            <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-                                             <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+
                                              <div class="col-md-2">Warehouse Name {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'placeholder' => 'Select Warehouse', 'id' => 'outlet','required']) }}
                                             </div>
                                             <div class="col-md-2">Supplier Name {{ Form::select('supplier_id', $supplier, null, ['class' => 'form-control', 'id' => 'supplier']) }}
@@ -460,8 +456,7 @@
                                            <div class="col-md-2 mt-4">
                                                <b>Manufacturer Wise Stock Report</b>
                                            </div>
-                                           <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-                                            <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+
                                             <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet','required']) }}
                                            </div>
                                            <div class="col-md-2">Manufacturer Name {{ Form::select('manufacturer_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Manufacturer', 'id' => 'manufacturer1']) }}
@@ -477,8 +472,7 @@
                                            <div class="col-md-2 mt-4">
                                                <b>Manufacturer Wise Stock Report</b>
                                            </div>
-                                           <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-                                            <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+
                                             <div class="col-md-2">Warehouse Name {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'placeholder' => 'Select Warehouse', 'id' => 'outlet','required']) }}
                                            </div>
                                            <div class="col-md-2">Manufacturer Name {{ Form::select('manufacturer_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Manufacturer', 'id' => 'manufacturer2']) }}
