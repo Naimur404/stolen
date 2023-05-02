@@ -1,5 +1,5 @@
 @extends('layouts.admin.master')
-@section('title')Edit Warehouse Stock Price
+@section('title')Edit Warehouse Stock
 @endsection
 @push('css')
 <style>
@@ -18,7 +18,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-6">
-			<h3>Edit Warehouse Stock Price</h3>
+			<h3>Edit Warehouse Stock</h3>
         </div>
 
         </div>
@@ -72,7 +72,7 @@
                         <td>{{ App\Models\Medicine::get_medicine_name($warehouseStock->medicine_id) }}
                                <input type="hidden" name="medicine_id" id="" value="{{ $warehouseStock->medicine_id }}">
                         </td>
-                        <td><input class="datepicker-here form-control digits" type="text" data-language="en" data-bs-original-title="" title="" name="expiry_date" value="{{  \Carbon\Carbon::parse($warehouseStock->expiry_date)->format('d-m-Y') }}" tabindex="2" required readonly>
+                        <td><input class="datepicker-here form-control digits" type="text" data-language="en" data-bs-original-title="" title="" name="expiry_date" value="{{  \Carbon\Carbon::parse($warehouseStock->expiry_date)->format('d-m-Y') }}" tabindex="2" required>
                         </td>
                         <td> <input type="number" name="quantity" id="qty" value="{{ $warehouseStock->quantity }}" class="form-control" required readonly></td>
                         <td><input type="number" name="purchase_price" id="price" value="{{ $warehouseStock->purchase_price }}" step="any" class="form-control" required>

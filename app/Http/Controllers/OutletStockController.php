@@ -187,10 +187,11 @@ class OutletStockController extends Controller
         'purchase_price' => $request->purchase_price,
         'price' => $request->price,
         'quantity' => $request->quantity,
+        'expiry_date' => Carbon::parse($request->expiry_date)->toDateString(),
 
       );
 
-      OutletStock::where('id',$request->id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',Carbon::parse($request->expiry_date)->toDateString())->update($data);
+      OutletStock::where('id',$request->id)->where('medicine_id',$request->medicine_id)->update($data);
         return redirect()->back()->with('success', ' Successfully Medicine stock Update.');
 
     }
