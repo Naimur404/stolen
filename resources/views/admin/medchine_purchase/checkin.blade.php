@@ -74,7 +74,8 @@
                     <th>SL</th>
                     <th>Name Of Medicine</th>
                     <th>Quantity</th>
-                    <th>Price</th>
+                    <th>Purchase Price</th>
+                    <th>Sell Price</th>
                     <th>Expiry Date</th>
                     <th>Action</th>
                 </tr>
@@ -85,11 +86,13 @@
                         <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
 
                           <input type="hidden" name="purchase_id" value="{{ $productPurchase->id }}">
-                          <input type="hidden" name="purchase_price" value="{{ $data->manufacturer_price }}">
+
                           <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name }}</td>
                         <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
+                        </td>
+                        <td>{{ Form::number('purchase_price', $data->manufacturer_price, ['class' => 'form-control', 'readonly']) }}
                         </td>
                         <td>{{ Form::number('price', $data->box_mrp, ['class' => 'form-control', 'readonly']) }}
                             </td>
