@@ -152,10 +152,7 @@ for ($i = 0; $i < sizeof($medicines); $i++) {
 
     );
 
-    Log::info($purchase_details);
-
-    $details = MedicinePurchaseDetails::create($purchase_details);
-    Log::info($details);
+    MedicinePurchaseDetails::create($purchase_details);
 }
 
 }else{
@@ -179,16 +176,9 @@ for ($i = 0; $i < sizeof($medicines); $i++) {
 
         );
 
-        Log::info($purchase_details);
-
-        $details = MedicinePurchaseDetails::create($purchase_details);
-        Log::info($details);
+         MedicinePurchaseDetails::create($purchase_details);
     }
-
-
 }
-
-
 
             return redirect()->back()->with('success', 'Data has been added.');
         } catch (Exception $e) {
