@@ -80,7 +80,7 @@
             <table class="table table-bordered mt-2">
                 <tr>
                     <th>SL</th>
-                    <th>Name Of Investigation</th>
+                    <th>Name Of Medicine</th>
                     <th>Quantity</th>
                     <th>Manufacturer Price</th>
                     <th>Amount</th>
