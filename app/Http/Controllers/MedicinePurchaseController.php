@@ -125,32 +125,69 @@ class MedicinePurchaseController extends Controller
             $purchase = MedicinePurchase::create($purchase_input);
             $medicines = $input['product_name'];
             Log::info($medicines);
+if($input['total_discount'] != '' || $input['total_discount'] > 0){
 
-            for ($i = 0; $i < sizeof($medicines); $i++) {
-                $purchase_details = array(
-                    'warehouse_id' => (int)$input['warehouse_id'],
-                    'medicine_purchase_id' => $purchase->id,
-                    'medicine_id' => (int)$input['product_id'][$i],
-                    'medicine_name' => $input['product_name'][$i],
-                    'product_type' => $input['product_type'][$i],
-                    'quantity' => (int)$input['quantity'][$i],
-                    'rack_no' => $input['rack_no'][$i],
-                    'expiry_date' => Carbon::parse($input['expiry_date'][$i])->toDateString(),
-                    'manufacturer_price' => (double)$input['manufacturer_price'][$i],
-                    'box_mrp' => (double)$input['box_mrp'][$i],
-                    'total_price' => (double)$input['total_price'][$i],
-                    'rate' => round($input['total_price'][$i] / $input['quantity'][$i], 2),
-                    'total_amount' => (double)$input['total_price'][$i],
-                    'total_discount' => (double)$input['total_discount'],
-                    'vat' => (double)$purchase->vat,
+$percent = ($input['total_discount']/$input['sub_total'])*100;
+$percent = number_format($percent,2);
 
-                );
+for ($i = 0; $i < sizeof($medicines); $i++) {
 
-                Log::info($purchase_details);
+    $manuprice  = $input['manufacturer_price'][$i]-($input['manufacturer_price'][$i]*($percent/100));
+    $purchase_details = array(
+        'warehouse_id' => (int)$input['warehouse_id'],
+        'medicine_purchase_id' => $purchase->id,
+        'medicine_id' => (int)$input['product_id'][$i],
+        'medicine_name' => $input['product_name'][$i],
+        'product_type' => $input['product_type'][$i],
+        'quantity' => (int)$input['quantity'][$i],
+        'rack_no' => $input['rack_no'][$i],
+        'expiry_date' => Carbon::parse($input['expiry_date'][$i])->toDateString(),
+        'manufacturer_price' => number_format($manuprice,2),
+        'box_mrp' => (double)$input['box_mrp'][$i],
+        'total_price' => (double)$input['total_price'][$i],
+        'rate' => round($input['total_price'][$i] / $input['quantity'][$i], 2),
+        'total_amount' => (double)$input['total_price'][$i],
+        'total_discount' => number_format(($input['manufacturer_price'][$i]*($percent/100))*$input['quantity'][$i],2),
+        'vat' => (double)$purchase->vat,
 
-                $details = MedicinePurchaseDetails::create($purchase_details);
-                Log::info($details);
-            }
+    );
+
+    Log::info($purchase_details);
+
+    $details = MedicinePurchaseDetails::create($purchase_details);
+    Log::info($details);
+}
+
+}else{
+    for ($i = 0; $i < sizeof($medicines); $i++) {
+        $purchase_details = array(
+            'warehouse_id' => (int)$input['warehouse_id'],
+            'medicine_purchase_id' => $purchase->id,
+            'medicine_id' => (int)$input['product_id'][$i],
+            'medicine_name' => $input['product_name'][$i],
+            'product_type' => $input['product_type'][$i],
+            'quantity' => (int)$input['quantity'][$i],
+            'rack_no' => $input['rack_no'][$i],
+            'expiry_date' => Carbon::parse($input['expiry_date'][$i])->toDateString(),
+            'manufacturer_price' => (double)$input['manufacturer_price'][$i],
+            'box_mrp' => (double)$input['box_mrp'][$i],
+            'total_price' => (double)$input['total_price'][$i],
+            'rate' => round($input['total_price'][$i] / $input['quantity'][$i], 2),
+            'total_amount' => (double)$input['total_price'][$i],
+            'total_discount' => (double)$input['total_discount'],
+            'vat' => (double)$purchase->vat,
+
+        );
+
+        Log::info($purchase_details);
+
+        $details = MedicinePurchaseDetails::create($purchase_details);
+        Log::info($details);
+    }
+
+
+}
+
 
 
             return redirect()->back()->with('success', 'Data has been added.');

@@ -72,24 +72,16 @@ class MedicineDistributeController extends Controller
             'warehouse_id' => 'required'
         ]);
 
-
-
         $input=$request->all();
 
         // return $input;
-
-
 
         $purchase_input = [
             'warehouse_id' => $input['warehouse_id'],
             'outlet_id' => $input['outlet_id'],
             'date' => Carbon::parse($input['purchase_date'])->toDateString(),
-
             'added_by' => Auth::user()->id,
-
             'remarks' => $input['remarks'],
-
-
         ];
         try {
 
@@ -107,21 +99,10 @@ class MedicineDistributeController extends Controller
                     'quantity' => $input['quantity'][$i],
                     'rack_no' => $input['rack_no'][$i],
                     'expiry_date' => $input['expiry_date'][$i],
-
-
                     'rate' => ($input['box_mrp'][$i]*$input['quantity'][$i]) / $input['quantity'][$i],
-
-
-
                 );
-
-
-
-
                 MedicineDistributeDetail::create($purchase_details);
             }
-
-
             return redirect()->route('distribute-medicine.index')->with('success', 'Data has been added.');
         } catch (Exception $e) {
 

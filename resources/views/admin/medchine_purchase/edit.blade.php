@@ -82,7 +82,7 @@
                     <th>SL</th>
                     <th>Name Of Investigation</th>
                     <th>Quantity</th>
-                    <th>Price</th>
+                    <th>Manufacturer Price</th>
                     <th>Amount</th>
                     <th>Action</th>
                 </tr>

@@ -188,7 +188,7 @@
                                         <nobr>Manufacturer Price<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>MRP<i class="text-danger">*</i></nobr>
+                                        <nobr>Box MRP<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Product Type <i class="text-danger">*</i></nobr>
