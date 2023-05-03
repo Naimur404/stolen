@@ -180,7 +180,7 @@ if(count($check)  < 1  ){
     {
         //
     }
-    public function warehouseStock(Request $request, $id )
+    public function warehouseStock(Request $request, $id)
 
     {
 
@@ -202,12 +202,9 @@ if(count($check)  < 1  ){
 
         // total records count
         if($id == 'all'){
-
-
             $totalRecords = WarehouseStock::where('quantity', '>', '0')->select('count(*) as allcount')
             ->count();
            $medicine_stock  = DB::table('warehouse_stocks')->orderBy($columnName,$columnSortOrder)->where('quantity', '>', '0')->leftjoin('medicines' ,'warehouse_stocks.medicine_id' ,'=' ,'medicines.id')->where('medicines.medicine_name', 'like', '%' .$searchValue . '%')->select('warehouse_stocks.*', 'medicines.medicine_name')
-
               ->skip($start)
               ->take($row_per_page)
               ->get();
@@ -216,7 +213,6 @@ if(count($check)  < 1  ){
            if(auth()->user()->hasrole('Super Admin')){
             $totalRecords = WarehouseStock::where('quantity', '>', '0')->select('count(*) as allcount')->where('warehouse_id', '=', $id)->count();
             $medicine_stock =    DB::table('warehouse_stocks')->orderBy($columnName,$columnSortOrder)->where('warehouse_id', '=', $id)->where('quantity', '>', '0')->leftjoin('medicines' ,'warehouse_stocks.medicine_id' ,'=' ,'medicines.id')->where('medicines.medicine_name', 'like', '%' .$searchValue . '%')->select('warehouse_stocks.*', 'medicines.medicine_name')
-
               ->skip($start)
               ->take($row_per_page)
               ->get();
@@ -224,7 +220,6 @@ if(count($check)  < 1  ){
            }else{
             $totalRecords = WarehouseStock::where('quantity', '>', '0')->select('count(*) as allcount')->where('warehouse_id', '=', Auth::user()->warehouse_id)->count();
             $medicine_stock =    DB::table('warehouse_stocks')->orderBy($columnName,$columnSortOrder)->where('warehouse_id', '=', Auth::user()->warehouse_id)->where('quantity', '>', '0')->leftjoin('medicines' ,'warehouse_stocks.medicine_id' ,'=' ,'medicines.id')->where('medicines.medicine_name', 'like', '%' .$searchValue . '%')->select('warehouse_stocks.*', 'medicines.medicine_name')
-
             ->skip($start)
             ->take($row_per_page)
             ->get();
@@ -371,7 +366,7 @@ if(count($check)  < 1  ){
         'expiry_date' => Carbon::parse($request->expiry_date)->toDateString(),
 
       );
-   
+
 
       WarehouseStock::where('id',$request->id)->where('medicine_id',$request->medicine_id)->update($data);
         return redirect()->back()->with('success', ' Successfully Medicine Price Update.');

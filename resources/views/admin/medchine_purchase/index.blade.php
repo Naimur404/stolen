@@ -38,87 +38,18 @@
 	                            <thead>
 	                                <tr>
                                         <th>SL</th>
-
                                         <th>Supplier</th>
                                         <th>Purchase Date</th>
-                                        {{-- <th>Product Type</th> --}}
                                         <th>Payment Method</th>
                                         <th>Total</th>
                                         <th>Pay</th>
                                         <th>Due</th>
-
-
-                                        @if (auth()->user()->can('medchine_purchase.edit') || auth()->user()->can('medchine_purchase.delete'))
                                         <th>Action</th>
-                                        @endif
+
                                     </tr>
 	                            </thead>
 	                            <tbody>
-                                    @foreach ($productPurchases as $productPurchase)
-                                    <tr>
-                                        <td>{{ $loop->index + 1 }}</td>
-                                        @if ( $productPurchase->supplier_id == null)
 
-                                            <td> N/A </td>
-                                        @elseif ( $productPurchase->supplier_id
-                                            != null)
-
-                                            <td>{{ $productPurchase->supplier->supplier_name }}</td>
-                                        @endif
-
-                                        <td>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y')}}
-                                        </td>
-                                        <td>@php
-                                           $data = App\Models\PaymentMethod::where('id',$productPurchase->payment_method_id)->first();
-                                        @endphp
-                                            {{ $data->method_name }}</td>
-
-                                        <td>{{ $productPurchase->grand_total }}</td>
-                                        <td>{{ $productPurchase->paid_amount }}</td>
-                                        @if ($productPurchase->due_amount > 0)
-                                            <td> {{ $productPurchase->due_amount }} </td>
-                                        @else
-                                            <td>Paid</td>
-                                        @endif
-
-
-
-                                        @if (auth()->user()->can('medchine_purchase.edit') || auth()->user()->can('medchine_purchase.delete'))
-                                        <td class="form-inline">
-                                            @php
-                                             $data1 = App\Models\MedicinePurchaseDetails::where('medicine_purchase_id',$productPurchase->id)->get();
-                                            $data = App\Models\WarehouseCheckIn::where('purchase_id',$productPurchase->id)->get();
-                                        @endphp
-                                        @if (count($data1) == count($data))
-                                        <a href="javscript:void()"
-                                        class="btn btn-warning btn-xs" title="Sent"
-                                        style="margin-right:5px"><i class="fa fa-check"
-                                                                    aria-hidden="true"></i></a>
-                                        @else
-                                        @can('medchine_purchase.edit')
-                                        <a href="{{ route('medicine-purchase.edit', $productPurchase->id) }}"
-                                            class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
-                                    @endcan
-                                        @endif
-
-
-                                            {{-- @can('product_purchase.print')
-                                            <a href="{{ route('medicine-purchase.show', $productPurchase->id) }}" class="btn btn-info btn-xs"  title="Print Invoice" target="__blank" style="margin-right:3px"><i class="fas fa-print"></i></a>
-                                            @endcan --}}
-
-                                            @can('medchine_purchase.delete')
-                                                {!! Form::open(['method' => 'DELETE', 'route' => ['medicine-purchase.destroy', $productPurchase->id]]) !!}
-                                                {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
-                                                {!! Form::close() !!}
-                                            @endcan
-
-                                            <a href="{{ route('medicine-purchase.checkIn', $productPurchase->id) }}"
-                                                class="btn btn-info btn-xs " title="CheckIn" style="margin-left:3px"><i class="fa fa-eye" aria-hidden="true"></i></a>
-
-                                        </td>
-                                        @endif
-                                    </tr>
-                                @endforeach
 	                            </tbody>
 	                        </table>
 	                    </div>
@@ -133,14 +64,38 @@
 
     <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
 
+
     <script type="text/javascript">
-       $(document).ready(function() {
-            $('.data-table').DataTable();
-        });
 
+        $(function () {
+      $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+          }
+    });
 
-   </script>
+    var table = $('.data-table').DataTable({
+        processing: true,
+        serverSide: true,
+        searching: true,
+        ajax: "/get-medicine-purchase",
 
+        columns: [
+            {data: 'id', name: 'sl'},
+            {data: 'supplier_id', name: 'Supplier'},
+            {data: 'purchase_date', name: 'Purchase Date'},
+            {data: 'payment_method_id', name: 'Payment Method'},
+            {data: 'grand_total', name: 'total'},
+            {data: 'paid_amount', name: 'pay'},
+            {data: 'due_amount', name: 'Due'},
+            {data: 'action', name: 'action'},
+
+        ]
+    });
+
+});
+
+</script>
 
 @if (Session()->get('success'))
 

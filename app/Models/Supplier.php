@@ -18,4 +18,12 @@ class Supplier extends Model
         'details',
         'is_active',
     ];
+    public static function getSupplierName($id)
+    {
+        if ($id != null) {
+            return Supplier::find($id)->supplier_name;
+        }
+        else
+            return null;
+    }
 }

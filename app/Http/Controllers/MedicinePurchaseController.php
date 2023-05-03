@@ -13,6 +13,7 @@ use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class MedicinePurchaseController extends Controller
@@ -34,15 +35,108 @@ class MedicinePurchaseController extends Controller
 
     public function index()
     {
-        $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
+        // $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
+        // if (Auth::user()->hasRole(['Super Admin','Admin'])) {
+        //     $productPurchases = MedicinePurchase::orderBy('id', 'desc')->get();
+        // } else {
+        //     $productPurchases = MedicinePurchase::where('warehouse_id', $warehouse_id)->orderBy('id', 'desc')->get();
+        // }
+
+        return view('admin.medchine_purchase.index');
+    }
+
+
+
+    public function medicinePurchase(Request $request){
+
+        $draw = $request->get('draw');
+        $start = $request->get("start");
+        $row_per_page = $request->get("length"); // rows display per page
+
+        $columnIndex_arr = $request->get('order');
+        $columnName_arr = $request->get('columns');
+        $order_arr = $request->get('order');
+        $search_arr = $request->get('search');
+
+        $columnIndex = (isset($columnIndex_arr[0]['column']))? $columnIndex_arr[0]['column'] : false; // column index
+        $columnName = (isset($columnName_arr[$columnIndex]['data']))? $columnName_arr[$columnIndex]['data'] : false; // column name
+        $columnSortOrder = (isset($order_arr[0]['dir']))? $order_arr[0]['dir'] : false; // asc or desc
+        $searchValue = (isset($search_arr['value'])) ? $search_arr['value'] : false; // Search value
+
+  $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
+
         if (Auth::user()->hasRole(['Super Admin','Admin'])) {
-            $productPurchases = MedicinePurchase::orderBy('id', 'desc')->get();
+            $totalRecords = MedicinePurchase::select('count(*) as allcount')->count();
+            $productPurchases = DB::table('medicine_purchases')
+            ->where('invoice_no', 'like', '%' . $searchValue . '%')->where('deleted_at', null)
+             ->orderBy($columnName, $columnSortOrder)
+            ->skip($start)
+            ->take($row_per_page)
+            ->get();
         } else {
-            $productPurchases = MedicinePurchase::where('warehouse_id', $warehouse_id)->orderBy('id', 'desc')->get();
+            $totalRecords = MedicinePurchase::where('warehouse_id',$warehouse_id)->select('count(*) as allcount')->count();
+            $productPurchases = DB::table('medicine_purchases')->where('warehouse_id',$warehouse_id)->where('deleted_at', null)
+            ->where('invoice_no', 'like', '%' . $searchValue . '%')
+            ->orderBy($columnName, $columnSortOrder)
+            ->skip($start)
+            ->take($row_per_page)
+            ->get();
+        }
+        $total_record_switch_filter = $totalRecords;
+        $data_arr = array();
+        $total = 0;
+        foreach ($productPurchases as $productPurchase) {
+
+            $edit = route('medicine-purchase.edit', $productPurchase->id);
+            $delete = route('medicinePurchaseDelete', $productPurchase->id);
+            $checkIn = route('medicine-purchase.checkIn', $productPurchase->id);
+
+            $s_no = $productPurchase->id;
+            $supplier = Supplier::getSupplierName($productPurchase->supplier_id);
+            $purchase_date = Carbon::parse($productPurchase->purchase_date)->format('d-m-Y');
+            $payment = PaymentMethod::getPayment($productPurchase->payment_method_id);
+            $total = $productPurchase->grand_total;
+            $pay = $productPurchase->paid_amount;
+            $due = $productPurchase->due_amount;
+            // $sold_by = User::getUser($productPurchase->added_by);
+            $data1 = MedicinePurchaseDetails::where('medicine_purchase_id',$productPurchase->id)->get();
+            $data = WarehouseCheckIn::where('purchase_id',$productPurchase->id)->get();
+            if (count($data1) == count($data)){
+                $action = '<a href="javascript:void()"class="btn btn-success btn-xs" title="Sent" style="margin-right:5px"><i class="fa fa-check" aria-hidden="true"></i></a>
+                <a href="' .$delete. '" class="btn btn-danger btn-xs " title="CheckIn" style="margin-left:3px"><i class="fa fa-trash"></i></a>
+                <a href="' .$checkIn. '" class="btn btn-info btn-xs " title="CheckIn" style="margin-left:3px"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+            }else{
+
+                $action = '<a href="'.$edit.'"class="btn btn-success btn-xs" title="Sent" style="margin-right:5px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                <a href="' .$delete. '" class="btn btn-danger btn-xs " title="Delete" style="margin-left:3px"><i class="fa fa-trash"></i></a>
+                <a href="' .$checkIn. '" class="btn btn-info btn-xs " title="CheckIn" style="margin-left:3px"><i class="fa fa-eye" aria-hidden="true"></i></a>';
+            }
+
+
+            $data_arr[] = array(
+                "id" => $s_no,
+                "supplier_id" => $supplier,
+                "purchase_date" => $purchase_date,
+                "payment_method_id" => $payment,
+                "grand_total" => $total,
+                "paid_amount" => $pay,
+                "due_amount" => $due,
+                "action" => $action,
+
+            );
         }
 
-        return view('admin.medchine_purchase.index', compact('productPurchases'));
+        $response = array(
+            "draw" => intval($draw),
+            "iTotalRecords" => $totalRecords,
+            "iTotalDisplayRecords" => $total_record_switch_filter,
+            "aaData" => $data_arr,
+
+        );
+
+        return response()->json($response);
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -114,7 +208,7 @@ class MedicinePurchaseController extends Controller
 
         ];
         try {
-            Log::info($purchase_input);
+
 
             $supplier = Supplier::where('id', $input['supplier_id'])->first();
             $supplier_due = array(
@@ -124,7 +218,7 @@ class MedicinePurchaseController extends Controller
 
             $purchase = MedicinePurchase::create($purchase_input);
             $medicines = $input['product_name'];
-            Log::info($medicines);
+
 if($input['total_discount'] != '' || $input['total_discount'] > 0){
 
 $percent = ($input['total_discount']/$input['sub_total'])*100;
@@ -243,13 +337,14 @@ for ($i = 0; $i < sizeof($medicines); $i++) {
      * @param \App\medicinePurchase $medicinePurchase
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function delete($id)
     {
-
+        medicinePurchaseDetails::where('medicine_purchase_id', $id)->Delete();
         $medicinePurchase = medicinePurchase::findOrFail($id);
-        medicinePurchaseDetails::where('medicine_purchase_id', $medicinePurchase->id)->delete();
-        $medicinePurchase->delete();
-        return redirect()->back()->with('success', 'Data has been Deteled.');
+        $medicinePurchase->Delete();
+
+
+        return redirect()->back()->with('success', 'Data has been Deleted.');
     }
 
 
