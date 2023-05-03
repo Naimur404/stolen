@@ -19,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Models\Category;
+use App\Models\Medicine;
 
 class ReportController2 extends Controller
 {
@@ -270,6 +271,30 @@ class ReportController2 extends Controller
 
         return view('admin.report.sale_report_details', compact('title', 'productSales'));
     }
+
+
+
+    public function sale_report_medicine_submit(Request $request)
+    {
+        $input = $request->all();
+        $start_date = Carbon::parse($input['start_date']);
+        $end_date = Carbon::parse($input['end_date']);
+        $medicine = Medicine::where('id', $request->medicine_id)->orderby('id', 'desc')->first('medicine_name');
+        if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
+            $productSales = DB::table('outlet_invoice_details')->where('medicine_id', $request->medicine_id)->whereDate('created_at', '>=', $start_date)
+                ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
+            $title = 'Medicine Name ' . $medicine->medicine_name;
+        } else {
+            $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : outlet::orderby('id', 'desc')->first('id');
+            $productSales = $productSales = DB::table('outlet_invoice_details')->where('outlet_id', $outlet_id)->where('medicine_id', $request->medicine_id)->whereDate('created_at', '>=', $start_date)
+            ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
+
+
+            $title = 'Medicine Name ' . $medicine->medicine_name;
+        }
+        return view('admin.report.medicine_sale_report_by_medicine', compact('start_date', 'end_date', 'productSales', 'title'));
+    }
+
 
     public function medicine_sale_report_by_user(Request $request)
     {
