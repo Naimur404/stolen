@@ -55,8 +55,7 @@
                 <th>Invoice ID</th>
                 <th>Medicine Name</th>
                 <th>Sale Quantity</th>
-                <th>Rate</th>
-                <th>Total</th>
+
 
             </tr>
             </thead>
@@ -75,10 +74,7 @@
                     </td>
 
                     <td>{{ $productSale->quantity ?? '' }}</td>
-                    <td>{{ $productSale->rate }}
-                    </td>
 
-                    <td>{{ $productSale->total_price ?? '' }}</td>
 
 
 
@@ -86,8 +82,7 @@
                 </tr>
                 @php
                     $quantity = $quantity + $productSale->quantity;
-                    $discount = $discount + $productSale->discount;
-                    $total = $total + $productSale->total_price;
+
 
                 @endphp
             @endforeach
@@ -96,7 +91,7 @@
             </tbody>
         </table>
 
-        <p class="text-center">Total {{ $total }} | Discount {{ $discount }} | Quantity
+        <p class="text-center"> Quantity
              {{ $quantity }}</p>
 
     </div>
