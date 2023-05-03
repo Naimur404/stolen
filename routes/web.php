@@ -328,6 +328,8 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
     Route::post('best-selling', [ReportController2::class,'bestSelling'])->name('best-selling');
     Route::post('slow-selling', [ReportController2::class,'slowSelling'])->name('slow-selling');
 
+    Route::post('sale-report-medicine-submit', [ReportController2::class,'sale_report_medicine_submit'])->name('sale-report-medicine-submit');
+
 });
 Route::group(['middleware' => ['auth'], 'prefix' => 'writeoff'],function () {
 Route::resource('outlet-writeoff', OutletWriteoffController::class);
@@ -337,3 +339,4 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'summary'],function () {
 Route::get('outlet',[DashBoardController::class,'summaryOutlet'])->name('outlet');
 Route::get('warehouse',[DashBoardController::class,'summaryWarehouse'])->name('warehouse');
 });
+
