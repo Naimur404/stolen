@@ -111,7 +111,6 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'],function () {
 
 Route::group(['middleware' => ['auth']],function () {
 
-
 //resource route
 Route::resource('payment-method',PaymentMethodController::class);
 Route::resource('supplier',SupplierController::class);
@@ -140,14 +139,13 @@ Route::get('supplier-due/{id}',[SupplierController::class,'supplierDue'])->name(
 Route::post('supplier-due-payment',[SupplierController::class,'supplierDuePayment'])->name('supplier-due-payment');
 
 //purchase
-
 Route::get('edit-purchase/{id}',[MedicinePurchaseController::class,'editPurchase'])->name('edit-purchase');
 Route::post('purchase-update',[MedicinePurchaseController::class,'purchaseUpdate'])->name('purchase-update');
 Route::get('purchase-delete/{id}',[MedicinePurchaseController::class,'purchaseDelete'])->name('purchase-delete');
-
+Route::get('/get-medicine-purchase',[MedicinePurchaseController::class,'medicinePurchase'])->name('medicinePurchase');
+Route::get('/medicine-purchase-delete/{id}',[MedicinePurchaseController::class,'delete'])->name('medicinePurchaseDelete');
 //checkin route
 Route::get('medicine-purchase/{id}/check-in',[MedicinePurchaseController::class,'checkIn'])->name('medicine-purchase.checkIn');
-
 Route::get('distribute-medicine/{id}/check-in',[MedicineDistributeController::class,'checkIn'])->name('distribute-medicine.checkIn');
 Route::get('medicine-return/{id}/check-in',[WarehouseReturnController::class,'checkIn'])->name('medicine-return.checkIn');
 
@@ -181,13 +179,12 @@ Route::get('get-medicine-details-for-sale/{id}',[OutletInvoiceController::class,
 Route::get('/get-outlet-Stock',[OutletInvoiceController::class,'getoutletStock'])->name('getoutletStock');
 Route::get('/print-invoice/{id}', [OutletInvoiceController::class,'printInvoice'])->name('print-invoice');
 
-//get warehuse stock
+//get warehouse stock
 
 Route::get('get-medicine-details-warehouse/{id}/{wid}',[WarehouseStockController::class,'get_medicine_details_warehouse']);
 Route::get('/get-warehouse-Stock/{id}',[WarehouseStockController::class,'getwarehouseStock'])->name('getwarehouseStock');
 
 //get warehouse stock for return
-
 Route::get('get-medicine-details-outlet/{id}/{wid}',[OutletStockController::class,'get_medicine_details_outlet']);
 Route::get('/get-oulet-Stockss/{id}',[OutletStockController::class,'getoutletStocks'])->name('getoutletStocks');
 //select2 route
