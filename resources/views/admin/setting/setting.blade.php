@@ -168,28 +168,15 @@
 								</div>
 							</div>
                             <div class="row">
-								<div class="col">
-                            <div class="mb-3">
-                                {{ Form::label('print', 'Report Print') }}
-                                @if ($data->print == 1)
-                                <select class="form-select" aria-label="Default select example" name="print">
-
-                                    <option value="0">Inactive</option>
-                                    <option value="1" selected>Active</option>
-
-                                  </select>
-                                  @else
-                                  <select class="form-select" aria-label="Default select example">
-
-                                    <option value="0" selected>Inactive</option>
-                                    <option value="1">Active</option>
-
-                                  </select>
-                                @endif
-
-                                {{-- <label class="form-label">Email-Address</label>
-                                <input class="form-control" placeholder=""  readonly value="{{ $Profile->email }}"/> --}}
-                            </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ Form::label('print', 'Report Auto Print') }}
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="mb-3">
+                                        {{ Form::select('print',[0 => 'Inactive', 1 => 'Active'], $data->print, ['class' => 'form-select']) }}
+                                    </div>
                                 </div>
                             </div>
 							<div class="row">
