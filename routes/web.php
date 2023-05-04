@@ -329,7 +329,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
     Route::post('slow-selling', [ReportController2::class,'slowSelling'])->name('slow-selling');
 
     Route::post('sale-report-medicine-submit', [ReportController2::class,'sale_report_medicine_submit'])->name('sale-report-medicine-submit');
-
+    Route::post('not-sold-medicine', [ReportController2::class,'notSoldMedicine'])->name('not-sold-medicine');
 });
 Route::group(['middleware' => ['auth'], 'prefix' => 'writeoff'],function () {
 Route::resource('outlet-writeoff', OutletWriteoffController::class);
