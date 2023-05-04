@@ -204,7 +204,10 @@ class PermissionSeeder extends Seeder
             'sent_stock_request',
             'stock_request',
             'medicine-sale.report',
-            'medicine-sale-submit.report'
+            'medicine-sale-submit.report',
+            'not-sold-medicine.report',
+            'not-sold-medicine-submit.report'
+
 
 
         ];

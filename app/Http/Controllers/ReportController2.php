@@ -66,6 +66,8 @@ class ReportController2 extends Controller
         $this->middleware('permission:slow_selling.search', ['only' => ['slowSelling']]);
 
         $this->middleware('permission:medicine-sale.report', ['only' => ['sale_report_medicine_submit']]);
+        $this->middleware('permission:not-sold-medicine-submit.report', ['only' => ['notSoldMedicine']]);
+
     }
 
     public function medicine_sale_report_submit(Request $request)

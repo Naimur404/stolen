@@ -125,6 +125,10 @@ class RoleSeeder extends Seeder
             'supplier-due-payment',
             'manufacturer_wise_stock_report_warehouse',
             'manufacturer_wise_stock_report_warehouse.search',
+            'medicine-sale.report',
+            'medicine-sale-submit.report',
+            'not-sold-medicine.report',
+            'not-sold-medicine-submit.report'
 
         ];
 

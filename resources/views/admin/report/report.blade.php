@@ -170,7 +170,7 @@
                     {!! Form::close() !!}
                     @endcan
 
-                      {{-- @can('medicine-sale.report') --}}
+                      @can('not-sold-medicine.report')
                     {!! Form::open(array('url'=> 'report2/not-sold-medicine', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
                         <div class="col-md-3 mt-4">
@@ -182,7 +182,7 @@
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                     </div>
                     {!! Form::close() !!}
-                    {{-- @endcan --}}
+                    @endcan
 
 @can('sale_report_by_user')
                     {!! Form::open(array('url'=> 'report2/sale-report-user', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
