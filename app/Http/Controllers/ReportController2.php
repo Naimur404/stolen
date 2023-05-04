@@ -66,6 +66,8 @@ class ReportController2 extends Controller
         $this->middleware('permission:slow_selling.search', ['only' => ['slowSelling']]);
 
         $this->middleware('permission:medicine-sale.report', ['only' => ['sale_report_medicine_submit']]);
+        $this->middleware('permission:not-sold-medicine-submit.report', ['only' => ['notSoldMedicine']]);
+
     }
 
     public function medicine_sale_report_submit(Request $request)
@@ -1010,5 +1012,18 @@ class ReportController2 extends Controller
 
         $data = OutletInvoiceDetails::whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->where('quantity', '>', '1')->orderby('quantity', 'asc')->get();
         return view('admin.report.slow_selling', compact('data'));
+    }
+
+    public function notSoldMedicine(Request $request){
+
+        $input = $request->all();
+        $start_date = Carbon::parse($input['start_date']);
+        $end_date = Carbon::parse($input['end_date']);
+
+        $medicine_id = DB::table('outlet_invoice_details')->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->select('medicine_id')->distinct()->pluck('medicine_id')->toArray();
+        $not_sold = DB::table('outlet_stocks')->where('quantity', '>', 0)->whereNotIn('medicine_id',$medicine_id)->leftjoin('medicines','outlet_stocks.medicine_id','=','medicines.id')->select('outlet_stocks.*','medicines.medicine_name as medicine_name')->get();
+        return view('admin.report.not_sold_medicine', compact('start_date', 'end_date','not_sold'));
+
+
     }
 }

@@ -170,6 +170,20 @@
                     {!! Form::close() !!}
                     @endcan
 
+                      @can('not-sold-medicine.report')
+                    {!! Form::open(array('url'=> 'report2/not-sold-medicine', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                    <div class="row form-group">
+                        <div class="col-md-3 mt-4">
+                            <b>Not Sold Report</b>
+                        </div>
+                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                        <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+
+                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                    </div>
+                    {!! Form::close() !!}
+                    @endcan
+
 @can('sale_report_by_user')
                     {!! Form::open(array('url'=> 'report2/sale-report-user', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
