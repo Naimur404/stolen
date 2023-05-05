@@ -16,27 +16,34 @@
         input:focus, textarea:focus, select:focus {
             outline: none;
         }
-        .card .card-header{
+
+        .card .card-header {
             padding: 6px !important;
         }
-        .card .card-body{
+
+        .card .card-body {
             padding: 10px !important;
         }
-        .form-control, .form-select{
+
+        .form-control, .form-select {
             border-color: #172d7b !important;
         }
-        .form-control:disabled, .form-control[readonly]{
+
+        .form-control:disabled, .form-control[readonly] {
             border-color: #efeff1 !important;
         }
 
-        .page-main-header{
+        .page-main-header {
             max-height: 80px !important;
         }
 
 
-        main-header-left
-        {
+        main-header-left {
             padding: 15px 40px !important;
+        }
+
+        .page-main-header .main-header-right .main-header-left {
+            border-right: none !important;
         }
 
     </style>
@@ -217,6 +224,13 @@
                         </div>
                     </div>
 
+                    <div class="row">
+                        <div class="col-md-12">
+                            <p class="text-danger pull-right" id="has_due_text"></p>
+                        </div>
+                    </div>
+
+
                 </div>
             </div>
         </div>
@@ -242,7 +256,8 @@
                                     <td class="text-right" colspan="7"><b>Sub total:</b></td>
                                     <td></td>
                                     <td class="text-right">
-                                        <input type="number" class="form-control text-right fw-bold text-primary" name="sub_total"
+                                        <input type="number" class="form-control text-right fw-bold text-primary"
+                                               name="sub_total"
                                                id="subtotal" readonly>
                                     </td>
                                     <td>
@@ -276,22 +291,14 @@
                                     </td>
 
                                 </tr>
-                                <tr>
-                                    <td class="text-right" colspan="8"><b>Point Redeem:</b></td>
-                                    {{-- <td></td> --}}
-                                    <td class="text-right">
-                                        <input type="number" class="form-control text-right redeem_points"
-                                               name="redeem_points"
-                                               id="redeem_points" onkeyup="prevent_points_amount()"
-                                               onchange="prevent_points_amount()">
-                                    </td>
 
-                                </tr>
                                 <tr>
                                     <td class="text-right" colspan="8"><b>After All Discount:</b></td>
 
                                     <td class="text-right">
-                                        <input type="number" class="form-control text-right afterdis fw-bold text-primary" name="afterdis"
+                                        <input type="number"
+                                               class="form-control text-right afterdis fw-bold text-primary"
+                                               name="afterdis"
                                                id="afterdis" readonly>
                                     </td>
 
@@ -316,12 +323,38 @@
                                     <td class="text-right" colspan="8"><b>Grand Total:</b></td>
 
                                     <td class="text-right">
-                                        <input type="number" class="form-control text-right text-success fw-bold" name="grand_total"
+                                        <input type="number" class="form-control text-right text-success fw-bold"
+                                               name="grand_total"
                                                id="grandTotal" readonly="readonly"
                                                required> {{-- <span id="grandTotal">0</span> --}}
                                     </td>
 
                                 </tr>
+
+                                <tr>
+                                    <td class="text-right" colspan="8"><b>Point Redeem:</b></td>
+                                    {{-- <td></td> --}}
+                                    <td class="text-right">
+                                        <input type="number" class="form-control text-right redeem_points"
+                                               name="redeem_points"
+                                               id="redeem_points" onkeyup="prevent_points_amount()"
+                                               onchange="prevent_points_amount()">
+                                    </td>
+
+                                </tr>
+
+                                <tr>
+                                    <td class="text-right" colspan="8"><b>Payable Amount:</b></td>
+
+                                    <td class="text-right">
+                                        <input type="number" class="form-control text-right text-danger fw-bold"
+                                               name="payable_amount"
+                                               id="payable_amount" readonly="readonly"
+                                               required> {{-- <span id="grandTotal">0</span> --}}
+                                    </td>
+
+                                </tr>
+
                                 <tr>
                                     <td class="text-right" colspan="8"><b>Given Amount :</b></td>
 
@@ -369,16 +402,20 @@
 
 
                             <div class="col-md-12">
-                                <label for="payment_type" class="text-right col-form-label mt-3">Payment Name</label>
+                                <label for="payment_type" class="text-right col-form-label mt-3">Payment Method</label>
 
                                 {{ Form::select( 'payment_method_id', $payment_methods, null, ['class' => 'form-control', 'required' ,'required'], ) }}
                                 <div class="invalid-feedback">Please Add Payment Type</div>
 
                                 <div class="card-footer text-end">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-info" onclick="lastprint()">Last Invoice print</button>
+                                        <button type="button" class="btn btn-info" onclick="lastprint()">Recent
+                                            Invoice
+                                        </button>
                                         &nbsp;
-                                        <button type="button" class="btn btn-primary" onclick="submitForm()">Save & Print</button>
+                                        <button type="button" class="btn btn-primary" onclick="submitForm()">Save &
+                                            Print
+                                        </button>
                                     </div>
                                 </div>
 
@@ -457,7 +494,7 @@
 
             function submitForm() {
                 var pay = $("#pay").val();
-                if (pay == 0 || pay == '') {
+                if (pay === 0 || pay === '') {
                     alert("Given Amount Can Not Be Zero Or Empty.");
                 } else {
                     if (confirm('Do You Want To Submit?')) {
@@ -519,20 +556,6 @@
                 });
             }
 
-            // $(window).on('afterprint', function() {
-            //   // Redirect back to the original page
-            //   window.location.href = "{{ route('invoice.create') }}";
-            // });
-
-
-            //    function prevent_paid_amount(){
-            //             var paid_amount = $("#pay").val();
-            //         var grand_total_amount = $("#grandTotal").val();
-            //         // if (parseInt(grand_total_amount) < parseInt(paid_amount)) {
-            //         //     alert("You can not paid more than grand total amount.");
-            //         //     $("#pay").val("");
-            //         //    }
-            //         }
 
             $(document).ready(function () {
 
@@ -550,24 +573,6 @@
                     }
                 });
 
-                //  let  grandTotal = '';
-                // $("#full_paid").on('click', function() {
-                //       grandTotal = $("#grandTotal").val();
-                //      $("#pay").val(grandTotal);
-                // });
-                // payment validations
-                //   $("#discount").on('click', function(){
-                //         let subTotal = $('#subtotal').val();
-                //         $("#discount").attr({
-                //              max: subTotal,
-                //         });
-                //   });
-                //   $("#pay").on('click', function(){
-                //     grandTotal = $("#grandTotal").val();
-                //         $("#pay").attr({
-                //              min: grandTotal,
-                //         });
-                //   });
 
                 //   percentage live calculations
                 $("#vat_percent").bind('keypress keyup keydown mouseup', function () {
@@ -587,12 +592,6 @@
                     //    console.log(calResult);
                 });
 
-                //   $("#discount_percent").bind('keypress keyup keydown mouseup', function(){
-                //       let discount = $(this).val();
-                //       let subTotal = $("#afterdis").val();
-                //       let totalDiscount = calculatePercentage(subTotal, discount);
-                //        $("#discount").val(totalDiscount);
-                //   })
 
                 function calculatePercentage(subTotal, vat) {
                     let result = subTotal * (vat / 100);
@@ -691,21 +690,8 @@
                 });
 
 
-                //  get medicine id
-
-                // $("#user_id").on('change', function() {
-
-                //     user_id = $(this).val();
-
-                // });
-
 
                 $("#adduser").on('click', function () {
-
-                    // let leaf = $('#leaf').find(":selected").val();
-                    // let qty = $('#box_qty').val();
-                    //   let multiply = leaf*qty;
-
 
                     if (user_id) {
                         $.ajax({
@@ -721,6 +707,11 @@
                                     $('#name').first().val(data.name);
                                     $('#address').val(data.address);
                                     $('#points').val(data.points);
+                                    if (data.due_balance > 0){
+                                        $('#has_due_text').html('Previous Due: <b> BDT '+ data.due_balance+' Taka</b> To pay <a href="/customer-due/'+data.id+'" target="_blank">Click here</a>');
+                                    }else{
+                                        $('#has_due_text').text('');
+                                    }
 
                                 } else {
                                     alert('Data not found!');
@@ -763,15 +754,6 @@
                 });
 
 
-                // 13 is the code for return
-
-
-                //    let medicine_id = '';
-                //     $("#medicine_id").on('change', function() {
-
-                //         medicine_id = $(this).val();
-
-                //     });
                 let medicine_id = '';
 
                 $('#medicine_id').on('select2:select', function (e) {
@@ -798,14 +780,6 @@
 
 
                 $("#addProductRow").click(function () {
-
-                    // let leaf = $('#leaf').find(":selected").val();
-                    // let qty = $('#box_qty').val();
-                    //   let multiply = leaf*qty;
-                    // let qty = $('#qty').val();
-                    // // clear input text after click
-                    // $('#qty').val('');
-
 
                     if (medicine_id) {
                         $.ajax({
@@ -866,6 +840,7 @@
                     // shipping : "#shipping",
                     vat: "#vat",
                     grandTotal: "#grandTotal",
+                    payable_amount: "#payable_amount",
                     afterdis: "#afterdis",
                     pay: "#pay",
                     back: ".back",
