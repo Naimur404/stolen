@@ -190,13 +190,19 @@
 
         </tr>
         <tr>
+            <td colspan="3" style="text-align: right; border: none;"><b> Payable Amount: </b></td>
+            <td style="width: 50px; border: none; text-align: right;"><b> {{ round($outletInvoice->payable_amount) }} </b>
+            </td>
+
+        </tr>
+        <tr>
             <td colspan="3" style="text-align: right; border: none;">Given Amount:</td>
             <td style="width: 50px; border: none; text-align: right;"> {{ round($outletInvoice->given_amount) }} </td>
         </tr>
-        @if($outletInvoice->given_amount > $outletInvoice->paid_amount)
+        @if($outletInvoice->given_amount > $outletInvoice->payable_amount)
             <tr>
                 <td colspan="3" style="text-align: right; border: none;">Change Amount:</td>
-                <td style="width: 50px; border: none; text-align: right;"> {{ round($outletInvoice->given_amount - $outletInvoice->paid_amount) }} </td>
+                <td style="width: 50px; border: none; text-align: right;"> {{ round($outletInvoice->given_amount - $outletInvoice->payable_amount) }} </td>
             </tr>
         @endif
 

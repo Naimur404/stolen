@@ -20,6 +20,7 @@ class OutletInvoice extends Model
         'vat',
         'total_discount',
         'grand_total',
+        'payable_amount',
         'given_amount',
         'paid_amount',
         'due_amount',

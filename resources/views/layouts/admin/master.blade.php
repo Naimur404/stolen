@@ -51,10 +51,11 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col-md-6 footer-copyright">
+                  <!-- Developed by Pigeon Soft -->
                 <p class="mb-0">{{ $app_setting->footer_text }}</p>
               </div>
-              <div class="col-md-6">
-                <p class="pull-right mb-0">{{ env('VERSION') }} <i class="fa fa-heart font-secondary"></i></p>
+              <div class="col-md-4 align-content-end">
+                <p class="pull-right mb-0 text-dark"><i class="fa fa-code-fork"></i> {{ env('VERSION', '') }}</p>
               </div>
             </div>
           </div>

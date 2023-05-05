@@ -17,6 +17,7 @@ class Customer extends Model
         'address',
         'outlet_id',
         'points',
+        'due_balance',
         'is_active',
     ];
 
