@@ -835,7 +835,7 @@ class ReportController2 extends Controller
 
         $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
             ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)
-            ->leftJoin('medicines', 'medicines.id', '=', 'outlet_invoice_details.medicine_id')
+            ->leftJoin('medicines', 'medicines.id', '=', 'outlet_invoice_details.medicine_id')->select('outlet_invoice_details.*','medicines.manufacturer_id')
             ->get();
 
         $manu = SupplierHasManufacturer::where('supplier_id', $request->supplier_id)->get();

@@ -75,7 +75,7 @@
                      @foreach ($productSales as $productPurchase)
                      <tr>
                         <td>{{ $loop->index + 1 }}</td>
-                         <td>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y') }}
+                         <td>{{ \Carbon\Carbon::parse($productPurchase->created_at)->format('d-m-Y') }}
                          </td>
                          <td>{{ $productPurchase->medicine_name }}</td>
 
