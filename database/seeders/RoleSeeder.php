@@ -128,7 +128,9 @@ class RoleSeeder extends Seeder
             'medicine-sale.report',
             'medicine-sale-submit.report',
             'not-sold-medicine.report',
-            'not-sold-medicine-submit.report'
+            'not-sold-medicine-submit.report',
+            'redeem_point_report',
+            'redeem_point_report_submit'
 
         ];
 

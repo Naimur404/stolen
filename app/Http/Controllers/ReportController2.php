@@ -64,6 +64,8 @@ class ReportController2 extends Controller
 
         $this->middleware('permission:best_selling.search', ['only' => ['bestSelling']]);
         $this->middleware('permission:slow_selling.search', ['only' => ['slowSelling']]);
+        $this->middleware('permission:redeem_point_report_submit', ['only' => ['redeemPointReport']]);
+
 
         $this->middleware('permission:medicine-sale.report', ['only' => ['sale_report_medicine_submit']]);
         $this->middleware('permission:not-sold-medicine-submit.report', ['only' => ['notSoldMedicine']]);
@@ -1026,4 +1028,14 @@ class ReportController2 extends Controller
 
 
     }
+   public function redeemPointReport(Request $request){
+
+        $input = $request->all();
+        $start_date = Carbon::parse($input['start_date']);
+        $end_date = Carbon::parse($input['end_date']);
+
+        $redeemSales =   OutletInvoice::where('outlet_id', $request->outlet_id)->where('redeem_point','!=', NULL)->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->get();
+
+        return view('admin.report.redeem_point_report', compact('start_date', 'end_date','redeemSales'));
+   }
 }

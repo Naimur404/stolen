@@ -382,6 +382,23 @@
                      </div>
                      {!! Form::close() !!}
                      @endcan
+
+                     @can('redeem_point_report')
+
+                     {!! Form::open(array('url'=> 'report2/redeem-point-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                     <div class="row form-group">
+                         <div class="col-md-2 mt-4">
+                             <b>Redeem Point Report</b>
+                         </div>
+                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                         <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                         <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
+                        </div>
+
+                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                     </div>
+                     {!! Form::close() !!}
+                     @endcan
 {{-- for warehouse manager --}}
 
                      @can('return_medicine_report_for_outlet')
@@ -449,6 +466,7 @@
                                         </div>
                                         {!! Form::close() !!}
                                         @endcan
+
 
                                         @can('supplier_wise_stock_report_warehouse')
                                         {!! Form::open(array('url'=> 'report2/supplier-stock-report-warehouse', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
