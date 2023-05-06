@@ -22,7 +22,10 @@
 
         @slot('button')
 <div class="row">
-    <div class="col-md-8">
+    <div class="col-md-4">
+        <button class="btn btn-danger btn" id="due">Due Only</button>
+    </div>
+    <div class="col-md-4">
         <a href="{{route('customer.create')}}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Add Customer</a>
     </div>
     <div class="col-md-4">
@@ -104,9 +107,15 @@
     outlet_id = $(this).val();
     table.ajax.url("/get-customer/" + outlet_id).load();
 });
+
+$('#due').on('click', function(){
+    due = 'due';
+    table.ajax.url("/get-customer/" + due).load();
 });
 
-   </script>
+});
+
+</script>
 @if (Session()->get('success'))
 
 <script>
