@@ -198,27 +198,27 @@ class CustomerManagementController extends Controller
         if($id == 'all'){
 
 
-            $totalRecords = Customer::where('deleted_at', '=', NULL)->select('count(*) as allcount')
+            $totalRecords = Customer::select('count(*) as allcount')
             ->count();
-           $customers  = DB::table('customers')->orderBy($columnName,$columnSortOrder)->where('name', 'like', '%' .$searchValue . '%')->where('deleted_at', '=', NULL)->skip($start)->take($row_per_page)->get();
+           $customers  = DB::table('customers')->orderBy($columnName,$columnSortOrder)->where('name', 'like', '%' .$searchValue . '%')->skip($start)->take($row_per_page)->get();
 
         }else{
            if(auth()->user()->hasrole('Super Admin')){
-            $totalRecords = Customer::where('deleted_at', '=', NULL)->select('count(*) as allcount')->where('outlet_id', '=', $id)->count();
-            $customers =    DB::table('customers')->orderBy($columnName,$columnSortOrder)->where('name', 'like', '%' .$searchValue . '%')->where('deleted_at', '=', NULL)->where('outlet_id', '=', $id)
+            $totalRecords = Customer::select('count(*) as allcount')->where('outlet_id', '=', $id)->count();
+            $customers =    DB::table('customers')->orderBy($columnName,$columnSortOrder)->where('name', 'like', '%' .$searchValue . '%')->where('outlet_id', '=', $id)
               ->skip($start)
               ->take($row_per_page)
               ->get();
 
            }elseif($id == 'due'){
-            $totalRecords = Customer::where('due_balance', '>', 0)->where('deleted_at', '=', NULL)->select('count(*) as allcount')->where('outlet_id', '=', Auth::user()->outlet_id)->count();
-            $customers = DB::table('customers')->where('due_balance', '>', 0)->orderBy($columnName,$columnSortOrder)->where('name', 'like', '%' .$searchValue . '%')->where('outlet_id', '=', Auth::user()->outlet_id)->where('deleted_at', '=', NULL)
+            $totalRecords = Customer::where('due_balance', '>', 0)->select('count(*) as allcount')->where('outlet_id', '=', Auth::user()->outlet_id)->count();
+            $customers = DB::table('customers')->where('due_balance', '>', 0)->orderBy($columnName,$columnSortOrder)->where('name', 'like', '%' .$searchValue . '%')->where('outlet_id', '=', Auth::user()->outlet_id)
             ->skip($start)
             ->take($row_per_page)
             ->get();
            }else{
-            $totalRecords = Customer::where('deleted_at', '=', NULL)->select('count(*) as allcount')->where('outlet_id', '=', Auth::user()->outlet_id)->count();
-            $customers = DB::table('customers')->orderBy($columnName,$columnSortOrder)->where('name', 'like', '%' .$searchValue . '%')->where('outlet_id', '=', Auth::user()->outlet_id)->where('deleted_at', '=', NULL)
+            $totalRecords = Customer::select('count(*) as allcount')->where('outlet_id', '=', Auth::user()->outlet_id)->count();
+            $customers = DB::table('customers')->orderBy($columnName,$columnSortOrder)->where('name', 'like', '%' .$searchValue . '%')->where('outlet_id', '=', Auth::user()->outlet_id)
             ->skip($start)
             ->take($row_per_page)
             ->get();

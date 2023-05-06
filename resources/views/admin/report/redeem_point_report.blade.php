@@ -75,7 +75,7 @@
                          <td>{{ $redeemSale->id }}</td>
 
 
-                         <td>{{ $redeemSale->customer->mobile }}</td>
+                         <td>{{ $redeemSale->customer->mobile?? ''}}</td>
 
 
 
