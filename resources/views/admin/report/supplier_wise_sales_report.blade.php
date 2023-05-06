@@ -95,8 +95,8 @@
 
 
                     @else
-                    @break
-                     @endif
+                    @continue
+                    @endif
                      @php
                      $grand_total = $grand_total + $productPurchase->total_price;
                      $total_quantity = $total_quantity + $productPurchase->quantity;

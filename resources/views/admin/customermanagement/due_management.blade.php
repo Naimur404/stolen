@@ -40,7 +40,7 @@
 
         <div class="card-body">
             {!! Form::open(['route' => ['customer-due-payment'], 'method' => 'POST', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
-              <input type="hidden" name="supplier_id" value="{{ $customer->id }}">
+              <input type="hidden" name="customer_id" value="{{ $customer->id }}">
             <div class="service_invoice_header">
                 <div class="row">
                     <div class="col-md-4">Customer Name: {{ $customer->name }}</div>
@@ -110,7 +110,7 @@
                             </tr>
                             <tr>
                                 <th>Pay Now</th>
-                                <td>{{ Form::number('paid_amount', $customer->due_balance, ['class' => 'form-control', 'required']) }}
+                                <td>{{ Form::number('paid_amount', $customer->due_balance, ['class' => 'form-control', 'required', 'step'=>'any']) }}
                                     @error('paid_amount')
                                     <div class="invalid-feedback2"> {{ $message }}</div>
 

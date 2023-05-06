@@ -72,28 +72,28 @@
                 $total_discount = 0;
 
                 @endphp
-                     @foreach ($productSales as $productPurchase)
+                     @foreach ($productSales as $productSale)
                      <tr>
                         <td>{{ $loop->index + 1 }}</td>
-                         <td>{{ \Carbon\Carbon::parse($productPurchase->purchase_date)->format('d-m-Y') }}
+                         <td>{{ \Carbon\Carbon::parse($productSale->created_at)->format('d-m-Y') }}
                          </td>
-                         <td>{{ $productPurchase->medicine_name }}</td>
+                         <td>{{ $productSale->medicine_name }}</td>
 
 
-                         <td>{{ $productPurchase->expiry_date }}</td>
+                         <td>{{ $productSale->expiry_date }}</td>
 
 
 
-                         <td>{{ $productPurchase->quantity }}</td>
-                         <td>{{ $productPurchase->rate }}</td>
+                         <td>{{ $productSale->quantity }}</td>
+                         <td>{{ $productSale->rate }}</td>
 
-                         <td>{{ $productPurchase->discount }}</td>
+                         <td>{{ $productSale->discount }}</td>
                      </tr>
                      @php
-                    $grand_quantity = $grand_quantity + $productPurchase->quantity;
+                    $grand_quantity = $grand_quantity + $productSale->quantity;
 
-                    $total_price = $total_price + $productPurchase->rate * $productPurchase->quantity;
-                    $total_discount = $total_discount + $productPurchase->discount;
+                    $total_price = $total_price + $productSale->rate * $productSale->quantity;
+                    $total_discount = $total_discount + $productSale->discount;
                     @endphp
                 @endforeach
 
