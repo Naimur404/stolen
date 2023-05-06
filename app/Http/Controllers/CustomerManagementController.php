@@ -338,8 +338,8 @@ elseif ($customer->is_active == 0) {
                 'received_by' => Auth::user()->id
                ]);
 
-           $log =  CustomerDuePayment::insert($due_data);
-           Log::info($log);
+             CustomerDuePayment::insert($due_data);
+
 
             $pay = $request->paid_amount;
             foreach ($invoices as $invoice) {
