@@ -1,8 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title')Outlet Medicine Stock
-
-@endsection
+@section('title','Outlet Medicine Stock')
 
 @push('css')
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
@@ -22,13 +20,17 @@
 
         @slot('button')
 <div class="row">
+
     <div class="col-md-8" style="  display: inline-block;">
+        @can('outlet_value')
         <p style="display:inline;">
             <span style="font-size: 1.5rem; color:red">Total Value =</span>
             <span id="hello2" style="font-size: 1.5rem ;color:red" ></span>
             <span style="font-size: 1.5rem ;color:red" >TK</span>
      </p>
+     @endcan
     </div>
+
     <div class="col-md-4">
             {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'id' => 'supplier_id']) }}
         </div>
@@ -52,20 +54,13 @@
                                         <th>Category</th>
                                         <th>Manufacturer Name</th>
                                         <th>Expiry Date</th>
-
                                         <th>Manufacture Price</th>
                                         <th>Sale Price</th>
-
                                         <th>Stock</th>
                                         <th>Action</th>
-
-
-
-
 	                                </tr>
 	                            </thead>
 	                            <tbody>
-
 	                            </tbody>
 	                        </table>
 	                    </div>
@@ -77,8 +72,6 @@
 	</div>
 
 	@push('scripts')
-
-
 
     <script type="text/javascript">
     $(function () {
@@ -127,9 +120,9 @@
     "success": function (data) {
 
         let ok = '';
-                   ok +=  Math.round(data.total);
+        ok +=  Math.round(data.total);
 
-                document.getElementById('hello2').innerHTML = ok;
+        document.getElementById('hello2').innerHTML = ok;
     }
 });
 

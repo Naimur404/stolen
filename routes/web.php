@@ -259,24 +259,24 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'],function
     Route::resource('medicine',MedicineController::class);
     Route::get('/status-manufacturer/{id}/{status}', [ManufacturerController::class,'active'])->name('manufacturer.active');
 });
-Route::group(['middleware' => ['auth'], 'prefix' => 'report'],function () {
+// Route::group(['middleware' => ['auth'], 'prefix' => 'report'],function () {
 
 
 
-    Route::get('sale-report', [ReportController::class,'medicine_sale_report_form'])->name('sale-report');
-    Route::post('sale-report-submit', [ReportController::class,'medicine_sale_report_submit'])->name('sale-report-submit');
+//     Route::get('sale-report', [ReportController::class,'medicine_sale_report_form'])->name('sale-report');
+//     Route::post('sale-report-submit', [ReportController::class,'medicine_sale_report_submit'])->name('sale-report-submit');
 
-    Route::get('purchase-report', [ReportController::class,'medicine_purchase_report_form'])->name('purchase-report');
-    Route::post('purchase-report-submit', [ReportController::class,'medicine_purchase_report_submit'])->name('purchase-report-submit');
+//     Route::get('purchase-report', [ReportController::class,'medicine_purchase_report_form'])->name('purchase-report');
+//     Route::post('purchase-report-submit', [ReportController::class,'medicine_purchase_report_submit'])->name('purchase-report-submit');
 
-    Route::get('outlet-stock', [ReportController::class,'outlet_stock_report_form'])->name('outlet-stock-report');
-    Route::post('outlet-stock-submit', [ReportController::class,'outlet_stock_report_submit'])->name('outlet-stock-submit');
+//     Route::get('outlet-stock', [ReportController::class,'outlet_stock_report_form'])->name('outlet-stock-report');
+//     Route::post('outlet-stock-submit', [ReportController::class,'outlet_stock_report_submit'])->name('outlet-stock-submit');
 
-    Route::get('warehouse-stock', [ReportController::class,'warehouse_stock_report_form'])->name('warehouse-stock-report');
-    Route::post('warehouse-stock-submit', [ReportController::class,'warehouse_stock_report_submit'])->name('warehouse-stock-submit');
+//     Route::get('warehouse-stock', [ReportController::class,'warehouse_stock_report_form'])->name('warehouse-stock-report');
+//     Route::post('warehouse-stock-submit', [ReportController::class,'warehouse_stock_report_submit'])->name('warehouse-stock-submit');
 
 
-});
+// });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'report2'],function () {
 

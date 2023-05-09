@@ -209,7 +209,9 @@ class PermissionSeeder extends Seeder
             'not-sold-medicine.report',
             'not-sold-medicine-submit.report',
             'redeem_point_report',
-            'redeem_point_report_submit'
+            'redeem_point_report_submit',
+            'warehouse_value',
+            'outlet_value'
 
 
 
