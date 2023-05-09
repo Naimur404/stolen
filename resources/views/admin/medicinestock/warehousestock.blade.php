@@ -1,8 +1,8 @@
 @extends('layouts.admin.master')
 
-@section('title')Warehouse Medicine Stock
+@section('title','Warehouse Medicine Stock')
 
-@endsection
+
 
 @push('css')
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
@@ -23,11 +23,13 @@
         @slot('button')
 <div class="row">
     <div class="col-md-8">
+        @can('warehouse_value')
         <p style="display:inline;">
             <span style="font-size: 1.5rem; color:red">Total Value =</span>
             <span id="hello2" style="font-size: 1.5rem ;color:red" ></span>
             <span style="font-size: 1.5rem ;color:red" >TK</span>
      </p>
+     @endcan
     </div>
     <div class="col-md-4">
             {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'id' => 'supplier_id']) }}
@@ -52,16 +54,10 @@
                                         <th>Category</th>
                                         <th>Manufacturer Name</th>
                                         <th>Expiry Date</th>
-
                                         <th>Manufacture Price</th>
                                         <th>Sale Price</th>
-
                                         <th>Stock</th>
                                         <th>Action</th>
-
-
-
-
 	                                </tr>
 	                            </thead>
 	                            <tbody>
@@ -77,8 +73,6 @@
 	</div>
 
 	@push('scripts')
-
-
 
     <script type="text/javascript">
     $(function () {
@@ -109,7 +103,6 @@
 
         ]
 
-
     });
 
     $.ajax({
@@ -120,7 +113,6 @@
 
         let ok = '';
         ok +=  data.total;
-
         document.getElementById('hello2').innerHTML = ok;
     }
 });
@@ -135,9 +127,9 @@
     "success": function (data) {
 
         let ok = '';
-                   ok +=  data.total;
+         ok +=  data.total;
 
-                document.getElementById('hello2').innerHTML = ok;
+        document.getElementById('hello2').innerHTML = ok;
     }
 });
 });
@@ -145,13 +137,6 @@
 
    </script>
 
-
-
-
-
-
-    {{-- <script src="{{asset('assets/js/ecommerce.js')}}"></script> --}}
-    {{-- <script src="{{asset('assets/js/product-list-custom.js')}}"></script> --}}
 	@endpush
 
 @endsection
