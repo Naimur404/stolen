@@ -70,7 +70,7 @@
                     @endcan
 
 
-                       @can('category-wise-report-outlet')
+                    @can('category-wise-report-outlet')
 
                     {!! Form::open(array('url'=> 'report2/category-wise-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
@@ -78,10 +78,27 @@
                             <b>Category Wise Stock Report(Outlet)</b>
                         </div>
                         <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
-                       </div>
+                    </div>
 
-                        <div class="col-md-2">Category {{ Form::select('category_id', $category, null, ['class' => 'form-control', 'placeholder' => 'Select Category', 'id' => '' ,'required']) }}
-                       </div>
+                    <div class="col-md-2">Category {{ Form::select('category_id', $category, null, ['class' => 'form-control', 'placeholder' => 'Select Category', 'id' => '' ,'required']) }}
+                    </div>
+                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                    </div>
+                    {!! Form::close() !!}
+                    @endcan
+
+                    @can('due-payment-report')
+
+                    {!! Form::open(array('url'=> 'report2/due-payment-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                    <div class="row form-group">
+                        <div class="col-md-3 mt-4">
+                            <b>Due Payment Report</b>
+                        </div>
+                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                        <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                        <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
+                    </div>
+
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                     </div>
                     {!! Form::close() !!}
@@ -170,13 +187,28 @@
                     {!! Form::close() !!}
                     @endcan
 
-                      @can('not-sold-medicine.report')
+                    @can('manufacture_sale_report')
+                    {!! Form::open(array('url'=> 'report2/sale-report-manufacturer-submit', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
+                    <div class="row form-group">
+                        <div class="col-md-3 mt-4">
+                            <b>Sales Report By Manufacturer</b>
+                        </div>
+                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                        <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                        <div class="col-md-2">Manufacturer Name {{ Form::select('manufacturer_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Manufacturer', 'id' => 'manufacturer10']) }}
+                        </div>
+                        <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
+                    </div>
+                    {!! Form::close() !!}
+                    @endcan
+
+                    @can('not-sold-medicine.report')
                     {!! Form::open(array('url'=> 'report2/not-sold-medicine', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
                         <div class="col-md-3 mt-4">
                             <b>Not Sold Report</b>
                         </div>
-                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                         <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
 
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
@@ -190,7 +222,7 @@
                         <div class="col-md-3 mt-4">
                             <b>Sales Report By User</b>
                         </div>
-                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                         <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                         <div class="col-md-3">User Name  {{ Form::select('user_id', $Users, null, ['class' => 'form-control add', 'id' => 'user_id2']) }}
                         </div>
@@ -209,7 +241,7 @@
                         <div class="col-md-3 mt-4">
                             <b>Sales Report By Payment Method</b>
                         </div>
-                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
+                        <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                         <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                         <div class="col-md-3">Payment Method  {{ Form::select('payment_id', $payment_method, null, ['class' => 'form-control add', 'id' => 'user_id2']) }}
                         </div>
@@ -604,6 +636,29 @@ ajax: {
 
 
 $( "#manufacturer2" ).select2({
+
+ajax: {
+  url: "{{route('get-manufacturer')}}",
+  type: "post",
+  dataType: 'json',
+
+  data: function (params) {
+    return {
+       _token: CSRF_TOKEN,
+       search: params.term // search term
+    };
+  },
+  processResults: function (response) {
+    return {
+      results: response
+    };
+  },
+  cache: true
+}
+
+});
+
+$( "#manufacturer10" ).select2({
 
 ajax: {
   url: "{{route('get-manufacturer')}}",

@@ -17,6 +17,6 @@ class CustomerDuePayment extends Model
         'due_amount',
         'pay',
         'rest_amount',
-        'received_by'
+        'received_by',
     ];
 }
