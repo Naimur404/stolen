@@ -41,6 +41,7 @@
         <div class="card-body">
             {!! Form::open(['route' => ['customer-due-payment'], 'method' => 'POST', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
               <input type="hidden" name="customer_id" value="{{ $customer->id }}">
+              <input type="hidden" name="outlet_id" value="{{ $customer->outlet_id }}">
             <div class="service_invoice_header">
                 <div class="row">
                     <div class="col-md-4">Customer Name: {{ $customer->name }}</div>
@@ -51,27 +52,12 @@
 
                 <div class="row">
                     <div class="col-md-3">Customer Mobile :  @if ($customer->mobile == null)
-                      <b>  N/A
+                    <b>  N/A
                     @elseif ($customer->mobile != null)
                         {{ $customer->mobile }}
                     @endif
                 </b> </div>
-
-
-
                 </div>
-                {{-- <div class="row">
-                    <div class="col-md-3">Manufacturer Name : </div>
-                    <div class="col-md-4"><b>
-                            @if ($productPurchase->manufacturer_id == null)
-                                N/A
-                            @elseif ($productPurchase->manufacturer_id != null)
-                                {{ $productPurchase->manufacturer->manufacturer_name }}
-                            @endif
-                        </b></div>
-
-                </div> --}}
-
             </div>
 
 
@@ -82,7 +68,6 @@
                     <th>Total Amount</th>
                     <th>Paid</th>
                     <th>Due</th>
-
                 </tr>
 
                 @foreach ($invoices as $data)

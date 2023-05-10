@@ -293,7 +293,6 @@ class CustomerManagementController extends Controller
 
         $customer = Customer::where('id', $request->customer_id)->first();
         $invoices = OutletInvoice::where('customer_id', $request->customer_id)->where('due_amount', '>', 0)->orderBy('id', 'asc')->get();
-        $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
 
         try {
 
@@ -304,16 +303,15 @@ class CustomerManagementController extends Controller
             );
             Customer::where('id', $request->customer_id)->update($due);
             $rest_amount = $customer->due_balance - $request->paid_amount;
-            $due_data = array([
-                'outlet_id' => $outlet_id,
+
+            CustomerDuePayment::create([
+                'outlet_id' => $request->outlet_id,
                 'customer_id' => $request->customer_id,
                 'due_amount' => $customer->due_balance,
                 'pay' => $request->paid_amount,
                 'rest_amount' => $rest_amount,
                 'received_by' => Auth::user()->id,
             ]);
-
-            CustomerDuePayment::insert($due_data);
 
             $pay = $request->paid_amount;
             foreach ($invoices as $invoice) {

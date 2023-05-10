@@ -211,7 +211,12 @@ class PermissionSeeder extends Seeder
             'redeem_point_report',
             'redeem_point_report_submit',
             'warehouse_value',
-            'outlet_value'
+            'outlet_value',
+            'due-payment-report',
+            'due-payment-report-submit',
+            'manufacture_sale_report',
+            'manufacture_sale_report_submit'
+
 
 
 

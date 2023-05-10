@@ -1,6 +1,10 @@
 <?php
 
 namespace App\Http\Controllers;
+
+use App\Models\Category;
+use App\Models\Manufacturer;
+use App\Models\Medicine;
 use App\Models\MedicinePurchase;
 use App\Models\Outlet;
 use App\Models\OutletInvoice;
@@ -8,37 +12,28 @@ use App\Models\OutletInvoiceDetails;
 use App\Models\OutletStock;
 use App\Models\PaymentMethod;
 use App\Models\SalesReturn;
+use App\Models\Supplier;
+use App\Models\SupplierHasManufacturer;
 use App\Models\User;
 use App\Models\Warehouse;
 use App\Models\WarehouseStock;
-use App\Models\SupplierHasManufacturer;
-use App\Models\Supplier;
 use Carbon\Carbon;
-use App\Models\Manufacturer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use App\Models\Category;
-use App\Models\Medicine;
 
 class ReportController2 extends Controller
 {
-    function __construct()
+    public function __construct()
     {
 
         $this->middleware('permission:sale_report.search', ['only' => ['medicine_sale_report_submit']]);
-
         $this->middleware('permission:purchase_report.search', ['only' => ['medicine_purchase_report_submit']]);
-
         $this->middleware('permission:outlet-stock.search', ['only' => ['outlet_stock_report_submit']]);
-
         $this->middleware('permission:warehouse-stock.search', ['only' => ['warehouse_stock_report_submit']]);
-
         $this->middleware('permission:sale_report_by_payment.search', ['only' => ['medicine_sale_report_by_payment']]);
-
         $this->middleware('permission:sale_report_by_user.search', ['only' => ['medicine_sale_report_by_user']]);
         $this->middleware('permission:sale_report_details.search', ['only' => ['medicine_sale_report_details']]);
-
         $this->middleware('permission:distribute_medicine_report_for_outlet.search', ['only' => ['distribute_medicine_report']]);
         $this->middleware('permission:distribute_medicine_report_for_warehouse.search', ['only' => ['distribute_medicine_report2']]);
         $this->middleware('permission:stock_request_report_for_outlet.search', ['only' => ['stock_request_report']]);
@@ -47,28 +42,24 @@ class ReportController2 extends Controller
         $this->middleware('permission:return_medicine_report_for_warehouse.search', ['only' => ['return_medicine_report2']]);
         $this->middleware('permission:sale_return_report.search', ['only' => ['medicine_sale_return']]);
         $this->middleware('permission:category-wise-report', ['only' => ['category_wise_report']]);
-
         $this->middleware('permission:category-wise-report-alert', ['only' => ['category_wise_report_alert']]);
         $this->middleware('permission:category-wise-report-alert-submit', ['only' => ['category_wise_report_alert_submit']]);
         $this->middleware('permission:supplier_wise_sale_report.search', ['only' => ['supplier_wise_sale']]);
-
-
         $this->middleware('permission:supplier_wise_stock_report_outlet.search', ['only' => ['supplier_wise_stock_outlet']]);
         $this->middleware('permission:supplier_wise_stock_report_warehouse.search', ['only' => ['supplier_wise_stock_warehouse']]);
         $this->middleware('permission:manufacturer_wise_stock_report_outlet.search', ['only' => ['manufacturer_wise_stock_outlet']]);
         $this->middleware('permission:manufacturer_wise_stock_report_warehouse.search', ['only' => ['manufacturer_wise_stock_warehouse']]);
         $this->middleware('permission:profit_loss.report', ['only' => ['profit_loss']]);
-
         $this->middleware('permission:expiry-wise-report-outlet.submit', ['only' => ['expiryDate1']]);
         $this->middleware('permission:expiry-wise-report-warehouse.submit', ['only' => ['expiryDate']]);
-
         $this->middleware('permission:best_selling.search', ['only' => ['bestSelling']]);
         $this->middleware('permission:slow_selling.search', ['only' => ['slowSelling']]);
         $this->middleware('permission:redeem_point_report_submit', ['only' => ['redeemPointReport']]);
-
-
         $this->middleware('permission:medicine-sale.report', ['only' => ['sale_report_medicine_submit']]);
         $this->middleware('permission:not-sold-medicine-submit.report', ['only' => ['notSoldMedicine']]);
+        $this->middleware('permission:due-payment-report-submit', ['only' => ['duePaymentReport']]);
+        $this->middleware('permission:manufacture_sale_report_submit', ['only' => ['sale_report_manufacturer_submit']]);
+
 
     }
 
@@ -93,7 +84,6 @@ class ReportController2 extends Controller
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
             if ($request->customer_id == '' || $request->customer_id == null) {
 
-
                 $productSales = OutletInvoice::where('outlet_id', '=', $outlet_id)->whereDate('created_at', '>=', $start_date)
                     ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
                 $outlet = Outlet::where('id', $outlet_id)->orderby('id', 'desc')->first('outlet_name');
@@ -107,10 +97,8 @@ class ReportController2 extends Controller
             }
         }
 
-
         return view('admin.report.medicine_sale_report2', compact('start_date', 'end_date', 'productSales', 'title'));
     }
-
 
     public function medicine_sale_report_details(Request $request)
     {
@@ -119,7 +107,6 @@ class ReportController2 extends Controller
         $end_date = Carbon::parse($input['end_date']);
 
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
-
 
             $productSales = OutletInvoice::whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
@@ -132,7 +119,6 @@ class ReportController2 extends Controller
             $outlet = Outlet::where('id', $outlet_id)->orderby('id', 'desc')->first('outlet_name');
             $title = 'All Sale Report For ' . $outlet->outlet_name;
         }
-
 
         return view('admin.report.medicine_sale_report_details', compact('start_date', 'end_date', 'productSales', 'title'));
     }
@@ -156,15 +142,12 @@ class ReportController2 extends Controller
             $title = 'All Purchase Report For ' . $warehouse->warehouse_name;
         }
 
-
         return view('admin.report.medicine_purchase_report2', compact('start_date', 'end_date', 'productSales', 'title'));
     }
-
 
     public function warehouse_stock_report_submit(Request $request)
     {
         $input = $request->all();
-
 
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
             if ($request->medicine_id == '' || $request->medicine_id == null) {
@@ -181,9 +164,8 @@ class ReportController2 extends Controller
 
             if ($request->medicine_id == '' || $request->medicine_id == null) {
 
-
                 $productSales = WarehouseStock::where('warehouse_id', '=', $warehouse_id)->where('quantity', '>', '0')
-                   ->orderBy('id', 'asc')->get();
+                    ->orderBy('id', 'asc')->get();
                 $outlet = Warehouse::where('id', $warehouse_id)->orderby('id', 'desc')->first('warehouse_name');
                 $title = 'All Stock Report ' . $outlet->warehouse_name;
             } else {
@@ -195,15 +177,12 @@ class ReportController2 extends Controller
             }
         }
 
-
         return view('admin.report.warehouse_stock_report2', compact('productSales', 'title'));
     }
-
 
     public function outlet_stock_report_submit(Request $request)
     {
         $input = $request->all();
-
 
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
             if ($request->medicine_id == '' || $request->medicine_id == null) {
@@ -212,7 +191,7 @@ class ReportController2 extends Controller
                 $title = 'All Outlet Stock Report';
             } else {
                 $productSales = OutletStock::where('medicine_id', $request->medicine_id)->where('quantity', '>', '0')
-                   ->orderBy('id', 'asc')->get();
+                    ->orderBy('id', 'asc')->get();
                 $title = 'All Outlet Stock Report';
             }
         } else {
@@ -220,9 +199,8 @@ class ReportController2 extends Controller
 
             if ($request->medicine_id == '' || $request->medicine_id == null) {
 
-
                 $productSales = OutletStock::where('outlet_id', '=', $outlet_id)->where('quantity', '>', '0')
-                   ->orderBy('id', 'asc')->get();
+                    ->orderBy('id', 'asc')->get();
                 $outlet = outlet::where('id', $outlet_id)->orderby('id', 'desc')->first('outlet_name');
                 $title = 'All Stock Report ' . $outlet->outlet_name;
             } else {
@@ -267,18 +245,14 @@ class ReportController2 extends Controller
         return view('admin.report.report', compact('Users', 'payment_method', 'outlet', 'warehouse', 'category', 'supplier'));
     }
 
-
     public function medicine_sale_report_details1($id)
     {
-
 
         $productSales = OutletInvoiceDetails::where('outlet_invoice_id', $id)->get();
         $title = 'Invoice Report Details';
 
         return view('admin.report.sale_report_details', compact('title', 'productSales'));
     }
-
-
 
     public function sale_report_medicine_submit(Request $request)
     {
@@ -293,14 +267,12 @@ class ReportController2 extends Controller
         } else {
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : outlet::orderby('id', 'desc')->first('id');
             $productSales = $productSales = DB::table('outlet_invoice_details')->where('outlet_id', $outlet_id)->where('medicine_id', $request->medicine_id)->whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
-
+                ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
 
             $title = 'Medicine Name ' . $medicine->medicine_name;
         }
         return view('admin.report.medicine_sale_report_by_medicine', compact('start_date', 'end_date', 'productSales', 'title'));
     }
-
 
     public function medicine_sale_report_by_user(Request $request)
     {
@@ -326,7 +298,6 @@ class ReportController2 extends Controller
         $input = $request->all();
         $start_date = Carbon::parse($input['start_date']);
         $end_date = Carbon::parse($input['end_date']);
-
 
         $paymnt = PaymentMethod::where('id', $request->paymemt_id)->orderby('id', 'desc')->first('method_name');
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
@@ -355,7 +326,6 @@ class ReportController2 extends Controller
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
 
             if ($request->outlet_id == '' || $request->outlet_id == null) {
-
 
                 $productSales = DB::table('medicine_distributes')->where('medicine_distributes.has_sent', 1)->whereDate('medicine_distributes.created_at', '>=', $start_date)
                     ->whereDate('medicine_distributes.created_at', '<=', $end_date)->leftJoin('medicine_distribute_details', 'medicine_distributes.id', '=', 'medicine_distribute_details.medicine_distribute_id')->select('medicine_distributes.id as mdid', 'medicine_distributes.*', 'medicine_distribute_details.*');
@@ -399,10 +369,8 @@ class ReportController2 extends Controller
             }
         }
 
-
         return view('admin.report.medicine_distruburte_report', compact('start_date', 'end_date', 'productSales', 'title'));
     }
-
 
     public function stock_request_report(Request $request)
     {
@@ -410,13 +378,9 @@ class ReportController2 extends Controller
         $start_date = Carbon::parse($input['start_date']);
         $end_date = Carbon::parse($input['end_date']);
 
-        // $productSales = MedicineDistribute::where('outlet_id',$request->outlet_id)->whereDate('created_at', '>=', $start_date)
-        // ->whereDate('created_at', '<=', $end_date)->with(['medicinedistributesdetails'])->get();
-
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
 
             if ($request->outlet_id == '' || $request->outlet_id == null) {
-
 
                 $productSales = DB::table('stock_requests')->where('stock_requests.has_sent', 1)->where('stock_requests.has_accepted', 1)->whereDate('stock_requests.created_at', '>=', $start_date)
                     ->whereDate('stock_requests.created_at', '<=', $end_date)->leftJoin('stock_request_details', 'stock_requests.id', '=', 'stock_request_details.stock_request_id')->select('stock_requests.id as mdid', 'stock_requests.*', 'stock_request_details.*');
@@ -461,10 +425,8 @@ class ReportController2 extends Controller
             }
         }
 
-
         return view('admin.report.stock_request_report', compact('start_date', 'end_date', 'productSales', 'title'));
     }
-
 
     //for warehouse manager
     public function distribute_medicine_report2(Request $request)
@@ -473,12 +435,7 @@ class ReportController2 extends Controller
         $start_date = Carbon::parse($input['start_date']);
         $end_date = Carbon::parse($input['end_date']);
 
-        // $productSales = MedicineDistribute::where('outlet_id',$request->outlet_id)->whereDate('created_at', '>=', $start_date)
-        // ->whereDate('created_at', '<=', $end_date)->with(['medicinedistributesdetails'])->get();
-
-
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
-
 
             $productSales = DB::table('medicine_distributes')->where('medicine_distributes.has_sent', 1)->whereDate('medicine_distributes.created_at', '>=', $start_date)
                 ->whereDate('medicine_distributes.created_at', '<=', $end_date)->leftJoin('medicine_distribute_details', 'medicine_distributes.id', '=', 'medicine_distribute_details.medicine_distribute_id')->select('medicine_distributes.id as mdid', 'medicine_distributes.*', 'medicine_distribute_details.*');
@@ -501,19 +458,14 @@ class ReportController2 extends Controller
             $title = 'Distribute Medicine Report';
         }
 
-
         return view('admin.report.medicine_distruburte_report', compact('start_date', 'end_date', 'productSales', 'title'));
     }
-
 
     public function stock_request_report2(Request $request)
     {
         $input = $request->all();
         $start_date = Carbon::parse($input['start_date']);
         $end_date = Carbon::parse($input['end_date']);
-
-        // $productSales = MedicineDistribute::where('outlet_id',$request->outlet_id)->whereDate('created_at', '>=', $start_date)
-        // ->whereDate('created_at', '<=', $end_date)->with(['medicinedistributesdetails'])->get();
 
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
 
@@ -537,10 +489,8 @@ class ReportController2 extends Controller
             $title = 'Stock Request Report';
         }
 
-
         return view('admin.report.stock_request_report', compact('start_date', 'end_date', 'productSales', 'title'));
     }
-
 
     //retun medicine
 
@@ -550,16 +500,12 @@ class ReportController2 extends Controller
         $start_date = Carbon::parse($input['start_date']);
         $end_date = Carbon::parse($input['end_date']);
 
-        // $productSales = MedicineDistribute::where('outlet_id',$request->outlet_id)->whereDate('created_at', '>=', $start_date)
-        // ->whereDate('created_at', '<=', $end_date)->with(['medicinedistributesdetails'])->get();
-
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
 
             if ($request->outlet_id == '' || $request->outlet_id == null) {
 
-
                 $productSales = DB::table('warehouse_returns')->whereDate('warehouse_returns.created_at', '>=', $start_date)
-                    ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);;
+                    ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);
                 if ($request->medicine_id == '' || $request->medicine_id == null) {
                     $productSales = $productSales->get();
                 } else {
@@ -568,7 +514,7 @@ class ReportController2 extends Controller
                 $title = 'Return Medicine Report';
             } else {
                 $productSales = DB::table('warehouse_returns')->where('warehouse_returns.outlet_id', $request->outlet_id)->whereDate('warehouse_returns.created_at', '>=', $start_date)
-                    ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);;
+                    ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);
                 if ($request->medicine_id == '' || $request->medicine_id == null) {
                     $productSales = $productSales->get();
                 } else {
@@ -590,7 +536,7 @@ class ReportController2 extends Controller
                 $title = 'Return Medicine Report';
             } else {
                 $productSales = DB::table('warehouse_returns')->where('warehouse_returns.outlet_id', $request->outlet_id)->whereDate('warehouse_returns.created_at', '>=', $start_date)
-                    ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);;
+                    ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);
                 if ($request->medicine_id == '' || $request->medicine_id == null) {
                     $productSales = $productSales->get();
                 } else {
@@ -600,12 +546,10 @@ class ReportController2 extends Controller
             }
         }
 
-
         return view('admin.report.retun_medicine_report', compact('start_date', 'end_date', 'productSales', 'title'));
     }
 
     //for warehouse manager
-
 
     public function return_medicine_report2(Request $request)
     {
@@ -613,14 +557,10 @@ class ReportController2 extends Controller
         $start_date = Carbon::parse($input['start_date']);
         $end_date = Carbon::parse($input['end_date']);
 
-        // $productSales = MedicineDistribute::where('outlet_id',$request->outlet_id)->whereDate('created_at', '>=', $start_date)
-        // ->whereDate('created_at', '<=', $end_date)->with(['medicinedistributesdetails'])->get();
-
-
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
 
             $productSales = DB::table('warehouse_returns')->whereDate('warehouse_returns.created_at', '>=', $start_date)
-                ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);;
+                ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);
             if ($request->medicine_id == '' || $request->medicine_id == null) {
                 $productSales = $productSales->get();
             } else {
@@ -630,7 +570,7 @@ class ReportController2 extends Controller
         } else {
             $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
             $productSales = DB::table('warehouse_returns')->where('warehouse_id', $warehouse_id)->whereDate('warehouse_returns.created_at', '>=', $start_date)
-                ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);;
+                ->whereDate('warehouse_returns.created_at', '<=', $end_date)->leftJoin('warehouse_return_details', 'warehouse_returns.id', '=', 'warehouse_return_details.warehouse_return_id')->select('warehouse_returns.id as mdid', 'warehouse_returns.*', 'warehouse_return_details.*')->where('warehouse_return_details.has_received', 1);
             if ($request->medicine_id == '' || $request->medicine_id == null) {
                 $productSales = $productSales->get();
             } else {
@@ -638,7 +578,6 @@ class ReportController2 extends Controller
             }
             $title = 'Return Medicine Report';
         }
-
 
         return view('admin.report.retun_medicine_report', compact('start_date', 'end_date', 'productSales', 'title'));
     }
@@ -653,7 +592,6 @@ class ReportController2 extends Controller
 
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
 
-
             $productSales = SalesReturn::whereDate('created_at', '>=', $start_date)
                 ->whereDate('created_at', '<=', $end_date)->orderBy('id', 'asc')->get();
             $title = 'All Outlet Sale Return Report';
@@ -665,14 +603,12 @@ class ReportController2 extends Controller
             $title = 'All Sale Return Report For ' . $outlet->outlet_name;
         }
 
-
         return view('admin.report.slaes_return_report', compact('start_date', 'end_date', 'productSales', 'title'));
     }
 
     public function category_wise_report(Request $request)
     {
         $input = $request->all();
-
 
         if ($request->outlet_id != null && $request->outlet_id != '') {
             $productSales = DB::table('outlet_stocks')->where('outlet_stocks.quantity', '>', '0')->where('outlet_stocks.outlet_id', $request->outlet_id)
@@ -689,14 +625,10 @@ class ReportController2 extends Controller
             $title = 'Stock Report For ' . $category->category_name;
         }
 
-
         return view('admin.report.category_stock_report', compact('productSales', 'title'));
     }
 
-
     public function category_wise_report_alert()
-
-
     {
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
         $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
@@ -712,7 +644,6 @@ class ReportController2 extends Controller
             $category1 = Category::pluck('category_name', 'id');
             $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
         } else {
-
 
             $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
             $category1 = Category::pluck('category_name', 'id');
@@ -740,13 +671,10 @@ class ReportController2 extends Controller
             $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
         } else {
 
-
             $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
             $category1 = Category::pluck('category_name', 'id');
             $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name', 'id');
         }
-        // $start_date = Carbon::parse($input['start_date']);
-        // $end_date = Carbon::parse($input['end_date']);
 
         if ($request->outlet_id != null || $request->outlet_id != '') {
             $productSales = DB::table('outlet_stocks')->where('outlet_stocks.quantity', '>', '0')->where('outlet_stocks.outlet_id', $request->outlet_id)
@@ -768,7 +696,6 @@ class ReportController2 extends Controller
                 }
             }
             if ($request->manufacturer_id) {
-
 
                 $productSales = $productSales->whereIn('medicines.manufacturer_id', $request->manufacturer_id);
             }
@@ -814,16 +741,13 @@ class ReportController2 extends Controller
                 $productSales = array();
             }
 
-
             $category = Category::where('id', $request->category_id)->first();
             $title = 'Category Stock Report Alert';
 
         }
 
-
-         return view('admin.report.category_wise_stock_alert', compact('productSales', 'title', 'outlet', 'category', 'warehouse', 'category1', 'total'));
+        return view('admin.report.category_wise_stock_alert', compact('productSales', 'title', 'outlet', 'category', 'warehouse', 'category1', 'total'));
     }
-
 
     public function supplier_wise_sale(Request $request)
     {
@@ -834,10 +758,9 @@ class ReportController2 extends Controller
 
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
 
-
         $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
             ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)
-            ->leftJoin('medicines', 'medicines.id', '=', 'outlet_invoice_details.medicine_id')->select('outlet_invoice_details.*','medicines.manufacturer_id')
+            ->leftJoin('medicines', 'medicines.id', '=', 'outlet_invoice_details.medicine_id')->select('outlet_invoice_details.*', 'medicines.manufacturer_id')
             ->get();
 
         $manu = SupplierHasManufacturer::where('supplier_id', $request->supplier_id)->get();
@@ -852,15 +775,13 @@ class ReportController2 extends Controller
     {
         $input = $request->all();
 
-
         $productStocks = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $request->outlet_id)
-           ->where('outlet_stocks.quantity', '>', '0')->leftJoin('medicines', 'medicines.id', '=', 'outlet_stocks.medicine_id')->select('outlet_stocks.*', 'medicines.manufacturer_id','medicines.medicine_name')->get();
+            ->where('outlet_stocks.quantity', '>', '0')->leftJoin('medicines', 'medicines.id', '=', 'outlet_stocks.medicine_id')->select('outlet_stocks.*', 'medicines.manufacturer_id', 'medicines.medicine_name')->get();
 
         $manu = SupplierHasManufacturer::where('supplier_id', $request->supplier_id)->get();
         $sup = Supplier::where('id', $request->supplier_id)->first();
 
         $title = $sup->supplier_name . ' Supplier Medicine Stock report';
-
 
         return view('admin.report.supplier_wise_stock_report', compact('productStocks', 'manu', 'title'));
     }
@@ -868,8 +789,6 @@ class ReportController2 extends Controller
     public function supplier_wise_stock_warehouse(Request $request)
     {
         $input = $request->all();
-
-
 
         $productStocks = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $request->warehouse_id)
             ->where('warehouse_stocks.quantity', '>', '0')->leftJoin('medicines', 'medicines.id', '=', 'warehouse_stocks.medicine_id')->select('warehouse_stocks.*', 'medicines.manufacturer_id', 'medicines.medicine_name')->get();
@@ -879,47 +798,37 @@ class ReportController2 extends Controller
 
         $title = $sup->supplier_name . ' Supplier Medicine Stock report';
 
-
         return view('admin.report.supplier_wise_stock_report', compact('productStocks', 'manu', 'title'));
     }
-
 
     public function manufacturer_wise_stock_outlet(Request $request)
     {
         $input = $request->all();
 
-
         $productStocks = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $request->outlet_id)->
-      where('outlet_stocks.quantity', '>', '0')->leftJoin('medicines', 'medicines.id', '=', 'outlet_stocks.medicine_id')->where('medicines.manufacturer_id', $request->manufacturer_id)->select('outlet_stocks.*', 'medicines.manufacturer_id','medicines.medicine_name')->get();
+            where('outlet_stocks.quantity', '>', '0')->leftJoin('medicines', 'medicines.id', '=', 'outlet_stocks.medicine_id')->where('medicines.manufacturer_id', $request->manufacturer_id)->select('outlet_stocks.*', 'medicines.manufacturer_id', 'medicines.medicine_name')->get();
         // dump($productStocks);
 
         $manu = Manufacturer::where('id', $request->manufacturer_id)->first();
 
-     $title = $manu->manufacturer_name . ' Manufacturer Medicine Stock report';
+        $title = $manu->manufacturer_name . ' Manufacturer Medicine Stock report';
 
-
-        return view('admin.report.manufacturer_wise_stock_report', compact( 'productStocks', 'manu', 'title'));
+        return view('admin.report.manufacturer_wise_stock_report', compact('productStocks', 'manu', 'title'));
     }
 
     public function manufacturer_wise_stock_warehouse(Request $request)
     {
         $input = $request->all();
 
-
-
         $productStocks = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $request->warehouse_id)
             ->where('warehouse_stocks.quantity', '>', '0')->leftJoin('medicines', 'medicines.id', '=', 'warehouse_stocks.medicine_id')->where('medicines.manufacturer_id', $request->manufacturer_id)->select('warehouse_stocks.*', 'medicines.manufacturer_id', 'medicines.medicine_name')->get();
 
-            $manu = Manufacturer::where('id', $request->manufacturer_id)->first();
+        $manu = Manufacturer::where('id', $request->manufacturer_id)->first();
 
-            $title = $manu->manufacturer_name . ' Manufacturer Medicine Stock report';
+        $title = $manu->manufacturer_name . ' Manufacturer Medicine Stock report';
 
-
-        return view('admin.report.manufacturer_wise_stock_report', compact( 'productStocks', 'manu', 'title'));
+        return view('admin.report.manufacturer_wise_stock_report', compact('productStocks', 'manu', 'title'));
     }
-
-
-
 
     public function profit_loss(Request $request)
     {
@@ -928,33 +837,27 @@ class ReportController2 extends Controller
         $end_date = Carbon::parse($input['end_date']);
         $total_discount = 0;
 
-        // $productSales = MedicineDistribute::where('outlet_id',$request->outlet_id)->whereDate('created_at', '>=', $start_date)
-        // ->whereDate('created_at', '<=', $end_date)->with(['medicinedistributesdetails'])->get();
-
         if (Auth::user()->hasAnyRole(['Super Admin', 'Admin'])) {
-
 
             $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
                 ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks', 'outlet_invoice_details.stock_id', '=', 'outlet_stocks.id')->select('outlet_invoice_details.*', 'outlet_stocks.purchase_price')->distinct()->get();
             $title = 'Profit & Loss Report';
             // dump($productSales);
             $total_discount = OutletInvoice::whereDate('created_at', '>=', $start_date)
-            ->whereDate('created_at', '<=', $end_date)->sum('total_discount');
+                ->whereDate('created_at', '<=', $end_date)->sum('total_discount');
         } else {
 
             $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : outlet::orderby('id', 'desc')->first('id');
             $productSales = DB::table('outlet_invoice_details')->whereDate('outlet_invoice_details.created_at', '>=', $start_date)
                 ->whereDate('outlet_invoice_details.created_at', '<=', $end_date)->leftJoin('outlet_stocks', 'outlet_invoice_details.stock_id', '=', 'outlet_stocks.id')->select('outlet_invoice_details.*', 'outlet_stocks.purchase_price', 'outlet_stocks.outlet_id')->where('outlet_stocks.outlet_id', $outlet_id)->distinct()->get();
-             $total_discount = OutletInvoice::whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->where('outlet_id', $outlet_id)->sum('total_discount');
+            $total_discount = OutletInvoice::whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->where('outlet_id', $outlet_id)->sum('total_discount');
             $title = 'Profit & Loss Report';
             // dump($productSales);
 
         }
 
-
-        return view('admin.report.profit_loss_report', compact('start_date', 'end_date', 'productSales', 'title','total_discount'));
+        return view('admin.report.profit_loss_report', compact('start_date', 'end_date', 'productSales', 'title', 'total_discount'));
     }
-
 
     public function expiryDate(Request $request)
     {
@@ -962,13 +865,10 @@ class ReportController2 extends Controller
 
         $start_date = Carbon::parse($input['start_date']);
 
-
         $productSales = WarehouseStock::whereDate('expiry_date', '<', $start_date)
             ->where('quantity', '>', '0')->get();
 
-
         $title = 'Expiry Wise Report';
-
 
         return view('admin.report.expiry_wise_report_warehouse', compact('start_date', 'productSales', 'title'));
     }
@@ -987,9 +887,7 @@ class ReportController2 extends Controller
                 ->where('quantity', '>', '0')->get();
         }
 
-
         $title = 'Expiry Wise Report';
-
 
         return view('admin.report.expiry_wise_report_outlet', compact('start_date', 'productSales', 'title'));
     }
@@ -1016,26 +914,58 @@ class ReportController2 extends Controller
         return view('admin.report.slow_selling', compact('data'));
     }
 
-    public function notSoldMedicine(Request $request){
+    public function notSoldMedicine(Request $request)
+    {
 
         $input = $request->all();
         $start_date = Carbon::parse($input['start_date']);
         $end_date = Carbon::parse($input['end_date']);
 
         $medicine_id = DB::table('outlet_invoice_details')->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->select('medicine_id')->distinct()->pluck('medicine_id')->toArray();
-        $not_sold = DB::table('outlet_stocks')->where('quantity', '>', 0)->whereNotIn('medicine_id',$medicine_id)->leftjoin('medicines','outlet_stocks.medicine_id','=','medicines.id')->select('outlet_stocks.*','medicines.medicine_name as medicine_name')->get();
-        return view('admin.report.not_sold_medicine', compact('start_date', 'end_date','not_sold'));
-
+        $not_sold = DB::table('outlet_stocks')->where('quantity', '>', 0)->whereNotIn('medicine_id', $medicine_id)->leftjoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->get();
+        return view('admin.report.not_sold_medicine', compact('start_date', 'end_date', 'not_sold'));
 
     }
-   public function redeemPointReport(Request $request){
+    public function redeemPointReport(Request $request)
+    {
 
         $input = $request->all();
         $start_date = Carbon::parse($input['start_date']);
         $end_date = Carbon::parse($input['end_date']);
 
-        $redeemSales =   OutletInvoice::where('outlet_id', $request->outlet_id)->where('redeem_point','!=', NULL)->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->get();
+        $redeemSales = OutletInvoice::where('outlet_id', $request->outlet_id)->where('redeem_point', '!=', null)->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->get();
 
-        return view('admin.report.redeem_point_report', compact('start_date', 'end_date','redeemSales'));
-   }
+        return view('admin.report.redeem_point_report', compact('start_date', 'end_date', 'redeemSales'));
+    }
+
+    public function duePaymentReport(Request $request)
+    {
+
+        $input = $request->all();
+        $start_date = Carbon::parse($input['start_date']);
+        $end_date = Carbon::parse($input['end_date']);
+
+        $due_payments = DB::table('customer_due_payments')->whereDate('customer_due_payments.created_at', '>=', $start_date)->whereDate('customer_due_payments.created_at', '<=', $end_date)->leftJoin('customers', 'customer_due_payments.customer_id', '=', 'customers.id')
+            ->select('customer_due_payments.*', 'customers.mobile as mobile')->get();
+
+        return view('admin.report.due_payment_report', compact('start_date', 'end_date', 'due_payments'));
+
+    }
+
+    public function sale_report_manufacturer_submit(Request $request)
+    {
+
+        $input = $request->all();
+        $start_date = Carbon::parse($input['start_date']);
+        $end_date = Carbon::parse($input['end_date']);
+
+        $medicine_id = Medicine::where('manufacturer_id', $request->manufacturer_id)->pluck('id');
+
+        $manufacturer_name = Manufacturer::where('id', $request->manufacturer_id)->pluck('manufacturer_name');
+
+        $manufacturer_sales = OutletInvoiceDetails::whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->whereIn('medicine_id', $medicine_id)->get();
+
+        return view('admin.report.manufacturer_sale_report', compact('start_date', 'end_date', 'manufacturer_sales', 'manufacturer_name'));
+
+    }
 }
