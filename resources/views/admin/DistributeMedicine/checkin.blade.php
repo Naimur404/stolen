@@ -125,7 +125,7 @@
                           <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
                           <input type="hidden" name="medicine_distribute_id" value="{{ $productPurchase->id }}">
                           <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
-                          
+
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name }}</td>
                         <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
@@ -145,7 +145,7 @@
                             </button>
                             @else
                             <button type="submit" class="btn btn-danger" tabindex="19" id="save_purchase" disabled >
-                              ChekIn Done
+                              CheckIn Done
                             </button>
                             @endif
                           </td>

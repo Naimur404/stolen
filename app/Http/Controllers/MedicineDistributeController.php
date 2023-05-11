@@ -33,12 +33,13 @@ class MedicineDistributeController extends Controller
 
     {
 
+        $lastMonth = Carbon::now()->subMonth();
         if (Auth::user()->hasRole(['Super Admin', 'Admin'])){
-            $medicinedistributes = MedicineDistribute::orderby('id','desc')->get();
+            $medicinedistributes = MedicineDistribute::where('created_at', '>=', $lastMonth)->orderby('id','desc')->get();
 
         }else{
             $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-            $medicinedistributes = MedicineDistribute::where('outlet_id',$outlet_id)->where('has_sent','1')->orderby('id','desc')->get();
+            $medicinedistributes = MedicineDistribute::where('outlet_id',$outlet_id)->where('created_at', '>=', $lastMonth)->where('has_sent','1')->orderby('id','desc')->get();
         }
 
 
@@ -91,11 +92,9 @@ class MedicineDistributeController extends Controller
 
             for ($i = 0; $i < sizeof($medicines); $i++) {
                 $purchase_details = array(
-
                     'medicine_distribute_id' => $medicinedistribute->id,
                     'medicine_id' => $input['product_id'][$i],
                     'medicine_name' => $input['product_name'][$i],
-
                     'quantity' => $input['quantity'][$i],
                     'rack_no' => $input['rack_no'][$i],
                     'expiry_date' => $input['expiry_date'][$i],
