@@ -1,14 +1,14 @@
-(function(jQuery) {
+(function (jQuery) {
     $.opt = {}; // jQuery Object
 
-    jQuery.fn.invoice = function(options) {
+    jQuery.fn.invoice = function (options) {
         var ops = jQuery.extend({}, jQuery.fn.invoice.defaults, options);
         $.opt = ops;
 
         var inv = new Invoice();
         inv.init();
 
-        jQuery('body').on('click', function(e) {
+        jQuery('body').on('click', function (e) {
             var cur = e.target.id || e.target.className;
 
             if (cur == $.opt.addRow.substring(1))
@@ -23,32 +23,13 @@
             inv.init();
         });
 
-        // jQuery('#product_id').on('click', function (e) {
-        //     var cur = e.target.id || e.target.className;
-
-        //     if (cur == $.opt.product_id.substring(1))
-        //         inv.newRow();
-
-        //     inv.init();
-        // });
-
-        // jQuery('body').on('click',function(e){
-        //     var cur = e.target.id || e.target.className;
-        //     if (cur == $.opt.delete.substring(1))
-        //     inv.deleteRow(e.target);
-        //      inv.init();
-        // });
-
-
-
-        jQuery("body").on('keyup', function(e) {
+        jQuery("body").on('keyup', function (e) {
             inv.init();
         });
 
         return this;
     };
 }(jQuery));
-
 
 
 function Invoice() {
@@ -58,7 +39,7 @@ function Invoice() {
 Invoice.prototype = {
     constructor: Invoice,
 
-    init: function() {
+    init: function () {
         this.calcTotal();
         // this.calcTotalQty();
         this.calcSubtotal();
@@ -67,30 +48,6 @@ Invoice.prototype = {
         this.datePicker();
         this.check();
 
-        // var row_index;
-
-        // $("#purchaseTable").on('click', "tbody tr", function(e) {
-        // row_index = $(this).parent().index();
-        // row_index = $(this).index();
-        // let col_index = $(this).index();
-        // console.log(row_index);
-        // console.log(col_index);
-        // let uniqueId = "hello" + row_index;
-        // console.log(uniqueId);
-        // $("#expiry_date").datepicker({ minDate: 0 });
-        // });
-
-
-
-        // let uniqueId = "hello" + row_index;
-
-
-        // $(".invoice_datepicker").datepicker({ minDate: 0 });
-
-        // var today = new Date();
-        // $(".invoice_datepicker").on('click', function() {
-        //     $(this).attr('min', today);
-        // })
     },
 
     /**
@@ -98,8 +55,8 @@ Invoice.prototype = {
      *
      * @returns {number}
      */
-    calcTotal: function() {
-        jQuery($.opt.parentClass).each(function(i) {
+    calcTotal: function () {
+        jQuery($.opt.parentClass).each(function (i) {
             var row = jQuery(this);
             var total = row.find($.opt.manu_price).val() * row.find($.opt.qty).val();
 
@@ -113,13 +70,13 @@ Invoice.prototype = {
         return 1;
     },
 
-       check: function() {
+    check: function () {
         var paid_amount = jQuery($.opt.qty).val();
-            var grand_total_amount = jQuery($.opt.stock).val();
-            if ( parseInt(paid_amount) > parseInt(grand_total_amount) ) {
-                alert("Quantity not more than Stock.");
-                jQuery($.opt.qty).val('');
-               }
+        var grand_total_amount = jQuery($.opt.stock).val();
+        if (parseInt(paid_amount) > parseInt(grand_total_amount)) {
+            alert("Quantity not more than Stock.");
+            jQuery($.opt.qty).val('');
+        }
 
         return 1;
     },
@@ -129,28 +86,16 @@ Invoice.prototype = {
      *
      * @returns {number}
      */
-    // calcTotalQty: function () {
-    //      var totalQty = 0;
-    //      jQuery($.opt.qty).each(function (i) {
-    //          var qty = jQuery(this).val();
-    //          if (!isNaN(qty)) totalQty += Number(qty);
-    //      });
 
-    //      totalQty = self.roundNumber(totalQty, 2);
-
-    //      jQuery($.opt.totalQty).html(totalQty);
-
-    //      return 1;
-    //  },
 
     /***
      * Calculate subtotal of an order.
      *
      * @returns {number}
      */
-    calcSubtotal: function() {
+    calcSubtotal: function () {
         var subtotal = 0;
-        jQuery($.opt.total).each(function(i) {
+        jQuery($.opt.total).each(function (i) {
             var total = jQuery(this).val();
             // var total = jQuery(this).html();
             if (!isNaN(total)) subtotal += Number(total);
@@ -173,18 +118,8 @@ Invoice.prototype = {
      *
      * @returns {number}
      */
-    // calcGrandTotal: function () {
-    //     var grandTotal = Number(jQuery($.opt.subtotal).html())
-    //                    + Number(jQuery($.opt.shipping).val())
-    //                    - Number(jQuery($.opt.discount).val());
-    //     grandTotal = self.roundNumber(grandTotal, 2);
 
-    //     jQuery($.opt.grandTotal).html(grandTotal);
-
-    //     return 1;
-    // },
-
-    calcGrandTotal: function() {
+    calcGrandTotal: function () {
         var grandTotal = Number(jQuery($.opt.subtotal).val()) +
             Number(jQuery($.opt.vat).val()) -
             Number(jQuery($.opt.discount).val());
@@ -194,7 +129,7 @@ Invoice.prototype = {
     },
 
 
-    calcPayment: function() {
+    calcPayment: function () {
         var due = Number(jQuery($.opt.grandTotal).val()) -
             Number(jQuery($.opt.pay).val());
         due = self.roundNumber(due, 2);
@@ -202,7 +137,7 @@ Invoice.prototype = {
         return 1;
     },
 
-    datePicker: function() {
+    datePicker: function () {
         // $(".invoice_datepicker").datepicker({ minDate: 0 });
 
         // return 0;
@@ -213,7 +148,7 @@ Invoice.prototype = {
      *
      * @returns {number}
      */
-    newRow: function() {
+    newRow: function () {
         jQuery(".item-row:first").after('<tr class="item-row"><td><input class="form-control pr_id" type="hidden" name="product_id[]"  readonly> <input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly required> </td><td><input class="form-control rack_no"  type="text" name="rack_no[]" placeholder="Rack No"></td><td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required></td><td><input class="form-control qty"  type="number" name="quantity[]" placeholder="Quantity"  id="qty" required></td><td><input class="form-control stock" type="number" step="any" name="stock[]" id="stock" onfocus= "clearInput1(this)" required readonly></td><td><input class="form-control manu_price" name="manu_price[]" type="number" step="any" id="manu_price" readonly><td><input class="form-control price" name="box_mrp[]" type="number" step="any" id="box_price" onfocus= "clearInput2(this)" required></td></td><td><input class="form-control total" name="total_price[]" placeholder="0.00 " readonly></td><td><span class="btn btn-sm btn-danger"><a class=' + $.opt.delete.substring(1) + ' href="javascript:;" title="Remove row">Delete</a></span></td></tr>');
 
 
@@ -225,14 +160,13 @@ Invoice.prototype = {
     },
 
 
-
     /**
      * Delete a row.
      *
      * @param elem   current element
      * @returns {number}
      */
-    deleteRow: function(elem) {
+    deleteRow: function (elem) {
         jQuery(elem).parents($.opt.parentClass).remove();
 
         if (jQuery($.opt.delete).length < 1) {
@@ -250,7 +184,7 @@ Invoice.prototype = {
      * @param decimals
      * @returns {*}
      */
-    roundNumber: function(number, decimals) {
+    roundNumber: function (number, decimals) {
         var newString; // The new rounded number
         decimals = Number(decimals);
 

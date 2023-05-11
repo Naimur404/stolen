@@ -11,7 +11,9 @@ class OutletStock extends Model
     protected $table = 'outlet_stocks';
     protected $fillable = [
         'outlet_id',
+        'warehouse_stock_id',
         'medicine_id',
+        'barcode_text',
         'expiry_date',
         'quantity',
         'purchase_price',

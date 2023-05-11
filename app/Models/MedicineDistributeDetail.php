@@ -12,6 +12,8 @@ class MedicineDistributeDetail extends Model
     protected $fillable = [
         'medicine_distribute_id',
         'medicine_id',
+        'warehouse_stock_id',
+        'barcode_text',
         'medicine_name',
         'rack_no',
         'expiry_date',
