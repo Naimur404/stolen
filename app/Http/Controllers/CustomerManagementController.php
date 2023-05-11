@@ -190,6 +190,7 @@ class CustomerManagementController extends Controller
                 ->count();
             $customers = DB::table('customers')->where('name', 'like', '%' . $searchValue . '%')->orderBy($columnName, $columnSortOrder)->skip($start)->take($row_per_page)->get();
         } elseif ($id == 'due') {
+
             $totalRecords = Customer::where('due_balance', '>', 0)->select('count(*) as allcount')->where('outlet_id', '=', Auth::user()->outlet_id)->count();
             if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
                 $customers = DB::table('customers')->where('due_balance', '>', 0)->where('name', 'like', '%' . $searchValue . '%')
@@ -198,7 +199,7 @@ class CustomerManagementController extends Controller
                     ->take($row_per_page)
                     ->get();
             } else {
-                $customers = DB::table('customers')->where('due_balance', '>', 0)->orwhere('outlet_id', '=', Auth::user()->outlet_id)->where('name', 'like', '%' . $searchValue . '%')
+                $customers = DB::table('customers')->where('due_balance', '>', 0)->where('outlet_id', '=', Auth::user()->outlet_id)->where('name', 'like', '%' . $searchValue . '%')
                     ->orderBy($columnName, $columnSortOrder)
                     ->skip($start)
                     ->take($row_per_page)

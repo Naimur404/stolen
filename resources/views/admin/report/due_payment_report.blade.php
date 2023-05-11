@@ -85,7 +85,7 @@
             </tbody>
         </table>
 
-        <p class="text-center">Total Coleection BDT {{ $total }}/-</p>
+        <p class="text-center">Total Collection BDT {{ $total }}/-</p>
         <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
 
     </div>

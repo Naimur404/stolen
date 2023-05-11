@@ -202,6 +202,7 @@ Invoice.prototype = {
         payable_amount = grandTotal;
         jQuery($.opt.grandTotal).val(grandTotal);
         jQuery($.opt.payable_amount).val(payable_amount);
+        jQuery($.opt.due).val(payable_amount);
         return 1;
     },
 
@@ -226,9 +227,10 @@ Invoice.prototype = {
         if ( pointRedeem > 0) {
             payableAmount = payableAmount - pointRedeem;
         }
-        
+
         payableAmount = self.roundNumber(payableAmount, 2);
         jQuery($.opt.payable_amount).val(payableAmount);
+        jQuery($.opt.due).val(payableAmount);
         return 1;
     },
 
