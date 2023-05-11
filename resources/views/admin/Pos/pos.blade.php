@@ -131,16 +131,7 @@
                                         <th class="text-center">
                                             <nobr>Expiry<i class="text-danger">*</i></nobr>
                                         </th>
-                                        {{--
-                                        <th class="text-center">
-                                            <nobr>Stock Qty</nobr>
-                                        </th> --}} {{--
-                                    <th class="text-center">
-                                        <nobr>Box Pattern<i class="text-danger">*</i></nobr>
-                                    </th> --}} {{--
-                                    <th class="text-center">
-                                        <nobr>Box Qty<i class="text-danger">*</i></nobr>
-                                    </th> --}}
+
                                         <th class="text-center">
                                             <nobr>Stock <i class="text-danger">*</i></nobr>
                                         </th>
@@ -159,12 +150,7 @@
                                         <th class="text-center">
                                             <nobr>Total Price</nobr>
                                         </th>
-                                        {{-- <th class="text-center">
-                                            <nobr>Total_Price</nobr>
-                                        </th> --}}
-                                        {{-- <th class="text-center">
-                                            <nobr>Action</nobr>
-                                        </th> --}}
+
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -172,22 +158,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                            {{-- <div class="form-group row">
-                                <div class="col-md-6 text-right">
-                                </div>
-                                <div class="col-md-6 text-right">
-                                    <div class="card-footer text-end">
-                                    <div class="mt-4">
-
-                                        <button type="button" id="full_paid" class="btn btn-warning" tabindex="19">
-                                               Full paid </button>
-                                        <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase">
-                                                Save
-                                            </button>
-                                    </div>
-                                    </div>
-                                </div>
-                            </div> --}}
+                       
 
                         </div>
                     </div>
