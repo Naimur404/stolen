@@ -103,7 +103,7 @@ class WarehouseStockController extends Controller
      */
     public function show(WarehouseStock $warehouseStock)
     {
-        //
+        return view('admin.medicinestock.print_barcode', compact('warehouseStock'));
     }
 
     /**
@@ -231,7 +231,9 @@ class WarehouseStockController extends Controller
 
             $stocks = $stock->quantity;
             $ul = route('warehouse-stock.edit', $stock->id);
+            $barcode_url = route('warehouse-stock.show', $stock->id);
             $url = '<a href="' . $ul . '"class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+            $url .= '<a href="' . $barcode_url . '"class="btn btn-primary btn-xs" title="Print Barcode" style="margin-right:3px" target="_blank"><i class="fa fa-barcode" aria-hidden="true"></i></a>';
 
             $data_arr[] = array(
                 "id" => $s_no,

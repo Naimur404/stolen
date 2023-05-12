@@ -114,7 +114,7 @@ class OutletInvoiceController extends Controller
                     'mobile' => $input['mobile'],
                     'address' => $input['address'],
                     'outlet_id' => $input['outlet_id'],
-                    'due_balance' =>  $input['due_amount'],
+                    'due_balance' => $input['due_amount'],
                     'points' => round(($input['grand_total'] / 100), 2),
 
                 );
@@ -200,7 +200,7 @@ class OutletInvoiceController extends Controller
                 $invoicedetails = array(
 
                     'outlet_invoice_id' => $outletinvoice->id,
-                    'stock_id'  => $input['stock_id'][$i],
+                    'stock_id' => $input['stock_id'][$i],
                     'medicine_id' => $input['product_id'][$i],
                     'medicine_name' => $input['product_name'][$i],
                     'expiry_date' => $input['expiry_date'][$i],
@@ -210,7 +210,7 @@ class OutletInvoiceController extends Controller
                     'quantity' => $input['quantity'][$i],
                     'rate' => $input['box_mrp'][$i],
                     'discount' => round($input['totaldis'][$i]),
-                    'total_price' => round($input['total'][$i])  + round($input['totaldis'][$i]),
+                    'total_price' => round($input['total'][$i]) + round($input['totaldis'][$i]),
 
                 );
                 OutletInvoiceDetails::create($invoicedetails);
@@ -313,11 +313,11 @@ class OutletInvoiceController extends Controller
     {
 
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
-        if (strlen($id) >= 10){
+        if (strlen($id) >= 10) {
             $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.barcode_text', '=', $id)
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                 ->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->first();
-        }else{
+        } else {
             $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.id', '=', $id)
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                 ->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->first();
@@ -330,7 +330,6 @@ class OutletInvoiceController extends Controller
 
     public function printInvoice($id)
     {
-
         $outletInvoice = OutletInvoice::find($id);
         $outletInvoicedetails = OutletInvoiceDetails::where('outlet_invoice_id', $id)->get();
         return view('admin.invoice.print', compact('outletInvoice', 'outletInvoicedetails'));
@@ -348,8 +347,6 @@ class OutletInvoiceController extends Controller
 
 
     public function dueList()
-
-
     {
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
 
@@ -366,8 +363,6 @@ class OutletInvoiceController extends Controller
 
 
     public function payDue($id)
-
-
     {
         $payment = PaymentMethod::pluck('method_name', 'id');
         $outletInvoice = OutletInvoice::findOrFail($id);
@@ -377,10 +372,7 @@ class OutletInvoiceController extends Controller
     }
 
     public function paymentDue(Request $request)
-
-
     {
-
 
         $invoiceData = OutletInvoice::where('id', $request->outlet_invoice_id)->first();
         $customer = Customer::where('id', $invoiceData->customer_id)->first();
@@ -443,16 +435,16 @@ class OutletInvoiceController extends Controller
 
         if (auth()->user()->hasrole('Super Admin')) {
             $totalRecords = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->orderBy('id', 'desc')->select('count(*) as allcount')->count();
-            $invoices =    DB::table('outlet_invoices')->whereDate('sale_date', '>=', Carbon::now()->month())
-                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->orWhereDate('outlet_invoices.sale_date' , 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
-                 ->orderBy($columnName, $columnSortOrder)
+            $invoices = DB::table('outlet_invoices')->whereDate('sale_date', '>=', Carbon::now()->month())
+                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->orWhereDate('outlet_invoices.sale_date', 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
+                ->orderBy($columnName, $columnSortOrder)
                 ->skip($start)
                 ->take($row_per_page)
                 ->get();
         } else {
             $totalRecords = OutletInvoice::where('outlet_id', '=', $outlet_id)->whereDate('sale_date', '>=', Carbon::now()->month())->select('count(*) as allcount')->count();
-            $invoices =  DB::table('outlet_invoices')->orderBy($columnName, $columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_invoices.outlet_id', $outlet_id)
-                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->orWhereDate('outlet_invoices.sale_date' , 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
+            $invoices = DB::table('outlet_invoices')->orderBy($columnName, $columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_invoices.outlet_id', $outlet_id)
+                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->orWhereDate('outlet_invoices.sale_date', 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
                 ->skip($start)
                 ->take($row_per_page)
                 ->get();
@@ -481,7 +473,6 @@ class OutletInvoiceController extends Controller
             $sold_by = User::getUser($invoice->added_by);
             $action = '<a href="' . $print . '" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
 <a href="' . $return . '"class="btn btn-success btn-xs" title="Return" style="margin-right:3px"><i class="fa fa-retweet" aria-hidden="true"></i></a><a href="' . $details . '"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>';
-
 
 
             $data_arr[] = array(
