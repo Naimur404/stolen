@@ -15,12 +15,12 @@
         }
 
         .receipt {
-            width: 384px;
+            width: 240px;
             display: block;
             margin: auto;
             border: 2px solid lightgray;
             padding: 10px;
-            margin-top: 50px;
+            /*margin-top: 50px;*/
             /* background-color: lightgray; */
         }
 
@@ -52,13 +52,11 @@
 
 <div class="receipt">
     <p align="center">{{ $app_setting->app_name }}</p>
-    <img style="margin-left: 10px"
-         src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$warehouseStock->barcode_text", 'C39+', 1.5, 35) !!}"
+    <img
+         src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$warehouseStock->barcode_text", 'C39+', 1, 35) !!}"
          alt="barcode"/>
-    <div class="row">
-        <div class="left">{{ $warehouseStock->medicine->medicine_name ?? '' }}</div>
-        <div class="right">BDT <b>{{ $warehouseStock->price }}</b></div>
-    </div>
+    <p>{{ $warehouseStock->medicine->medicine_name ?? '' }}</p>
+    <p>Tk. <b>{{ $warehouseStock->price }}/-</b></p>
 </div>
 
 
