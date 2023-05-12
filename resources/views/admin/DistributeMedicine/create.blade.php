@@ -135,7 +135,7 @@
                                         <nobr>Product Info<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Rack No<i class="text-danger">*</i></nobr>
+                                        <nobr>Barcode<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Expiry Date<i class="text-danger">*</i></nobr>
@@ -350,6 +350,8 @@
                                 success: function (data) {
                                     if (data != null) {
                                         $('.pr_id').first().val(data.medicine_id);
+                                        $('.stock_id').first().val(data.id);
+                                        $('.barcode').first().val(data.barcode_text);
                                         $('.stock').first().val(data.quantity);
                                         $('#qty').first().val('1');
                                         $('#product_name').val(data.medicine_name);

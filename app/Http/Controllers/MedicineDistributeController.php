@@ -11,7 +11,6 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-
 class MedicineDistributeController extends Controller
 {
     /**
@@ -20,28 +19,26 @@ class MedicineDistributeController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     function __construct()
-     {
-         $this->middleware('permission:distribute-medicine.management|distribute-medicine.create|distribute-medicine.edit|distribute-medicine.delete', ['only' => ['index','store']]);
-         $this->middleware('permission:distribute-medicine.create', ['only' => ['create','store']]);
-         $this->middleware('permission:distribute-medicine.edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:distribute-medicine.delete', ['only' => ['destroy']]);
-         $this->middleware('permission:distribute-medicine.checkin', ['only' => ['checkIn']]);
-     }
+    public function __construct()
+    {
+        $this->middleware('permission:distribute-medicine.management|distribute-medicine.create|distribute-medicine.edit|distribute-medicine.delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:distribute-medicine.create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:distribute-medicine.edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:distribute-medicine.delete', ['only' => ['destroy']]);
+        $this->middleware('permission:distribute-medicine.checkin', ['only' => ['checkIn']]);
+    }
 
     public function index()
-
     {
 
         $lastMonth = Carbon::now()->subMonth();
-        if (Auth::user()->hasRole(['Super Admin', 'Admin'])){
-            $medicinedistributes = MedicineDistribute::where('created_at', '>=', $lastMonth)->orderby('id','desc')->get();
+        if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
+            $medicinedistributes = MedicineDistribute::where('created_at', '>=', $lastMonth)->orderby('id', 'desc')->get();
 
-        }else{
-            $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-            $medicinedistributes = MedicineDistribute::where('outlet_id',$outlet_id)->where('created_at', '>=', $lastMonth)->where('has_sent','1')->orderby('id','desc')->get();
+        } else {
+            $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+            $medicinedistributes = MedicineDistribute::where('outlet_id', $outlet_id)->where('created_at', '>=', $lastMonth)->where('has_sent', '1')->orderby('id', 'desc')->get();
         }
-
 
         return view('admin.DistributeMedicine.index', compact('medicinedistributes'));
     }
@@ -55,7 +52,7 @@ class MedicineDistributeController extends Controller
     {
         $warehouse = Warehouse::pluck('warehouse_name', 'id');
         $outlets = Outlet::pluck('outlet_name', 'id');
-        return view('admin.DistributeMedicine.create',compact('warehouse', 'outlets'));
+        return view('admin.DistributeMedicine.create', compact('warehouse', 'outlets'));
     }
 
     /**
@@ -67,13 +64,12 @@ class MedicineDistributeController extends Controller
     public function store(Request $request)
     {
 
-
         $request->validate([
             'outlet_id' => 'required',
-            'warehouse_id' => 'required'
+            'warehouse_id' => 'required',
         ]);
 
-        $input=$request->all();
+        $input = $request->all();
 
         // return $input;
 
@@ -96,17 +92,18 @@ class MedicineDistributeController extends Controller
                     'medicine_id' => $input['product_id'][$i],
                     'medicine_name' => $input['product_name'][$i],
                     'quantity' => $input['quantity'][$i],
-                    'rack_no' => $input['rack_no'][$i],
+                    'warehouse_stock_id' => $input['stock_id'][$i],
+                    'barcode_text' => $input['barcode'][$i],
                     'expiry_date' => $input['expiry_date'][$i],
-                    'rate' => ($input['box_mrp'][$i]*$input['quantity'][$i]) / $input['quantity'][$i],
+                    'rate' => ($input['box_mrp'][$i] * $input['quantity'][$i]) / $input['quantity'][$i],
                 );
                 MedicineDistributeDetail::create($purchase_details);
             }
             return redirect()->route('distribute-medicine.index')->with('success', 'Data has been added.');
         } catch (Exception $e) {
 
-             return redirect()->route('distribute-medicine.index')->with('error', $e->getMessage());
-         }
+            return redirect()->route('distribute-medicine.index')->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -130,12 +127,10 @@ class MedicineDistributeController extends Controller
     {
         $data = MedicineDistribute::find($id);
 
-        $medicinedetails = MedicineDistributeDetail::where('medicine_distribute_id',$data->id)->get();
+        $medicinedetails = MedicineDistributeDetail::where('medicine_distribute_id', $data->id)->get();
         $warehouse = Warehouse::pluck('warehouse_name', 'id');
-        return view('admin.DistributeMedicine.edit',compact('data','medicinedetails','warehouse'));
+        return view('admin.DistributeMedicine.edit', compact('data', 'medicinedetails', 'warehouse'));
     }
-
-
 
     /**
      * Update the specified resource in storage.
@@ -148,9 +143,9 @@ class MedicineDistributeController extends Controller
     {
         $request->validate([
             'outlet_id' => 'required',
-            'warehouse_id' => 'required'
+            'warehouse_id' => 'required',
         ]);
-        $input=$request->all();
+        $input = $request->all();
 
         // return $input;
 
@@ -162,8 +157,8 @@ class MedicineDistributeController extends Controller
             'date' => Carbon::parse($input['purchase_date'])->toDateString(),
             'remarks' => $input['remarks'],
         ];
-        try{
-          $data =  MedicineDistribute::where('id',$id)->update($purchase_input);
+        try {
+            $data = MedicineDistribute::where('id', $id)->update($purchase_input);
             $medicines = $input['product_name'];
 
             for ($i = 0; $i < sizeof($medicines); $i++) {
@@ -175,40 +170,32 @@ class MedicineDistributeController extends Controller
                     'medicine_name' => $input['product_name'][$i],
 
                     'quantity' => $input['quantity'][$i],
-                    'rack_no' => $input['rack_no'][$i],
+                    'warehouse_stock_id' => $input['stock_id'][$i],
+                    'barcode_text' => $input['barcode'][$i],
                     'expiry_date' => $input['expiry_date'][$i],
-                    'rate' => ($input['box_mrp'][$i]*$input['quantity'][$i]) / $input['quantity'][$i],
-
-
+                    'rate' => ($input['box_mrp'][$i] * $input['quantity'][$i]) / $input['quantity'][$i],
 
                 );
 
+                $check = MedicineDistributeDetail::where('medicine_distribute_id', $id)->where('medicine_id', $input['product_id'][$i])->first();
 
+                if ($check != null) {
 
-                 $check = MedicineDistributeDetail::where('medicine_distribute_id',$id)->where('medicine_id',$input['product_id'][$i])->first();
+                    MedicineDistributeDetail::where('medicine_distribute_id', $id)->where('medicine_id', $input['product_id'][$i])->update($purchase_details);
 
-
-                 if($check != null){
-
-
-                    MedicineDistributeDetail::where('medicine_distribute_id',$id)->where('medicine_id',$input['product_id'][$i])->update($purchase_details);
-
-                 }else{
+                } else {
 
                     MedicineDistributeDetail::create($purchase_details);
 
-
-                 }
-
+                }
 
             }
-
 
             return redirect()->back()->with('success', 'Data has been Updated.');
         } catch (Exception $e) {
 
-             return redirect()->back()->with('error', $e->getMessage());
-         }
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -218,39 +205,33 @@ class MedicineDistributeController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
-
     {
-        MedicineDistribute::where('id',$id)->delete();
-        MedicineDistributeDetail::where('medicine_distribute_id',$id)->delete();
+        MedicineDistribute::where('id', $id)->delete();
+        MedicineDistributeDetail::where('medicine_distribute_id', $id)->delete();
         return redirect()->back()->with('success', 'Data has been deleted');
 
     }
-    public function medicineDistributeDetailDelete($medicine_id,$distribute_id)
+    public function medicineDistributeDetailDelete($medicine_id, $distribute_id)
     {
-      $data =  MedicineDistributeDetail::where('medicine_id',$medicine_id)->where('medicine_distribute_id',$distribute_id)->delete();
-
+        $data = MedicineDistributeDetail::where('medicine_id', $medicine_id)->where('medicine_distribute_id', $distribute_id)->delete();
 
         return redirect()->back()->with('success', 'Data has been Deleted.');
     }
     public function checkIn($id)
     {
-        if (Auth::user()->hasRole(['Super Admin', 'Admin'])){
+        if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
 
             $productPurchase = MedicineDistribute::findOrFail($id);
             $productPurchaseDetails = MedicineDistributeDetail::where('medicine_distribute_id', $productPurchase->id)->get();
 
-        }else{
+        } else {
 
             $productPurchase = MedicineDistribute::findOrFail($id);
-            $productPurchaseDetails = MedicineDistributeDetail::where('medicine_distribute_id', $productPurchase->id)->where('has_sent','1')->get();
+            $productPurchaseDetails = MedicineDistributeDetail::where('medicine_distribute_id', $productPurchase->id)->where('has_sent', '1')->get();
 
         }
 
-
-
         return view('admin.DistributeMedicine.checkin', compact('productPurchase', 'productPurchaseDetails'));
     }
-
-
 
 }

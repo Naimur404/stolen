@@ -157,7 +157,7 @@
                                         <nobr>Product Info<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Rack No<i class="text-danger">*</i></nobr>
+                                        <nobr>Barcode<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Expiry Date<i class="text-danger">*</i></nobr>
@@ -197,8 +197,9 @@
                                 <tr class="item-row">
                                     <td>
                                     <input class="form-control pr_id" type="hidden" name="product_id[]"  readonly="" value="{{ $details->medicine_id }}">
+                                    <input class="form-control stock_id" type="hidden" name="stock_id[]"  readonly="" value="{{ $details->warehouse_stock_id }}">
                                      <input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly="" required="" value="{{ $details->medicine_name }}"> </td>
-                                     <td><input class="form-control rack_no" type="text" name="rack_no[]" placeholder="Rack No"  value="{{ $details->rack_no }}"></td>
+                                     <td><input class="form-control barcode" type="text" name="barcode[]" placeholder="Barocde"  value="{{ $details->barcode_text }}"></td>
                                      <td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required="" value="{{ $details->expiry_date }}"></td>
                                      <td><input class="form-control qty" type="number" name="quantity[]" placeholder="Quantity" required="" value="{{ $details->quantity }}"></td>
                                      @php
@@ -401,12 +402,15 @@
 
                         success: function(data) {
                             if (data != null) {
-                                $('.pr_id').first().val(data.id);
-                                $('.qty').first().val(qty);
+                                $('.pr_id').first().val(data.medicine_id);
+                                $('.stock_id').first().val(data.id);
+                                $('.barcode').first().val(data.barcode_text);
+                                $('.stock').first().val(data.quantity);
+                                $('#qty').first().val('1');
                                 $('#product_name').val(data.medicine_name);
-                                $('#box_price').val(data.price);
-                                $('#manufacturer_price').val(data.manufacturer_price);
-                                $('#product_type').val('medicine');
+                                $('#box_price').first().val(data.price);
+                                $('#manu_price').first().val(data.purchase_price);
+                                $('#expiry_date').val(data.expiry_date);
                             } else {
                                 alert('Data not found!');
 

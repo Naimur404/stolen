@@ -202,24 +202,11 @@ Invoice.prototype = {
         payable_amount = grandTotal;
         jQuery($.opt.grandTotal).val(grandTotal);
         jQuery($.opt.payable_amount).val(payable_amount);
-        jQuery($.opt.due).val(payable_amount);
+
         return 1;
     },
 
 
-    calcPayment: function () {
-        let due = 0;
-        if (Number(jQuery($.opt.pay).val()) > Number(jQuery($.opt.payable_amount).val())) {
-            due = 0;
-        } else {
-            due = Number(jQuery($.opt.payable_amount).val()) - Number(jQuery($.opt.pay).val());
-        }
-
-
-        due = self.roundNumber(due, 2);
-        jQuery($.opt.due).val(due);
-        return 1;
-    },
 
     calcPayable: function () {
         let payableAmount = Number(jQuery($.opt.grandTotal).val());
@@ -231,7 +218,22 @@ Invoice.prototype = {
         payableAmount = self.roundNumber(payableAmount, 2);
         jQuery($.opt.payable_amount).val(payableAmount);
         jQuery($.opt.due).val(payableAmount);
+        if (Number(jQuery($.opt.pay).val()) > Number(jQuery($.opt.payable_amount).val())) {
+            var due = 0;
+        } else {
+            var due = Number(jQuery($.opt.payable_amount).val()) - Number(jQuery($.opt.pay).val());
+        }
+
+
+        due = self.roundNumber(due, 2);
+        jQuery($.opt.due).val(due);
         return 1;
+
+        return 1;
+    },
+
+    calcPayment: function () {
+
     },
 
     calcBack: function () {
