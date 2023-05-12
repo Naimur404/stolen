@@ -74,7 +74,7 @@
                     <th>SL</th>
                     <th>Name Of Medicine</th>
                     <th>Quantity</th>
-                    <th>Rack No</th>
+                    <th>Barcode</th>
                     <th>Price</th>
                     <th>Expiry Date</th>
                     <th>Action</th>
@@ -89,11 +89,13 @@
 
                           <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
                           <input type="hidden" name="medicine_distribute_id" value="{{ $productPurchase->id }}">
+
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name }}</td>
                         <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
+                            <input type="hidden" name="stock_id" value="{{ $productPurchase->warehouse_stock_id }}">
                         </td>
-                        <td>{{ Form::number('rack_no', $data->rack_no, ['class' => 'form-control', 'readonly']) }}
+                        <td>{{ Form::number('barcode', $data->barcode_text, ['class' => 'form-control', 'readonly']) }}
                             </td>
                             <td>{{ Form::number('price', $data->rate, ['class' => 'form-control', 'readonly']) }}
                             </td>
@@ -129,8 +131,9 @@
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name }}</td>
                         <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
+                            <input type="hidden" name="stock_id" value="{{ $data->warehouse_stock_id }}">
                         </td>
-                        <td>{{ Form::number('rack_no', $data->rack_no, ['class' => 'form-control', 'readonly']) }}
+                        <td>{{ Form::number('barcode', $data->barcode_text, ['class' => 'form-control', 'readonly']) }}
                             </td>
                             <td>{{ Form::number('price', $data->rate, ['class' => 'form-control', 'readonly']) }}
                             </td>
