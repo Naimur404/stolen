@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MedicinePurchaseController extends Controller
 {
@@ -34,13 +35,6 @@ class MedicinePurchaseController extends Controller
 
     public function index()
     {
-        // $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
-        // if (Auth::user()->hasRole(['Super Admin','Admin'])) {
-        //     $productPurchases = MedicinePurchase::orderBy('id', 'desc')->get();
-        // } else {
-        //     $productPurchases = MedicinePurchase::where('warehouse_id', $warehouse_id)->orderBy('id', 'desc')->get();
-        // }
-
         return view('admin.medchine_purchase.index');
     }
 
@@ -230,12 +224,12 @@ class MedicinePurchaseController extends Controller
                         'quantity' => (int) $input['quantity'][$i],
                         'rack_no' => $input['rack_no'][$i],
                         'expiry_date' => Carbon::parse($input['expiry_date'][$i])->toDateString(),
-                        'manufacturer_price' => number_format($manuprice, 2),
+                        'manufacturer_price' => (double)($manuprice),
                         'box_mrp' => (double) $input['box_mrp'][$i],
                         'total_price' => (double) $input['total_price'][$i],
                         'rate' => round($input['total_price'][$i] / $input['quantity'][$i], 2),
                         'total_amount' => (double) $input['total_price'][$i],
-                        'total_discount' => number_format(($input['manufacturer_price'][$i] * ($percent / 100)) * $input['quantity'][$i], 2),
+                        'total_discount' => (double)(($input['manufacturer_price'][$i] * ($percent / 100)) * $input['quantity'][$i]),
                         'vat' => (double) $purchase->vat,
 
                     );
