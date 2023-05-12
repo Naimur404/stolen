@@ -158,7 +158,7 @@
                                     </tbody>
                                 </table>
                             </div>
-                       
+
 
                         </div>
                     </div>
@@ -740,9 +740,9 @@
                 $("#barcode").keyup(function (e) {
                     if (e.which == 13) {
 
-
                         medicine_id = $(this).val();
                         $("#addProductRow").click();
+                        $("#barcode").val('');
                     } else {
                         // Do whatever you like
                     }
