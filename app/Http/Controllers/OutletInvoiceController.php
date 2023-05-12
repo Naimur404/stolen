@@ -313,9 +313,16 @@ class OutletInvoiceController extends Controller
     {
 
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
-        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.id', '=', $id)
-            ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-            ->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->first();
+        if (strlen($id) >= 10){
+            $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.barcode_text', '=', $id)
+                ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
+                ->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->first();
+        }else{
+            $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.id', '=', $id)
+                ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
+                ->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->first();
+        }
+
 
         // $product_details = Medicine::where('id', $id)->select('id','medicine_name','price','manufacturer_price')->first();
         return json_encode($product_details);
