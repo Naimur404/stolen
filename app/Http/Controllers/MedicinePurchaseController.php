@@ -94,7 +94,7 @@ class MedicinePurchaseController extends Controller
             $data1 = MedicinePurchaseDetails::where('medicine_purchase_id', $productPurchase->id)->get();
             $data = WarehouseCheckIn::where('purchase_id', $productPurchase->id)->get();
             if (count($data1) == count($data)) {
-                $action = '<a href="javascript:void()"class="btn btn-success btn-xs" title="Sent" style="margin-right:5px"><i class="fa fa-check" aria-hidden="true"></i></a>
+                $action = '<a href="javascript:void()"class="btn btn-warning btn-xs" title="Sent" style="margin-right:5px"><i class="fa fa-check" aria-hidden="true"></i></a>
                 <a href="' . $delete . '" class="btn btn-danger btn-xs " title="CheckIn" style="margin-left:3px"><i class="fa fa-trash"></i></a>
                 <a href="' . $checkIn . '" class="btn btn-info btn-xs " title="CheckIn" style="margin-left:3px"><i class="fa fa-eye" aria-hidden="true"></i></a>';
             } else {

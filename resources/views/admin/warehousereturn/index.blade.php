@@ -42,14 +42,8 @@
                                         <th>SL</th>
                                         <th>Outlet Name</th>
                                         <th>Warehouse Name</th>
-
-                                        {{-- <th>Product Type</th> --}}
                                         <th>Added By</th>
                                         <th>Remarks</th>
-
-
-
-
                                         <th>Action</th>
 
                                     </tr>
@@ -82,22 +76,11 @@
 
                                         <td>{{ Auth::user()->name }}</td>
                                         <td>{{ $warehousereturn->remarks }}</td>
-
-
-
-
-
-
                                         <td class="form-inline uniqueClassName">
                                             @can('warehouse-return.edit')
                                                 <a href="{{ route('warehouse-return.edit', $warehousereturn->id) }}"
                                                     class="btn btn-success btn-xs" title="Edit" style="margin-right:10px; "><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
                                             @endcan
-
-                                            {{-- @can('product_purchase.print')
-                                            <a href="{{ route('medicine-purchase.show', $productPurchase->id) }}" class="btn btn-info btn-xs"  title="Print Invoice" target="__blank" style="margin-right:3px"><i class="fas fa-print"></i></a>
-                                            @endcan --}}
-
                                             @can('warehouse-return.delete')
                                                 {!! Form::open(['method' => 'DELETE', 'route' => ['warehouse-return.destroy', $warehousereturn->id]]) !!}
                                                 {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}

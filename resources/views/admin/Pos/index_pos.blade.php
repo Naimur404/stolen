@@ -84,7 +84,7 @@
         serverSide: true,
         searching: true,
         ajax: "/ajax-invoice",
-
+        order: [[0, 'desc']],
         columns: [
             {data: 'id', name: 'id'},
             {data: 'sale_date', name: 'Sale Date'},

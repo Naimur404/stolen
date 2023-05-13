@@ -40,21 +40,14 @@
                                     <th class="date">Date</th>
                                     <th>Outlet Name</th>
                                     <th>Warehouse Name</th>
-
-                                    {{-- <th>Product Type</th> --}}
                                     <th>Added By</th>
                                     <th>Remarks</th>
-
-
-                                        <th>Action</th>
-
+                                    <th>Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 @foreach ($medicinedistributes as $productPurchase)
-                                    {{-- @php
-                                        $data = App\Models\MedicineDistributeDetail::where('medicine_distribute_id',$productPurchase->id)->get();
-                                    @endphp --}}
+
                                     <tr>
                                         <td>
                                             {{ \Carbon\Carbon::parse($productPurchase->date)->format('d-m-Y')}}</td>
@@ -76,28 +69,24 @@
                                             <td>{{ $productPurchase->warehouse->warehouse_name }}</td>
                                         @endif
 
-
                                         <td>{{ $productPurchase->user->name }}</td>
                                         <td>{{ $productPurchase->remarks }}</td>
-
-
-
                                             <td class="form-inline uniqueClassName">
                                                 @if(Auth::user()->hasRole(['Admin','Super Admin']))
                                                 @if($productPurchase->has_sent == 0)
                                                     @can('medchine_purchase.edit')
 
                                                         <a href="{{ route('distribute-medicine.edit', $productPurchase->id) }}"
-                                                           class="btn btn-success btn-xs" title="Edit"
-                                                           style="margin-right:5px"><i class="fa fa-pencil-square-o"
-                                                                                       aria-hidden="true"></i></a>
+                                                        class="btn btn-success btn-xs" title="Edit"
+                                                        style="margin-right:5px"><i class="fa fa-pencil-square-o"
+                                                        aria-hidden="true"></i></a>
                                                     @endcan
 
                                                 @else
                                                     <a href="javscript:void()"
-                                                       class="btn btn-warning btn-xs" title="Sent"
-                                                       style="margin-right:5px"><i class="fa fa-check"
-                                                                                   aria-hidden="true"></i></a>
+                                                    class="btn btn-warning btn-xs" title="Sent"
+                                                    style="margin-right:5px"><i class="fa fa-check"
+                                                    aria-hidden="true"></i></a>
 
                                                 @endif
                                                 {{-- @can('product_purchase.print')
@@ -113,7 +102,7 @@
 
 
                                                 <a href="{{ route('distribute-medicine.checkIn', $productPurchase->id) }}"
-                                                   class="btn btn-info btn-xs " title="CheckIn" style="margin-left:5px"><i
+                                                class="btn btn-info btn-xs " title="CheckIn" style="margin-left:5px"><i
                                                         class="fa fa-eye" aria-hidden="true"></i></a>
 
 
@@ -126,7 +115,7 @@
                                                                             aria-hidden="true"></i></a>
                                                 @endif
                                                 <a href="{{ route('distribute-medicine.checkIn', $productPurchase->id) }}"
-                                                   class="btn btn-info btn-xs " title="CheckIn" style="margin-left:5px"><i
+                                                class="btn btn-info btn-xs " title="CheckIn" style="margin-left:5px"><i
                                                         class="fa fa-eye" aria-hidden="true"></i></a>
 
                                                 @endif

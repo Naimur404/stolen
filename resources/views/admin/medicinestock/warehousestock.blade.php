@@ -87,7 +87,7 @@
         autoWidth: false,
         processing: true,
         serverSide: true,
-
+        order: [[0, 'desc']],
         ajax: "/get-warehouse-stock/" + warehouse_id,
         columns: [
             {data: 'id', name: 'si'},
