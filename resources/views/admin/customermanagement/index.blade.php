@@ -85,6 +85,7 @@
         processing: true,
         serverSide: true,
         "filter": true,
+        order: [[0, 'desc']],
 
         ajax: "/get-customer/" + outlet_id,
         columns: [

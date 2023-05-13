@@ -75,10 +75,12 @@
     });
 
     var table = $('.data-table').DataTable({
+
         processing: true,
         serverSide: true,
         searching: true,
         ajax: "/get-medicine-purchase",
+        order: [[0, 'desc']],
 
         columns: [
             {data: 'id', name: 'sl'},

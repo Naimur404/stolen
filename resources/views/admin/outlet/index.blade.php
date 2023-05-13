@@ -71,7 +71,8 @@
     });
     var table = $('.data-table').DataTable({
         processing: true,
-       
+        order: [[0, 'desc']],
+
         ajax: "{{ route('outlet.index') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
