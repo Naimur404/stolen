@@ -1,106 +1,106 @@
 @extends('layouts.admin.master')
-@section('title')Due Payment
+@section('title')
+    Due Payment
 @endsection
 @push('css')
-<style>
-    .delete {
-        color: #fff;
-    }
+    <style>
+        .delete {
+            color: #fff;
+        }
 
-    .custom-td {
-        padding: 5px !important;
-        vertical-align: middle !important;
-    }
-</style>
+        .custom-td {
+            padding: 5px !important;
+            vertical-align: middle !important;
+        }
+    </style>
 @endpush
 @section('content')
-	@component('components.breadcrumb')
-		@slot('breadcrumb_title')
-        <div class="row">
-            <div class="col-sm-6">
-			<h3>Due Payment</h3>
-        </div>
+    @component('components.breadcrumb')
+        @slot('breadcrumb_title')
+            <div class="row">
+                <div class="col-sm-6">
+                    <h3>Due Payment</h3>
+                </div>
 
-        </div>
+            </div>
 
-		@endslot
+        @endslot
 
         @slot('button')
 
         @endslot
-	@endcomponent
-<div class="col-md-12 col-lg-12">
-    <div class="card">
-        <div class="card-header py-2">
-            <div class="d-flex justify-content-between align-items-center">
-
-
-            </div>
-        </div>
-
-        <div class="card-body">
-            {!! Form::open(['route' => ['supplier-due-payment'], 'method' => 'POST', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
-              <input type="hidden" name="supplier_id" value="{{ $supplier->id }}">
-            <div class="service_invoice_header">
-                <div class="row">
-                    <div class="col-md-4">Customer Name: {{ $supplier->name }}</div>
-
-                    <div class="col-md-4">Customer Address :
-                        {{ $supplier->address }}</div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-3">Customer Mobile :  @if ($supplier->mobile == null)
-                      <b>  N/A
-                    @elseif ($supplier->mobile != null)
-                        {{ $supplier->mobile }}
-                    @endif
-                </b> </div>
-
+    @endcomponent
+    <div class="col-md-12 col-lg-12">
+        <div class="card">
+            <div class="card-header py-2">
+                <div class="d-flex justify-content-between align-items-center">
 
 
                 </div>
-                {{-- <div class="row">
-                    <div class="col-md-3">Manufacturer Name : </div>
-                    <div class="col-md-4"><b>
-                            @if ($productPurchase->manufacturer_id == null)
-                                N/A
-                            @elseif ($productPurchase->manufacturer_id != null)
-                                {{ $productPurchase->manufacturer->manufacturer_name }}
-                            @endif
-                        </b></div>
-
-                </div> --}}
-
             </div>
 
+            <div class="card-body">
+                {!! Form::open(['route' => ['supplier-due-payment'], 'method' => 'POST', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
+                <input type="hidden" name="supplier_id" value="{{ $supplier->id }}">
+                <div class="service_invoice_header">
+                    <div class="row">
+                        <div class="col-md-4">Customer Name: {{ $supplier->name }}</div>
 
-            <table class="table table-bordered mt-2">
-                <tr>
-                    <th>Invoice</th>
-                    <th>Date</th>
-                    <th>Total Amount</th>
-                    <th>Paid</th>
-                    <th>Due</th>
+                        <div class="col-md-4">Customer Address :
+                            {{ $supplier->address }}</div>
+                    </div>
 
-                </tr>
+                    <div class="row">
+                        <div class="col-md-3">Customer Mobile : @if ($supplier->mobile == null)
+                                <b> N/A
+                                    @elseif ($supplier->mobile != null)
+                                        {{ $supplier->mobile }}
+                                    @endif
+                                </b></div>
 
-                @foreach ($purchase as $data)
+
+                    </div>
+                    {{-- <div class="row">
+                        <div class="col-md-3">Manufacturer Name : </div>
+                        <div class="col-md-4"><b>
+                                @if ($productPurchase->manufacturer_id == null)
+                                    N/A
+                                @elseif ($productPurchase->manufacturer_id != null)
+                                    {{ $productPurchase->manufacturer->manufacturer_name }}
+                                @endif
+                            </b></div>
+
+                    </div> --}}
+
+                </div>
+
+
+                <table class="table table-bordered mt-2">
                     <tr>
-                        <td>{{ $data->id }}</td>
-                        <td> {{ \Carbon\Carbon::parse($data->sale_date)->format('d-m-Y') }} </td>
-                        <td>{{ $data->grand_total }}</td>
-                        <td>{{ $data->paid_amount }}</td>
-                        <td>{{ $data->due_amount}}</td>
+                        <th>Invoice</th>
+                        <th>Date</th>
+                        <th>Total Amount</th>
+                        <th>Paid</th>
+                        <th>Due</th>
 
                     </tr>
-                @endforeach
 
-            </table>
+                    @foreach ($purchase as $data)
+                        <tr>
+                            <td>{{ $data->id }}</td>
+                            <td> {{ \Carbon\Carbon::parse($data->sale_date)->format('d-m-Y') }} </td>
+                            <td>{{ $data->grand_total }}</td>
+                            <td>{{ $data->paid_amount }}</td>
+                            <td>{{ $data->due_amount}}</td>
 
-            <div class="row">
-                <div class="col-md-7">
-                    <br>
+                        </tr>
+                    @endforeach
+
+                </table>
+
+                <div class="row">
+                    <div class="col-md-7">
+                        <br>
 
                         <table class="table table-borderless">
                             <tr>
@@ -110,11 +110,11 @@
                             </tr>
                             <tr>
                                 <th>Pay Now</th>
-                                <td>{{ Form::number('paid_amount', $supplier->due_balance, ['class' => 'form-control', 'required']) }}
+                                <td>{{ Form::number('paid_amount', $supplier->due_balance, ['class' => 'form-control', 'required', 'step'=>'any']) }}
                                     @error('paid_amount')
                                     <div class="invalid-feedback2"> {{ $message }}</div>
 
-                                @enderror
+                                    @enderror
                                 </td>
                             </tr>
 
@@ -129,55 +129,52 @@
                         </table>
 
 
+                    </div>
+                    <div class="col-md-5">
+                        <table class="table table-borderless">
 
-
+                            <tr>
+                                <td>Due Amount</td>
+                                <td>{{ $supplier->due_balance }}</td>
+                            </tr>
+                        </table>
+                    </div>
 
                 </div>
-                <div class="col-md-5">
-                    <table class="table table-borderless">
 
-                        <tr>
-                            <td>Due Amount</td>
-                            <td>{{ $supplier->due_balance }}</td>
-                        </tr>
-                    </table>
-                </div>
+                {!! Form::close() !!}
 
             </div>
-
-            {!! Form::close() !!}
-
         </div>
     </div>
-</div>
 
-@push('scripts')
+    @push('scripts')
 
-<script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
-@if (Session()->get('success'))
+        <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
+        @if (Session()->get('success'))
 
-<script>
-$.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('success') }}</strong>', {
-type: 'theme',
-allow_dismiss: true,
-delay: 2000,
-showProgressbar: true,
-timer: 300
-});
-</script>
+            <script>
+                $.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('success') }}</strong>', {
+                    type: 'theme',
+                    allow_dismiss: true,
+                    delay: 2000,
+                    showProgressbar: true,
+                    timer: 300
+                });
+            </script>
 
-@endif
-@if (Session()->get('error'))
+        @endif
+        @if (Session()->get('error'))
 
-<script>
-$.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('error') }}</strong>', {
-type: 'theme',
-allow_dismiss: true,
-delay: 2000,
-showProgressbar: true,
-timer: 300
-});
-</script>
-@endif
-@endpush
+            <script>
+                $.notify('<i class="fa fa-bell-o"></i><strong>{{ Session()->get('error') }}</strong>', {
+                    type: 'theme',
+                    allow_dismiss: true,
+                    delay: 2000,
+                    showProgressbar: true,
+                    timer: 300
+                });
+            </script>
+        @endif
+    @endpush
 @endsection
