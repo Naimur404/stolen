@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Customer;
+use App\Models\CustomerDuePayment;
 use App\Models\Outlet;
 use App\Models\OutletHasUser;
 use App\Models\OutletInvoice;
@@ -403,6 +404,14 @@ class OutletInvoiceController extends Controller
 
             );
             OutletPayment::create($array2);
+            CustomerDuePayment::create([
+                'outlet_id' => $invoiceData->outlet_id,
+                'customer_id' => $invoiceData->customer_id,
+                'due_amount' => $request->due,
+                'pay' => $request->paid_amount,
+                'rest_amount' => $request->due - $request->paid_amount,
+                'received_by' => Auth::user()->id,
+            ]);
             Customer::where('id', $invoiceData->customer_id)->update($due);
             OutletInvoice::where('id', $request->outlet_invoice_id)->update($arra);
             return redirect()->back()->with('success', 'Due Payment Successful.');

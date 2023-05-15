@@ -144,7 +144,7 @@
                                 <th>Grand Total</th>
                                 <td>
 
-                                    <input class="form-control" type="number" name="total" id="total" value="0" readonly>
+                                    <input class="form-control" type="number" name="total" id="total" value="0" step="any" readonly>
 
                                 </td>
                             </tr>
@@ -152,7 +152,7 @@
                                 <th>Pay Now</th>
                                 <td>
 
-                                    <input class="form-control" type="number" name="paid_amount" id="paid_amount" value="" placeholder="0.00" required>
+                                    <input class="form-control" type="number" name="paid_amount" id="paid_amount" value="" step="any" placeholder="0.00" required>
 
                                 </td>
                             </tr>
@@ -162,8 +162,9 @@
                                 <th>Due</th>
                                 <td>
 
-                                    <input class="form-control" type="number" name="due" id="due" value="0" onkeyup="prevent_due_amount()" placeholder="0.00"
-                                    onchange="prevent_due_amount()" readonly>
+                                    <input class="form-control" type="number" name="due" id="due" value="0"
+                                           onkeyup="prevent_due_amount()" placeholder="0.00" step="any"
+                                           onchange="prevent_due_amount()" readonly>
 
                                 </td>
                             </tr>
