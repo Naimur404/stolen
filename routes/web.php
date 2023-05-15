@@ -50,6 +50,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::view('/role', 'admin.role.role')->name('role');
+
     //user route
 
     Route::get('/user', [UserRoleController::class, 'users'])->name('user');
@@ -98,7 +99,9 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
 });
 
 Route::group(['middleware' => ['auth']], function () {
-
+    Route::get('/top-sale', [DashBoardController::class, 'totalSale'])->name('top-sale');
+    Route::get('/top-purchase', [DashBoardController::class, 'totalPurchase'])->name('top-purchase');
+    Route::get('/top-customer', [DashBoardController::class, 'topCustomer'])->name('top-customer');
 //resource route
     Route::resource('payment-method', PaymentMethodController::class);
     Route::resource('supplier', SupplierController::class);
