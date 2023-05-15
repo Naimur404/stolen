@@ -54,9 +54,9 @@
                                     <th>Category</th>
                                     <th>Manufacturer Name</th>
                                     <th>Expiry Date</th>
+                                    <th>Stock</th>
                                     <th>Manufacture Price</th>
                                     <th>Sale Price</th>
-                                    <th>Stock</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -84,6 +84,7 @@
                 var table = $('.data-table').DataTable({
                     processing: true,
                     serverSide: true,
+                    paging: true,
                     "filter": true,
                     order: [[0, 'desc']],
 
@@ -103,9 +104,9 @@
                         {data: 'category', name: 'category'},
                         {data: 'manufacturer_name', name: 'Manufacturer Name'},
                         {data: 'expiry_date', name: 'Expiry Date'},
+                        {data: 'quantity', name: 'stock'},
                         {data: 'manufacturer_price', name: 'Manufacturer price'},
                         {data: 'price', name: 'sale price'},
-                        {data: 'quantity', name: 'stock'},
                         {data: 'action', name: 'action'},
 
                     ],
