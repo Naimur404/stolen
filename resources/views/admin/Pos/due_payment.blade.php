@@ -75,7 +75,7 @@
             <table class="table table-bordered mt-2">
                 <tr>
                     <th>SL</th>
-                    <th>Name Of Investigation</th>
+                    <th>Name Of Medicine</th>
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Discount</th>
