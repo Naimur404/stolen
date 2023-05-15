@@ -76,9 +76,8 @@ class OutletStockController extends Controller
             'medicine_id' => $request->medicine_id,
             'expiry_date' => $request->expiry_date,
             'barcode_text' => $request->barcode,
-            'warehouse_stock_id' => $request->stock_id,
+            'warehouse_stock_id' => $request->stock_id ?? null,
             'purchase_price' => $manu_price->purchase_price,
-            'price' => $request->price,
 
         );
 
