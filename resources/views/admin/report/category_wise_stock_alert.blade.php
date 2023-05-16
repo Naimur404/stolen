@@ -47,16 +47,16 @@ $total_pay = 0;
                          </div>
                          <div class="col-md-3">
 
-                                  <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Category</label>
+                                  <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Category *</label>
 
 
-                                {{ Form::select('category_id[]', $category1, null, ['class' => 'form-control', 'multiple'=>'multiple', 'id' => 'sel_emp' ]) }}
+                                {{ Form::select('category_id',  [''], null, ['class' => 'form-control', 'id' => 'sel_emp', 'placeholder' => ' Please Select a Category','required']) }}
 
                          </div>
                          <div class="col-md-3">
 
                                   <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Manufacturar</label>
-                                  {{ Form::select('manufacturer_id[]', [''], null,['class' => 'form-control', 'id' => 'sel_emp2','multiple'=>'multiple', ]) }}
+                                  {{ Form::select('manufacturer_id', [''], null,['class' => 'form-control', 'id' => 'sel_emp2' , 'placeholder' => ' Please Select a Manufacturer']) }}
 
                          </div>
 
@@ -72,22 +72,22 @@ $total_pay = 0;
                      {!! Form::open(['url' => 'category-wise-report-alert-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
                      <div class="row mt-3">
                          <div class="col-md-3">
-                            <label class="input-group"  style="margin-right: 10px">Warehouse Name </label>
-                                {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
+                            <label class="input-group"  style="margin-right: 10px">Warehouse Name *</label>
+                                {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet','required']) }}
 
                          </div>
                          <div class="col-md-3">
 
-                            <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Category</label>
+                            <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Category *</label>
 
 
-                          {{ Form::select('category_id[]', $category1, null, ['class' => 'form-control', 'multiple'=>'multiple', 'id' => 'sel_emp4' ]) }}
+                          {{ Form::select('category_id',[''] , null, ['class' => 'form-control', 'id' => 'sel_emp4', 'placeholder' => ' Please Select a Category','required' ]) }}
 
                    </div>
                    <div class="col-md-3">
 
                             <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Manufacturar</label>
-                            {{ Form::select('manufacturer_id[]', [''], null,['class' => 'form-control', 'id' => 'sel_emp3','multiple'=>'multiple']) }}
+                            {{ Form::select('manufacturer_id', [''], null,['class' => 'form-control', 'id' => 'sel_emp3', 'placeholder' => ' Please Select a Manufacturer']) }}
 
                    </div>
                          <input type="hidden" name="outlet_id" value="">
@@ -107,11 +107,9 @@ $total_pay = 0;
                         <thead>
                             <tr>
                                 <th>SL</th>
-
                                 {{-- <th>Outlet Name</th> --}}
                                 <th>Medicine Name</th>
                                 <th>Expiry Date</th>
-
                                 <th>Price</th>
                                 <th>Quantity</th>
                                 <th>Total</th>
@@ -119,21 +117,17 @@ $total_pay = 0;
                             </tr>
                         </thead>
                         <tbody>
-
                             @isset($productSales)
 
                             @foreach ($productSales as $productPurchase)
                                 <tr>
                                     <td>{{ $loop->index + 1 }}</td>
-
-
                                     <td>{{ $productPurchase->medicine_name }}</td>
                                     <td>{{ \Carbon\Carbon::parse($productPurchase->expiry_date)->format('d-m-Y') }}
                                     </td>
                                     <td>{{ $productPurchase->price }}</td>
                                     <td>{{ $productPurchase->quantity }}</td>
                                     <td>{{ $productPurchase->price * $productPurchase->quantity }}</td>
-
                                 </tr>
                                 @php
                                 $grand_total = $grand_total + $productPurchase->quantity;
@@ -144,9 +138,6 @@ $total_pay = 0;
                         </tbody>
                         <tfoot>
                             <tr>
-
-
-
                                 <td></td>
                                 <td></td>
                                 <td></td>

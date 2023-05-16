@@ -612,14 +612,14 @@ class ReportController2 extends Controller
 
         if ($request->outlet_id != null && $request->outlet_id != '') {
             $productSales = DB::table('outlet_stocks')->where('outlet_stocks.quantity', '>', '0')->where('outlet_stocks.outlet_id', $request->outlet_id)
-                ->leftjoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')->where('medicines.category_id', $request->category_id)
+                ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')->where('medicines.category_id', $request->category_id)
                 ->select('outlet_stocks.*', 'medicines.category_id', 'medicines.medicine_name')->get();
 
             $category = Category::where('id', $request->category_id)->first();
             $title = 'Stock Report For ' . $category->category_name;
         } else {
             $productSales = DB::table('warehouse_stocks')->where('warehouse_stocks.quantity', '>', '0')->where('warehouse_stocks.warehouse_id', $request->warehouse_id)
-                ->leftjoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')->where('medicines.category_id', $request->category_id)
+                ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')->where('medicines.category_id', $request->category_id)
                 ->select('warehouse_stocks.*', 'medicines.category_id', 'medicines.medicine_name')->get();
             $category = Category::where('id', $request->category_id)->first();
             $title = 'Stock Report For ' . $category->category_name;
@@ -678,60 +678,48 @@ class ReportController2 extends Controller
 
         if ($request->outlet_id != null || $request->outlet_id != '') {
             $productSales = DB::table('outlet_stocks')->where('outlet_stocks.quantity', '>', '0')->where('outlet_stocks.outlet_id', $request->outlet_id)
-                ->leftjoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                ->select('outlet_stocks.*', 'medicines.category_id', 'medicines.medicine_name');
+                ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
+                ->select('outlet_stocks.*', 'medicines.category_id', 'medicines.medicine_name','medicines.manufacturer_id');
             if ($request->category_id) {
                 $total = 0;
-                $categorys = Category::whereIn('id', $request->category_id)->get();
-                foreach ($categorys as $data) {
-                    $total = $total + $data->alert_limit;
-                }
+                $category = Category::where('id', $request->category_id)->first();
+                    $total = $total + $category->alert_limit;
 
-                $productSales = $productSales->whereIn('medicines.category_id', $request->category_id);
-            } else {
-                $total = 0;
-                $categorys = Category::get();
-                foreach ($categorys as $data) {
-                    $total = $total + $data->alert_limit;
-                }
+                $productSales = $productSales->where('medicines.category_id', $request->category_id);
+
             }
             if ($request->manufacturer_id) {
 
-                $productSales = $productSales->whereIn('medicines.manufacturer_id', $request->manufacturer_id);
+                $productSales = $productSales->where('medicines.manufacturer_id', $request->manufacturer_id);
             }
             $data = $productSales->sum('outlet_stocks.quantity');
+
             if ($data <= $total) {
                 $productSales = $productSales->get();
+
             } else {
                 $productSales = array();
             }
 
-            $category = Category::where('id', $request->category_id)->first();
             $title = 'Category Stock Report Alert';
         } else {
             $productSales = DB::table('warehouse_stocks')->where('warehouse_stocks.quantity', '>', '0')->where('warehouse_stocks.warehouse_id', $request->warehouse_id)
-                ->leftjoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
-                ->select('warehouse_stocks.*', 'medicines.category_id', 'medicines.medicine_name');
+                ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
+                ->select('warehouse_stocks.*', 'medicines.category_id', 'medicines.medicine_name','medicines.manufacturer_id');
             if ($request->category_id) {
 
                 $total = 0;
-                $categorys = Category::whereIn('id', $request->category_id)->get();
-                foreach ($categorys as $data) {
-                    $total = $total + $data->alert_limit;
-                }
+                $category = Category::where('id', $request->category_id)->first();
 
-                $productSales = $productSales->whereIn('medicines.category_id', $request->category_id);
-            } else {
-                $total = 0;
-                $categorys = Category::get();
-                foreach ($categorys as $data) {
-                    $total = $total + $data->alert_limit;
-                }
+                    $total = $total + $category->alert_limit;
+
+
+                $productSales = $productSales->where('medicines.category_id', $request->category_id);
             }
 
             if ($request->manufacturer_id) {
 
-                $productSales = $productSales->whereIn('medicines.manufacturer_id', $request->manufacturer_id);
+                $productSales = $productSales->where('medicines.manufacturer_id', $request->manufacturer_id);
             }
 
             $data = $productSales->sum('warehouse_stocks.quantity');
@@ -741,13 +729,14 @@ class ReportController2 extends Controller
                 $productSales = array();
             }
 
-            $category = Category::where('id', $request->category_id)->first();
             $title = 'Category Stock Report Alert';
-
         }
+
+
 
         return view('admin.report.category_wise_stock_alert', compact('productSales', 'title', 'outlet', 'category', 'warehouse', 'category1', 'total'));
     }
+
 
     public function supplier_wise_sale(Request $request)
     {
