@@ -216,8 +216,8 @@ class OutletStockController extends Controller
                 ->where('quantity', '>', 0)
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                 ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
-                ->where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
-                ->where('categories.category_name', 'like', '%' . $searchValue . '%')
+                ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
+                ->orWhere('categories.category_name', 'like', '%' . $searchValue . '%')
                 ->select('outlet_stocks.*', 'medicines.medicine_name');
 
 
@@ -230,8 +230,8 @@ class OutletStockController extends Controller
                     ->where('quantity', '>', 0)
                     ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                     ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
-                    ->where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
-                    ->where('categories.category_name', 'like', '%' . $searchValue . '%')
+                    ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
+                    ->orWhere('categories.category_name', 'like', '%' . $searchValue . '%')
                     ->select('outlet_stocks.*', 'medicines.medicine_name');
 
 
@@ -241,7 +241,7 @@ class OutletStockController extends Controller
                     ->where('outlet_id', '=', Auth::user()->outlet_id)
                     ->where('quantity', '>', 0)
                     ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                    ->where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
+                    ->orWhere('medicines.medicine_name', 'like', '%' . $searchValue . '%')
                     ->select('outlet_stocks.*', 'medicines.medicine_name');
 
             }
