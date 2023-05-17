@@ -213,7 +213,7 @@ class OutletStockController extends Controller
 
             $medicine_stock_query = DB::table('outlet_stocks')
                 ->orderBy($columnName, $columnSortOrder)
-                ->where('quantity', '>', 0)
+                ->where('outlet_stocks.quantity', '>', 0)
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                 ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
                 ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
@@ -222,28 +222,30 @@ class OutletStockController extends Controller
 
 
         } else {
-            if (auth()->user()->hasrole('Super Admin')) {
+            if (auth()->user()->hasrole('Super Admin','admin')) {
 
                 $medicine_stock_query = DB::table('outlet_stocks')
-                    ->orderBy($columnName, $columnSortOrder)
-                    ->where('outlet_id', '=', $id)
-                    ->where('quantity', '>', 0)
+
+                    ->where('outlet_stocks.outlet_id', '=', $id)
+                    ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
+                    ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
+                    ->where('outlet_stocks.quantity', '>', 0)
+                    ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
+                    ->orWhere('categories.category_name', 'like', '%' . $searchValue . '%')
+                    ->select('outlet_stocks.*', 'medicines.medicine_name')
+                    ->orderBy($columnName, $columnSortOrder);
+
+            } else {
+                $medicine_stock_query = DB::table('outlet_stocks')
+
+                    ->where('outlet_id', '=', Auth::user()->outlet_id)
+                    ->where('outlet_stocks.quantity', '>', 0)
                     ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                     ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
                     ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
                     ->orWhere('categories.category_name', 'like', '%' . $searchValue . '%')
-                    ->select('outlet_stocks.*', 'medicines.medicine_name');
-
-
-            } else {
-                $medicine_stock_query = DB::table('outlet_stocks')
-                    ->orderBy($columnName, $columnSortOrder)
-                    ->where('outlet_id', '=', Auth::user()->outlet_id)
-                    ->where('quantity', '>', 0)
-                    ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                    ->orWhere('medicines.medicine_name', 'like', '%' . $searchValue . '%')
-                    ->select('outlet_stocks.*', 'medicines.medicine_name');
-
+                    ->select('outlet_stocks.*', 'medicines.medicine_name')
+                    ->orderBy($columnName, $columnSortOrder);
             }
 
         }
@@ -262,31 +264,40 @@ class OutletStockController extends Controller
         $sl = 1;
         $total = 0;
         foreach ($medicine_stock as $stock) {
-            $s_no = $sl++;
-            $medicine_name = Medicine::get_medicine_name($stock->medicine_id);
-            $manufacturer_price = '৳&nbsp;' . $stock->purchase_price;
-            $medicine = Medicine::where('id', $stock->medicine_id)->first();
-            $category = Category::get_category_name($medicine->category_id);
-            $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);
-            $price = '৳&nbsp;' . $stock->price;
-            $expiry_date = $stock->expiry_date;
+            if ($stock->quantity < 1){
 
-            $stocks = $stock->quantity;
-            $ul = route('outlet-stock.edit', $stock->id);
-            $url = '<a href="' . $ul . '"class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
-            $total = $total + $stock->price * $stock->quantity;
-            $data_arr[] = array(
-                "id" => $s_no,
-                "medicine_name" => $medicine_name,
-                "category" => $category,
-                "manufacturer_name" => $manufacturer_name,
-                "price" => $price,
-                "manufacturer_price" => $manufacturer_price,
-                "quantity" => $stocks,
-                "expiry_date" => $expiry_date,
-                "action" => $url,
+                continue;
 
-            );
+            }else{
+
+                $s_no = $sl++;
+                $medicine_name = Medicine::get_medicine_name($stock->medicine_id);
+                $manufacturer_price = '৳&nbsp;' . $stock->purchase_price;
+                $medicine = Medicine::where('id', $stock->medicine_id)->first();
+                $category = Category::get_category_name($medicine->category_id);
+                $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);
+                $price = '৳&nbsp;' . $stock->price;
+                $expiry_date = $stock->expiry_date;
+
+                $stocks = $stock->quantity;
+                $ul = route('outlet-stock.edit', $stock->id);
+                $url = '<a href="' . $ul . '"class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
+                $total = $total + $stock->price * $stock->quantity;
+                $data_arr[] = array(
+                    "id" => $s_no,
+                    "medicine_name" => $medicine_name,
+                    "category" => $category,
+                    "manufacturer_name" => $manufacturer_name,
+                    "price" => $price,
+                    "manufacturer_price" => $manufacturer_price,
+                    "quantity" => $stocks,
+                    "expiry_date" => $expiry_date,
+                    "action" => $url,
+
+                );
+
+            }
+
         }
 
         $response = array(
