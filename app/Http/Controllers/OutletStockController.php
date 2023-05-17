@@ -213,7 +213,7 @@ class OutletStockController extends Controller
 
             $medicine_stock_query = DB::table('outlet_stocks')
                 ->orderBy($columnName, $columnSortOrder)
-                ->where('quantity', '>', 0)
+                ->where('outlet_stocks.quantity', '>', 0)
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                 ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
                 ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
@@ -226,10 +226,10 @@ class OutletStockController extends Controller
 
                 $medicine_stock_query = DB::table('outlet_stocks')
 
-                    ->where('.outlet_stocks.outlet_id', '=', $id)
-                    ->where('outlet_stocks.quantity', '>', 0)
+                    ->where('outlet_stocks.outlet_id', '=', $id)
                     ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                     ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
+                    ->where('outlet_stocks.quantity', '>', 0)
                     ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
                     ->orWhere('categories.category_name', 'like', '%' . $searchValue . '%')
                     ->select('outlet_stocks.*', 'medicines.medicine_name')
@@ -239,7 +239,7 @@ class OutletStockController extends Controller
                 $medicine_stock_query = DB::table('outlet_stocks')
 
                     ->where('outlet_id', '=', Auth::user()->outlet_id)
-                    ->where('quantity', '>', 0)
+                    ->where('outlet_stocks.quantity', '>', 0)
                     ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                     ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
                     ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
