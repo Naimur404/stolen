@@ -417,14 +417,26 @@
                 document.getElementById('time').innerHTML = time;
             }, 1000);
 
-            function prevent_stock_amount() {
-                var stock = $("#stock").val();
-                var qty = $("#qty").val();
-                if (parseInt(qty) > parseInt(stock)) {
-                    alert("Quantity not more than Stock amount.");
-                    $("#qty").val("");
-                }
-            }
+            $("#purchaseTable").on("change", "#saleRow", function() {
+                let tr_index = $(this).index();
+                // let avil_qty =  $(this).find('.stock-qty').val();
+                var stock = $(this).find('.stock-qty').val();
+                var qty = $(this).find('.qty').val();
+                 if (parseInt(qty) > parseInt(stock)) {
+                     alert("Quantity not more than Stock amount.");
+
+                    $(this).find(".qty").val("");
+                    }
+                });
+
+            // function prevent_stock_amount() {
+            //     var stock = $("#stock").val();
+            //     var qty = $("#qty").val();
+            //     if (parseInt(qty) > parseInt(stock)) {
+            //         alert("Quantity not more than Stock amount.");
+            //         $("#qty").val("");
+            //     }
+            // }
 
             function prevent_points_amount() {
                 var cuspoint = $("#points").val();
