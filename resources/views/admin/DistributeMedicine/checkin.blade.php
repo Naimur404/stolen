@@ -82,7 +82,7 @@
 
                     @foreach ($productPurchaseDetails as $data)
                         @if (Auth::user()->hasRole(['Super Admin', 'Admin']))
-                            {!! Form::open(['route' => ['warehouse-stock.update', $productPurchase->warehouse_id ] ,'class' => 'needs-validation', 'novalidate'=> '' ,'method'=>'PUT',]) !!}
+                            {!! Form::open(['route' => ['warehouse-stock.update', $productPurchase->warehouse_id ] ,'class' => 'needs-validation testfrom', 'novalidate'=> '' ,'method'=>'PUT',]) !!}
                             <tr>
 
                                 <input type="hidden" name="outlet_id" value="{{ $productPurchase->outlet_id }}">
@@ -108,7 +108,7 @@
                                 <td>
 
                                     @if ($data->has_sent == 0)
-                                        <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase">
+                                        <button type="submit" class="btn btn-success save_purchase_btn" tabindex="19" id="save_purchase">
                                             Medicine Distribute
                                         </button>
                                     @else
@@ -121,7 +121,7 @@
                             </tr>
                             {!! Form::close() !!}
                         @else
-                            {!! Form::open(['route' => 'outlet-stock.store' ,'class' => 'needs-validation', 'novalidate'=> '']) !!}
+                            {!! Form::open(['route' => 'outlet-stock.store' ,'class' => 'needs-validation testform', 'novalidate'=> '']) !!}
                             <tr>
 
                                 <input type="hidden" name="outlet_id" value="{{ $productPurchase->outlet_id }}">
@@ -145,7 +145,7 @@
                                 <td>
 
                                     @if ($data->has_received == 0)
-                                        <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase">
+                                        <button type="submit" class="btn btn-success save_purchase_btn" tabindex="19" id="save_purchase">
                                             Checkin
                                         </button>
                                     @else
@@ -169,10 +169,18 @@
     </div>
 
     @push('scripts')
-        <script>
-
-
-        </script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+          $('.save_purchase_btn').on('click', function() {
+            var $form = $(this).closest('.testform');
+            if (confirm("Are you sure you want to Click ?")) {
+              $form.submit(); // Submit the form
+            }else{
+              return false;
+            }
+          });
+        });
+      </script>
 
         <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
         @if (Session()->get('success'))
