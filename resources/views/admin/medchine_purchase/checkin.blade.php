@@ -81,12 +81,11 @@
                 </tr>
 
                 @foreach ($productPurchaseDetails as $data)
-                {!! Form::open(['route' => 'warehouse-stock.store' ,'class' => 'needs-validation', 'novalidate'=> '']) !!}
+
+                {!! Form::open(['route' => 'warehouse-stock.store' ,'method' => 'post' ,'class' => 'needs-validation testform', 'novalidate'=> '','id'=>'testform']) !!}
                     <tr>
-                        <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
-
+                          <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
                           <input type="hidden" name="purchase_id" value="{{ $productPurchase->id }}">
-
                           <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name }}</td>
@@ -97,15 +96,13 @@
                         <td>{{ Form::number('price', $data->box_mrp, ['class' => 'form-control', 'readonly']) }}
                             </td>
                         <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
-
-
                            </td>
                         <td>
                             @php
                                 $data = App\Models\WarehouseCheckIn::where('purchase_id',$productPurchase->id)->where('medicine_id',$data->medicine_id)->whereDate('expiry_date','=',$data->expiry_date)->first();
                             @endphp
                             @if (is_null($data))
-                            <button type="submit" class="btn btn-success" tabindex="19" id="save_purchase"  >
+                            <button type="submit" class="btn btn-success save_purchase_btn" tabindex="19" id="save_purchasess">
                                 Receive
                             </button>
                             @else
@@ -117,22 +114,23 @@
                     </tr>
                     {!! Form::close() !!}
                 @endforeach
-
-
             </table>
-
-
-
-
-
         </div>
     </div>
 </div>
 
 @push('scripts')
-<script>
-
-
+<script type="text/javascript">
+  $(document).ready(function() {
+    $('.save_purchase_btn').on('click', function() {
+      var $form = $(this).closest('.testform');
+      if (confirm("Are you sure you want to Click Receive?")) {
+        $form.submit(); // Submit the form
+      }else{
+        return false;
+      }
+    });
+  });
 </script>
 
 <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
