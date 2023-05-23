@@ -123,7 +123,7 @@
                         $payment = App\Models\PaymentMethod::where('id',$outletInvoice->payment_method_id)->first();
                     @endphp
 
-                    <td style="width: 50px; border: none; text-align: left;"> Posted By: {{ App\Models\User::where('id',$outletInvoice->added_by)->value('name') }}</td>
+                    <td style="width: 50px; border: none; text-align: left;"> Posted By: {{ Auth::user()->name }}</td>
 
                     <td style="width: 50px; border: none; text-align: right;">Pay
                         Mode: {{ $payment->method_name  }}</td>
