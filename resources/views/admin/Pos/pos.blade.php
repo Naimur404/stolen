@@ -478,10 +478,9 @@
 
             function submitForm() {
                 var pay = parseInt($("#pay").val()) || 0;
-
                 var customer_name = $("#name").val().toLowerCase();
-                console.log(customer_name);
                 let amount = parseInt($("#payable_amount").val()) || 0;
+
                 if ((customer_name === 'walking customer' || customer_name === '') && pay < amount){
                     Swal.fire(
                         'Payment Required',
