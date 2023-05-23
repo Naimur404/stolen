@@ -406,7 +406,7 @@
         {{-- <script src="{{ asset('backend/form-validations/pharmacy/product-purchase.js') }}"></script> --}}
         <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
         <script src="{{ asset('assets/js/pos.js') }}"></script>
-        <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
         <script type="text/javascript">
 
             let a;
@@ -450,19 +450,6 @@
 
                 }
             }
-
-            $("#pay").on('change', function () {
-
-                var name = $("#name").val();
-                let pay = $("#pay").val();
-                let amount = $("#payable_amount").val();
-                    if (name == 'Walking Customer'){
-                      if ( parseInt(pay) < parseInt(amount)){
-                        swal("Walking Customer!", "Cannot Make Due!", "error");
-                           $("#pay").val("");
-                      }
-                     }
-            });
 
             function clearInput1(target) {
                 if (target.value == '0') {
@@ -560,7 +547,6 @@
                     if (input == 0) {
                         $(this).val('');
                     }
-
                 });
 
                 $(window).keydown(function (event) {
