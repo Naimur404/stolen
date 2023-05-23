@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Medicine;
+use App\Models\MedicinePurchaseDetails;
+use App\Models\OutletInvoiceDetails;
 use App\Models\SupplierHasManufacturer;
 use Exception;
 use Illuminate\Http\Request;
@@ -23,10 +25,11 @@ class MedicineController extends Controller
         $this->middleware('permission:medicine.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:medicine.delete', ['only' => ['destroy']]);
     }
+
     public function index()
     {
 
-        return view('admin.medchine.index');
+        return view('admin.medicine.index');
     }
 
     /**
@@ -36,13 +39,13 @@ class MedicineController extends Controller
      */
     public function create()
     {
-        return view('admin.medchine.create');
+        return view('admin.medicine.create');
     }
 
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -79,30 +82,39 @@ class MedicineController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Medicine  $medicine
+     * @param \App\Models\Medicine $medicine
      * @return \Illuminate\Http\Response
      */
     public function show(Medicine $medicine)
     {
-        //
+
+        $purchase_query = MedicinePurchaseDetails::where('medicine_id', $medicine->id)->whereDate('created_at', '>=', now()->subYear());
+        $total_purchase = $purchase_query->sum('quantity');
+        $purchases = $purchase_query->get();
+
+        $sales_query = OutletInvoiceDetails::where('medicine_id', $medicine->id)->whereDate('created_at', '>=', now()->subYear());
+        $total_sale = $sales_query->sum('quantity');
+        $sales = $sales_query->get();
+
+        return view('admin.medicine.show', compact('purchases', 'sales', 'medicine', 'total_purchase', 'total_sale'));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Medicine  $medicine
+     * @param \App\Models\Medicine $medicine
      * @return \Illuminate\Http\Response
      */
     public function edit(Medicine $medicine)
     {
-        return view('admin.medchine.edit', compact('medicine'));
+        return view('admin.medicine.edit', compact('medicine'));
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Medicine  $medicine
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Medicine $medicine
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Medicine $medicine)
@@ -142,7 +154,7 @@ class MedicineController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Medicine  $medicine
+     * @param \App\Models\Medicine $medicine
      * @return \Illuminate\Http\Response
      */
     public function destroy(Medicine $medicine)
@@ -201,6 +213,7 @@ class MedicineController extends Controller
 
         return response()->json($response);
     }
+
     public function get_all_medicines(Request $request)
     {
 
@@ -236,7 +249,7 @@ class MedicineController extends Controller
         foreach ($medicines as $medicine) {
             $s_no = $medicine->id;
             //    $id = $medicine->id;
-            $medicine_name = $medicine->medicine_name;
+            $medicine_name = '<a href="'.route('medicine.show', $medicine->id).'">'.$medicine->medicine_name.'</a>';
             $generic_name = $medicine->generic_name;
             $category = Category::get_category_name($medicine->category_id);
             $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);

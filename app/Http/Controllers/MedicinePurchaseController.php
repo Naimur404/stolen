@@ -277,10 +277,10 @@ class MedicinePurchaseController extends Controller
     public function show($id)
     {
 
-        $medicinePurchase = medicinePurchase::findOrFail($id);
-        $medicinePurchaseDetails = medicinePurchaseDetails::where('medicine_purchase_id', $medicinePurchase->id)
+        $productPurchase = MedicinePurchase::findOrFail($id);
+        $productPurchaseDetails = MedicinePurchaseDetails::where('medicine_purchase_id', $productPurchase->id)
             ->get();
-        return view('pharmacy.print.medicine_purchase_invoice', compact('medicinePurchase', 'medicinePurchaseDetails'));
+        return view('admin.medchine_purchase.show', compact('productPurchase', 'productPurchaseDetails'));
     }
 
     /**

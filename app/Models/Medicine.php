@@ -10,6 +10,7 @@ class Medicine extends Model
 {
     use HasFactory;
     use SoftDeletes;
+
     protected $table = 'medicines';
     protected $fillable = [
         'manufacturer_id',
@@ -26,16 +27,29 @@ class Medicine extends Model
         'medicine_details',
         'image',
     ];
-    public static function get_medicine_name($id){
+
+    public static function get_medicine_name($id)
+    {
         return Medicine::where('id', $id)->value('medicine_name');
- }
- public static function get_manufacturer_price($id){
-    return Medicine::where('id', $id)->value('manufacturer_price');
-}
-public static function get_manufacturer_prices($id,$date){
-    return MedicinePurchaseDetails::where('medicine_id', $id)->whereDate('expiry_date','=',$date)->value('manufacturer_price');
-}
-public function medicine_stock(){
-    return $this->belongsTo(OutletStock::class, 'id', 'medicine_id');
-}
+    }
+
+    public static function get_manufacturer_price($id)
+    {
+        return Medicine::where('id', $id)->value('manufacturer_price');
+    }
+
+    public static function get_manufacturer_prices($id, $date)
+    {
+        return MedicinePurchaseDetails::where('medicine_id', $id)->whereDate('expiry_date', '=', $date)->value('manufacturer_price');
+    }
+
+    public function medicine_stock()
+    {
+        return $this->belongsTo(OutletStock::class, 'id', 'medicine_id');
+    }
+
+    public function category()
+    {
+        return $this->hasOne(Category::class, 'id', 'category_id');
+    }
 }

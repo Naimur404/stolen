@@ -73,14 +73,14 @@
 
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('customer.index')}}"
-                               href="{{route('customer.index')}}"><i data-feather="users"></i><span>Customer Management</span></a>
+                               href="{{route('customer.index')}}"><i data-feather="users"></i><span>Customers</span></a>
                         </li>
                     @endcan
 
                     @can('sent_stock_request')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('stock-request.index')}}"
-                               href="{{route('stock-request.index')}}"><i data-feather="box"></i><span>Sent Stock Request</span></a>
+                               href="{{route('stock-request.index')}}"><i data-feather="box"></i><span>Stock Request</span></a>
                         </li>
                     @endcan
 
@@ -147,23 +147,10 @@
                             </ul>
                         </li>
                         @endcan
+
                         <li class="dropdown">
-                            <a class="nav-link menu-title {{ prefixActive('/report2') }} "
-                               href="javascript:void(0)"><i data-feather="anchor"></i><span>Report</span></a>
-                            <ul class="nav-submenu menu-content"
-                                style="display:{{ prefixBlock('/report2') }};">
-                                <li>
-
-
-
-                                <li class="">
-                                    <a class="submenu-title {{routeActive('all-report')}}"
-                                       href="{{route('all-report')}}"><i data-feather="filter"></i><span><h10>All Report</h10></span></a>
-                                </li>
-
-
-
-                            </ul>
+                            <a class="nav-link menu-title {{routeActive('all-report')}}"
+                               href="{{route('all-report')}}"><i data-feather="file-text"></i><span>All Report</span></a>
                         </li>
 
                          @can('writeoff')
@@ -250,18 +237,6 @@
                         <a class="nav-link menu-title {{ prefixActive('/admin') }}" href="javascript:void(0)"><i
                                 data-feather="anchor"></i><span>Admin Area</span></a>
                         <ul class="nav-submenu menu-content" style="display: {{ prefixBlock('/admin') }};">
-                            {{-- <li>
-                                <a class="submenu-title {{routeActive('datatable-AJAX')}} " href="{{ route('datatable-AJAX') }}">
-                                    AJAX Data Table <span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
-                                </a>
-
-                            </li>
-                            <li>
-                                <a class="submenu-title {{routeActive('form')}}" href="{{ route('form') }}">
-                                    Collective Form<span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
-                                </a>
-
-                            </li> --}}
                             <li>
                                 <a class="submenu-title {{routeActive('user')}}" href="{{ route('user') }}">
                                     User<span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
@@ -301,7 +276,7 @@
                             </li>
                             <li>
                                 <a class="submenu-title {{routeActive('setting')}}" href="{{ route('setting') }}">
-                                    Setttings <span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
+                                    Settings <span class="sub-arrow"><i class="fa fa-chevron-right"></i></span>
                                 </a>
 
                             </li>

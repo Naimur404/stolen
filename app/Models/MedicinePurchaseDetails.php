@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class MedicinePurchaseDetails extends Model
 {
     use HasFactory;
+
     protected $table = 'medicine_purchase_details';
     protected $fillable = [
         'warehouse_id',
@@ -28,11 +29,14 @@ class MedicinePurchaseDetails extends Model
     ];
 
 
+    public function medicine()
+    {
+        return $this->belongsTo(Medicine::class, 'medicine_id', 'id');
+    }
 
-
-
-     public function medicine(){
-          return $this->belongsTo(Medicine::class, 'medicine_id', 'id');
-     }
+    public function warehouse()
+    {
+        return $this->hasOne(Warehouse::class, 'id', 'warehouse_id');
+    }
 
 }

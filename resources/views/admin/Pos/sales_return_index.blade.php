@@ -30,7 +30,7 @@
                 <div class="card">
 
                     <div class="card-body">
-                        <div class="table-responsive product-table">
+                        <div class="table-responsive">
                             <table class="display data-table">
                                 <thead>
                                 <tr>
@@ -102,11 +102,11 @@
                                         <td class="form-inline">
 
                                             <a href="{{ route('sale-return.details', $sales_return->id) }}"
-                                               class="btn btn-primary btn-xs" title="Details" style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i>
+                                               class="btn btn-xs btn-primary" title="Details" style="margin-right:3px"><i class="fa fa-info"></i>
                                             </a>
 
                                             {!! Form::open(['method' => 'DELETE', 'route' => ['sale-return.destroy', $sales_return->id]]) !!}
-                                            {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-danger btn-xs', 'id' => 'delete', 'title' => 'Delete']) }}
+                                            {{ Form::button('<i class="fa fa-trash"></i>', ['type' => 'submit', 'class' => 'btn btn-sm btn-danger', 'id' => 'delete', 'title' => 'Delete']) }}
                                             {!! Form::close() !!}
 
 

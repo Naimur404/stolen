@@ -14,7 +14,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-8">
-			<h3>All Outlet Writeoff</h3>
+			<h3>All Outlet Write off</h3>
         </div>
 
         </div>
@@ -32,15 +32,13 @@
 	            <div class="card">
 
 	                <div class="card-body">
-	                    <div class="table-responsive product-table">
+	                    <div class="table-responsive">
                             <table class="display data-table">
 	                            <thead>
 	                                <tr>
-                                        <th>SI</th>
+                                        <th>SL</th>
 	                                    <th>Medicine Name</th>
-
                                         <th>Pre Quantity</th>
-
                                         <th>Quantity</th>
                                         <th>Reason</th>
                                         <th>Action</th>
