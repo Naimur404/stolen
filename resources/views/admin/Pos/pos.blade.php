@@ -406,6 +406,7 @@
         {{-- <script src="{{ asset('backend/form-validations/pharmacy/product-purchase.js') }}"></script> --}}
         <script src="{{asset('assets/js/notify/bootstrap-notify.min.js')}}"></script>
         <script src="{{ asset('assets/js/pos.js') }}"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <script type="text/javascript">
 
@@ -476,37 +477,58 @@
             }
 
             function submitForm() {
-                var pay = $("#pay").val();
-                if (pay === 0 || pay === '') {
-                    alert("Given Amount Can Not Be Zero Or Empty.");
-                } else {
-                    if (confirm('Do You Want To Submit?')) {
-                        const form = document.getElementById('my-form');
-                        const formData = new FormData(form);
+                var pay = parseInt($("#pay").val()) || 0;
+                var customer_name = $("#name").val().toLowerCase();
+                let amount = parseInt($("#payable_amount").val()) || 0;
 
-                        // Send AJAX request
-                        $.ajax({
-                            url: "{{ route('invoice.store') }}",
-                            method: "POST",
-                            data: formData,
-                            contentType: false,
-                            processData: false,
-                            success: function (response) {
-                                var datas = response.data;
-                                var url = "{{ route('print-invoice', ':id') }}";
-                                url = url.replace(':id', datas.id);
-                                window.open(url, "_blank");
-                                window.location.href = "{{ route('invoice.create') }}";
-
-                            },
-                            error: function (xhr) {
-                                // Handle error response
-                            }
-                        });
-
-                    } else {
-                        return false;
+                if ((customer_name === 'walking customer' || customer_name === '') && pay < amount){
+                    Swal.fire(
+                        'Payment Required',
+                        'This customer is not allowed for due',
+                        'warning'
+                    )
+                }
+                else {
+                    let alert_text = '';
+                    if (pay < amount){
+                        alert_text = "This invoice will remain due";
+                    }else{
+                        alert_text = "You won't be able to revert this!";
                     }
+
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: alert_text,
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            const form = document.getElementById('my-form');
+                            const formData = new FormData(form);
+
+                            // Send AJAX request
+                            $.ajax({
+                                url: "{{ route('invoice.store') }}",
+                                method: "POST",
+                                data: formData,
+                                contentType: false,
+                                processData: false,
+                                success: function (response) {
+                                    var datas = response.data;
+                                    var url = "{{ route('print-invoice', ':id') }}";
+                                    url = url.replace(':id', datas.id);
+                                    window.open(url, "_blank");
+                                    window.location.href = "{{ route('invoice.create') }}";
+
+                                },
+                                error: function (xhr) {
+                                    // Handle error response
+                                }
+                            });
+                        } else if (result.isDenied) {
+                            Swal.fire('Changes are not saved', '', 'info')
+                        }
+                    })
                 }
 
                 // Get form data

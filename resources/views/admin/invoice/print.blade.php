@@ -92,9 +92,9 @@
         @endphp
 
         <img class="pos-logo" src="{{asset('uploads/'.$app_setting->logo)}}" alt="">
-        <p><b style="font-size: 20px">{{ $outlet->outlet_name }}</b> <br>
-            {{ $outlet->address }} <br>
-            {{ $outlet->mobile }}</p>
+        <p><b style="font-size: 20px">{{ $outletInvoice->outlet->outlet_name ?? '' }}</b> <br>
+            {{ $outletInvoice->outlet->address ?? '' }} <br>
+            {{ $outletInvoice->outlet->mobile ?? '' }}</p>
 
 
     </div>
@@ -119,14 +119,10 @@
                     </td>
                 </tr>
                 <tr class="new">
-                    @php
-                        $payment = App\Models\PaymentMethod::where('id',$outletInvoice->payment_method_id)->first();
-                    @endphp
-
-                    <td style="width: 50px; border: none; text-align: left;"> Posted By: {{ Auth::user()->name }}</td>
+                    <td style="width: 50px; border: none; text-align: left;"> Posted By: {{ $outletInvoice->user->name }}</td>
 
                     <td style="width: 50px; border: none; text-align: right;">Pay
-                        Mode: {{ $payment->method_name  }}</td>
+                        Mode: {{ $outletInvoice->payment->method_name ?? '' }}</td>
 
                 </tr>
 
