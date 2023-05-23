@@ -32,7 +32,7 @@
 	            <div class="card">
 
 	                <div class="card-body">
-	                    <div class="table-responsive product-table">
+	                    <div class="table-responsive">
 	                        <table class="display data-table" id="basic-1">
 	                            <thead>
 	                                <tr>
@@ -74,7 +74,7 @@
     });
     var table = $('.data-table').DataTable({
         processing: true,
-      
+
         ajax: "{{ route('supplier.index') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},

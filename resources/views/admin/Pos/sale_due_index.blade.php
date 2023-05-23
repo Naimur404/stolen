@@ -30,7 +30,7 @@
                 <div class="card">
 
                     <div class="card-body">
-                        <div class="table-responsive product-table">
+                        <div class="table-responsive">
                             <table class="display data-table">
                                 <thead>
                                 <tr>
@@ -56,7 +56,7 @@
                                 <tbody>
                                 @foreach ($datas as $productPurchase)
                                     <tr>
-                                      <td>{{ $productPurchase->id }}</td>
+                                        <td>{{ $productPurchase->id }}</td>
 
                                         <td>{{ \Carbon\Carbon::parse($productPurchase->sale_date)->format('d-m-Y')}}
                                         </td>
@@ -70,16 +70,14 @@
                                         @endif
                                         <td>
                                             @if($productPurchase->customer_id != '' || $productPurchase->customer_id != null)
-                                              @php
-                                                $customer = App\Models\Customer::where('id',$productPurchase->customer_id)->first();
-                                            @endphp
-                                            @if ($customer->mobile == null || $customer->mobile == '')
+                                                @php
+                                                    $customer = App\Models\Customer::where('id',$productPurchase->customer_id)->first();
+                                                @endphp
+                                                @if ($customer->mobile == null || $customer->mobile == '')
 
-                                              @else
-                                              {{ $customer->mobile }}
-                                            @endif
-
-
+                                                @else
+                                                    {{ $customer->mobile }}
+                                                @endif
 
                                             @endif
 
@@ -103,8 +101,7 @@
                                         </td>
 
 
-                                        <td class="form-inline">
-
+                                        <td>
 
 
                                             <a href="{{ route('payDue', $productPurchase->id) }}"
@@ -132,11 +129,10 @@
 
         <script type="text/javascript">
             $(document).ready(function () {
-                $('.data-table').DataTable(                  {
-                        order: [[0, 'desc']],
-});
+                $('.data-table').DataTable({
+                    order: [[0, 'desc']],
+                });
             });
-
 
 
         </script>

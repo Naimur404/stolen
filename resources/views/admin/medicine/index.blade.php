@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title',' All Outlet')
+@section('title',' All Medicine')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
@@ -12,15 +12,15 @@
         @slot('breadcrumb_title')
             <div class="row">
                 <div class="col-sm-6">
-                    <h3>All Outlet</h3>
+                    <h3>All Medicine</h3>
                 </div>
 
             </div>
         @endslot
 
         @slot('button')
-            <a href="{{ route('outlet.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn"
-               title=""> Add Outlet</a>
+            <a href="{{ route('medicine.create') }}" class="btn btn-primary btn"
+               data-original-title="btn btn-danger btn" title=""> Add Medicine</a>
         @endslot
     @endcomponent
 
@@ -36,11 +36,13 @@
                                 <thead>
                                 <tr>
                                     <th>SL</th>
-                                    <th>Outlet Name</th>
-                                    <th>Phone</th>
-                                    <th>Address</th>
-                                    <th>Is Active</th>
+                                    <th>Medicine Name</th>
+                                    <th>Generic Name</th>
+                                    <th>Manufacture Name</th>
+                                    <th>Category</th>
+                                    <th>Price</th>
                                     <th>Action</th>
+
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -68,16 +70,25 @@
                 });
                 var table = $('.data-table').DataTable({
                     processing: true,
+                    serverSide: true,
                     order: [[0, 'desc']],
-
-                    ajax: "{{ route('outlet.index') }}",
+                    ajax: "{{ route('medicine.all-medicines') }}",
                     columns: [
-                        {data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                        {data: 'outlet_name', name: 'outlet name', orderable: false},
-                        {data: 'mobile', name: 'phone'},
-                        {data: 'address', name: 'address'},
-                        {data: 'active', name: 'is active', orderable: false, searchable: false},
-                        {data: 'action', name: 'action', orderable: false, searchable: false},
+                        {data: 'id', name: 'si'},
+                        {data: 'medicine_name', name: 'medicine name'},
+                        {data: 'generic_name', name: 'generic name'},
+                        {data: 'manufacturer_name', name: 'manufacture name'},
+                        {data: 'category', name: 'category'},
+                        {data: 'price', name: 'price'},
+
+
+                        {
+                            data: 'action',
+                            name: 'action',
+                            orderable: false,
+                            searchable: false,
+                            className: "uniqueClassName"
+                        },
                     ]
                 });
             });
@@ -110,8 +121,7 @@
             </script>
 
         @endif
-        {{-- <script src="{{asset('assets/js/ecommerce.js')}}"></script> --}}
-        {{-- <script src="{{asset('assets/js/product-list-custom.js')}}"></script> --}}
+
     @endpush
 
 @endsection

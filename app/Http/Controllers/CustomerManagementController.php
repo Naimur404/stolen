@@ -29,6 +29,7 @@ class CustomerManagementController extends Controller
         $this->middleware('permission:customer-due', ['only' => ['customerDue']]);
         $this->middleware('permission:customer-due-payment', ['only' => ['customerDuePayment']]);
     }
+
     public function index()
     {
         if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
@@ -56,7 +57,7 @@ class CustomerManagementController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
@@ -88,7 +89,7 @@ class CustomerManagementController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Customer  $customerManagement
+     * @param \App\Models\Customer $customerManagement
      * @return \Illuminate\Http\Response
      */
     public function show(Customer $customerManagement)
@@ -99,7 +100,7 @@ class CustomerManagementController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Customer  $customerManagement
+     * @param \App\Models\Customer $customerManagement
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -111,8 +112,8 @@ class CustomerManagementController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Customer  $customerManagement
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Models\Customer $customerManagement
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request)
@@ -144,7 +145,7 @@ class CustomerManagementController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Customer  $customerManagement
+     * @param \App\Models\Customer $customerManagement
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
@@ -166,6 +167,7 @@ class CustomerManagementController extends Controller
             return redirect()->back()->with('success', $e->getMessage());
         }
     }
+
     public function customer(Request $request, $id)
     {
 
@@ -246,13 +248,12 @@ class CustomerManagementController extends Controller
             $action = '<div class="btn-group" style="text-align: center"><form action="' . $edit . '" method="GET"><button type="submit" class="btn btn-primary btn-xs open-modal"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></button></form><button type="button" class="btn btn-danger btn-xs" data-bs-toggle="modal" data-bs-target="#staticBackdrop' . $s_no . '" ><i class="fa fa-trash"></i></button><div class="modal fade" id="staticBackdrop' . $s_no . '" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h1 class="modal-title fs-5" id="staticBackdropLabel">Are You Sure want To Delete?</h1><button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button></div><div class="modal-footer"><button type="button" class="btn btn-primary btn-xs" data-bs-dismiss="modal">Close</button><form action="' . $delete . '" method="get"><button type="submit" class="btn btn-danger btn-xs">Permanent Delete</button></form></div></div></div></div>';
             $check = Customer::where('id', $customer->id)->first();
             if ($customer->due_balance > 0) {
-                $action .= '<a href="' . $duepay . '"class="btn btn-success btn-xs" title="Pay Now"style="margin-right:3px"><i class="fa fa-paypal"></i></a>';
+                $action .= '<a href="' . $duepay . '"class="btn btn-success btn-sm" title="Pay Now"style="margin-right:3px"><i class="fa fa-paypal"></i></a>';
             }
 
             $data_arr[] = array(
                 "id" => $s_no,
                 "name" => $name,
-
                 "mobile" => $mobile,
                 "outlet_name" => $outlet_name,
                 "points" => $points,
@@ -273,6 +274,7 @@ class CustomerManagementController extends Controller
 
         return response()->json($response);
     }
+
     public function active($id, $status)
     {
 

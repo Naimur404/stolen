@@ -26749,7 +26749,7 @@ span.twitter-typeahead .tt-suggestion {
     color: #fff; }
 
 .mobile-clock-widget {
- 
+
   background-repeat: no-repeat;
   background-size: cover;
   height: 350px;
@@ -30972,3 +30972,9 @@ span.twitter-typeahead .tt-suggestion {
 /**=====================
     60. RTL CSS Ends
 ==========================**/
+
+#delete{
+    width: 35px;
+    height: 25px;
+    padding: 0;
+}
