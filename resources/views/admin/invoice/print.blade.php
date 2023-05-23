@@ -240,7 +240,7 @@
     <br>
     <div class="row justify-content-center mt-3">
         <img style="margin-left: 87px"
-             src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$outletInvoice->id", 'C39+') !!}" alt="barcode"/>
+             src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$outletInvoice->id", 'C39') !!}" alt="barcode"/>
     </div>
 
     <div class="footer">
