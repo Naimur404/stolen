@@ -19,9 +19,15 @@
             display: block;
             margin: auto;
             border: 2px solid lightgray;
-            padding: 10px;
+            padding: 5px;
             /*margin-top: 50px;*/
             /* background-color: lightgray; */
+        }
+
+        .receipt img{
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
 
@@ -30,19 +36,9 @@
         h5, p {
             margin-block-end: 0;
             margin-block-start: 0;
+            text-align: center;
         }
 
-        .row{
-            overflow: hidden;
-        }
-        .row > .left {
-            float: left;
-            margin-left: 10px;
-        }
-        .row > .right {
-            float: right;
-            margin-right: 15px;
-        }
 
     </style>
 </head>
@@ -53,10 +49,10 @@
 <div class="receipt">
     <p align="center">{{ $app_setting->app_name }}</p>
     <img
-         src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$warehouseStock->barcode_text", 'C39+', 1, 35) !!}"
+         src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$warehouseStock->barcode_text", 'C39', 1, 35) !!}"
          alt="barcode"/>
     <p>{{ $warehouseStock->medicine->medicine_name ?? '' }}</p>
-    <p>Tk. <b>{{ $warehouseStock->price }}/-</b></p>
+    <p>Tk <b>{{ $warehouseStock->price }}/-</b></p>
 </div>
 
 
