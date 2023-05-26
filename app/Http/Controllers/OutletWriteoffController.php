@@ -18,17 +18,15 @@ class OutletWriteoffController extends Controller
      *
      */
 
-     function __construct()
-     {
+    function __construct()
+    {
 
-         $this->middleware('permission:outlet-writeoff', ['only' => ['index','store','show']]);
-
-
-     }
+        $this->middleware('permission:outlet-writeoff', ['only' => ['index', 'store', 'show']]);
+    }
     public function index()
     {
         $datas = OutletWriteoff::all();
-        return view('admin.Writeoff.outlet_index',compact('datas'));
+        return view('admin.Writeoff.outlet_index', compact('datas'));
     }
 
     /**
@@ -42,7 +40,7 @@ class OutletWriteoffController extends Controller
 
         $outlets = Outlet::pluck('outlet_name', 'id');
 
-        return view('admin.Writeoff.outlet_writeoff',compact('outlets'));
+        return view('admin.Writeoff.outlet_writeoff', compact('outlets'));
     }
 
     /**
@@ -55,39 +53,39 @@ class OutletWriteoffController extends Controller
     {
         $input = $request->all();
 
-        try{
+        try {
 
             $data = array(
                 'outlet_id' => $input['outlet_id'],
-                'outlet_stock_id'=> $input['stock_id'],
-                'medicine_id'=> $input['medicine'],
-                'medicine_name'=> $input['medicine_name'],
-                'previous_stock'=> $input['pre_quantity'],
-                'quantity'=> $input['quantity'],
-                'reason'=> $input['reason'],
-                'remarks'=> $input['remarks'],
-                'added_by'=> Auth::user()->id,
+                'outlet_stock_id' => $input['stock_id'],
+                'medicine_id' => $input['medicine'],
+                'medicine_name' => $input['medicine_name'],
+                'previous_stock' => $input['pre_quantity'],
+                'quantity' => $input['quantity'],
+                'reason' => $input['reason'],
+                'remarks' => $input['remarks'],
+                'added_by' => Auth::user()->id,
                 'type' => $input['type']
             );
 
             OutletWriteoff::create($data);
-            if($request->type == 'sub'){
+            if ($request->type == 'sub') {
                 $data1 = array(
                     'quantity' =>  $input['pre_quantity'] - $input['quantity'],
 
-                   );
-                }
+                );
+            }
 
-                if($request->type == 'add'){
+            if ($request->type == 'add') {
 
-                    $data1 = array(
-                        'quantity' =>  $input['pre_quantity'] + $input['quantity'],
+                $data1 = array(
+                    'quantity' =>  $input['pre_quantity'] + $input['quantity'],
 
-                       );
-                }
-             OutletStock::where('id', $input['stock_id'])->where('outlet_id',$input['outlet_id'])->where('medicine_id',$input['medicine'])->update($data1);
-             return redirect()->back()->with('success', ' WriteOff Added Sucessfully.');
-        }catch(Exception $e){
+                );
+            }
+            OutletStock::where('id', $input['stock_id'])->where('outlet_id', $input['outlet_id'])->where('medicine_id', $input['medicine'])->update($data1);
+            return redirect()->back()->with('success', ' WriteOff Added Sucessfully.');
+        } catch (Exception $e) {
             return redirect()->route('outlet-writeoff.create')->with('success', $e->getMessage());
         }
     }

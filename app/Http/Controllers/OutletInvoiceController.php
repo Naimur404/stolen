@@ -130,7 +130,7 @@ class OutletInvoiceController extends Controller
                 $customerdetails = array(
                     'name' => $input['name'],
                     'mobile' => $input['mobile'],
-                    'due_balance' => $customer->due_balance + $input['due_amount'],
+                    'due_balance' =>  round($customer->due_balance + $input['due_amount']),
                     'address' => $input['address'],
                     'points' => round(($input['grand_total'] / 100), 2) + $points,
 
@@ -407,9 +407,9 @@ class OutletInvoiceController extends Controller
             CustomerDuePayment::create([
                 'outlet_id' => $invoiceData->outlet_id,
                 'customer_id' => $invoiceData->customer_id,
-                'due_amount' => $request->due,
+                'due_amount' => $request->total,
                 'pay' => $request->paid_amount,
-                'rest_amount' => $request->due - $request->paid_amount,
+                'rest_amount' => $request->total - $request->paid_amount,
                 'received_by' => Auth::user()->id,
             ]);
             Customer::where('id', $invoiceData->customer_id)->update($due);

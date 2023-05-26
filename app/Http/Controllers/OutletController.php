@@ -20,34 +20,34 @@ class OutletController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:outlet.management|outlet.create|outlet.edit|outlet.delete', ['only' => ['index','store']]);
-        $this->middleware('permission:outlet.create', ['only' => ['create','store']]);
-        $this->middleware('permission:outlet.edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:outlet.management|outlet.create|outlet.edit|outlet.delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:outlet.create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:outlet.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:outlet.delete', ['only' => ['destroy']]);
     }
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Outlet::orderBy("id","desc")->get();
+            $data = Outlet::orderBy("id", "desc")->get();
             return  DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('active', function($row){
-                        $active = route('outlet.active',[$row->id,0]);
-                        $inactive = route('outlet.active',[$row->id,1]);
-                        return view('admin.action.active',compact('active','inactive','row'));
-                    })
+                ->addIndexColumn()
+                ->addColumn('active', function ($row) {
+                    $active = route('outlet.active', [$row->id, 0]);
+                    $inactive = route('outlet.active', [$row->id, 1]);
+                    return view('admin.action.active', compact('active', 'inactive', 'row'));
+                })
 
-                    ->addColumn('action', function($row){
-                        $id = $row->id;
-                        $edit = route('outlet.edit',$id);
-                        $delete = route('outlet.destroy',$id);
-                        $url = route('addusers',$id);
-                        return view('admin.action.action', compact('id','edit','delete','url'));
-                    })
-                    ->rawColumns(['active'])
+                ->addColumn('action', function ($row) {
+                    $id = $row->id;
+                    $edit = route('outlet.edit', $id);
+                    $delete = route('outlet.destroy', $id);
+                    $url = route('addusers', $id);
+                    return view('admin.action.action', compact('id', 'edit', 'delete', 'url'));
+                })
+                ->rawColumns(['active'])
 
-                    ->rawColumns(['action'])
-                    ->make(true);
+                ->rawColumns(['action'])
+                ->make(true);
         }
         return view('admin.outlet.index');
     }
@@ -75,15 +75,15 @@ class OutletController extends Controller
             'mobile' => 'required|min:11',
 
 
-           ]);
-           $input = $request->all();
-           try{
+        ]);
+        $input = $request->all();
+        try {
             Outlet::create($input);
 
             return redirect()->route('outlet.index')->with('success', ' Successfully Added.');
-         }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->route('outlet.index')->with('success', $e->getMessage());
-         }
+        }
     }
 
     /**
@@ -105,7 +105,7 @@ class OutletController extends Controller
      */
     public function edit(Outlet $outlet)
     {
-        return view('admin.outlet.edit',compact('outlet'));
+        return view('admin.outlet.edit', compact('outlet'));
     }
 
     /**
@@ -117,20 +117,20 @@ class OutletController extends Controller
      */
     public function update(Request $request, Outlet $outlet)
     {
-          $request->validate([
+        $request->validate([
             'outlet_name' => 'required|string',
             'mobile' => 'required|min:11',
 
 
-           ]);
-           $input = $request->all();
-           try{
-               $outlet->update($input);
+        ]);
+        $input = $request->all();
+        try {
+            $outlet->update($input);
 
             return redirect()->route('outlet.index')->with('success', ' Successfully Added.');
-         }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->route('outlet.index')->with('success', $e->getMessage());
-         }
+        }
     }
 
     /**
@@ -141,58 +141,55 @@ class OutletController extends Controller
      */
     public function destroy(Outlet $outlet)
     {
-        try{
+        try {
             $outlet->delete();
 
             return redirect()->route('outlet.index')->with('success', ' Successfully Deleted.');
-         }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->route('outlet.index')->with('success', $e->getMessage());
-         }
+        }
     }
-    public function active($id,$status){
+    public function active($id, $status)
+    {
 
         $data = Outlet::find($id);
         $data->is_active = $status;
         $data->save();
-        return redirect()->route('outlet.index')->with('success','Active Status Updated');
-
+        return redirect()->route('outlet.index')->with('success', 'Active Status Updated');
     }
-    public function addUser($id){
+    public function addUser($id)
+    {
         $id = $id;
-        $outlet = OutletHasUser::where('outlet_id',$id)->get();
+        $outlet = OutletHasUser::where('outlet_id', $id)->get();
         $data = User::all();
 
-        if(is_null($outlet)){
+        if (is_null($outlet)) {
             $bol = false;
-            return view('admin.outlet.add_user',compact('data','id','bol','outlet'));
-        }else{
-            return view('admin.outlet.add_user',compact('data','id','outlet'));
+            return view('admin.outlet.add_user', compact('data', 'id', 'bol', 'outlet'));
+        } else {
+            return view('admin.outlet.add_user', compact('data', 'id', 'outlet'));
         }
     }
-    public function storeUser(Request $request){
+    public function storeUser(Request $request)
+    {
 
         $data = array();
-        $outlet = OutletHasUser::where('outlet_id',$request->id)->get();
+        $outlet = OutletHasUser::where('outlet_id', $request->id)->get();
 
         $users = $request->user;
 
-        if(!empty($outlet)){
-            foreach( $outlet as $item){
-                 OutletHasUser::where('outlet_id',$request->id)->delete();
-
+        if (!empty($outlet)) {
+            foreach ($outlet as $item) {
+                OutletHasUser::where('outlet_id', $request->id)->delete();
             }
-            foreach($users as $key => $item){
+            foreach ($users as $key => $item) {
                 $data['outlet_id'] = $request->id;
                 $data['user_id'] = $item;
                 $data['added_by'] = Auth::user()->id;
                 DB::table('outlet_has_users')->insert($data);
             }
-
-
-
         }
 
-       return redirect()->route('outlet.index')->with('success','User in outlet added successfully');
-
-     }
+        return redirect()->route('outlet.index')->with('success', 'User in outlet added successfully');
+    }
 }

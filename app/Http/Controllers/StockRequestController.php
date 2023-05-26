@@ -20,23 +20,22 @@ class StockRequestController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     function __construct()
+    function __construct()
     {
-        $this->middleware('permission:sent_stock_request', ['only' => ['index','store','update','destroy','edit','stockRequestDelete','details']]);
-        $this->middleware('permission:stock_request', ['only' => ['warehouseRequest','store','hasSent','hasAccepted','hasAcceptedMedicine','detailsRequestWarehouse']]);
-
+        $this->middleware('permission:sent_stock_request', ['only' => ['index', 'store', 'update', 'destroy', 'edit', 'stockRequestDelete', 'details']]);
+        $this->middleware('permission:stock_request', ['only' => ['warehouseRequest', 'store', 'hasSent', 'hasAccepted', 'hasAcceptedMedicine', 'detailsRequestWarehouse']]);
     }
     public function index()
     {
-    $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-    if(Auth::user()->hasrole('Super Admin')){
-        $stockrequets = StockRequest::all();
-    }else{
-        $stockrequets = StockRequest::where('outlet_id',$outlet_id)->get();
-    }
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+        if (Auth::user()->hasrole('Super Admin')) {
+            $stockrequets = StockRequest::all();
+        } else {
+            $stockrequets = StockRequest::where('outlet_id', $outlet_id)->get();
+        }
 
 
-    return view('admin.stockrequest.outlet_stock_request_index', compact('stockrequets'));
+        return view('admin.stockrequest.outlet_stock_request_index', compact('stockrequets'));
     }
 
     /**
@@ -46,10 +45,11 @@ class StockRequestController extends Controller
      */
     public function create()
 
-    {   $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-        $outlet = Outlet::where('id',$outlet_id)->pluck('outlet_name','id');
-        $warehouse = Warehouse::pluck('warehouse_name','id');
-        return view('admin.stockrequest.outlet_request_to_warehouse',compact('outlet','warehouse'));
+    {
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+        $outlet = Outlet::where('id', $outlet_id)->pluck('outlet_name', 'id');
+        $warehouse = Warehouse::pluck('warehouse_name', 'id');
+        return view('admin.stockrequest.outlet_request_to_warehouse', compact('outlet', 'warehouse'));
     }
 
     /**
@@ -67,7 +67,7 @@ class StockRequestController extends Controller
 
 
 
-        $input=$request->all();
+        $input = $request->all();
 
         // return $input;
 
@@ -123,8 +123,8 @@ class StockRequestController extends Controller
             return redirect()->back()->with('success', ' Stock Request has been Sent.');
         } catch (Exception $e) {
 
-             return redirect()->back()->with('error', $e->getMessage());
-         }
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -146,13 +146,13 @@ class StockRequestController extends Controller
      */
     public function edit($id)
     {
-        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-        $outlet = Outlet::where('id', $outlet_id)->pluck('outlet_name','id');
+        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+        $outlet = Outlet::where('id', $outlet_id)->pluck('outlet_name', 'id');
         $data = StockRequest::find($id);
 
-        $stockdetails = StockRequestDetails::where('stock_request_id',$data->id)->get();
+        $stockdetails = StockRequestDetails::where('stock_request_id', $data->id)->get();
         $warehouse = Warehouse::pluck('warehouse_name', 'id');
-        return view('admin.stockrequest.outlet_stock_request_edit',compact('data','stockdetails','warehouse','outlet'));
+        return view('admin.stockrequest.outlet_stock_request_edit', compact('data', 'stockdetails', 'warehouse', 'outlet'));
     }
 
     /**
@@ -171,7 +171,7 @@ class StockRequestController extends Controller
 
 
 
-        $input=$request->all();
+        $input = $request->all();
 
         // return $input;
 
@@ -189,7 +189,7 @@ class StockRequestController extends Controller
 
         ];
         try {
-              StockRequest::where('id',$request->id)->update($purchase_input);
+            StockRequest::where('id', $request->id)->update($purchase_input);
 
 
             $medicines = $input['product_name'];
@@ -207,33 +207,26 @@ class StockRequestController extends Controller
 
 
                 );
-                $check = StockRequestDetails::where('stock_request_id',$request->id)->where('medicine_id',$input['product_id'][$i])->first();
+                $check = StockRequestDetails::where('stock_request_id', $request->id)->where('medicine_id', $input['product_id'][$i])->first();
 
 
 
-                if($check != null){
+                if ($check != null) {
 
 
-                    StockRequestDetails::where('stock_request_id',$request->id)->where('medicine_id',$input['product_id'][$i])->update($return_details);
-
-                }else{
+                    StockRequestDetails::where('stock_request_id', $request->id)->where('medicine_id', $input['product_id'][$i])->update($return_details);
+                } else {
 
                     StockRequestDetails::create($return_details);
-
-
-                 }
-
-
-
-
+                }
             }
 
 
             return redirect()->back()->with('success', ' Stock Request has been Updated.');
         } catch (Exception $e) {
 
-             return redirect()->back()->with('error', $e->getMessage());
-         }
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -244,65 +237,48 @@ class StockRequestController extends Controller
      */
     public function destroy($id)
     {
-        StockRequest::where('id',$id)->delete();
-        StockRequestDetails::where('stock_request_id',$id)->delete();
+        StockRequest::where('id', $id)->delete();
+        StockRequestDetails::where('stock_request_id', $id)->delete();
         return redirect()->back()->with('success', 'Data has been deleted');
     }
-    public function stockRequestDelete($medicine_id,$request_id ){
-        $data =  StockRequestDetails::where('medicine_id',$medicine_id)->where('stock_request_id', $request_id)->delete();
+    public function stockRequestDelete($medicine_id, $request_id)
+    {
+        $data =  StockRequestDetails::where('medicine_id', $medicine_id)->where('stock_request_id', $request_id)->delete();
 
 
         return redirect()->back()->with('success', 'Data has been Deleted.');
     }
-    public function details($id){
+    public function details($id)
+    {
         $stockrequest = StockRequest::find($id);
-        $stockDetails  = StockRequestDetails::where('stock_request_id',$id)->get();
-        return view('admin.stockrequest.stock_request_details_outlet',compact('stockrequest','stockDetails'));
-
+        $stockDetails  = StockRequestDetails::where('stock_request_id', $id)->get();
+        return view('admin.stockrequest.stock_request_details_outlet', compact('stockrequest', 'stockDetails'));
     }
-    public function warehouseRequest(){
-        $warehouse_id = Auth::user()->warehouse_id != null  ?  Auth::user()->warehouse_id : Warehouse::orderby('id','desc')->first('id');
-        if(Auth::user()->hasrole('Super Admin')){
+    public function warehouseRequest()
+    {
+        $warehouse_id = Auth::user()->warehouse_id != null  ?  Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
+        if (Auth::user()->hasrole('Super Admin')) {
             $stockrequets = StockRequest::all();
-
-        }else{
+        } else {
             $stockrequets = StockRequest::where('warehouse_id', $warehouse_id)->get();
         }
 
 
 
-    return view('admin.stockrequest.warehouse_stock_request', compact('stockrequets'));
-
+        return view('admin.stockrequest.warehouse_stock_request', compact('stockrequets'));
     }
-    public function hasSent($id,$status){
+    public function hasSent($id, $status)
+    {
 
         $data = StockRequest::find($id);
         $data->has_sent = $status;
         $data->save();
-        return redirect()->back()->with('success','Sent Status Updated');
-
+        return redirect()->back()->with('success', 'Sent Status Updated');
     }
-    public function hasAccepted(Request $request){
+    public function hasAccepted(Request $request)
+    {
 
-        if($request->status == 0){
-
-
-            $data = array(
-                'has_accepted' => $request->status,
-                'accepted_by' => Auth::user()->id,
-                'accepted_on' => Carbon::now()
-
-           );
-
-           StockRequest::where('id',$request->id)->update($data);
-           $status = array (
-                 'has_accepted' => $request->status,
-
-           );
-           StockRequestDetails::where('stock_request_id',$request->id)->update($status);
-           return redirect()->back()->with('success','Accepted Status Updated');
-
-        }else{
+        if ($request->status == 0) {
 
 
             $data = array(
@@ -310,43 +286,53 @@ class StockRequestController extends Controller
                 'accepted_by' => Auth::user()->id,
                 'accepted_on' => Carbon::now()
 
-           );
+            );
 
-           StockRequest::where('id',$request->id)->update($data);
-           $status = array (
-                 'has_accepted' => $request->status,
+            StockRequest::where('id', $request->id)->update($data);
+            $status = array(
+                'has_accepted' => $request->status,
 
-           );
-           StockRequestDetails::where('stock_request_id',$request->id)->update($status);
-           $data = StockRequest::find($request->id);
+            );
+            StockRequestDetails::where('stock_request_id', $request->id)->update($status);
+            return redirect()->back()->with('success', 'Accepted Status Updated');
+        } else {
 
-           $medicinedetails = StockRequestDetails::where('stock_request_id',$request->id)->get();
-           $warehouse = Warehouse::pluck('warehouse_name', 'id');
-           return view('admin.DistributeMedicine.direct_distribute',compact('data','medicinedetails','warehouse'));
 
+            $data = array(
+                'has_accepted' => $request->status,
+                'accepted_by' => Auth::user()->id,
+                'accepted_on' => Carbon::now()
+
+            );
+
+            StockRequest::where('id', $request->id)->update($data);
+            $status = array(
+                'has_accepted' => $request->status,
+
+            );
+            StockRequestDetails::where('stock_request_id', $request->id)->update($status);
+            $data = StockRequest::find($request->id);
+
+            $medicinedetails = StockRequestDetails::where('stock_request_id', $request->id)->get();
+            $warehouse = Warehouse::pluck('warehouse_name', 'id');
+            return view('admin.DistributeMedicine.direct_distribute', compact('data', 'medicinedetails', 'warehouse'));
         }
-
-
-
-
-
     }
 
-    public function hasAcceptedMedicine($id,$status,$medicine_id){
+    public function hasAcceptedMedicine($id, $status, $medicine_id)
+    {
 
-        $status = array (
+        $status = array(
             'has_accepted' => $status,
 
-      );
-      StockRequestDetails::where('stock_request_id',$id)->where('medicine_id',$medicine_id)->update($status);
-      return redirect()->back()->with('success','Accepted Status Updated For This Medicine');
-
+        );
+        StockRequestDetails::where('stock_request_id', $id)->where('medicine_id', $medicine_id)->update($status);
+        return redirect()->back()->with('success', 'Accepted Status Updated For This Medicine');
     }
-    public function detailsRequestWarehouse($id){
+    public function detailsRequestWarehouse($id)
+    {
         $stockrequest = StockRequest::find($id);
-        $stockDetails  = StockRequestDetails::where('stock_request_id',$id)->get();
-        return view('admin.stockrequest.details_for_warehouse',compact('stockrequest','stockDetails'));
-
+        $stockDetails  = StockRequestDetails::where('stock_request_id', $id)->get();
+        return view('admin.stockrequest.details_for_warehouse', compact('stockrequest', 'stockDetails'));
     }
-
 }

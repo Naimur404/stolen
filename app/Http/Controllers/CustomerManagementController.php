@@ -207,7 +207,6 @@ class CustomerManagementController extends Controller
                     ->take($row_per_page)
                     ->get();
             }
-
         } else {
             $totalRecords = Customer::select('count(*) as allcount')->where('outlet_id', '=', Auth::user()->outlet_id)->count();
             $customers = DB::table('customers')->orWhere('outlet_id', '=', $id)->where('name', 'like', '%' . $searchValue . '%')->orderBy($columnName, $columnSortOrder)
