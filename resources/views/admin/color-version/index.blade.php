@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-
+            @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
             <div class="col-sm-6 col-xl-3 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
@@ -71,7 +71,8 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            @endif
+            <div class="col-sm-6 col-xl-2 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-secondary b-r-4 card-body">
                         <div class="media static-top-widget">
@@ -87,6 +88,20 @@
             </div>
             <div class="col-sm-6 col-xl-3 col-lg-6">
                 <div class="card o-hidden border-0">
+                    <div class="bg-secondary b-r-4 card-body">
+                        <div class="media static-top-widget">
+                            <div class="align-self-center text-center"><i data-feather="credit-card"></i></div>
+                            <div class="media-body">
+                                <span class="m-0">Yesterday's Sale</span>
+                                <h4 class="mb-0 counter">{{ $lastdaysales }}</h4>
+                                <i class="icon-bg" data-feather="credit-card"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6 col-xl-2 col-lg-6">
+                <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
                         <div class="media static-top-widget">
                             <div class="align-self-center text-center"><i data-feather="truck"></i></div>
@@ -99,7 +114,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-2 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
                         <div class="media static-top-widget">
@@ -113,6 +128,7 @@
                     </div>
                 </div>
             </div>
+            @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
             <div class="col-sm-6 col-xl-3 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
@@ -127,6 +143,7 @@
                     </div>
                 </div>
             </div>
+            @endif
             <div class="col-sm-6 col-xl-3 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-secondary b-r-4 card-body">
@@ -171,9 +188,9 @@
             </div>
 
             @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
-                <div class="col-xl-6 xl-100 box-col-12">
+                <div class="col-xl-7 xl-100 box-col-12">
                     @else
-                        <div class="col-xl-6 xl-100 box-col-12">
+                        <div class="col-xl-7 xl-100 box-col-12">
                             @endif
                             <div class="card">
                                 <div class="card-header pb-0 d-flex justify-content-center align-items-center">
@@ -207,7 +224,7 @@
                             </div>
                         </div>
                         @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
-                            <div class="col-xl-6 xl-100 box-col-12">
+                            <div class="col-xl-5 xl-100 box-col-12">
                                 <div class="card">
                                     <div class="card-header pb-0 d-flex justify-content-center align-items-center">
                                         <h6 class="mt-3">Top 10 Products This Month(Purchase)</h6>

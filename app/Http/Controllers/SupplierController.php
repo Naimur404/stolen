@@ -19,9 +19,9 @@ class SupplierController extends Controller
      */
     function __construct()
     {
-        $this->middleware('permission:supplier.management|supplier.create|supplier.edit|supplier.delete', ['only' => ['index','store']]);
-        $this->middleware('permission:supplier.create', ['only' => ['create','store']]);
-        $this->middleware('permission:supplier.edit', ['only' => ['edit','update']]);
+        $this->middleware('permission:supplier.management|supplier.create|supplier.edit|supplier.delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:supplier.create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:supplier.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:supplier.delete', ['only' => ['destroy']]);
         $this->middleware('permission:supplier-due', ['only' => ['supplierDue']]);
         $this->middleware('permission:supplier-due-payment', ['only' => ['supplierDuePayment']]);
@@ -31,27 +31,27 @@ class SupplierController extends Controller
         if ($request->ajax()) {
             $data = Supplier::all();
             return  DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('manufacturer', function($row){
+                ->addIndexColumn()
+                ->addColumn('manufacturer', function ($row) {
 
-                        return view('admin.action.manufacturer', compact('row'));
-                    })
-                    ->addColumn('active', function($row){
-                        $active = route('supplier.active',[$row->id,0]);
-                        $inactive = route('supplier.active',[$row->id,1]);
-                        return view('admin.action.active',compact('active','inactive','row'));
-                    })
-                    ->addColumn('action', function($row){
-                        $id = $row->id;
-                        $edit = route('supplier.edit',$id);
-                        $delete = route('supplier.destroy',$id);
+                    return view('admin.action.manufacturer', compact('row'));
+                })
+                ->addColumn('active', function ($row) {
+                    $active = route('supplier.active', [$row->id, 0]);
+                    $inactive = route('supplier.active', [$row->id, 1]);
+                    return view('admin.action.active', compact('active', 'inactive', 'row'));
+                })
+                ->addColumn('action', function ($row) {
+                    $id = $row->id;
+                    $edit = route('supplier.edit', $id);
+                    $delete = route('supplier.destroy', $id);
 
-                        return view('admin.action.action', compact('id','edit','delete', 'row'));
-                    })
-                    ->rawColumns(['manufacturer'])
-                    ->rawColumns(['active'])
-                    ->rawColumns(['action'])
-                    ->make(true);
+                    return view('admin.action.action', compact('id', 'edit', 'delete', 'row'));
+                })
+                ->rawColumns(['manufacturer'])
+                ->rawColumns(['active'])
+                ->rawColumns(['action'])
+                ->make(true);
         }
         return view('admin.supplier.index');
     }
@@ -80,12 +80,12 @@ class SupplierController extends Controller
             'supplier_name' => 'required|string',
             'mobile' => 'required|min:11',
 
-           ]);
+        ]);
         $input = $request->all();
 
         $manufacturers = $request->input('manufacturer_id');
-        try{
-             $supplier = Supplier::create($input);
+        try {
+            $supplier = Supplier::create($input);
 
             foreach ($manufacturers as $manufacturer) {
                 SupplierHasManufacturer::create([
@@ -96,9 +96,9 @@ class SupplierController extends Controller
             }
 
 
-             return redirect()->back()->with('success', 'Data has been added.');
-        }catch(\Exception $e){
-               return redirect()->back()->with('success', $e->getMessage());
+            return redirect()->back()->with('success', 'Data has been added.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('success', $e->getMessage());
         }
     }
 
@@ -124,7 +124,7 @@ class SupplierController extends Controller
 
         $manufacturers = Manufacturer::all();
         $exist_manufacturer = SupplierHasManufacturer::whereIn('supplier_id', [$supplier->id])->get();
-        return view('admin.supplier.edit',compact('supplier','manufacturers', 'exist_manufacturer'));
+        return view('admin.supplier.edit', compact('supplier', 'manufacturers', 'exist_manufacturer'));
     }
 
     /**
@@ -137,12 +137,12 @@ class SupplierController extends Controller
     public function update(Request $request, Supplier $supplier)
     {
         $input = $request->all();
-        try{
+        try {
             $supplier->update($input);
             SupplierHasManufacturer::whereIn('supplier_id', [$supplier->id])->delete();
             $manufacturers = $request->input('manufacturer_id');
 
-            foreach ($manufacturers as $manufacturer){
+            foreach ($manufacturers as $manufacturer) {
                 SupplierHasManufacturer::create([
 
                     'supplier_id' => $supplier->id,
@@ -150,9 +150,9 @@ class SupplierController extends Controller
                 ]);
             }
             return redirect()->back()->with('success', 'Data has been Update.');
-       }catch(\Exception $e){
-              return redirect()->back()->with('success', $e->getMessage());
-       }
+        } catch (\Exception $e) {
+            return redirect()->back()->with('success', $e->getMessage());
+        }
     }
 
     /**
@@ -169,13 +169,13 @@ class SupplierController extends Controller
 
         return redirect()->back()->with('success', 'Data has been Deleted.');
     }
-    public function active($id,$status){
+    public function active($id, $status)
+    {
 
         $data = Supplier::find($id);
         $data->is_active = $status;
         $data->save();
-        return redirect()->route('supplier.index')->with('success','Active Status Updated');
-
+        return redirect()->route('supplier.index')->with('success', 'Active Status Updated');
     }
 
     public function supplierDue($id)
@@ -201,26 +201,26 @@ class SupplierController extends Controller
                 'due_balance' => $supplier->due_balance - $request->paid_amount
 
             );
-            Supplier::where('id',$request->supplier_id)->update($due);
+            Supplier::where('id', $request->supplier_id)->update($due);
             $pay = $request->paid_amount;
             foreach ($purchases as $purchase) {
 
 
                 if ($pay >= 0) {
-                    if($pay == $purchase->due_amount){
+                    if ($pay == $purchase->due_amount) {
                         $data = array(
                             'due_amount' => $purchase->due_amount - $pay,
                             'paid_amount' => $purchase->paid_amount + $pay,
                         );
                         $pay = 0;
-                    }elseif($pay > $purchase->due_amount){
-                          $payment =  $purchase->due_amount;
-                          $data = array(
+                    } elseif ($pay > $purchase->due_amount) {
+                        $payment =  $purchase->due_amount;
+                        $data = array(
                             'due_amount' => $purchase->due_amount - $payment,
                             'paid_amount' =>  $payment + $pay,
                         );
                         $pay = $pay - $purchase->due_amount;
-                    }else{
+                    } else {
                         $data = array(
                             'due_amount' => $purchase->due_amount - $pay,
                             'paid_amount' => $purchase->paid_amount + $pay,
@@ -228,8 +228,6 @@ class SupplierController extends Controller
                         $pay = 0;
                     }
                     MedicinePurchase::where('supplier_id', $request->supplier_id)->where('id', $purchase->id)->update($data);
-
-
                 } else {
                     break;
                 }
@@ -239,5 +237,4 @@ class SupplierController extends Controller
             return redirect()->back()->with('error', $e->getMessage());
         }
     }
-
 }

@@ -35,9 +35,10 @@ class DashBoardController extends Controller
             $products = OutletStock::where('quantity', '>', 0)->count();
             $stocks = OutletStock::where('quantity', '<', 10)->count();
             $purchases = MedicinePurchase::whereDate('purchase_date', Carbon::now())->sum('grand_total');
-            $sales = OutletInvoice::whereDate('sale_date', Carbon::now())->sum('grand_total');
+            $sales = OutletInvoice::whereDate('sale_date', Carbon::now())->sum('payable_amount');
             $returns = SalesReturn::whereDate('return_date', Carbon::now())->count();
             $invoices = OutletInvoice::whereDate('sale_date', Carbon::now())->count();
+            $lastdaysales = OutletInvoice::whereDate('sale_date', today()->subDay())->sum('payable_amount');
             $thisMonthPurchases = MedicinePurchase::whereBetween('purchase_date',
                 [
                     Carbon::now()->startOfMonth(),
@@ -69,6 +70,7 @@ class DashBoardController extends Controller
             $products = OutletStock::where('outlet_id', $outlet_id)->where('quantity', '>', 0)->count();
             $stocks = OutletStock::where('outlet_id', $outlet_id)->where('quantity', '<', 10)->count();
             $invoices = OutletInvoice::where('outlet_id', $outlet_id)->whereDate('sale_date', Carbon::now())->count();
+            $lastdaysales = OutletInvoice::where('outlet_id', $outlet_id)->whereDate('sale_date', today()->subDay())->sum('payable_amount');
 
             $thisMonthPurchases = MedicinePurchase::where('warehouse_id', $warehouse_id)->whereBetween('purchase_date',
                 [
@@ -93,7 +95,7 @@ class DashBoardController extends Controller
                 ])->count();
         }
 
-        return view('admin.color-version.index', compact('customers', 'products', 'stocks', 'purchases', 'sales', 'returns', 'invoices','thisMonthPurchases','thisMonthSales','thisMonthReturns','thisMonthInvoices'));
+        return view('admin.color-version.index', compact('customers', 'products', 'stocks', 'purchases', 'sales', 'returns', 'invoices','thisMonthPurchases','thisMonthSales','thisMonthReturns','thisMonthInvoices','lastdaysales'));
     }
 
     public function totalSale(Request $request)

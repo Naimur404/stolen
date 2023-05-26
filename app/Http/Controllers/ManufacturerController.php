@@ -15,36 +15,36 @@ class ManufacturerController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-     function __construct()
-     {
-         $this->middleware('permission:manufacturer.management|manufacturer.create|manufacturer.edit|manufacturer.delete', ['only' => ['index','store']]);
-         $this->middleware('permission:manufacturer.create', ['only' => ['create','store']]);
-         $this->middleware('permission:manufacturer.edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:manufacturer.delete', ['only' => ['destroy']]);
-     }
+    function __construct()
+    {
+        $this->middleware('permission:manufacturer.management|manufacturer.create|manufacturer.edit|manufacturer.delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:manufacturer.create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:manufacturer.edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:manufacturer.delete', ['only' => ['destroy']]);
+    }
     public function index(Request $request)
     {
 
         if ($request->ajax()) {
-            $data = Manufacturer::orderBy("id","desc")->get();
+            $data = Manufacturer::orderBy("id", "desc")->get();
             return  DataTables::of($data)
-                    ->addIndexColumn()
-                    ->addColumn('active', function($row){
-                        $active = route('manufacturer.active',[$row->id,0]);
-                        $inactive = route('manufacturer.active',[$row->id,1]);
-                        return view('admin.action.active',compact('active','inactive','row'));
-                    })
+                ->addIndexColumn()
+                ->addColumn('active', function ($row) {
+                    $active = route('manufacturer.active', [$row->id, 0]);
+                    $inactive = route('manufacturer.active', [$row->id, 1]);
+                    return view('admin.action.active', compact('active', 'inactive', 'row'));
+                })
 
-                    ->addColumn('action', function($row){
-                        $id = $row->id;
-                        $edit = route('manufacturer.edit',$id);
-                        $delete = route('manufacturer.destroy',$id);
-                        return view('admin.action.action', compact('id','edit','delete'));
-                    })
-                    ->rawColumns(['active'])
+                ->addColumn('action', function ($row) {
+                    $id = $row->id;
+                    $edit = route('manufacturer.edit', $id);
+                    $delete = route('manufacturer.destroy', $id);
+                    return view('admin.action.action', compact('id', 'edit', 'delete'));
+                })
+                ->rawColumns(['active'])
 
-                    ->rawColumns(['action'])
-                    ->make(true);
+                ->rawColumns(['action'])
+                ->make(true);
         }
         return view('admin.manufacturer.index');
     }
@@ -72,17 +72,15 @@ class ManufacturerController extends Controller
             'mobile' => 'required|min:11',
 
 
-           ]);
-           $input = $request->all();
-           try{
+        ]);
+        $input = $request->all();
+        try {
             Manufacturer::create($input);
 
             return redirect()->route('manufacturer.index')->with('success', ' Successfully Added.');
-         }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->route('manufacturer.index')->with('success', $e->getMessage());
-         }
-
-
+        }
     }
 
     /**
@@ -104,7 +102,7 @@ class ManufacturerController extends Controller
      */
     public function edit(Manufacturer $manufacturer)
     {
-        return view('admin.manufacturer.edit',compact('manufacturer'));
+        return view('admin.manufacturer.edit', compact('manufacturer'));
     }
 
     /**
@@ -121,17 +119,16 @@ class ManufacturerController extends Controller
             'mobile' => 'required|min:11',
 
 
-           ]);
-           $input = $request->all();
+        ]);
+        $input = $request->all();
 
-           try{
+        try {
             $manufacturer->update($input);
 
             return redirect()->route('manufacturer.index')->with('success', ' Successfully Added.');
-         }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->route('manufacturer.index')->with('success', $e->getMessage());
-         }
-
+        }
     }
 
     /**
@@ -143,59 +140,60 @@ class ManufacturerController extends Controller
     public function destroy(Manufacturer $manufacturer)
     {
 
-        try{
+        try {
             $manufacturer->delete();
 
             return redirect()->route('manufacturer.index')->with('success', ' Successfully Added.');
-         }catch(Exception $e){
+        } catch (Exception $e) {
             return redirect()->route('manufacturer.index')->with('success', $e->getMessage());
-         }
-
+        }
     }
-    public function active($id,$status){
+    public function active($id, $status)
+    {
 
         $data = Manufacturer::find($id);
         $data->is_active = $status;
         $data->save();
-        return redirect()->route('manufacturer.index')->with('success','Active Status Updated');
-
+        return redirect()->route('manufacturer.index')->with('success', 'Active Status Updated');
     }
-    public function getManufacturer(Request $request){
+    public function getManufacturer(Request $request)
+    {
         $search = $request->search;
 
-        if($search == ''){
-            $Manufacturers = Manufacturer::orderby('manufacturer_name','asc')->select('id','manufacturer_name')->limit(5)->get();
-        }else{
-           $Manufacturers = Manufacturer::orderby('manufacturer_name','asc')->select('id','manufacturer_name')->where('manufacturer_name', 'like', '%' .$search . '%')->limit(5)->get();
+        if ($search == '') {
+            $Manufacturers = Manufacturer::orderby('manufacturer_name', 'asc')->select('id', 'manufacturer_name')->limit(5)->get();
+        } else {
+            $Manufacturers = Manufacturer::orderby('manufacturer_name', 'asc')->select('id', 'manufacturer_name')->where('manufacturer_name', 'like', '%' . $search . '%')->limit(5)->get();
         }
 
         $response = array();
-        foreach($Manufacturers as $Manufacturer){
-           $response[] = array(
-                "id"=>$Manufacturer->id,
-                "text"=>$Manufacturer->manufacturer_name
-           );
+        foreach ($Manufacturers as $Manufacturer) {
+            $response[] = array(
+                "id" => $Manufacturer->id,
+                "text" => $Manufacturer->manufacturer_name
+            );
         }
         return response()->json($response);
-     }
-     public function select_manufacturer(Request $request){
+    }
+    public function select_manufacturer(Request $request)
+    {
 
         $search = $request->search;
 
-          if($search == ''){
-             $categories = Manufacturer::orderby('id','asc')->select('id','manufacturer_name')->get();
-          }else{
-             $categories = Manufacturer::orderby('id','asc')->select('id','manufacturer_name')->where('manufacturer_name', 'like', '%' .$search . '%')->get();
-          }
+        if ($search == '') {
+            $categories = Manufacturer::orderby('id', 'asc')->select('id', 'manufacturer_name')->get();
+        } else {
+            $categories = Manufacturer::orderby('id', 'asc')->select('id', 'manufacturer_name')->where('manufacturer_name', 'like', '%' . $search . '%')->get();
+        }
 
-          $response = array();
-          foreach($categories as $category){
-             $response[] = array(
-                  "id"=>$category->id,
-                  "text"=>$category->manufacturer_name
-             );
-          }
+        $response = array();
+        foreach ($categories as $category) {
+            $response[] = array(
+                "id" => $category->id,
+                "text" => $category->manufacturer_name
+            );
+        }
 
-          return response()->json($response);
-      }
+        return response()->json($response);
+    }
 }

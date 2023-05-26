@@ -70,6 +70,7 @@
                     $total_due = 0;
                     $total_pay = 0;
                     $total_discount = 0;
+                    $redeem_points = 0;
                 @endphp
                 @foreach ($productSales as $productSale)
                     <tr>
@@ -83,7 +84,7 @@
                         <td>{{ $productSale->user->name ?? '' }}</td>
 
 
-                        <td>{{ $productSale->grand_total }}</td>
+                        <td>{{ $productSale->payable_amount }}</td>
                         <td>{{ $productSale->paid_amount }}</td>
                         <td>
                             {{ $productSale->due_amount > 0.5 ? $productSale->due_amount : 'Paid' }}
@@ -92,10 +93,11 @@
                     </tr>
                     @php
                         $sub_total = $sub_total + $productSale->sub_total;
-                        $grand_total = $grand_total + $productSale->grand_total;
+                        $grand_total = $grand_total + $productSale->payable_amount;
                         $total_due = $total_due + $productSale->due_amount > 0.5 ? $productSale->due_amount : 0;
                         $total_pay = $total_pay + $productSale->paid_amount;
                         $total_discount = $total_discount + $productSale->total_discount;
+                        $redeem_points =  $redeem_points + $productSale->redeem_point;
                     @endphp
                 @endforeach
 
@@ -103,7 +105,7 @@
                 </tbody>
             </table>
 
-            <p class="text-center">Sub Total {{ $sub_total }} | Total Discount {{ $total_discount }} | Grand Total {{ $grand_total }} | Total Pay {{ $total_pay }} | Total
+            <p class="text-center">Sub Total {{ round($sub_total) }} | Total Discount {{ $total_discount }} | Redeem Point {{ $redeem_points }} | Grand Total {{ $grand_total }} | Total Pay {{ $total_pay }} | Total
                 Due {{ $total_due }}</p>
                 <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
         </div>

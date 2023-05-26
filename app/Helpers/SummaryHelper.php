@@ -6,9 +6,7 @@
  * Time: 3:13 AM
  */
 
-
 namespace App\Helpers;
-
 
 use App\Models\MedicinePurchase;
 use App\Models\MedicinePurchaseDetails;
@@ -27,7 +25,7 @@ class SummaryHelper
      */
     public function getWarehouseSummary($summary_date = null): array
     {
-        if ($summary_date == null){
+        if ($summary_date == null) {
             $summary_date = Carbon::now()->format('Y-m-d');
         }
         // total records count
@@ -61,7 +59,7 @@ class SummaryHelper
      */
     public function getOutletSummary($summary_date = null): array
     {
-        if ($summary_date == null){
+        if ($summary_date == null) {
             $summary_date = Carbon::now()->format('Y-m-d');
         }
         $outlets = Outlet::all();

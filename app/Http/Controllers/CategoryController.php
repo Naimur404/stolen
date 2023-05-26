@@ -15,31 +15,31 @@ class CategoryController extends Controller
      *
      */
 
-     function __construct()
-     {
-         $this->middleware('permission:category.management|category.create|category.edit|category.delete', ['only' => ['index','store']]);
-         $this->middleware('permission:category.create', ['only' => ['create','store']]);
-         $this->middleware('permission:category.edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:category.delete', ['only' => ['destroy']]);
-     }
+    function __construct()
+    {
+        $this->middleware('permission:category.management|category.create|category.edit|category.delete', ['only' => ['index', 'store']]);
+        $this->middleware('permission:category.create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:category.edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:category.delete', ['only' => ['destroy']]);
+    }
     public function index(Request $request)
     {
 
         if ($request->ajax()) {
-            $data = Category::orderBy("id","desc")->get();
+            $data = Category::orderBy("id", "desc")->get();
             return  DataTables::of($data)
-                    ->addIndexColumn()
-                        ->addColumn('action', function($row){
-                        $id = $row->id;
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $id = $row->id;
 
-                        $edit = route('category.edit',$id);
-                        $delete = route('category.destroy',$id);
-                        $permission = 'category.edit';
-                        $permissiondelete = 'category.delete';
-                        return view('admin.action.action', compact('id','edit','delete','permission','permissiondelete'));
-                    })
-                    ->rawColumns(['action'])
-                    ->make(true);
+                    $edit = route('category.edit', $id);
+                    $delete = route('category.destroy', $id);
+                    $permission = 'category.edit';
+                    $permissiondelete = 'category.delete';
+                    return view('admin.action.action', compact('id', 'edit', 'delete', 'permission', 'permissiondelete'));
+                })
+                ->rawColumns(['action'])
+                ->make(true);
         }
         return view('admin.category.category');
     }
@@ -70,7 +70,7 @@ class CategoryController extends Controller
 
 
         $category_name = Category::create($request->all());
-         return response()->json($category_name);
+        return response()->json($category_name);
     }
 
     /**
@@ -111,11 +111,11 @@ class CategoryController extends Controller
 
         ]);
         $input = $request->all();
-            $category_name = $category->update($input);
+        $category_name = $category->update($input);
 
 
 
-            return response()->json($category_name);
+        return response()->json($category_name);
     }
 
     /**
@@ -126,9 +126,7 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
-      $category->delete();
-        return redirect()->route('category.index')->with('success','Delete successfully');
+        $category->delete();
+        return redirect()->route('category.index')->with('success', 'Delete successfully');
     }
-
-
 }
