@@ -24,7 +24,6 @@ class WarehouseStockController extends Controller
         $this->middleware('permission:warehouseStock', ['only' => ['warehouseStock']]);
         $this->middleware('permission:warehousetStock-price-edit', ['only' => ['edit']]);
         $this->middleware('permission:warehouseStock-price-update', ['only' => ['warehouse_Stock_Update']]);
-
     }
     /**
      * Display a listing of the resource.
@@ -32,14 +31,15 @@ class WarehouseStockController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
-    {if (auth()->user()->hasrole('Super Admin')) {
-        $warehouse = Warehouse::pluck('warehouse_name', 'id');
+    {
+        if (auth()->user()->hasrole('Super Admin')) {
+            $warehouse = Warehouse::pluck('warehouse_name', 'id');
 
-        $warehouse = new Collection($warehouse);
-        $warehouse->prepend('All Warehouse Stock', 'all');
-    } else {
-        $warehouse = Warehouse::where('id', Auth::user()->warehouse_id)->pluck('warehouse_name', 'id');
-    }
+            $warehouse = new Collection($warehouse);
+            $warehouse->prepend('All Warehouse Stock', 'all');
+        } else {
+            $warehouse = Warehouse::where('id', Auth::user()->warehouse_id)->pluck('warehouse_name', 'id');
+        }
 
         return view('admin.medicinestock.warehousestock', compact('warehouse'));
     }
@@ -92,7 +92,6 @@ class WarehouseStockController extends Controller
         } catch (Exception $e) {
             return redirect()->route('medicine-purchase.index')->with('success', $e->getMessage());
         }
-
     }
 
     /**
@@ -156,7 +155,6 @@ class WarehouseStockController extends Controller
         } catch (Exception $e) {
             return redirect()->route('distribute-medicine.index')->with('success', $e->getMessage());
         }
-
     }
 
     /**
@@ -194,7 +192,6 @@ class WarehouseStockController extends Controller
                 ->skip($start)
                 ->take($row_per_page)
                 ->get();
-
         } else {
             if (auth()->user()->hasrole('Super Admin')) {
                 $totalRecords = WarehouseStock::where('quantity', '>', '0')->select('count(*) as allcount')->where('warehouse_id', '=', $id)->count();
@@ -202,16 +199,13 @@ class WarehouseStockController extends Controller
                     ->skip($start)
                     ->take($row_per_page)
                     ->get();
-
             } else {
                 $totalRecords = WarehouseStock::where('quantity', '>', '0')->select('count(*) as allcount')->where('warehouse_id', '=', Auth::user()->warehouse_id)->count();
                 $medicine_stock = DB::table('warehouse_stocks')->orderBy($columnName, $columnSortOrder)->where('warehouse_id', '=', Auth::user()->warehouse_id)->where('quantity', '>', '0')->leftjoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')->where('medicines.medicine_name', 'like', '%' . $searchValue . '%')->select('warehouse_stocks.*', 'medicines.medicine_name')
                     ->skip($start)
                     ->take($row_per_page)
                     ->get();
-
             }
-
         }
 
         $total_record_switch_filter = $totalRecords;
@@ -257,7 +251,6 @@ class WarehouseStockController extends Controller
         );
 
         return json_encode($response);
-
     }
 
     public function warehouseStock2(Request $request, $id)
@@ -272,12 +265,10 @@ class WarehouseStockController extends Controller
 
                 $medicine_stock = DB::table('warehouse_stocks')->where('warehouse_id', '=', $id)->where('quantity', '>', '0')->leftjoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')->select('warehouse_stocks.*', 'medicines.medicine_name')
                     ->get();
-
             } else {
 
                 $medicine_stock = DB::table('warehouse_stocks')->where('warehouse_id', '=', Auth::user()->warehouse_id)->where('quantity', '>', '0')->leftjoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')->select('warehouse_stocks.*', 'medicines.medicine_name')
                     ->get();
-
             }
         }
 
@@ -285,7 +276,6 @@ class WarehouseStockController extends Controller
         foreach ($medicine_stock as $stock) {
 
             $total = $total + $stock->purchase_price * $stock->quantity;
-
         }
         $response = array(
 
@@ -293,7 +283,6 @@ class WarehouseStockController extends Controller
         );
 
         return response()->json($response);
-
     }
 
     public function getwarehouseStock(Request $request, $id)
@@ -305,13 +294,11 @@ class WarehouseStockController extends Controller
             $medicines = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id)->where('warehouse_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
                 ->select('warehouse_stocks.medicine_id as id', 'medicines.category_id as category_id', 'warehouse_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
-
         } else {
 
             $medicines = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id)->where('warehouse_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
                 ->select('warehouse_stocks.medicine_id as id', 'medicines.category_id as category_id', 'warehouse_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
-
         }
 
         $response = array();
