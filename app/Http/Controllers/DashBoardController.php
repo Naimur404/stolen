@@ -194,7 +194,7 @@ class DashBoardController extends Controller
                 ->leftJoin('customers', 'customers.id', '=', 'outlet_invoices.customer_id')
                 ->select('outlet_invoices.customer_id', 'customers.name', 'customers.mobile',
                     DB::raw('SUM(outlet_invoices.payable_amount) as total'), DB::raw('COUNT(outlet_invoices.customer_id) as count'))
-                ->groupBy('outlet_invoices.customer_id', 'customers.name')
+                ->groupBy('outlet_invoices.customer_id', 'customers.name','customers.mobile')
                 ->orderBy('total', 'desc')
                 ->limit(10)
                 ->get();
@@ -209,7 +209,7 @@ class DashBoardController extends Controller
                 ->leftJoin('customers', 'customers.id', '=', 'outlet_invoices.customer_id')
                 ->select('outlet_invoices.customer_id', 'customers.name', 'customers.mobile',
                     DB::raw('SUM(outlet_invoices.payable_amount) as total'), DB::raw('COUNT(outlet_invoices.customer_id) as count'))
-                ->groupBy('outlet_invoices.customer_id', 'customers.name')
+                ->groupBy('outlet_invoices.customer_id', 'customers.name','customers.mobile')
                 ->orderBy('total', 'desc')
                 ->limit(10)
                 ->get();
