@@ -1,4 +1,16 @@
 <!DOCTYPE html>
+
+<!--
+    ========================================
+    PharmAssist - Pharmacy Management Application
+    Developed by Pigeon Soft
+    Website : www.pigeon-soft.com
+    Mobile  : +8801737569833
+
+    All rights reserved. © Pigeon Soft 2016 - {{ date('Y') }}
+    ========================================
+-->
+
 <html lang="en">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -84,4 +96,16 @@
 </script>
 
 </body>
+
+<!--
+    ========================================
+    PharmAssist - Pharmacy Management Application
+    Developed by Pigeon Soft
+    Website : www.pigeon-soft.com
+    Mobile  : +8801737569833
+
+    All rights reserved. © Pigeon Soft 2016 - {{ date('Y') }}
+    ========================================
+-->
+
 </html>
