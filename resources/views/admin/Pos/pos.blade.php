@@ -480,8 +480,16 @@
                 var pay = parseInt($("#pay").val()) || 0;
                 var customer_name = $("#name").val().toLowerCase();
                 let amount = parseInt($("#payable_amount").val()) || 0;
+                var item = $("#item").val();
+                if(item == 0){
+                    Swal.fire({
+  icon: 'error',
+  title: 'Oops...',
+  text: 'Please Select At List One Item',
 
-                if ((customer_name === 'walking customer' || customer_name === '') && pay < amount){
+})
+                }else{
+                    if ((customer_name === 'walking customer' || customer_name === '') && pay < amount){
                     Swal.fire(
                         'Payment Required',
                         'This customer is not allowed for due',
@@ -529,6 +537,9 @@
                             Swal.fire('Changes are not saved', '', 'info')
                         }
                     })
+                }
+
+
                 }
 
                 // Get form data
