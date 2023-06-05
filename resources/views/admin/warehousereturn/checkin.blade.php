@@ -85,7 +85,7 @@
                         <input type="hidden" name="outlet_id" value="{{ $productPurchase->outlet_id }}">
                         <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
 
-                          <input type="hidden" name="warehouse_return_id" value="{{ $productPurchase->id }}">
+                        <input type="hidden" name="warehouse_return_id" value="{{ $productPurchase->id }}">
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name }}</td>
                         <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
@@ -93,11 +93,11 @@
                         @php
                         $stock =  App\Models\OutletStock::where('outlet_id',$productPurchase->outlet_id)->where('medicine_id',$data->medicine_id)->whereDate('expiry_date','=',$data->expiry_date)->first();
                     @endphp
-                        <td>{{ Form::number('quantity', $stock->quantity, ['class' => 'form-control', 'readonly']) }}
+                        <td>{{ Form::number('stock_quantity', $stock->quantity, ['class' => 'form-control', 'readonly']) }}
                         </td>
                         <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
-                            <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
-                           </td>
+                        <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
+                        </td>
                         <td>
 
                             @if ($data->has_received == 0)
