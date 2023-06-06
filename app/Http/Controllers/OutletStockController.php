@@ -223,30 +223,22 @@ class OutletStockController extends Controller
 
 
         } else {
-            if (auth()->user()->hasrole('Super Admin','admin')) {
-
+            if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
                 $medicine_stock_query = DB::table('outlet_stocks')
-
-                    ->where('outlet_stocks.outlet_id', '=', $id)
-                    ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                    ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
+                    ->orderBy($columnName, $columnSortOrder)
+                    ->where('outlet_stocks.outlet_id', '=' , $id)
                     ->where('outlet_stocks.quantity', '>', 0)
+                    ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                     ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
-                    ->orWhere('categories.category_name', 'like', '%' . $searchValue . '%')
-                    ->select('outlet_stocks.*', 'medicines.medicine_name')
-                    ->orderBy($columnName, $columnSortOrder);
-
+                    ->select('outlet_stocks.*', 'medicines.medicine_name');
             } else {
                 $medicine_stock_query = DB::table('outlet_stocks')
-
-                    ->where('outlet_id', '=', Auth::user()->outlet_id)
-                    ->where('outlet_stocks.quantity', '>', 0)
+                    ->orderBy($columnName, $columnSortOrder)
+                    ->where('outlet_id', Auth::user()->outlet_id)
+                    ->where('quantity', '>', 0)
                     ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                    ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
                     ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
-                    ->orWhere('categories.category_name', 'like', '%' . $searchValue . '%')
-                    ->select('outlet_stocks.*', 'medicines.medicine_name')
-                    ->orderBy($columnName, $columnSortOrder);
+                    ->select('outlet_stocks.*', 'medicines.medicine_name');
             }
 
         }
@@ -255,7 +247,6 @@ class OutletStockController extends Controller
             ->skip($start)
             ->take($row_per_page)
             ->get();
-
         $total_record_switch_filter = $totalRecords;
 
         // fetch records with search

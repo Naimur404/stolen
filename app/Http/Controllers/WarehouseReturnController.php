@@ -23,11 +23,11 @@ class WarehouseReturnController extends Controller
     public function index()
     {
 
-        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-        if (Auth::user()->hasRole(['Super Admin','Admin'])){
-        $warehousereturns = WarehouseReturn::get();
-        }else{
-            $warehousereturns = WarehouseReturn::where('outlet_id',$outlet_id)->get();
+        $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+        if (Auth::user()->hasRole(['Super Admin', 'Admin'])) {
+            $warehousereturns = WarehouseReturn::get();
+        } else {
+            $warehousereturns = WarehouseReturn::where('outlet_id', $outlet_id)->get();
         }
         return view('admin.warehousereturn.index', compact('warehousereturns'));
     }
@@ -41,12 +41,12 @@ class WarehouseReturnController extends Controller
     {
         $warehouse = Warehouse::pluck('warehouse_name', 'id');
         if (Auth::user()->hasRole('Super Admin')) {
-        $outlets = Outlet::pluck('outlet_name', 'id');
-    }else{
-        $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id','desc')->first('id');
-        $outlets = Outlet::where('id',$outlet_id)->pluck('outlet_name', 'id');
-    }
-        return view('admin.warehousereturn.create',compact('warehouse','outlets'));
+            $outlets = Outlet::pluck('outlet_name', 'id');
+        } else {
+            $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+            $outlets = Outlet::where('id', $outlet_id)->pluck('outlet_name', 'id');
+        }
+        return view('admin.warehousereturn.create', compact('warehouse', 'outlets'));
     }
 
     /**
@@ -59,16 +59,12 @@ class WarehouseReturnController extends Controller
     {
         $request->validate([
             'outlet_id' => 'required',
-            'warehouse_id' => 'required'
+            'warehouse_id' => 'required',
         ]);
 
-
-
-        $input=$request->all();
+        $input = $request->all();
 
         // return $input;
-
-
 
         $purchase_input = [
             'warehouse_id' => $input['warehouse_id'],
@@ -78,7 +74,6 @@ class WarehouseReturnController extends Controller
             'added_by' => Auth::user()->id,
 
             'remarks' => $input['remarks'],
-
 
         ];
         try {
@@ -98,10 +93,7 @@ class WarehouseReturnController extends Controller
 
                     'expiry_date' => $input['expiry_date'][$i],
 
-
                     // 'rate' => $input['total_price'][$i] / $input['quantity'][$i],
-
-
 
                 );
                 // $warehousetock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->whereDate('expiry_date','=',$input['expiry_date'][$i])->implode('quantity');
@@ -111,17 +103,14 @@ class WarehouseReturnController extends Controller
                 // );
                 // WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->update($new_stock);
 
-
-
                 WarehouseReturnDetails::create($return_details);
             }
-
 
             return redirect()->back()->with('success', 'Request has been Sent.');
         } catch (Exception $e) {
 
-             return redirect()->back()->with('error', $e->getMessage());
-         }
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -145,9 +134,9 @@ class WarehouseReturnController extends Controller
     {
         $data = WarehouseReturn::find($id);
 
-        $returndetails = WarehouseReturnDetails::where('warehouse_return_id',$data->id)->get();
+        $returndetails = WarehouseReturnDetails::where('warehouse_return_id', $data->id)->get();
         $warehouse = Warehouse::pluck('warehouse_name', 'id');
-        return view('admin.warehousereturn.edit',compact('data','returndetails','warehouse'));
+        return view('admin.warehousereturn.edit', compact('data', 'returndetails', 'warehouse'));
     }
 
     /**
@@ -161,13 +150,11 @@ class WarehouseReturnController extends Controller
     {
         $request->validate([
             'outlet_id' => 'required',
-            'warehouse_id' => 'required'
+            'warehouse_id' => 'required',
         ]);
-        $input=$request->all();
+        $input = $request->all();
 
         // return $input;
-
-
 
         $purchase_input = [
             'warehouse_id' => $input['warehouse_id'],
@@ -175,8 +162,8 @@ class WarehouseReturnController extends Controller
             'date' => Carbon::parse($input['purchase_date'])->toDateString(),
             'remarks' => $input['remarks'],
         ];
-        try{
-           WarehouseReturn::where('id',$id)->update($purchase_input);
+        try {
+            WarehouseReturn::where('id', $id)->update($purchase_input);
             $medicines = $input['product_name'];
 
             for ($i = 0; $i < sizeof($medicines); $i++) {
@@ -191,36 +178,26 @@ class WarehouseReturnController extends Controller
 
                     'expiry_date' => $input['expiry_date'][$i],
 
-
-
-
-
-
                 );
-                $check = WarehouseReturnDetails::where('warehouse_return_id',$id)->where('medicine_id',$input['product_id'][$i])->first();
+                $check = WarehouseReturnDetails::where('warehouse_return_id', $id)->where('medicine_id', $input['product_id'][$i])->first();
 
+                if ($check != null) {
 
-                 if($check != null){
+                    WarehouseReturnDetails::where('warehouse_return_id', $id)->where('medicine_id', $input['product_id'][$i])->update($return_details);
 
-
-                    WarehouseReturnDetails::where('warehouse_return_id',$id)->where('medicine_id',$input['product_id'][$i])->update($return_details);
-
-                 }else{
+                } else {
 
                     WarehouseReturnDetails::create($return_details);
 
-
-                 }
-
+                }
 
             }
-
 
             return redirect()->back()->with('success', 'Data has been Updated.');
         } catch (Exception $e) {
 
-             return redirect()->back()->with('error', $e->getMessage());
-         }
+            return redirect()->back()->with('error', $e->getMessage());
+        }
     }
 
     /**
@@ -231,29 +208,22 @@ class WarehouseReturnController extends Controller
      */
     public function destroy($id)
     {
-        WarehouseReturn::where('id',$id)->delete();
-        WarehouseReturnDetails::where('warehouse_return_id',$id)->delete();
+        WarehouseReturn::where('id', $id)->delete();
+        WarehouseReturnDetails::where('warehouse_return_id', $id)->delete();
         return redirect()->back()->with('success', 'Data has been deleted');
     }
     public function medicineReturnlDelete($medicine_id, $return_id)
     {
-      $data =  WarehouseReturnDetails::where('medicine_id',$medicine_id)->where('warehouse_return_id', $return_id)->delete();
-
+        $data = WarehouseReturnDetails::where('medicine_id', $medicine_id)->where('warehouse_return_id', $return_id)->delete();
 
         return redirect()->back()->with('success', 'Data has been Deleted.');
     }
 
-
     public function checkIn($id)
     {
 
-
-            $productPurchase = WarehouseReturn::findOrFail($id);
-            $productPurchaseDetails = WarehouseReturnDetails::where('warehouse_return_id', $productPurchase->id)->get();
-
-
-
-
+        $productPurchase = WarehouseReturn::findOrFail($id);
+        $productPurchaseDetails = WarehouseReturnDetails::where('warehouse_return_id', $productPurchase->id)->get();
 
         return view('admin.warehousereturn.checkin', compact('productPurchase', 'productPurchaseDetails'));
     }
@@ -265,32 +235,31 @@ class WarehouseReturnController extends Controller
             'has_received' => '1',
 
         );
-try{
-        WarehouseReturnDetails::where('warehouse_return_id',$request->warehouse_return_id)->where('medicine_id',$request->medicine_id)->update($has_received);
+        try {
+            WarehouseReturnDetails::where('warehouse_return_id', $request->warehouse_return_id)->where('medicine_id', $request->medicine_id)->update($has_received);
 
-         $outlet = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->first();
+            $outlet = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->first();
 
-         $warehousetock = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->first();
+            $warehousetock = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->first();
 
-        $outletnewstock = array(
-         'quantity' => (int)$outlet->quantity - (int)$request->quantity
+            $outletnewstock = array(
+                'quantity' => (int) $outlet->quantity - (int) $request->quantity,
 
-        );
+            );
 
-        OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($outletnewstock);
+            OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->update($outletnewstock);
 
-        $warehousenewstock = array(
-            'quantity' => (int)$warehousetock->quantity + (int)$request->quantity
+            $warehousenewstock = array(
+                'quantity' => (int) $warehousetock->quantity + (int) $request->quantity,
 
-           );
+            );
 
-           WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id',$request->medicine_id)->whereDate('expiry_date','=',$request->expiry_date)->update($warehousenewstock);
+            WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->update($warehousenewstock);
 
-           return redirect()->back()->with('success', ' Successfully Return This Medicine.');
+            return redirect()->back()->with('success', ' Successfully Return This Medicine.');
 
-    }
-    catch(Exception $e){
-        return redirect()->back()->with('success', $e->getMessage());
-    }
+        } catch (Exception $e) {
+            return redirect()->back()->with('success', $e->getMessage());
+        }
     }
 }

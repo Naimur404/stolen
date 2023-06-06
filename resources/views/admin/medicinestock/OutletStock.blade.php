@@ -82,10 +82,10 @@
                 });
                 let outlet_id = $('#supplier_id').val();
                 var table = $('.data-table').DataTable({
+                    responsive: true,
+                    autoWidth: false,
                     processing: true,
                     serverSide: true,
-                    paging: true,
-                    "filter": true,
                     order: [[0, 'desc']],
 
 
