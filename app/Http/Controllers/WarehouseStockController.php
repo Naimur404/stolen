@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BarcodeLog;
 use App\Models\Category;
 use App\Models\Manufacturer;
 use App\Models\Medicine;
@@ -73,7 +74,12 @@ class WarehouseStockController extends Controller
             );
             WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id', $input['medicine_id'])->whereDate('expiry_date', '=', $input['expiry_date'])->update($quantity);
         } else {
-            WarehouseStock::create($input);
+
+            $warehouseStock = WarehouseStock::create($input);
+            $barcode = BarcodeLog::generateBarcodeText();
+            // set the barcode text to the generated value
+            $warehouseStock->barcode_text = $barcode;
+            $warehouseStock->save();
         }
 
         try {
