@@ -21,18 +21,18 @@ class WarehouseStock extends Model
     ];
 
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::creating(function ($warehouseStock){
-            if (!$warehouseStock->barcode_text) {
-                $barcode = BarcodeLog::generateBarcodeText();
-                // set the barcode text to the generated value
-                $warehouseStock->barcode_text = $barcode;
-            }
-        });
-    }
+//    protected static function boot()
+//    {
+//        parent::boot();
+//
+//        static::creating(function ($warehouseStock){
+//            if (!$warehouseStock->barcode_text) {
+//                $barcode = BarcodeLog::generateBarcodeText();
+//                // set the barcode text to the generated value
+//                $warehouseStock->barcode_text = $barcode;
+//            }
+//        });
+//    }
 
     public function medicine(){
         return $this->belongsTo(Medicine::class,  'medicine_id','id');
