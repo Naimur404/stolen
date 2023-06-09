@@ -108,11 +108,18 @@
                                href="{{route('warehouseRequest')}}"><i data-feather="box"></i><span>Stock Request</span></a>
                         </li>
                     @endcan
-                     @can('category-wise-report-alert')
+                     @can('category-wise-report-alert-outlet')
 
                     <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('category-wise-report-alert')}}"
-                           href="{{route('category-wise-report-alert')}}"><i data-feather="box"></i><span>Category wise Alert</span></a>
+                        <a class="nav-link menu-title {{routeActive('category-wise-report-alert-outlet')}}"
+                           href="{{route('category-wise-report-alert-outlet')}}"><i data-feather="box"></i><span>Category wise Alert Outlet</span></a>
+                    </li>
+                    @endcan
+                    @can('category-wise-report-alert-warehouse')
+
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{routeActive('category-wise-report-alert-warehouse')}}"
+                           href="{{route('category-wise-report-alert-warehouse')}}"><i data-feather="box"></i><span>Category wise Alert Warehouse</span></a>
                     </li>
                     @endcan
 

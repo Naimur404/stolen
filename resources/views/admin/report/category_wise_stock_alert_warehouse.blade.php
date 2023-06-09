@@ -35,70 +35,16 @@ $total_pay = 0;
                     </div>
                 </div>
                 <div class="card-body">
-                      @can('category-wise-report-alert-outlet')
-                    {!! Form::open(['url' => 'category-wise-report-alert-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
-                     <div class="row">
-                         <div class="col-md-3">
 
-                                  <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Outlet Name* </label>
-
-                                {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet','required']) }}
-
-                         </div>
-                         <div class="col-md-3">
-
-                                  <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Category *</label>
-
-
-                                {{ Form::select('category_id',  [''], null, ['class' => 'form-control', 'id' => 'sel_emp', 'placeholder' => ' Please Select a Category','required']) }}
-
-                         </div>
-                         <div class="col-md-3">
-
-                                  <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Manufacturar</label>
-                                  {{ Form::select('manufacturer_id', [''], null,['class' => 'form-control', 'id' => 'sel_emp2' , 'placeholder' => ' Please Select a Manufacturer']) }}
-
-                         </div>
-
-                         <div class="col-md-2 mt-4">
-                            <button type="submit" class="btn btn-info">
-                                Search
-                            </button>
-                         </div>
-                     </div>
-                     {!! Form::close() !!}
-                     @endcan
                      @can('category-wise-report-alert-warehouse')
-                     {!! Form::open(['url' => 'category-wise-report-alert-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
+                     {!! Form::open(['url' => 'category-wise-report-alert-warehouse-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
                      <div class="row mt-3">
                          <div class="col-md-3">
                             <label class="input-group"  style="margin-right: 10px">Warehouse Name *</label>
                                 {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet','required']) }}
 
                          </div>
-                         <div class="col-md-3">
 
-                            <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Category *</label>
-
-
-                          {{ Form::select('category_id',[''] , null, ['class' => 'form-control', 'id' => 'sel_emp4', 'placeholder' => ' Please Select a Category','required' ]) }}
-
-                   </div>
-                   <div class="col-md-3">
-
-                            <label class="input-group" for="inputGroupSelect01" style="margin-right: 10px">Manufacturar</label>
-                            {{ Form::select('manufacturer_id', [''], null,['class' => 'form-control', 'id' => 'sel_emp3', 'placeholder' => ' Please Select a Manufacturer']) }}
-
-                   </div>
-                         <input type="hidden" name="outlet_id" value="">
-                         <div class="col-md-2 mt-4">
-                            <button type="submit" class="btn btn-info">
-                                Search
-                            </button>
-                         </div>
-                     </div>
-                     {!! Form::close() !!}
-                     @endcan
 
 
                     <div class="table-responsive mt-3">

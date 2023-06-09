@@ -59,8 +59,6 @@ class ReportController2 extends Controller
         $this->middleware('permission:not-sold-medicine-submit.report', ['only' => ['notSoldMedicine']]);
         $this->middleware('permission:due-payment-report-submit', ['only' => ['duePaymentReport']]);
         $this->middleware('permission:manufacture_sale_report_submit', ['only' => ['sale_report_manufacturer_submit']]);
-
-
     }
 
     public function medicine_sale_report_submit(Request $request)
@@ -628,13 +626,11 @@ class ReportController2 extends Controller
         return view('admin.report.category_stock_report', compact('productSales', 'title'));
     }
 
-    public function category_wise_report_alert()
+    public function category_wise_report_alert_warehouse()
     {
-        $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+
         $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
         if (Auth::user()->hasRole('Super Admin')) {
-            $outlet = Outlet::limit(10)->pluck('outlet_name', 'id');
-
             $warehouse = Warehouse::pluck('warehouse_name', 'id');
             $category1 = Category::pluck('category_name', 'id');
         } elseif (Auth::user()->hasRole('Admin')) {
@@ -642,24 +638,38 @@ class ReportController2 extends Controller
             $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name', 'id');
 
             $category1 = Category::pluck('category_name', 'id');
-            $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
         } else {
-
-            $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
             $category1 = Category::pluck('category_name', 'id');
             $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name', 'id');
         }
         $title = 'Medicine Purchase Report';
-        return view('admin.report.category_wise_stock_alert', compact('title', 'outlet', 'category1', 'warehouse'));
+        return view('admin.report.category_wise_stock_alert_warehouse', compact('title', 'category1', 'warehouse'));
     }
 
-    public function category_wise_report_alert_submit(Request $request)
+    public function category_wise_report_alert_outlet()
     {
-        $input = $request->all();
         $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
-        $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
         if (Auth::user()->hasRole('Super Admin')) {
             $outlet = Outlet::limit(10)->pluck('outlet_name', 'id');
+            $category1 = Category::pluck('category_name', 'id');
+        } elseif (Auth::user()->hasRole('Admin')) {
+            $category1 = Category::pluck('category_name', 'id');
+            $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
+        } else {
+
+            $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
+            $category1 = Category::pluck('category_name', 'id');
+        }
+        $title = 'Medicine Purchase Report';
+        return view('admin.report.category_wise_stock_alert_outlet', compact('title', 'outlet', 'category1'));
+    }
+
+    public function category_wise_report_alert_warehouse_submit(Request $request)
+    {
+        $input = $request->all();
+        $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
+        if (Auth::user()->hasRole('Super Admin')) {
+
 
             $warehouse = Warehouse::pluck('warehouse_name', 'id');
             $category1 = Category::pluck('category_name', 'id');
@@ -668,25 +678,76 @@ class ReportController2 extends Controller
             $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name', 'id');
 
             $category1 = Category::pluck('category_name', 'id');
+        } else {
+
+
+            $category1 = Category::pluck('category_name', 'id');
+            $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name', 'id');
+        }
+
+        $productSales = DB::table('warehouse_stocks')->where('warehouse_stocks.quantity', '>', '0')->where('warehouse_stocks.warehouse_id', $request->warehouse_id)
+            ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
+            ->select('warehouse_stocks.*', 'medicines.category_id', 'medicines.medicine_name', 'medicines.manufacturer_id');
+        if ($request->category_id) {
+
+            $total = 0;
+            $category = Category::where('id', $request->category_id)->first();
+
+            $total = $total + $category->alert_limit;
+
+
+            $productSales = $productSales->where('medicines.category_id', $request->category_id);
+        }
+
+        if ($request->manufacturer_id) {
+
+            $productSales = $productSales->where('medicines.manufacturer_id', $request->manufacturer_id);
+        }
+
+        $data = $productSales->sum('warehouse_stocks.quantity');
+        if ($data <= $total) {
+            $productSales = $productSales->get();
+        } else {
+            $productSales = array();
+        }
+
+        $title = 'Category Stock Report Alert';
+
+
+
+
+        return view('admin.report.category_wise_stock_alert_warehouse', compact('productSales', 'title', 'category', 'warehouse', 'category1', 'total'));
+    }
+
+
+    public function category_wise_report_alert_outlet_submit(Request $request)
+    {
+        $input = $request->all();
+        $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+        if (Auth::user()->hasRole('Super Admin')) {
+            $outlet = Outlet::limit(10)->pluck('outlet_name', 'id');
+
+            $category1 = Category::pluck('category_name', 'id');
+        } elseif (Auth::user()->hasRole('Admin')) {
+
+            $category1 = Category::pluck('category_name', 'id');
             $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
         } else {
 
             $outlet = Outlet::where('id', $outlet_id)->limit(10)->pluck('outlet_name', 'id');
             $category1 = Category::pluck('category_name', 'id');
-            $warehouse = Warehouse::where('id', $warehouse_id)->pluck('warehouse_name', 'id');
         }
 
         if ($request->outlet_id != null || $request->outlet_id != '') {
             $productSales = DB::table('outlet_stocks')->where('outlet_stocks.quantity', '>', '0')->where('outlet_stocks.outlet_id', $request->outlet_id)
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                ->select('outlet_stocks.*', 'medicines.category_id', 'medicines.medicine_name','medicines.manufacturer_id');
+                ->select('outlet_stocks.*', 'medicines.category_id', 'medicines.medicine_name', 'medicines.manufacturer_id');
             if ($request->category_id) {
                 $total = 0;
                 $category = Category::where('id', $request->category_id)->first();
-                    $total = $total + $category->alert_limit;
+                $total = $total + $category->alert_limit;
 
                 $productSales = $productSales->where('medicines.category_id', $request->category_id);
-
             }
             if ($request->manufacturer_id) {
 
@@ -696,35 +757,6 @@ class ReportController2 extends Controller
 
             if ($data <= $total) {
                 $productSales = $productSales->get();
-
-            } else {
-                $productSales = array();
-            }
-
-            $title = 'Category Stock Report Alert';
-        } else {
-            $productSales = DB::table('warehouse_stocks')->where('warehouse_stocks.quantity', '>', '0')->where('warehouse_stocks.warehouse_id', $request->warehouse_id)
-                ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
-                ->select('warehouse_stocks.*', 'medicines.category_id', 'medicines.medicine_name','medicines.manufacturer_id');
-            if ($request->category_id) {
-
-                $total = 0;
-                $category = Category::where('id', $request->category_id)->first();
-
-                    $total = $total + $category->alert_limit;
-
-
-                $productSales = $productSales->where('medicines.category_id', $request->category_id);
-            }
-
-            if ($request->manufacturer_id) {
-
-                $productSales = $productSales->where('medicines.manufacturer_id', $request->manufacturer_id);
-            }
-
-            $data = $productSales->sum('warehouse_stocks.quantity');
-            if ($data <= $total) {
-                $productSales = $productSales->get();
             } else {
                 $productSales = array();
             }
@@ -734,7 +766,7 @@ class ReportController2 extends Controller
 
 
 
-        return view('admin.report.category_wise_stock_alert', compact('productSales', 'title', 'outlet', 'category', 'warehouse', 'category1', 'total'));
+        return view('admin.report.category_wise_stock_alert_outlet', compact('productSales', 'title', 'outlet', 'category', 'category1', 'total'));
     }
 
 
@@ -794,8 +826,7 @@ class ReportController2 extends Controller
     {
         $input = $request->all();
 
-        $productStocks = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $request->outlet_id)->
-            where('outlet_stocks.quantity', '>', '0')->leftJoin('medicines', 'medicines.id', '=', 'outlet_stocks.medicine_id')->where('medicines.manufacturer_id', $request->manufacturer_id)->select('outlet_stocks.*', 'medicines.manufacturer_id', 'medicines.medicine_name')->get();
+        $productStocks = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $request->outlet_id)->where('outlet_stocks.quantity', '>', '0')->leftJoin('medicines', 'medicines.id', '=', 'outlet_stocks.medicine_id')->where('medicines.manufacturer_id', $request->manufacturer_id)->select('outlet_stocks.*', 'medicines.manufacturer_id', 'medicines.medicine_name')->get();
         // dump($productStocks);
 
         $manu = Manufacturer::where('id', $request->manufacturer_id)->first();
@@ -913,7 +944,6 @@ class ReportController2 extends Controller
         $medicine_id = DB::table('outlet_invoice_details')->whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->select('medicine_id')->distinct()->pluck('medicine_id')->toArray();
         $not_sold = DB::table('outlet_stocks')->where('quantity', '>', 0)->whereNotIn('medicine_id', $medicine_id)->leftjoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->get();
         return view('admin.report.not_sold_medicine', compact('start_date', 'end_date', 'not_sold'));
-
     }
     public function redeemPointReport(Request $request)
     {
@@ -938,7 +968,6 @@ class ReportController2 extends Controller
             ->select('customer_due_payments.*', 'customers.mobile as mobile')->get();
 
         return view('admin.report.due_payment_report', compact('start_date', 'end_date', 'due_payments'));
-
     }
 
     public function sale_report_manufacturer_submit(Request $request)
@@ -955,6 +984,5 @@ class ReportController2 extends Controller
         $manufacturer_sales = OutletInvoiceDetails::whereDate('created_at', '>=', $start_date)->whereDate('created_at', '<=', $end_date)->whereIn('medicine_id', $medicine_id)->get();
 
         return view('admin.report.manufacturer_sale_report', compact('start_date', 'end_date', 'manufacturer_sales', 'manufacturer_name'));
-
     }
 }

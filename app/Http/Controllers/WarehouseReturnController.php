@@ -236,7 +236,7 @@ class WarehouseReturnController extends Controller
 
         );
         try {
-            WarehouseReturnDetails::where('warehouse_return_id', $request->warehouse_return_id)->where('medicine_id', $request->medicine_id)->update($has_received);
+            WarehouseReturnDetails::where('warehouse_return_id', $request->warehouse_return_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->update($has_received);
 
             $outlet = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->first();
 
