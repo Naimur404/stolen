@@ -108,20 +108,32 @@
                                href="{{route('warehouseRequest')}}"><i data-feather="box"></i><span>Stock Request</span></a>
                         </li>
                     @endcan
-                     @can('category-wise-report-alert-outlet')
+                    @can('medicine.management')
+                        <li class="dropdown">
+                            <a class="nav-link menu-title {{ prefixActive('/alert') }} "
+                               href="javascript:void(0)"><i data-feather="anchor"></i><span>Category Wise Alert</span></a>
+                            <ul class="nav-submenu menu-content"
+                                style="display:{{ prefixBlock('/alert') }};">
+                                @can('category-wise-report-alert-outlet')
+                                <li>
 
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('category-wise-report-alert-outlet')}}"
-                           href="{{route('category-wise-report-alert-outlet')}}"><i data-feather="box"></i><span>Category wise Alert Outlet</span></a>
-                    </li>
-                    @endcan
-                    @can('category-wise-report-alert-warehouse')
+                                    <a class="submenu-title {{routeActive('category-wise-report-alert-outlet')}}"
+                                       href="{{route('category-wise-report-alert-outlet')}}"><i
+                                            data-feather="align-justify"></i><span>Outlet Alert</span></a>
+                                </li>
+                                @endcan
+                                @can('category-wise-report-alert-warehouse')
+                                <li class="">
+                                    <a class="submenu-title {{routeActive('category-wise-report-alert-warehouse')}}"
+                                    href="{{route('category-wise-report-alert-warehouse')}}"><i
+                                            data-feather="database"></i><span>Warehouse Alert</span></a>
+                                </li>
+                                @endcan
 
-                    <li class="dropdown">
-                        <a class="nav-link menu-title {{routeActive('category-wise-report-alert-warehouse')}}"
-                           href="{{route('category-wise-report-alert-warehouse')}}"><i data-feather="box"></i><span>Category wise Alert Warehouse</span></a>
-                    </li>
-                    @endcan
+                            </ul>
+                        </li>
+                        @endcan
+
 
                     @can('medicine.management')
                         <li class="dropdown">

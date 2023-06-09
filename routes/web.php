@@ -229,13 +229,16 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/pay-due/{id}', [OutletInvoiceController::class, 'payDue'])->name('payDue');
     Route::post('/pay-due', [OutletInvoiceController::class, 'paymentDue'])->name('paymentDue');
 
+
+});
+
+Route::group(['middleware' => ['auth'], 'prefix' => 'alert'], function () {
+
     Route::get('/category-wise-report-alert-outlet', [ReportController2::class, 'category_wise_report_alert_outlet'])->name('category-wise-report-alert-outlet');
     Route::get('/category-wise-report-alert-warehouse', [ReportController2::class, 'category_wise_report_alert_warehouse'])->name('category-wise-report-alert-warehouse');
     Route::post('/category-wise-report-alert-outlet-submit', [ReportController2::class, 'category_wise_report_alert_outlet_submit'])->name('category-wise-report-alert-outlet-submit');
     Route::post('/category-wise-report-alert-warehouse-submit', [ReportController2::class, 'category_wise_report_alert_warehouse_submit'])->name('category-wise-report-alert-warehouse-submit');
-
 });
-
 Route::group(['middleware' => ['auth'], 'prefix' => 'medicine-setting'], function () {
 
     Route::resource('category', CategoryController::class);
