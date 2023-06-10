@@ -36,7 +36,7 @@ $total_pay = 0;
                 </div>
                 <div class="card-body">
                       @can('category-wise-report-alert-outlet')
-                    {!! Form::open(['url' => 'category-wise-report-alert-outlet-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
+                    {!! Form::open(['route' => ['category-wise-report-alert-outlet-submit'], 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
                      <div class="row">
                          <div class="col-md-3">
 

@@ -37,7 +37,7 @@ $total_pay = 0;
                 <div class="card-body">
 
                      @can('category-wise-report-alert-warehouse')
-                     {!! Form::open(['url' => 'category-wise-report-alert-warehouse-submit', 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
+                     {!! Form::open(['route' => ['category-wise-report-alert-warehouse-submit'], 'method' => 'POST', 'class' => 'form-horizontal', 'files' => true]) !!}
                      <div class="row mt-3">
                          <div class="col-md-3">
                             <label class="input-group"  style="margin-right: 10px">Warehouse Name *</label>
