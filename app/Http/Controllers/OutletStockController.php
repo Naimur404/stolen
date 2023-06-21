@@ -68,20 +68,21 @@ class OutletStockController extends Controller
     public function store(Request $request)
     {
 
-        $manu_price = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->first();
+        $manu_price = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->first();
         $data = array(
             'quantity' => (int) $request->quantity,
             'price' => $request->price,
             'outlet_id' => $request->outlet_id,
             'medicine_id' => $request->medicine_id,
-            'expiry_date' => $request->expiry_date,
+            'size' => $request->size,
+            'create_date' => $request->create_date,
             'barcode_text' => $request->barcode,
             'warehouse_stock_id' => $request->stock_id ?? null,
             'purchase_price' => $manu_price->purchase_price,
 
         );
 
-        $check = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->first();
+        $check = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->first();
 
         if ($check != null) {
             $stock2 = array(
@@ -95,8 +96,8 @@ class OutletStockController extends Controller
                 'has_received' => '1',
 
             );
-            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->update($has_received2);
-            OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->update($stock2);
+            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->whereDate('size', '=', $request->size)->update($has_received2);
+            OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($stock2);
 
         } else {
             $has_received2 = array(
@@ -104,7 +105,7 @@ class OutletStockController extends Controller
                 'has_received' => '1',
 
             );
-            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->update($has_received2);
+            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($has_received2);
             $check = OutletStock::create($data);
 
         }
@@ -122,7 +123,8 @@ class OutletStockController extends Controller
                 'outlet_id' => $request->outlet_id,
                 'medicine_distribute_id' => $request->medicine_distribute_id,
                 'medicine_id' => $request->medicine_id,
-                'expiry_date' => $request->expiry_date,
+                'size' => $request->size,
+                'create_date' => $request->create_date,
                 'quantity' => $request->quantity,
                 'checked_by' => Auth::user()->id,
                 'remarks' => 'added',
@@ -131,7 +133,7 @@ class OutletStockController extends Controller
             OutletCheckIn::create($data);
 //            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->update([''])
 
-            return redirect()->back()->with('success', ' Successfully Recieved This Medicine.');
+            return redirect()->back()->with('success', ' Successfully Recieved This Product.');
         } catch (Exception $e) {
             return redirect()->route('distribute-medicine.index')->with('success', $e->getMessage());
         }
@@ -173,12 +175,13 @@ class OutletStockController extends Controller
             'purchase_price' => $request->purchase_price,
             'price' => $request->price,
             'quantity' => $request->quantity,
-            'expiry_date' => Carbon::parse($request->expiry_date)->toDateString(),
+            'size' => $request->size,
+            'create_date' => $request->create_date,
 
         );
 
         OutletStock::where('id', $request->id)->where('medicine_id', $request->medicine_id)->update($data);
-        return redirect()->back()->with('success', ' Successfully Medicine stock Update.');
+        return redirect()->back()->with('success', ' Successfully Product stock Update.');
 
     }
 
@@ -255,6 +258,7 @@ class OutletStockController extends Controller
 
         $sl = 1;
         $total = 0;
+       
         foreach ($medicine_stock as $stock) {
             if ($stock->quantity < 1){
 
@@ -269,7 +273,7 @@ class OutletStockController extends Controller
                 $category = Category::get_category_name($medicine->category_id);
                 $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);
                 $price = '৳&nbsp;' . $stock->price;
-                $expiry_date = $stock->expiry_date;
+                $size = $stock->size;
 
                 $stocks = $stock->quantity;
                 $ul = route('outlet-stock.edit', $stock->id);
@@ -285,7 +289,7 @@ class OutletStockController extends Controller
                     "price" => $price,
                     "manufacturer_price" => $manufacturer_price,
                     "quantity" => $stocks,
-                    "expiry_date" => $expiry_date,
+                    "size" => $size,
                     "action" => $url,
 
                 );
@@ -354,13 +358,13 @@ class OutletStockController extends Controller
 
             $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $id)->where('outlet_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                ->select('outlet_stocks.medicine_id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
+                ->select('outlet_stocks.medicine_id as id', 'medicines.category_id as category_id', 'outlet_stocks.size as size', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
 
         } else {
 
             $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $id)->where('outlet_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                ->select('outlet_stocks.medicine_id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
+                ->select('outlet_stocks.medicine_id as id', 'medicines.category_id as category_id', 'outlet_stocks.size as size', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
 
         }
 
@@ -368,8 +372,8 @@ class OutletStockController extends Controller
         foreach ($medicines as $medicine) {
             $category = Category::where('id', $medicine->category_id)->first();
             $response[] = array(
-                "id" => $medicine->medicine_id . ',' . $medicine->expiry_date,
-                "text" => $medicine->medicine_name . ' - ' . $category->category_name . ' - ' . ' EX ' . $medicine->expiry_date,
+                "id" => $medicine->medicine_id . ',' . $medicine->size,
+                "text" => $medicine->medicine_name . ' - ' . $category->category_name . ' - ' . ' EX ' . $medicine->size,
             );
         }
         return response()->json($response);
@@ -379,7 +383,7 @@ class OutletStockController extends Controller
     {
         $data = explode(",", $id);
 
-        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $id2)->where('outlet_stocks.medicine_id', '=', $data[0])->whereDate('outlet_stocks.expiry_date', '=', $data[1])
+        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $id2)->where('outlet_stocks.medicine_id', '=', $data[0])->whereDate('outlet_stocks.size', '=', $data[1])
             ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
             ->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->first();
 

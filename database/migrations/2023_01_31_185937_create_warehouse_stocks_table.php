@@ -19,7 +19,8 @@ return new class extends Migration
             $table->foreign('warehouse_id')->references('id')->on('warehouses');
             $table->bigInteger('medicine_id')->unsigned();
             $table->foreign('medicine_id')->references('id')->on('medicines');
-            $table->date('expiry_date')->nullable();
+            $table->string('size')->nullable();
+            $table->timestamp('create_date')->nullable();
             $table->integer('quantity')->default(0);
             $table->float('price', 8,2)->default(0.0);
             $table->timestamps();

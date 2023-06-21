@@ -91,12 +91,13 @@ class WarehouseReturnController extends Controller
 
                     'quantity' => $input['quantity'][$i],
 
-                    'expiry_date' => $input['expiry_date'][$i],
+                    'size' => $input['size'][$i],
+                    'create_date' => Carbon::now(),
 
                     // 'rate' => $input['total_price'][$i] / $input['quantity'][$i],
 
                 );
-                // $warehousetock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->whereDate('expiry_date','=',$input['expiry_date'][$i])->implode('quantity');
+                // $warehousetock = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id',$input['product_id'][$i])->whereDate('size','=',$input['size'][$i])->implode('quantity');
                 // $new_stock = array(
                 //       'quantity' => $warehousetock - $input['quantity'][$i] ,
 
@@ -176,7 +177,8 @@ class WarehouseReturnController extends Controller
 
                     'quantity' => $input['quantity'][$i],
 
-                    'expiry_date' => $input['expiry_date'][$i],
+                    'size' => $input['size'][$i],
+                    'create_date' => Carbon::now(),
 
                 );
                 $check = WarehouseReturnDetails::where('warehouse_return_id', $id)->where('medicine_id', $input['product_id'][$i])->first();
@@ -236,25 +238,25 @@ class WarehouseReturnController extends Controller
 
         );
         try {
-            WarehouseReturnDetails::where('warehouse_return_id', $request->warehouse_return_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->update($has_received);
+            WarehouseReturnDetails::where('warehouse_return_id', $request->warehouse_return_id)->where('medicine_id', $request->medicine_id)->whereDate('size', '=', $request->size)->update($has_received);
 
-            $outlet = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->first();
+            $outlet = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->whereDate('size', '=', $request->size)->first();
 
-            $warehousetock = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->first();
+            $warehousetock = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->whereDate('size', '=', $request->size)->first();
 
             $outletnewstock = array(
                 'quantity' => (int) $outlet->quantity - (int) $request->quantity,
 
             );
 
-            OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->update($outletnewstock);
+            OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->whereDate('size', '=', $request->size)->update($outletnewstock);
 
             $warehousenewstock = array(
                 'quantity' => (int) $warehousetock->quantity + (int) $request->quantity,
 
             );
 
-            WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->update($warehousenewstock);
+            WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->whereDate('size', '=', $request->size)->update($warehousenewstock);
 
             return redirect()->back()->with('success', ' Successfully Return This Medicine.');
 

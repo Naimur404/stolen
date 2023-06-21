@@ -76,7 +76,7 @@
                     <th>Quantity</th>
                     <th>Purchase Price</th>
                     <th>Sell Price</th>
-                    <th>Expiry Date</th>
+                    <th>Size</th>
                     <th>Action</th>
                 </tr>
 
@@ -87,6 +87,7 @@
                           <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
                           <input type="hidden" name="purchase_id" value="{{ $productPurchase->id }}">
                           <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
+                          <input type="hidden" name="create_date" value="{{$data->create_date }}">
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name }}</td>
                         <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
@@ -95,11 +96,11 @@
                         </td>
                         <td>{{ Form::number('price', $data->box_mrp, ['class' => 'form-control', 'readonly']) }}
                             </td>
-                        <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
+                        <td>{{ Form::text('size', $data->size, ['class' => 'form-control', 'readonly']) }}
                            </td>
                         <td>
                             @php
-                                $data = App\Models\WarehouseCheckIn::where('purchase_id',$productPurchase->id)->where('medicine_id',$data->medicine_id)->whereDate('expiry_date','=',$data->expiry_date)->first();
+                                $data = App\Models\WarehouseCheckIn::where('purchase_id',$productPurchase->id)->where('medicine_id',$data->medicine_id)->where('size','=',$data->size)->where('create_date','=',$data->create_date)->first();
                             @endphp
                             @if (is_null($data))
                             <button type="submit" class="btn btn-success save_purchase_btn" tabindex="19" id="save_purchasess">

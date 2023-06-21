@@ -94,7 +94,8 @@ class MedicineDistributeController extends Controller
                     'quantity' => $input['quantity'][$i],
                     'warehouse_stock_id' => $input['stock_id'][$i],
                     'barcode_text' => $input['barcode'][$i],
-                    'expiry_date' => $input['expiry_date'][$i],
+                    'size' => $input['size'][$i],
+                    'create_date' => $input['create_date'][$i],
                     'rate' => ($input['box_mrp'][$i] * $input['quantity'][$i]) / $input['quantity'][$i],
                 );
                 MedicineDistributeDetail::create($purchase_details);
@@ -168,11 +169,11 @@ class MedicineDistributeController extends Controller
                     'medicine_distribute_id' => $id,
                     'medicine_id' => $input['product_id'][$i],
                     'medicine_name' => $input['product_name'][$i],
-
                     'quantity' => $input['quantity'][$i],
                     'warehouse_stock_id' => $input['stock_id'][$i],
                     'barcode_text' => $input['barcode'][$i],
-                    'expiry_date' => $input['expiry_date'][$i],
+                    'size' => $input['size'][$i],
+                    'create_date' => $input['create_date'][$i],
                     'rate' => ($input['box_mrp'][$i] * $input['quantity'][$i]) / $input['quantity'][$i],
 
                 );

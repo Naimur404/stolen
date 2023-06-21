@@ -22,9 +22,10 @@ return new class extends Migration
             $table->bigInteger('medicine_id')->unsigned();
             $table->foreign('medicine_id')->references('id')->on('medicines');
             $table->string('medicine_name')->nullable();
-            $table->string('product_type')->nullable()->default('medicine');
+            $table->string('product_type')->nullable()->default('t-shirt');
             $table->string('rack_no')->nullable();
-            $table->date('expiry_date')->nullable();
+            $table->string('size')->nullable();
+            $table->timestamp('create_date')->nullable();
             $table->integer('quantity')->default(1);
             $table->float('manufacturer_price', 10,2)->default(0.00);
             $table->float('box_mrp', 10,2)->default(0.00);

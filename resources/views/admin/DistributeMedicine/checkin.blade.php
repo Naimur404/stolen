@@ -72,11 +72,11 @@
                 <table class="table table-bordered mt-2">
                     <tr>
                         <th>SL</th>
-                        <th>Name Of Medicine</th>
+                        <th>Name Of Product</th>
                         <th>Quantity</th>
                         <th>Barcode</th>
                         <th>Price</th>
-                        <th>Expiry Date</th>
+                        <th>Size</th>
                         <th>Action</th>
                     </tr>
 
@@ -94,22 +94,22 @@
                                 <td>{{ $data->medicine_name }}</td>
                                 <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
                                     <input type="hidden" name="stock_id"
-                                           value="{{ $productPurchase->warehouse_stock_id }}">
+                                    value="{{ $productPurchase->warehouse_stock_id }}">
                                 </td>
                                 <td>{{ Form::number('barcode', $data->barcode_text, ['class' => 'form-control', 'readonly']) }}
                                 </td>
                                 <td>{{ Form::number('price', $data->rate, ['class' => 'form-control', 'readonly']) }}
                                 </td>
 
-                                <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
+                                <td>{{ Form::text('size', $data->size, ['class' => 'form-control', 'readonly']) }}
                                     <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
-
+                                    <input type="hidden" name="create_date" value="{{$data->create_date }}">
                                 </td>
                                 <td>
 
                                     @if ($data->has_sent == 0)
                                         <button type="submit" class="btn btn-success save_purchase_btn" tabindex="19" id="save_purchase">
-                                            Medicine Distribute
+                                            Product Distribute
                                         </button>
                                     @else
                                         <button type="submit" class="btn btn-danger" tabindex="19" id="save_purchase"
@@ -129,7 +129,7 @@
                                 <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
                                 <input type="hidden" name="medicine_distribute_id" value="{{ $productPurchase->id }}">
                                 <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
-
+                                <input type="hidden" name="create_date" value="{{$data->create_date }}">
                                 <td>{{ $loop->index + 1 }}</td>
                                 <td>{{ $data->medicine_name }}</td>
                                 <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
@@ -139,7 +139,7 @@
                                 </td>
                                 <td>{{ Form::number('price', $data->rate, ['class' => 'form-control', 'readonly']) }}
                                 </td>
-                                <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
+                                <td>{{ Form::text('size', $data->size, ['class' => 'form-control', 'readonly']) }}
 
                                 </td>
                                 <td>

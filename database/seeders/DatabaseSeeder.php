@@ -23,8 +23,8 @@ class DatabaseSeeder extends Seeder
             UnitSeeder::class,
             MedicineCategorySeeder::class,
             PaymentMethodSeeder::class,
-            ManufactureSeeder::class,
-            MedicineTypeSeeder::class,
+            // ManufactureSeeder::class,
+            // MedicineTypeSeeder::class,
         ]);
     }
 }

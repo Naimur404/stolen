@@ -169,7 +169,7 @@
                                         <nobr>Rack No</nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Expiry Date<i class="text-danger">*</i></nobr>
+                                        <nobr>Size<i class="text-danger">*</i></nobr>
                                     </th>
                                     {{--
                                     <th class="text-center">
@@ -188,7 +188,7 @@
                                         <nobr>Manufacturer Price<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Box MRP<i class="text-danger">*</i></nobr>
+                                        <nobr>MRP<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Product Type <i class="text-danger">*</i></nobr>
@@ -474,7 +474,7 @@
                                     $('#product_name').val(data.medicine_name);
                                     $('#box_price').val(data.price);
                                     $('#manufacturer_price').val(data.manufacturer_price);
-                                    $('#product_type').val('medicine');
+                                    $('#product_type').val('T-Shirt');
                                 } else {
                                     alert('Data not found!');
 

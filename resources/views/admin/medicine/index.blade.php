@@ -37,7 +37,6 @@
                                 <tr>
                                     <th>SL</th>
                                     <th>Medicine Name</th>
-                                    <th>Generic Name</th>
                                     <th>Manufacture Name</th>
                                     <th>Category</th>
                                     <th>Price</th>
@@ -76,7 +75,6 @@
                     columns: [
                         {data: 'id', name: 'si'},
                         {data: 'medicine_name', name: 'medicine name'},
-                        {data: 'generic_name', name: 'generic name'},
                         {data: 'manufacturer_name', name: 'manufacture name'},
                         {data: 'category', name: 'category'},
                         {data: 'price', name: 'price'},

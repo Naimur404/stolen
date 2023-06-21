@@ -80,7 +80,7 @@ class OutletInvoiceController extends Controller
             'outlet_id' => 'required',
             'product_id' => 'required',
             'product_name' => 'required',
-            'expiry_date' => 'required',
+            'size' => 'required',
             'quantity' => 'required',
             'box_mrp' => 'required',
             'grand_total' => 'required',
@@ -204,7 +204,7 @@ class OutletInvoiceController extends Controller
                     'stock_id' => $input['stock_id'][$i],
                     'medicine_id' => $input['product_id'][$i],
                     'medicine_name' => $input['product_name'][$i],
-                    'expiry_date' => $input['expiry_date'][$i],
+                    'size' => $input['size'][$i],
 
                     'available_qty' => $input['stockquantity'][$i],
 
@@ -217,7 +217,7 @@ class OutletInvoiceController extends Controller
                 OutletInvoiceDetails::create($invoicedetails);
 
 
-                $findquantity = OutletStock::where('outlet_id', $input['outlet_id'])->where('medicine_id', $input['product_id'][$i])->whereDate('expiry_date', '=', $input['expiry_date'][$i])->first();
+                $findquantity = OutletStock::where('outlet_id', $input['outlet_id'])->where('medicine_id', $input['product_id'][$i])->where('size', '=', $input['size'][$i])->first();
 
 
                 $stock2 = array(
@@ -225,7 +225,7 @@ class OutletInvoiceController extends Controller
                     'quantity' => (int)$findquantity->quantity - (int)$input['quantity'][$i],
                 );
 
-                OutletStock::where('outlet_id', $input['outlet_id'])->where('medicine_id', $input['product_id'][$i])->whereDate('expiry_date', '=', $input['expiry_date'][$i])->update($stock2);
+                OutletStock::where('outlet_id', $input['outlet_id'])->where('medicine_id', $input['product_id'][$i])->where('size', '=', $input['size'][$i])->update($stock2);
             }
 
             return response()->json([
@@ -291,12 +291,12 @@ class OutletInvoiceController extends Controller
 
             $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                ->select('outlet_stocks.id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
+                ->select('outlet_stocks.id as id', 'medicines.category_id as category_id', 'outlet_stocks.size as size', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
         } else {
 
             $medicines = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $outlet_id)->where('outlet_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                ->select('outlet_stocks.id as id', 'medicines.category_id as category_id', 'outlet_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
+                ->select('outlet_stocks.id as id', 'medicines.category_id as category_id', 'outlet_stocks.size as size', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
         }
 
         $response = array();
@@ -304,7 +304,7 @@ class OutletInvoiceController extends Controller
             $category = Category::where('id', $medicine->category_id)->first();
             $response[] = array(
                 "id" => $medicine->id,
-                "text" => $medicine->medicine_name . ' - ' . $category->category_name . ' - ' . ' EX ' . $medicine->expiry_date,
+                "text" => $medicine->medicine_name . ' - ' . $category->category_name . ' - ' . ' EX ' . $medicine->size,
             );
         }
         return response()->json($response);

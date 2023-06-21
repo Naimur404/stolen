@@ -14,7 +14,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-8">
-			<h3>Warehouse Medicine Stock</h3>
+			<h3>Warehouse Product Stock</h3>
         </div>
 
         </div>
@@ -50,10 +50,10 @@
 	                            <thead>
 	                                <tr>
                                         <th>SI</th>
-	                                    <th>Medicine Name</th>
+	                                    <th>Product Name</th>
                                         <th>Category</th>
                                         <th>Manufacturer Name</th>
-                                        <th>Expiry Date</th>
+                                        <th>Size</th>
                                         <th>Manufacture Price</th>
                                         <th>Sale Price</th>
                                         <th>Stock</th>
@@ -94,7 +94,7 @@
             {data: 'medicine_name', name: 'medicine Name'},
             {data: 'category', name: 'category'},
             {data: 'manufacturer_name', name: 'Manufacturer Name'},
-            {data: 'expiry_date', name: 'Expiry Date'},
+            {data: 'size', name: 'size'},
 
             {data: 'manufacturer_price', name: 'Manufacturer price'},
             {data: 'price', name: 'sale price'},

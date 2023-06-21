@@ -23,13 +23,9 @@ return new class extends Migration
             $table->foreign('unit_id')->references('id')->on('units');
             $table->bigInteger('type_id')->nullable();
             $table->string('medicine_name')->nullable();
-            $table->string('generic_name')->nullable();
-            $table->string('strength')->nullable();
-            $table->string('box_size')->nullable();
             $table->float('price',8,2)->default(0.00);
             $table->string('tax')->nullable();
             $table->float('manufacturer_price',10,2)->default(0.00);
-            $table->text('medicine_details')->nullable();
             $table->string('image')->nullable();
             $table->softDeletes();
             $table->timestamps();

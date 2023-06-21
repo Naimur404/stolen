@@ -56,7 +56,6 @@ class MedicineController extends Controller
             'unit_id' => 'required',
             // 'type_id',
             'medicine_name' => 'required|string',
-            'generic_name' => 'required|string',
             'price' => 'required',
             'manufacturer_id' => 'required',
             'manufacturer_price' => 'required',
@@ -125,7 +124,6 @@ class MedicineController extends Controller
             'unit_id' => 'required',
             // 'type_id',
             'medicine_name' => 'required|string',
-            'generic_name' => 'required|string',
             'price' => 'required',
             'manufacturer_id' => 'required',
             'manufacturer_price' => 'required',
@@ -269,7 +267,6 @@ class MedicineController extends Controller
             $data_arr[] = array(
                 "id" => $s_no,
                 "medicine_name" => $medicine_name,
-                "generic_name" => $generic_name,
                 "category" => $category,
                 "manufacturer_name" => $manufacturer_name,
                 "price" => $price,

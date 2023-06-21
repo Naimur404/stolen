@@ -138,7 +138,7 @@
                                         <nobr>Barcode<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Expiry Date<i class="text-danger">*</i></nobr>
+                                        <nobr>Size<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Quantity <i class="text-danger">*</i></nobr>
@@ -355,10 +355,10 @@
                                         $('.stock').first().val(data.quantity);
                                         $('#qty').first().val('1');
                                         $('#product_name').val(data.medicine_name);
-
                                         $('#box_price').first().val(data.price);
                                         $('#manu_price').first().val(data.purchase_price);
-                                        $('#expiry_date').val(data.expiry_date);
+                                        $('.size').val(data.size);
+                                        $('.create_date').val(data.create_date);
 
                                     } else {
                                         alert('Data not found!');

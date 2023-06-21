@@ -66,13 +66,13 @@ class WarehouseStockController extends Controller
 
         $input = $request->all();
 
-        $warehousecheck = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id', $input['medicine_id'])->whereDate('expiry_date', '=', $input['expiry_date'])->first();
+        $warehousecheck = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id', $input['medicine_id'])->whereDate('size', '=', $input['size'])->first();
 
         if ($warehousecheck != null) {
             $quantity = array(
                 'quantity' => (int) $input['quantity'] + (int) $warehousecheck->quantity,
             );
-            WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id', $input['medicine_id'])->whereDate('expiry_date', '=', $input['expiry_date'])->update($quantity);
+            WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id', $input['medicine_id'])->whereDate('size', '=', $input['size'])->update($quantity);
         } else {
 
             $warehouseStock = WarehouseStock::create($input);
@@ -87,8 +87,9 @@ class WarehouseStockController extends Controller
                 'warehouse_id' => $request->warehouse_id,
                 'purchase_id' => $request->purchase_id,
                 'medicine_id' => $request->medicine_id,
-                'expiry_date' => $request->expiry_date,
+                'size' => $request->size,
                 'quantity' => $request->quantity,
+                'create_date' => $request->create_date,
                 'checked_by' => Auth::user()->id,
 
             );
@@ -133,7 +134,7 @@ class WarehouseStockController extends Controller
     {
 
         try {
-            $warehousetock = WarehouseStock::where('warehouse_id', $id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->first();
+            $warehousetock = WarehouseStock::where('warehouse_id', $id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->first();
 
             if ($warehousetock != null) {
                 $new_stock = array(
@@ -145,9 +146,9 @@ class WarehouseStockController extends Controller
                     'has_sent' => '1',
 
                 );
-                MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->update($has_received2);
+                MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($has_received2);
 
-                WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->whereDate('expiry_date', '=', $request->expiry_date)->update($new_stock);
+                WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($new_stock);
             }
             $check = MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('has_sent', '0')->get();
             if (count($check) < 1) {
@@ -157,7 +158,7 @@ class WarehouseStockController extends Controller
                 MedicineDistribute::where('id', $request->medicine_distribute_id)->update($has_received);
             }
 
-            return redirect()->back()->with('success', ' Successfully Distriute This Medicine.');
+            return redirect()->back()->with('success', ' Successfully Distribute This Product.');
         } catch (Exception $e) {
             return redirect()->route('distribute-medicine.index')->with('success', $e->getMessage());
         }
@@ -227,7 +228,7 @@ class WarehouseStockController extends Controller
             $category = Category::get_category_name($medicine->category_id);
             $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);
             $price = '৳&nbsp' . $stock->price;
-            $expiry_date = $stock->expiry_date;
+            $size = $stock->size;
 
             $stocks = $stock->quantity;
             $ul = route('warehouse-stock.edit', $stock->id);
@@ -244,7 +245,7 @@ class WarehouseStockController extends Controller
                 "price" => $price,
                 "manufacturer_price" => $manufacturer_price,
                 "quantity" => $stocks,
-                "expiry_date" => $expiry_date,
+                "size" => $size,
                 "action" => $url,
             );
         }
@@ -299,20 +300,20 @@ class WarehouseStockController extends Controller
 
             $medicines = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id)->where('warehouse_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
-                ->select('warehouse_stocks.medicine_id as id', 'medicines.category_id as category_id', 'warehouse_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
+                ->select('warehouse_stocks.medicine_id as id', 'medicines.category_id as category_id', 'warehouse_stocks.size as size', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->limit(20)->get();
         } else {
 
             $medicines = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id)->where('warehouse_stocks.quantity', '>', '0')
                 ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
-                ->select('warehouse_stocks.medicine_id as id', 'medicines.category_id as category_id', 'warehouse_stocks.expiry_date as expiry_date', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
+                ->select('warehouse_stocks.medicine_id as id', 'medicines.category_id as category_id', 'warehouse_stocks.size as size', 'medicines.medicine_name as medicine_name', 'medicines.id as medicine_id')->where('medicine_name', 'like', '%' . $search . '%')->get();
         }
 
         $response = array();
         foreach ($medicines as $medicine) {
             $category = Category::where('id', $medicine->category_id)->first();
             $response[] = array(
-                "id" => $medicine->medicine_id . ',' . $medicine->expiry_date,
-                "text" => $medicine->medicine_name . ' - ' . $category->category_name . ' - ' . ' EX ' . $medicine->expiry_date,
+                "id" => $medicine->medicine_id . ',' . $medicine->size,
+                "text" => $medicine->medicine_name . ' - ' . $category->category_name . ' - ' . ' EX ' . $medicine->size,
             );
         }
 
@@ -323,7 +324,7 @@ class WarehouseStockController extends Controller
     {
         $data = explode(",", $id);
 
-        $product_details = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id2)->where('warehouse_stocks.medicine_id', '=', $data[0])->whereDate('warehouse_stocks.expiry_date', '=', $data[1])
+        $product_details = DB::table('warehouse_stocks')->where('warehouse_stocks.warehouse_id', $id2)->where('warehouse_stocks.medicine_id', '=', $data[0])->where('warehouse_stocks.size', '=', $data[1])
             ->leftJoin('medicines', 'warehouse_stocks.medicine_id', '=', 'medicines.id')
             ->select('warehouse_stocks.*', 'medicines.medicine_name as medicine_name')->first();
 
@@ -337,7 +338,7 @@ class WarehouseStockController extends Controller
         $data = array(
             'purchase_price' => $request->purchase_price,
             'price' => $request->price,
-            'expiry_date' => Carbon::parse($request->expiry_date)->toDateString(),
+            'size' => Carbon::parse($request->size)->toDateString(),
 
         );
 

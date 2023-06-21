@@ -16,13 +16,6 @@
 
                         </div>
                     </div>
-                    <div class="col-sm-12 col-md-12">
-                        <div class="mb-3">
-                            {!! Form::label('age', 'Strength', array('class' => 'form-label')) !!}
-                            {!! Form::text('strength',null,['class'=>'form-control', 'id' => 'age','placeholder'=>'Strength' ]) !!}
-
-                        </div>
-                    </div>
 
                     <div class="col-sm-12 col-md-12">
                         <div class="mb-3">
@@ -133,30 +126,8 @@
                         {!! Form::number('tax',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'0.00%','step' => '0.1' ]) !!}
                     </div>
                 </div>
-                <div class="col-sm-12 col-md-12">
-                    <div class="mb-3">
-                        {!! Form::label('generic_name', 'Generic Name *', array('class' => 'form-label')) !!}
-                        {!! Form::text('generic_name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Generic Name','required' ]) !!}
-                        @error('generic_name')
-                        <div class="invalid-feedback2"> {{ $message }}</div>
 
-                        @enderror
-                    </div>
-                </div>
-                <div class="col-sm-12 col-md-12">
-                    <div class="mb-3">
-                        {!! Form::label('box_size', 'Box Size', array('class' => 'form-label')) !!}
-                        {!! Form::number('box_size',null,['class'=>'form-control', 'id' => 'age','placeholder'=>'Enter Box Size' ]) !!}
-
-                    </div>
-                </div>
-
-                <div class="col-sm-12 col-md-12">
-                    <div class="mb-3">
-                        {!! Form::label('medicine_details', 'Medicine Details', array('class' => 'form-label')) !!}
-                        {!! Form::text('medicine_details',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Medicine Details','step' => '0.1' ]) !!}
-                    </div>
-                </div>
+    
                 <div class="col-sm-12 col-md-12">
                     <div class="mb-3">
                         @if(Request::route()->named('medicine.edit'))

@@ -77,7 +77,7 @@
 
 
                         <div class="col-md-3">
-                            {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
+                            {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id']) }}
 
 
                         </div>
@@ -129,7 +129,7 @@
                                         </th>
 
                                         <th class="text-center">
-                                            <nobr>Expiry<i class="text-danger">*</i></nobr>
+                                            <nobr>Size<i class="text-danger">*</i></nobr>
                                         </th>
 
                                         <th class="text-center">
@@ -810,7 +810,7 @@
                                 if (data != null) {
                                     $('.stock_id').first().val(data.id);
                                     $('.pr_id').first().val(data.medicine_id);
-                                    $('#expiry_date').first().val(data.expiry_date);
+                                    $('.size').first().val(data.size);
                                     $('#product_name').first().val(data.medicine_name);
                                     $('.stock-qty').first().val(data.quantity);
                                     $('.qty').first().val('1');
