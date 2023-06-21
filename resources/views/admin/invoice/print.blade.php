@@ -235,13 +235,14 @@
     </table>
     <br>
     <div class="row justify-content-center mt-3">
-        <img style="margin-left: 87px"
+        <img style="margin-left: 135px"
              src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$outletInvoice->id", 'C39', 2) !!}" alt="barcode"/>
     </div>
 
     <div class="footer">
-        <h4>A Concern of BlueMoon Group</h4>
+        <h4>A Concern of Stolen Group</h4>
         <h4>Thank You ❤</h4>
+        <h6>Developed By: Naimur404cse@gmail.com</h6>
 {{--        <h6>Software by Pigeon Soft</h6>--}}
     </div>
 

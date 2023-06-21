@@ -62,7 +62,7 @@
             <table class="table table-bordered mt-2">
                 <tr>
                     <th>Name Of Investigation</th>
-                    <th>Expiry Date</th>
+                    <th>Size</th>
                     <th>Quantity</th>
                     <th>Purchase Price</th>
                     <th>MRP</th>
@@ -72,7 +72,7 @@
                         <td>{{ App\Models\Medicine::get_medicine_name($warehouseStock->medicine_id) }}
                                <input type="hidden" name="medicine_id" id="" value="{{ $warehouseStock->medicine_id }}">
                         </td>
-                        <td><input class="datepicker-here form-control digits" type="text" data-language="en" data-bs-original-title="" title="" name="expiry_date" value="{{  \Carbon\Carbon::parse($warehouseStock->expiry_date)->format('d-m-Y') }}" tabindex="2" required>
+                        <td><input class="" type="text" name="size" value="{{  $warehouseStockgit->size) }}" tabindex="2" required>
                         </td>
                         <td> <input type="number" name="quantity" id="qty" value="{{ $warehouseStock->quantity }}" class="form-control" required readonly></td>
                         <td><input type="number" name="purchase_price" id="price" value="{{ $warehouseStock->purchase_price }}" step="any" class="form-control" required>

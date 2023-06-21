@@ -7,8 +7,8 @@
                 <div class="row">
                     <div class="col-sm-12 col-md-12">
                         <div class="mb-3">
-                            {!! Form::label('name', 'Medicine Name *', array('class' => 'form-label')) !!}
-                            {!! Form::text('medicine_name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Medicine Name','required' ]) !!}
+                            {!! Form::label('name', 'Product Name *', array('class' => 'form-label')) !!}
+                            {!! Form::text('medicine_name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Product Name','required' ]) !!}
                             @error('medicine_name')
                             <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -127,7 +127,7 @@
                     </div>
                 </div>
 
-    
+
                 <div class="col-sm-12 col-md-12">
                     <div class="mb-3">
                         @if(Request::route()->named('medicine.edit'))
@@ -141,7 +141,7 @@
                                     $name = $datas->type_name;
                                 @endphp
                             @endif
-                            {{ Form::label('type_id', 'Medicine Type *') }}
+                            {{ Form::label('type_id', 'Product Type *') }}
                             {{ Form::select('type_id', [$data=>$name], null,['class' => 'form-control', 'placeholder' => '--please select--', 'id' => 'sel_emp3']) }}
                             <div class="invalid-feedback"> Please Enter Medicine Type</div>
                             @error('type_id')
@@ -150,7 +150,7 @@
                             @enderror
 
                         @else
-                            {{ Form::label('type_id', 'Medicine Type *') }}
+                            {{ Form::label('type_id', 'Product Type *') }}
                             {{ Form::select('type_id', [ ], null,['class' => 'form-control', 'placeholder' => '--please select--', 'id' => 'sel_emp3','required']) }}
                             <div class="invalid-feedback"> Please Enter Medicine Type</div>
                             @error('type_id')

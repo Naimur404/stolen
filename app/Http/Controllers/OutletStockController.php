@@ -96,7 +96,7 @@ class OutletStockController extends Controller
                 'has_received' => '1',
 
             );
-            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->whereDate('size', '=', $request->size)->update($has_received2);
+            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($has_received2);
             OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($stock2);
 
         } else {
@@ -258,7 +258,7 @@ class OutletStockController extends Controller
 
         $sl = 1;
         $total = 0;
-       
+
         foreach ($medicine_stock as $stock) {
             if ($stock->quantity < 1){
 
@@ -383,7 +383,7 @@ class OutletStockController extends Controller
     {
         $data = explode(",", $id);
 
-        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $id2)->where('outlet_stocks.medicine_id', '=', $data[0])->whereDate('outlet_stocks.size', '=', $data[1])
+        $product_details = DB::table('outlet_stocks')->where('outlet_stocks.outlet_id', $id2)->where('outlet_stocks.medicine_id', '=', $data[0])->where('outlet_stocks.size', '=', $data[1])
             ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
             ->select('outlet_stocks.*', 'medicines.medicine_name as medicine_name')->first();
 

@@ -39,7 +39,7 @@
         </div>
 
         <div class="card-body">
-            {!! Form::open(['route' => ['medicine-purchase.update', $productPurchase->id], 'method' => 'PUT', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
+            {!! Form::open(['route' => ['product-purchase.update', $productPurchase->id], 'method' => 'PUT', 'class' => 'needs-validation', 'novalidate'=> '']) !!}
 
             <div class="service_invoice_header">
                 <div class="row">

@@ -1,7 +1,7 @@
 
 
 @extends('layouts.admin.master')
-@section('title')Edit Distribute Medicine to Outlet
+@section('title')Edit Distribute Product to Outlet
 @endsection
 @push('css')
 <style>
@@ -20,7 +20,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-8">
-			<h3>Edit Distribute Medicine to Outlet</h3>
+			<h3>Edit Distribute Product to Outlet</h3>
         </div>
 
         </div>
@@ -116,7 +116,7 @@
             <div class="card">
 
                 <div class="card-header bg-secondary">
-                    <i class="fa fa-table"></i> Make Distribute Medicin
+                    <i class="fa fa-table"></i> Make Distribute Product
                 </div>
 
                 <div class="card-body">
@@ -124,7 +124,7 @@
                     <div class="row">
 
                         <div class="col-md-3">
-                            <h2>Add Medicine</h2>
+                            <h2>Add Product</h2>
                         </div>
 
                         <div class="col-md-4">
@@ -164,7 +164,7 @@
                                         <nobr>Barcode<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Expiry Date<i class="text-danger">*</i></nobr>
+                                        <nobr>Size<i class="text-danger">*</i></nobr>
                                     </th>
                                     {{--
                                     <th class="text-center">
@@ -203,7 +203,7 @@
                                     <input class="form-control stock_id" type="hidden" name="stock_id[]"  readonly="" value="{{ $details->warehouse_stock_id }}">
                                      <input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly="" required="" value="{{ $details->medicine_name }}"> </td>
                                      <td><input class="form-control barcode" type="text" name="barcode[]" placeholder="barcode"  value="{{ $details->barcode_text }}"></td>
-                                     <td><input class="form-control invoice_datepicker" type="date" name="expiry_date[]" placeholder="Expiry Date" id="expiry_date" required="" value="{{ $details->expiry_date }}"></td>
+                                     <td><input class="form-control size" type="text" name="size[]" placeholder="size" id="size" required="" value="{{ $details->size }}"></td>
                                      <td><input class="form-control qty" type="number" name="quantity[]" placeholder="Quantity" required="" value="{{ $details->quantity }}"></td>
 
                                      <td><input class="form-control qty" type="number"  placeholder="" required="" value="" readonly></td>
@@ -425,7 +425,7 @@ function clearInput1(target){
                                 $('#manu_price').first().val(data.purchase_price);
                                 $('#product_name').val(data.medicine_name);
                                 $('#box_price').val(data.price);
-                                $('#expiry_date').val(data.expiry_date);
+                                $('.size').val(data.size);
 
                             } else {
                                 alert('Data not found!');

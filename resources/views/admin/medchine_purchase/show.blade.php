@@ -68,7 +68,7 @@
                 <table class="table table-bordered mt-2">
                     <tr>
                         <th>SL</th>
-                        <th>Name Of Medicine</th>
+                        <th>Name Of Product</th>
                         <th>Quantity</th>
                         <th>Manufacturer Price</th>
                         <th>Amount</th>

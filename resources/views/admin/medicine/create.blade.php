@@ -1,7 +1,7 @@
 @extends('layouts.admin.master')
 
 
-@section('title','Add Medicine')
+@section('title','Add Product')
 
 @push('css')
 
@@ -12,7 +12,7 @@
         @slot('breadcrumb_title')
             <div class="row">
                 <div class="col-sm-5">
-                    <h3>Add Medicine</h3>
+                    <h3>Add Product</h3>
                 </div>
 
             </div>

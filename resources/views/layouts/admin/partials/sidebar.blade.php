@@ -28,7 +28,7 @@
                     @can('medchine_purchase.management')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('medicine-purchase.index')}}"
-                               href="{{route('medicine-purchase.index')}}"><i
+                               href="{{route('product-purchase.index')}}"><i
                                     data-feather="shopping-bag"></i><span>Purchase</span></a>
                         </li>
                     @endcan
@@ -36,7 +36,7 @@
                     @can('distribute-medicine.management')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('distribute-medicine.index')}}"
-                               href="{{route('distribute-medicine.index')}}"><i data-feather="plus-circle"></i><span>Distribute Medicine</span></a>
+                               href="{{route('distribute-medicine.index')}}"><i data-feather="plus-circle"></i><span>Distribute Product</span></a>
                         </li>
                     @endcan
                     @can('outletStock')
@@ -58,7 +58,7 @@
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('warehouse-return.index')}}"
                                href="{{route('warehouse-return.index')}}"><i
-                                    data-feather="box"></i><span>Medicine Return</span></a>
+                                    data-feather="box"></i><span>Product Return</span></a>
                         </li>
                     @endcan
 
@@ -108,7 +108,7 @@
                                href="{{route('warehouseRequest')}}"><i data-feather="box"></i><span>Stock Request</span></a>
                         </li>
                     @endcan
-                    @can('medicine.management')
+                    {{-- @can('medicine.management')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{ prefixActive('/alert') }} "
                                href="javascript:void(0)"><i data-feather="anchor"></i><span>Category Wise Alert</span></a>
@@ -132,13 +132,13 @@
 
                             </ul>
                         </li>
-                        @endcan
+                        @endcan --}}
 
 
                     @can('medicine.management')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{ prefixActive('/medicine-setting') }} "
-                               href="javascript:void(0)"><i data-feather="anchor"></i><span>Medicine Settings</span></a>
+                               href="javascript:void(0)"><i data-feather="anchor"></i><span>Product Settings</span></a>
                             <ul class="nav-submenu menu-content"
                                 style="display:{{ prefixBlock('/medicine-setting') }};">
                                 <li>
@@ -161,18 +161,18 @@
                                 <li class="">
                                     <a class="submenu-title {{routeActive('medicine.index')}}"
                                        href="{{route('medicine.index')}}"><i
-                                            data-feather="droplet"></i><span>Medicine</span></a>
+                                            data-feather="droplet"></i><span>Product</span></a>
                                 </li>
                             </ul>
                         </li>
                         @endcan
 
-                        <li class="dropdown">
+                        {{-- <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('all-report')}}"
                                href="{{route('all-report')}}"><i data-feather="file-text"></i><span>All Report</span></a>
-                        </li>
+                        </li> --}}
 
-                         @can('writeoff')
+                         {{-- @can('writeoff')
 
                         <li class="dropdown">
                             <a class="nav-link menu-title {{ prefixActive('/writeoff') }} "
@@ -195,10 +195,10 @@
 
                             </ul>
                         </li>
-                        @endcan
+                        @endcan --}}
 
 
-                     @can('summary')
+                     {{-- @can('summary')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{ prefixActive('/summary') }} "
                                href="javascript:void(0)"><i data-feather="anchor"></i><span>Summary</span></a>
@@ -218,7 +218,7 @@
 
                             </ul>
                         </li>
-                        @endcan
+                        @endcan --}}
                     @can('payment-method.management')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('payment-method.index')}}"

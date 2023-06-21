@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title',' All Medicine')
+@section('title',' All Product')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
@@ -12,7 +12,7 @@
         @slot('breadcrumb_title')
             <div class="row">
                 <div class="col-sm-6">
-                    <h3>All Medicine</h3>
+                    <h3>All Product</h3>
                 </div>
 
             </div>
@@ -20,7 +20,7 @@
 
         @slot('button')
             <a href="{{ route('medicine.create') }}" class="btn btn-primary btn"
-               data-original-title="btn btn-danger btn" title=""> Add Medicine</a>
+               data-original-title="btn btn-danger btn" title=""> Add Product</a>
         @endslot
     @endcomponent
 
@@ -36,7 +36,7 @@
                                 <thead>
                                 <tr>
                                     <th>SL</th>
-                                    <th>Medicine Name</th>
+                                    <th>Product Name</th>
                                     <th>Manufacture Name</th>
                                     <th>Category</th>
                                     <th>Price</th>
@@ -74,7 +74,7 @@
                     ajax: "{{ route('medicine.all-medicines') }}",
                     columns: [
                         {data: 'id', name: 'si'},
-                        {data: 'medicine_name', name: 'medicine name'},
+                        {data: 'medicine_name', name: 'Product Name'},
                         {data: 'manufacturer_name', name: 'manufacture name'},
                         {data: 'category', name: 'category'},
                         {data: 'price', name: 'price'},

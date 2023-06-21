@@ -107,7 +107,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('supplier', SupplierController::class);
     Route::resource('warehouse', WarehouseController::class);
     Route::resource('outlet', OutletController::class);
-    Route::resource('medicine-purchase', MedicinePurchaseController::class);
+    Route::resource('product-purchase', MedicinePurchaseController::class);
     Route::resource('warehouse-stock', WarehouseStockController::class);
     Route::resource('outlet-stock', OutletStockController::class);
     Route::resource('distribute-medicine', MedicineDistributeController::class);
