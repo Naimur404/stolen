@@ -129,10 +129,10 @@
 
                         <div class="col-md-4">
                             @if(!is_null($medicinedetails))
-                            {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
+                            {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id']) }}
                              @else
-                             {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id' ,'required']) }}
-                             <div class="invalid-feedback">Please Add Medicine</div>
+                             {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id' ,'required']) }}
+                             <div class="invalid-feedback">Please Add Product</div>
                              @endif
 
 
@@ -423,9 +423,9 @@ function clearInput1(target){
                                 $('.stock').val(data.quantity);
                                 $('.barcode').first().val(data.barcode_text);
                                 $('#manu_price').first().val(data.purchase_price);
-                                $('#product_name').val(data.medicine_name);
-                                $('#box_price').val(data.price);
-                                $('.size').val(data.size);
+                                $('#product_name').first().val(data.medicine_name);
+                                $('#box_price').first().val(data.price);
+                                $('.size').first().val(data.size);
 
                             } else {
                                 alert('Data not found!');

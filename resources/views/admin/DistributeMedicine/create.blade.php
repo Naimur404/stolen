@@ -108,8 +108,8 @@
                             </div>
 
                             <div class="col-md-4">
-                                {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id','required']) }}
-                                <div class="invalid-feedback">Please Add Medicine</div>
+                                {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id','required']) }}
+                                <div class="invalid-feedback">Please Add Product</div>
 
 
                             </div>
@@ -357,8 +357,8 @@
                                         $('#product_name').val(data.medicine_name);
                                         $('#box_price').first().val(data.price);
                                         $('#manu_price').first().val(data.purchase_price);
-                                        $('.size').val(data.size);
-                                        $('.create_date').val(data.create_date);
+                                        $('.size').first().val(data.size);
+                                        $('.create_date').first().val(data.create_date);
 
                                     } else {
                                         alert('Data not found!');

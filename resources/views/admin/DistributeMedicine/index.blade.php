@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title',' All Distribute Medicine to Outlet')
+@section('title',' All Distribute Product to Outlet')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
@@ -12,7 +12,7 @@
         @slot('breadcrumb_title')
             <div class="row">
                 <div class="col-sm-8 mt-3">
-                     <h3>All Distribute Medicine to Outlet</h3>
+                     <h3>All Distribute Product to Outlet</h3>
                 </div>
 
             </div>
@@ -21,7 +21,7 @@
         @slot('button')
         @can('medchine_purchase.create')
             <a href="{{ route('distribute-medicine.create') }}" class="btn btn-primary btn"
-               data-original-title="btn btn-danger btn" title="">Distribute Medicine</a>
+               data-original-title="btn btn-danger btn" title="">Distribute Product</a>
                @endcan
         @endslot
     @endcomponent

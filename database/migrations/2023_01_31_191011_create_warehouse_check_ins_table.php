@@ -22,7 +22,7 @@ return new class extends Migration
             $table->bigInteger('medicine_id')->unsigned();
             $table->foreign('medicine_id')->references('id')->on('medicines');
             $table->string('size')->nullable();
-            $table->timestamp('create_date')->nullable();
+            $table->string('create_date')->nullable();
             $table->integer('quantity')->default(0);
             $table->bigInteger('checked_by')->unsigned(); // Auth ID
             $table->string('remarks')->nullable();
