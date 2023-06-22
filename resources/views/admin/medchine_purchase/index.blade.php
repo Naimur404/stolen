@@ -22,7 +22,7 @@
 		@endslot
 
         @slot('button')
-        <a href="{{ route('medicine-purchase.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Purchase</a>
+        <a href="{{ route('product-purchase.create') }}" class="btn btn-primary btn" data-original-title="btn btn-danger btn" title="">Purchase</a>
         @endslot
 	@endcomponent
 

@@ -79,7 +79,7 @@ class MedicinePurchaseController extends Controller
         $total = 0;
         foreach ($productPurchases as $productPurchase) {
 
-            $edit = route('medicine-purchase.edit', $productPurchase->id);
+            $edit = route('product-purchase.edit', $productPurchase->id);
             $delete = route('medicinePurchaseDelete', $productPurchase->id);
             $checkIn = route('medicine-purchase.checkIn', $productPurchase->id);
 

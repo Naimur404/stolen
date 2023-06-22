@@ -1,5 +1,5 @@
 @extends('layouts.admin.master')
-@section('title')Medicine Checkin
+@section('title')Product Checkin
 @endsection
 @push('css')
 <style>

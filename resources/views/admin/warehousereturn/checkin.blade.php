@@ -1,5 +1,5 @@
 @extends('layouts.admin.master')
-@section('title') Return Medicine to Warehouse Checkin
+@section('title') Return Product to Warehouse Checkin
 @endsection
 @push('css')
 <style>
@@ -18,7 +18,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-10">
-			<h3> Return Medicine to Warehouse Checkin</h3>
+			<h3> Return Product to Warehouse Checkin</h3>
         </div>
 
         </div>
@@ -72,10 +72,10 @@
             <table class="table table-bordered mt-2">
                 <tr>
                     <th>SL</th>
-                    <th>Name Of Medicine</th>
+                    <th>Name Of Product</th>
                     <th>Quantity</th>
                     <th>Stock</th>
-                    <th>Expiry Date</th>
+                    <th>Size</th>
                     <th>Action</th>
                 </tr>
 
@@ -91,11 +91,11 @@
                         <td>{{ Form::number('quantity', $data->quantity, ['class' => 'form-control', 'readonly']) }}
                         </td>
                         @php
-                        $stock =  App\Models\OutletStock::where('outlet_id',$productPurchase->outlet_id)->where('medicine_id',$data->medicine_id)->whereDate('expiry_date','=',$data->expiry_date)->first();
+                        $stock =  App\Models\OutletStock::where('outlet_id',$productPurchase->outlet_id)->where('medicine_id',$data->medicine_id)->where('size','=',$data->size)->first();
                     @endphp
                         <td>{{ Form::number('stock_quantity', $stock->quantity, ['class' => 'form-control', 'readonly']) }}
                         </td>
-                        <td>{{ Form::date('expiry_date', $data->expiry_date, ['class' => 'form-control', 'readonly']) }}
+                        <td>{{ Form::text('size', $data->size, ['class' => 'form-control', 'readonly']) }}
                         <input type="hidden" name="medicine_id" value="{{$data->medicine_id }}">
                         </td>
                         <td>

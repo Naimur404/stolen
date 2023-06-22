@@ -136,7 +136,7 @@
                                     </th>
 
                                     <th class="text-center">
-                                        <nobr>Expiry Date <i class="text-danger">*</i></nobr>
+                                        <nobr>Size <i class="text-danger">*</i></nobr>
                                     </th>
                                     {{--
                                     <th class="text-center">
@@ -388,7 +388,7 @@
                                 $('#qty').first().val('1');
                                 $('#product_name').first().val(data.medicine_name);
 
-                                $('#expiry_date').first().val(data.expiry_date);
+                                $('.size').first().val(data.size);
 
                             } else {
                                 alert('Data not found!');

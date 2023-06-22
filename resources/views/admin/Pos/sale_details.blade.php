@@ -79,7 +79,7 @@
             <table class="table table-bordered mt-2">
                 <tr>
                     <th>SL</th>
-                    <th>Name Of Name of medicine</th>
+                    <th>Name Of Product</th>
                     <th>Purchase Quantity</th>
                     <th>Return Quantity</th>
                     <th>Price</th>
@@ -93,7 +93,7 @@
                         <td>{{ $data->quantity }}</td>
                         @php
                             $data1 = App\Models\SalesReturn::where('invoice_id', $data->outlet_invoice_id ?? false)->first();
-                            $return = App\Models\SalesReturnDetails::where('sales_return_id', $data1->id ?? false)->where('medicine_id', $data->medicine_id)->whereDate('expiry_date','=', $data->expiry_date)->first();
+                            $return = App\Models\SalesReturnDetails::where('sales_return_id', $data1->id ?? false)->where('medicine_id', $data->medicine_id)->where('size','=', $data->size)->first();
 
                         @endphp
                         <td>{{ $return->return_qty ?? '0' }}</td>

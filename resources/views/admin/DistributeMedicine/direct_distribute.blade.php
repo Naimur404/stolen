@@ -1,7 +1,7 @@
 
 
 @extends('layouts.admin.master')
-@section('title')Add Distribute Medicine to Outlet
+@section('title')Add Distribute Product to Outlet
 @endsection
 @push('css')
 <style>
@@ -20,7 +20,7 @@
 		@slot('breadcrumb_title')
         <div class="row">
             <div class="col-sm-8">
-			<h3>Add Distribute Medicine to Outlet</h3>
+			<h3>Add Distribute Product to Outlet</h3>
         </div>
 
         </div>
@@ -120,7 +120,7 @@
                     <div class="row">
 
                         <div class="col-md-3">
-                            <h2>Add Medicine</h2>
+                            <h2>Add Product</h2>
                         </div>
 
                         <div class="col-md-4">

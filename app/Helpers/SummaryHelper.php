@@ -26,7 +26,7 @@ class SummaryHelper
     public function getWarehouseSummary($summary_date = null): array
     {
         if ($summary_date == null) {
-            $summary_date = Carbon::now()->format('Y-m-d');
+            $summary_date = "M";
         }
         // total records count
         $warehouses = Warehouse::all();
@@ -40,7 +40,7 @@ class SummaryHelper
                 ->leftJoin('medicine_distribute_details', 'medicine_distributes.id', '=', 'medicine_distribute_details.medicine_distribute_id')->sum('medicine_distribute_details.quantity');
             $request = DB::table('stock_requests')->where('warehouse_id', $warehouse->id)->where('stock_requests.has_sent', 1)->whereDate('stock_requests.date', $summary_date)
                 ->leftJoin('stock_request_details', 'stock_requests.id', '=', 'stock_request_details.stock_request_id')->sum('stock_request_details.quantity');
-            $stock = WarehouseStock::where('warehouse_id', $warehouse->id)->whereDate('expiry_date', '=', $summary_date)->sum('quantity');
+            $stock = WarehouseStock::where('warehouse_id', $warehouse->id)->where('size', '=', $summary_date)->sum('quantity');
             $data_arr[] = array(
                 "name" => $name->warehouse_name,
                 "purchase_qty" => $purchase_qty,

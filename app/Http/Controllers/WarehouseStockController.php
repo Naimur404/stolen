@@ -66,13 +66,13 @@ class WarehouseStockController extends Controller
 
         $input = $request->all();
 
-        $warehousecheck = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id', $input['medicine_id'])->whereDate('size', '=', $input['size'])->first();
+        $warehousecheck = WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id', $input['medicine_id'])->where('size', '=', $input['size'])->first();
 
         if ($warehousecheck != null) {
             $quantity = array(
                 'quantity' => (int) $input['quantity'] + (int) $warehousecheck->quantity,
             );
-            WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id', $input['medicine_id'])->whereDate('size', '=', $input['size'])->update($quantity);
+            WarehouseStock::where('warehouse_id', $input['warehouse_id'])->where('medicine_id', $input['medicine_id'])->where('size', '=', $input['size'])->update($quantity);
         } else {
 
             $warehouseStock = WarehouseStock::create($input);
