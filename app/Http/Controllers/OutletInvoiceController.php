@@ -304,7 +304,7 @@ class OutletInvoiceController extends Controller
             $category = Category::where('id', $medicine->category_id)->first();
             $response[] = array(
                 "id" => $medicine->id,
-                "text" => $medicine->medicine_name . ' - ' . $category->category_name . ' - ' . ' EX ' . $medicine->size,
+                "text" => $medicine->medicine_name . ' - ' . $category->category_name . ' - ' . '  ' . $medicine->size,
             );
         }
         return response()->json($response);

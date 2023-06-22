@@ -142,6 +142,7 @@
         <tr class="">
 
             <th class="product">Item</th>
+            <th>Size</th>
             <th>Rate</th>
             <th>Qty</th>
             <th style="text-align: right; ">Amount</th>
@@ -154,6 +155,7 @@
             <tr>
 
                 <td class="product"> {{ $loop->index+1 }}. {{ $item->medicine_name }} </td>
+                <td>{{ $item->size }} </td>
                 <td>{{ $item->rate }} </td>
                 <td>{{ $item->quantity }} </td>
                 <td style="text-align: right; ">{{ round($item->rate * $item->quantity) }} </td>

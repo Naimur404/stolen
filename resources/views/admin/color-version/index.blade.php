@@ -257,9 +257,9 @@
                             </div>
                         @endif
                         @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
-                            <div class="col-xl-8 xl-100 box-col-12">
+                            <div class="col-xl-12 xl-100 box-col-12">
                                 @else
-                                    <div class="col-xl-8 xl-100 box-col-12">
+                                    <div class="col-xl-5 xl-100 box-col-12">
                                         @endif
                                         <div class="card">
                                             <div
@@ -316,7 +316,7 @@
 
                                     $.each(data, function (key, value) {
                                         items += '<tr><td class="f-w-600">' + value.medicine_name
-                                            + '</td><td><div class="span badge rounded-pill pill-badge-success">' + value.total + '</div></td><td><div class="span badge rounded-pill pill-badge-secondary">' + value.count + '</div></td></tr>';
+                                            +'</td><td><div class="span badge rounded-pill pill-badge-success">' + value.total + '</div></td><td><div class="span badge rounded-pill pill-badge-secondary">' + value.count + '</div></td></tr>';
                                     });
 
                                     $('#data-list').html(items);

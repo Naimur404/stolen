@@ -25,7 +25,7 @@ return new class extends Migration
             $table->string('product_type')->nullable()->default('t-shirt');
             $table->string('rack_no')->nullable();
             $table->string('size')->nullable();
-            $table->timestamp('create_date')->nullable();
+            $table->string('create_date')->nullable();
             $table->integer('quantity')->default(1);
             $table->float('manufacturer_price', 10,2)->default(0.00);
             $table->float('box_mrp', 10,2)->default(0.00);

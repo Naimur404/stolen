@@ -27,7 +27,7 @@
                                 @endphp
                                 {{ Form::label('unit_id', 'Unit *') }}
                                 {{ Form::select('unit_id',[$data=>$name] , null, ['class' => 'form-control', 'placeholder' => '--please select--', 'required', 'id' => 'sel_emp2' ,'required']) }}
-                                <div class="invalid-feedback"> Please Enter Medicine Unit</div
+                                <div class="invalid-feedback"> Please Enter Product Unit</div
                                 @error('unit_id')
                                 <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -35,7 +35,7 @@
                             @else
                                 {{ Form::label('unit_id', 'Unit *') }}
                                 {{ Form::select('unit_id',[''] , null, ['class' => 'form-control', 'placeholder' => '--please select--', 'required', 'id' => 'sel_emp2' ,'required']) }}
-                                <div class="invalid-feedback"> Please Enter Medicine Unit</div
+                                <div class="invalid-feedback"> Please Enter Product Unit</div
                                 @error('unit_id')
                                 <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -53,7 +53,7 @@
                                 @endphp
                                 {{ Form::label('category_id', 'Category *') }}
                                 {{ Form::select('category_id',[$data=>$name] , null, ['class' => 'form-control', 'placeholder' => '--please select--', 'required', 'id' => 'sel_emp4','required']) }}
-                                <div class="invalid-feedback"> Please Enter Medicine Category</div>
+                                <div class="invalid-feedback"> Please Enter Product Category</div>
                                 @error('category_id')
                                 <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -62,7 +62,7 @@
                             @else
                                 {{ Form::label('category_id', 'Category *') }}
                                 {{ Form::select('category_id',[''] , null, ['class' => 'form-control', 'placeholder' => '--please select--', 'required', 'id' => 'sel_emp4','required']) }}
-                                <div class="invalid-feedback"> Please Enter Medicine Category</div>
+                                <div class="invalid-feedback"> Please Enter Product Category</div>
                                 @error('category_id')
                                 <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -73,7 +73,7 @@
                     <div class="col-sm-12 col-md-12">
                         <div class="mb-3">
                             {!! Form::label('price', 'Price *', array('class' => 'form-label')) !!}
-                            {!! Form::number('price',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Medicine Price','step' => 'any' ,'required']) !!}
+                            {!! Form::number('price',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Product Price','step' => 'any' ,'required']) !!}
 
                             @error('price')
                             <div class="invalid-feedback2"> {{ $message }}</div>
@@ -143,7 +143,7 @@
                             @endif
                             {{ Form::label('type_id', 'Product Type *') }}
                             {{ Form::select('type_id', [$data=>$name], null,['class' => 'form-control', 'placeholder' => '--please select--', 'id' => 'sel_emp3']) }}
-                            <div class="invalid-feedback"> Please Enter Medicine Type</div>
+                            <div class="invalid-feedback"> Please Enter Product Type</div>
                             @error('type_id')
                             <div class="invalid-feedback2"> {{ $message }}</div>
 
@@ -152,7 +152,7 @@
                         @else
                             {{ Form::label('type_id', 'Product Type *') }}
                             {{ Form::select('type_id', [ ], null,['class' => 'form-control', 'placeholder' => '--please select--', 'id' => 'sel_emp3','required']) }}
-                            <div class="invalid-feedback"> Please Enter Medicine Type</div>
+                            <div class="invalid-feedback"> Please Enter Product Type</div>
                             @error('type_id')
                             <div class="invalid-feedback2"> {{ $message }}</div>
 

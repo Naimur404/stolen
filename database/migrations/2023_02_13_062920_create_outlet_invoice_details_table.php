@@ -21,7 +21,7 @@ return new class extends Migration
             $table->foreign('medicine_id')->references('id')->on('medicines');
             $table->string('medicine_name')->nullable();
             $table->string('size')->nullable();
-            $table->timestamp('create_date')->nullable();
+            $table->string('create_date')->nullable();
             $table->integer('available_qty')->default(1)->unsigned();
             $table->integer('quantity')->default(1);
             $table->float('rate', 8,2)->default(0.00);

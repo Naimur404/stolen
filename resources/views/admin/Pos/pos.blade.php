@@ -814,7 +814,7 @@
                                     $('#product_name').first().val(data.medicine_name);
                                     $('.stock-qty').first().val(data.quantity);
                                     $('.qty').first().val('1');
-                                    $('#price').val(data.price);
+                                    $('#price').first().val(data.price);
                                     $('.total').first().val(1 * data.price);
 
 

@@ -21,7 +21,7 @@ class DatabaseSeeder extends Seeder
             WarehouseOutletSeeder::class,
             UserSeeder::class,
             UnitSeeder::class,
-            MedicineCategorySeeder::class,
+            // MedicineCategorySeeder::class,
             PaymentMethodSeeder::class,
             // ManufactureSeeder::class,
             // MedicineTypeSeeder::class,
