@@ -100,21 +100,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-2 col-lg-6">
-                <div class="card o-hidden border-0">
-                    <div class="bg-primary b-r-4 card-body">
-                        <div class="media static-top-widget">
-                            <div class="align-self-center text-center"><i data-feather="truck"></i></div>
-                            <div class="media-body">
-                                <span class="m-0">Today's Return</span>
-                                <h4 class="mb-0 counter">{{ $returns }}</h4>
-                                <i class="icon-bg" data-feather="truck"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6 col-xl-2 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
                         <div class="media static-top-widget">
