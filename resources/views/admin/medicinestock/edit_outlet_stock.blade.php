@@ -72,7 +72,7 @@
                         <td>{{ App\Models\Medicine::get_medicine_name($outletStock->medicine_id) }}
                         <input type="hidden" name="medicine_id" id="" value="{{ $outletStock->medicine_id }}">
                         </td>
-                        <td><input class="" type="text" name="size" value="{{  $outletStock->size) }}" tabindex="2" required>
+                        <td><input class="form-control" type="text" name="size" value="{{  $outletStock->size }}" tabindex="2" required>
                         </td>
                         <td> <input type="number" name="quantity" id="qty" value="{{ $outletStock->quantity }}" class="form-control" required readonly></td>
                         <td><input type="number" name="purchase_price" id="price" value="{{ $outletStock->purchase_price }}" step="any" class="form-control" required>

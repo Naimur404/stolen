@@ -178,11 +178,11 @@ class MedicineDistributeController extends Controller
 
                 );
 
-                $check = MedicineDistributeDetail::where('medicine_distribute_id', $id)->where('medicine_id', $input['product_id'][$i])->first();
+                $check = MedicineDistributeDetail::where('medicine_distribute_id', $id)->where('medicine_id', $input['product_id'][$i])->where('create_date', $input['create_date'][$i])->first();
 
                 if ($check != null) {
 
-                    MedicineDistributeDetail::where('medicine_distribute_id', $id)->where('medicine_id', $input['product_id'][$i])->update($purchase_details);
+                    MedicineDistributeDetail::where('medicine_distribute_id', $id)->where('medicine_id', $input['product_id'][$i])->where('create_date', $input['create_date'][$i])->update($purchase_details);
 
                 } else {
 

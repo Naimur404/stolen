@@ -107,8 +107,8 @@
                         </div>
 
                         <div class="col-md-4">
-                            {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id' ,'required']) }}
-                            <div class="invalid-feedback">Please Add Medicine</div>
+                            {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id' ,'required']) }}
+                            <div class="invalid-feedback">Please Add Product</div>
 
 
                         </div>

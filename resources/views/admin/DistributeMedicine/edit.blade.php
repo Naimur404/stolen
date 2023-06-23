@@ -201,17 +201,19 @@
                                     <td>
                                     <input class="form-control pr_id" type="hidden" name="product_id[]"  readonly="" value="{{ $details->medicine_id }}">
                                     <input class="form-control stock_id" type="hidden" name="stock_id[]"  readonly="" value="{{ $details->warehouse_stock_id }}">
-                                     <input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly="" required="" value="{{ $details->medicine_name }}"> </td>
-                                     <td><input class="form-control barcode" type="text" name="barcode[]" placeholder="barcode"  value="{{ $details->barcode_text }}"></td>
-                                     <td><input class="form-control size" type="text" name="size[]" placeholder="size" id="size" required="" value="{{ $details->size }}"></td>
-                                     <td><input class="form-control qty" type="number" name="quantity[]" placeholder="Quantity" required="" value="{{ $details->quantity }}"></td>
+                                    <input class="form-control product_name" type="text" name="product_name[]" id="product_name" readonly="" required="" value="{{ $details->medicine_name }}"> </td>
+                                    <td><input class="form-control barcode" type="text" name="barcode[]" placeholder="barcode"  value="{{ $details->barcode_text }}"></td>
+                                    <td><input class="form-control size" type="text" name="size[]" placeholder="size" id="size" required="" value="{{ $details->size }}"></td>
+                                    <td><input class="form-control qty" type="number" name="quantity[]" placeholder="Quantity" required="" value="{{ $details->quantity }}"></td>
 
-                                     <td><input class="form-control qty" type="number"  placeholder="" required="" value="" readonly></td>
-                                     <td><input class="form-control" name="box_mrp[]" type="number" step="any" id="box_price" required="" value="{{ $details->rate }}"</td>
+                                    <td><input class="form-control qty" type="number"  placeholder="" required="" value="" readonly></td>
+                                    <td><input class="form-control" name="box_mrp[]" type="number" step="any" id="box_price" required="" value="{{ $details->rate }}">
+                                        <input class="form-control" name="create_date[]" type="hidden" step="any" id="create_date" required="" value="{{ $details->create_date }}">
+                                    </td>
 
                                      {{-- <td><input class="form-control" name="total_price[]" type="text" id="product_type" readonly="" required="" value="{{ $details->rate * $details->quantity }}"></td> --}}
 
-                                     <td>
+                                    <td>
 
                                         <span class="btn btn-sm btn-danger"><a class="" href="{{ route('delete.medicineDistributeDetailDelete',[$details->medicine_id, $details->medicine_distribute_id]) }}">Delete</a></span>
                                     </td>
