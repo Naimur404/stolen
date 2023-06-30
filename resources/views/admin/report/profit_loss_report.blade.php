@@ -51,8 +51,8 @@
             <tr>
                 <th>SL</th>
                 <th>Sales Date</th>
-                <th>Medicine Name</th>
-                <th>Expiry Date</th>
+                <th>Product Name</th>
+                <th>Size</th>
                 <th>Purchase Price</th>
                 <th>Sell Price</th>
                 <th>Quantity</th>
@@ -72,7 +72,7 @@
                     <td>{{ \Carbon\Carbon::parse($sale->created_at)->format('d-m-Y') }}
                     </td>
                     <td>{{ $sale->medicine_name }}</td>
-                    <td>{{ \Carbon\Carbon::parse($sale->expiry_date)->format('d-m-Y') }}</td>
+                    <td>{{ $sale->size }}</td>
                     <td>{{ $sale->purchase_price }}</td>
                     <td>{{ $sale->rate }}</td>
                     <td>{{ $sale->quantity }}</td>

@@ -57,8 +57,8 @@
 
 
                                 <th>Purchase Date</th>
-                                <th>Medicine Name</th>
-                                <th>Expiry Date</th>
+                                <th>Product Name</th>
+                                <th>Size</th>
                                 <th>Quantity</th>
                                 <th>Price</th>
                                 <th>Discount</th>
@@ -80,7 +80,7 @@
                          <td>{{ $productSale->medicine_name }}</td>
 
 
-                         <td>{{ $productSale->expiry_date }}</td>
+                         <td>{{ $productSale->size }}</td>
 
 
 

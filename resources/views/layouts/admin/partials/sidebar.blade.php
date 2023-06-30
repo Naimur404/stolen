@@ -167,10 +167,10 @@
                         </li>
                         @endcan
 
-                        {{-- <li class="dropdown">
+                        <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('all-report')}}"
                                href="{{route('all-report')}}"><i data-feather="file-text"></i><span>All Report</span></a>
-                        </li> --}}
+                        </li>
 
                          {{-- @can('writeoff')
 

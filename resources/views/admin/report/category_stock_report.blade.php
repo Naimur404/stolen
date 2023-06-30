@@ -48,8 +48,8 @@
                     <th>SL</th>
 
 
-                                <th>Medicine Name</th>
-                                <th>Expiry Date</th>
+                                <th>Product Name</th>
+                                <th>Size</th>
 
                                 <th>Price</th>
                                 <th>Quantity</th>
@@ -69,7 +69,7 @@
 
 
                         <td>{{ $productPurchase->medicine_name }}</td>
-                        <td>{{ \Carbon\Carbon::parse($productPurchase->expiry_date)->format('d-m-Y') }}
+                        <td>{{$productPurchase->size }}
                         </td>
 
 
