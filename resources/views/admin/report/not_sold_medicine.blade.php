@@ -54,8 +54,8 @@
                 <thead class="">
                 <tr>
                     <th>SL</th>
-                    <th>Medicine Name</th>
-                    <th>Expiry Date</th>
+                    <th>Product Name</th>
+                    <th>Size</th>
                     <th>Quantity</th>
 
                 </tr>
@@ -69,7 +69,7 @@
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine_name ?? '' }}</td>
-                        <td>{{ $data->expiry_date }}
+                        <td>{{ $data->size }}
                         </td>
                         <td>{{ $data->quantity ?? '' }}</td>
 
@@ -84,7 +84,7 @@
 
 
                 </tbody>
-               
+
             </table>
 
             <p class="text-center">Sub Total {{ $quantity }}

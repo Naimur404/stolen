@@ -53,7 +53,7 @@
 
                 <th>Sale Date</th>
                 <th>Invoice ID</th>
-                <th>Medicine Name</th>
+                <th>Product Name</th>
                 <th>Sale Quantity</th>
 
 

@@ -40,7 +40,7 @@
 </div>
 
 <div class="row all-content">
-    <p align="center"><b> Medicine Stock Report 
+    <p align="center"><b> Medicine Stock Report
         {{-- @if ($start_date && $end_date !=null )
            From {{Carbon\Carbon::parse($start_date)->format('d-m-Y')}}
            To {{Carbon\Carbon::parse($end_date)->format('d-m-Y') }}
@@ -55,9 +55,9 @@
 
 
 
-                                <th>Medicine Name</th>
+                                <th>Product Name</th>
                                 <th>Manufacturer</th>
-                                <th>Expiry Date</th>
+                                <th>Size</th>
                                 <th>Quantity</th>
                                 <th>Purchase Price</th>
                                 <th>Sell Price</th>
@@ -84,7 +84,7 @@
 
                         <td>{{ $productStock->medicine_name }}</td>
                         <td>{{ $manu->manufacturer_name }}</td>
-                        <td>{{ $productStock->expiry_date }}</td>
+                        <td>{{ $productStock->size }}</td>
                         <td>{{ $productStock->quantity }}</td>
 
                         <td>{{ $productStock->purchase_price }}</td>

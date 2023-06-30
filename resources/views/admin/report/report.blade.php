@@ -31,7 +31,7 @@
                     {!! Form::open(array('url'=> 'report2/purchase-report-submit', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
                         <div class="col-md-3 mt-4">
-                            <b>Medicine Purchase Report</b>
+                            <b>Product Purchase Report</b>
                         </div>
                          <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                         <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
@@ -134,7 +134,7 @@
                             <b>Warehouse Stock Report</b>
                         </div>
 
-                        <div class="col-md-3">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id']) }}
+                        <div class="col-md-3">Product Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id']) }}
                             </div>
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                     </div>
@@ -147,7 +147,7 @@
                             <b>Outlet Stock Report</b>
                         </div>
 
-                        <div class="col-md-3">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id2']) }}
+                        <div class="col-md-3">Product Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id2']) }}
                             </div>
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                     </div>
@@ -161,7 +161,7 @@
                     {!! Form::open(array('url'=> 'report2/sale-report-submit', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
                         <div class="col-md-3 mt-4">
-                            <b>Medicine Sales Report</b>
+                            <b>Product Sales Report</b>
                         </div>
                          <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                         <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
@@ -180,7 +180,7 @@
                         </div>
                          <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                         <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-                        <div class="col-md-3">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id10']) }}
+                        <div class="col-md-3">Product Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id10']) }}
                         </div>
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                     </div>
@@ -261,7 +261,7 @@
                          <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                         <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
 
-                        <div class="col-md-3">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id25']) }}
+                        <div class="col-md-3">Product Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id25']) }}
                        </div>
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                     </div>
@@ -283,38 +283,7 @@
                     {!! Form::close() !!}
 
 @endcan
-
-
-@can('expiry-wise-report-warehouse')
-
-
-{!! Form::open(array('url'=> 'report2/expiry-wise-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-<div class="row form-group">
-    <div class="col-md-3 mt-4">
-        <b>Expiry Wise Report(Warehouse)</b>
-    </div>
-     <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-
-    <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-</div>
-{!! Form::close() !!}
-
-@endcan
-
-@can('expiry-wise-report-outlet')
-{!! Form::open(array('url'=> 'report2/expiry-wise-report1', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-<div class="row form-group">
-    <div class="col-md-3 mt-4">
-        <b>Expiry Wise Report(Outlet)</b>
-    </div>
-     <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-
-    <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-</div>
-{!! Form::close() !!}
-
-@endcan
-
+@can('best_selling')
 
 {!! Form::open(array('url'=> 'report2/best-selling', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
 <div class="row form-group">
@@ -326,50 +295,19 @@
     <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
 </div>
 {!! Form::close() !!}
-
-
-
-@can('best_selling')
-
-{!! Form::open(array('url'=> 'report2/slow-selling', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-<div class="row form-group">
-    <div class="col-md-3 mt-4">
-        <b>Slow selling product</b>
-    </div>
-     <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-     <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-    <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-</div>
-{!! Form::close() !!}
-
 @endcan
-
-@can('slow_selling')
-
-{!! Form::open(array('url'=> 'report2/expiry-wise-report1', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-<div class="row form-group">
-    <div class="col-md-3 mt-4">
-        <b>Expiry Wise Report</b>
-    </div>
-     <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-
-    <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-</div>
-{!! Form::close() !!}
-@endcan
-
                     @can('distribute_medicine_report_for_warehouse')
 
                     {{-- for warehouse manager --}}
                                          {!! Form::open(array('url'=> 'report2/distribute-medicine-report2', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                                          <div class="row form-group">
                                              <div class="col-md-3 mt-4">
-                                                 <b>Distribute Medicine Report</b>
+                                                 <b>Distribute Product Report</b>
                                              </div>
                                              <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                         <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
 
-                                             <div class="col-md-3">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id24']) }}
+                                             <div class="col-md-3">Product Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id24']) }}
                                             </div>
                                              <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                                          </div>
@@ -383,13 +321,13 @@
                      {!! Form::open(array('url'=> 'report2/distribute-medicine-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                      <div class="row form-group">
                          <div class="col-md-2 mt-4">
-                             <b>Distribute Medicine Report</b>
+                             <b>Distribute Product Report</b>
                          </div>
                          <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                          <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                          <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
                         </div>
-                         <div class="col-md-2">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id23']) }}
+                         <div class="col-md-2">Product Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id23']) }}
                         </div>
                          <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                      </div>
@@ -408,7 +346,7 @@
                          <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                          <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
                         </div>
-                         <div class="col-md-2">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id22']) }}
+                         <div class="col-md-2">Product Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id22']) }}
                         </div>
                          <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                      </div>
@@ -438,116 +376,18 @@
                      {!! Form::open(array('url'=> 'report2/return-meidicine-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                      <div class="row form-group">
                          <div class="col-md-2 mt-4">
-                             <b>Return Medicine Report(Outlet)</b>
+                             <b>Return Product Report(Outlet)</b>
                          </div>
                          <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                          <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                          <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet']) }}
                         </div>
-                         <div class="col-md-2">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id26']) }}
+                         <div class="col-md-2">Product Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id26']) }}
                         </div>
                          <div class="col-md-1"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                      </div>
                      {!! Form::close() !!}
                      @endcan
-                     {{-- for warehouse --}}
-                     @can('return_medicine_report_for_warehouse')
-                     {!! Form::open(array('url'=> 'report2/return-meidicine-report2', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-                     <div class="row form-group">
-                         <div class="col-md-3 mt-4">
-                             <b>Return Medicine Report(Warehouse)</b>
-                         </div>
-                         <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-                         <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-
-                         <div class="col-md-2">Medicine Name {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select medicine', 'id' => 'medicine_id27']) }}
-                        </div>
-                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-                     </div>
-                     {!! Form::close() !!}
-                     @endcan
-                     @can('supplier_wise_sale_report')
-                     {!! Form::open(array('url'=> 'report2/supplier-wise-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-
-                                          <div class="row form-group">
-                                             <div class="col-md-3 mt-4">
-                                                 <b>Supplier Wise Sale Report</b>
-                                             </div>
-                                             <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-                                             <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
-
-                                             <div class="col-md-2">Supplier Name {{ Form::select('supplier_id', $supplier, null, ['class' => 'form-control', 'id' => 'supplier']) }}
-                                             </div>
-                                             <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-                                         </div>
-                                         {!! Form::close() !!}
-                                         @endcan
-                                    @can('supplier_wise_stock_report_outlet')
-
-                                         {!! Form::open(array('url'=> 'report2/supplier-stock-report-outlet', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-                                         <div class="row form-group">
-                                            <div class="col-md-3 mt-4">
-                                                <b>Supplier Wise Stock Report(Outlet)</b>
-                                            </div>
-
-                                             <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet','required']) }}
-                                            </div>
-                                            <div class="col-md-2">Supplier Name {{ Form::select('supplier_id', $supplier, null, ['class' => 'form-control', 'id' => 'supplier']) }}
-                                            </div>
-                                            <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-                                        </div>
-                                        {!! Form::close() !!}
-                                        @endcan
-
-
-                                        @can('supplier_wise_stock_report_warehouse')
-                                        {!! Form::open(array('url'=> 'report2/supplier-stock-report-warehouse', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-                                        <div class="row form-group">
-                                            <div class="col-md-3 mt-4">
-                                                <b>Supplier Wise Stock Report(Warehouse)</b>
-                                            </div>
-
-                                             <div class="col-md-2">Warehouse Name {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'placeholder' => 'Select Warehouse', 'id' => 'outlet','required']) }}
-                                            </div>
-                                            <div class="col-md-2">Supplier Name {{ Form::select('supplier_id', $supplier, null, ['class' => 'form-control', 'id' => 'supplier']) }}
-                                            </div>
-                                            <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-                                        </div>
-                                        {!! Form::close() !!}
-                                        @endcan
-
-                                        @can('manufacturer_wise_stock_report_outlet')
-
-                                        {!! Form::open(array('url'=> 'report2/manufacturer-stock-report-outlet', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-                                        <div class="row form-group">
-                                           <div class="col-md-3 mt-4">
-                                               <b>Manufacturer Wise Stock Report</b>
-                                           </div>
-
-                                            <div class="col-md-2">Outlet Name {{ Form::select('outlet_id', $outlet, null, ['class' => 'form-control', 'placeholder' => 'Select Outlet', 'id' => 'outlet','required']) }}
-                                           </div>
-                                           <div class="col-md-2">Manufacturer Name {{ Form::select('manufacturer_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Manufacturer', 'id' => 'manufacturer1']) }}
-                                           </div>
-                                           <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-                                       </div>
-                                       {!! Form::close() !!}
-                                       @endcan
-
-                                       @can('manufacturer_wise_stock_report_warehouse')
-                                       {!! Form::open(array('url'=> 'report2/manufacturer-stock-report-warehouse', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
-                                       <div class="row form-group">
-                                           <div class="col-md-3 mt-4">
-                                               <b>Manufacturer Wise Stock Report</b>
-                                           </div>
-
-                                            <div class="col-md-2">Warehouse Name {{ Form::select('warehouse_id', $warehouse, null, ['class' => 'form-control', 'placeholder' => 'Select Warehouse', 'id' => 'outlet','required']) }}
-                                           </div>
-                                           <div class="col-md-2">Manufacturer Name {{ Form::select('manufacturer_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Manufacturer', 'id' => 'manufacturer2']) }}
-                                           </div>
-                                           <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
-                                       </div>
-                                       {!! Form::close() !!}
-                                       @endcan
                 </div>
             </div>
         </div>
