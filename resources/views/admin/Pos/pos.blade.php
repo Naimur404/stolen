@@ -181,13 +181,20 @@
                         </div>
 
 
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             {!! Form::label('name', 'Customer Name', array('class' => 'form-label')) !!}
                             {!! Form::text('name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Customer Name' ,'required']) !!}
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             {!! Form::label('address', 'Address', array('class' => 'form-label')) !!}
                             {!! Form::text('address',null,['class'=>'form-control', 'id' => 'address','placeholder'=>'Enter Address' ]) !!}
+                        </div>
+                        <div class="col-md-2">
+                            {!! Form::label('birth_date', 'Customer Birth Date', array('class' => 'form-label')) !!}
+                            <input class="datepicker-here form-control digits" type="text" data-language="en"
+                                   data-bs-original-title="" title="" id="birth_date" name="birth_date"
+                                   value="" tabindex="2" required placeholder="dd-mm-yyyy">
+                            {{-- <input type="text" name="purchase_date" class="form-control datepicker" id="purdate" placeholder="Purchase Date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required> --}}
                         </div>
                         <div class="col-md-2">
                             {!! Form::label('points', 'Points', array('class' => 'form-label')) !!}
@@ -723,6 +730,7 @@
                                     $('#name').first().val(data.name);
                                     $('#address').val(data.address);
                                     $('#points').val(data.points);
+                                    $('#birth_date').val(data.birth_date);
                                     if (data.due_balance > 0){
                                         $('#has_due_text').html('Previous Due: <b> BDT '+ data.due_balance+' Taka</b> To pay <a href="/customer-due/'+data.id+'" target="_blank">Click here</a>');
                                     }else{
