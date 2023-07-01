@@ -6,6 +6,7 @@ use App\Models\Customer;
 use App\Models\CustomerDuePayment;
 use App\Models\Outlet;
 use App\Models\OutletInvoice;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
@@ -73,6 +74,7 @@ class CustomerManagementController extends Controller
             'name' => $input['name'],
             'mobile' => $input['mobile'],
             'address' => $input['address'],
+            'birth_date' => Carbon::parse($input['birth_date'])->toDateString(),
             'points' => 0,
             'outlet_id' => $input['outlet_id'],
 
@@ -129,6 +131,7 @@ class CustomerManagementController extends Controller
             'name' => $input['name'],
             'mobile' => $input['mobile'],
             'address' => $input['address'],
+            'birth_date' => Carbon::parse($input['birth_date'])->toDateString(),
             'points' => $input['points'],
             'outlet_id' => $input['outlet_id'],
 

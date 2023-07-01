@@ -102,6 +102,16 @@ class OutletInvoiceController extends Controller
 
                 );
                 $customer = Customer::create($customerdetails);
+            }else{
+                $customerdetails = array(
+                    'name' => 'Walking Customer',
+                    'mobile' => '00000000000',
+                    'address' => '',
+                    'outlet_id' => $input['outlet_id'],
+                    'points' => '0',
+
+                );
+                Customer::where('outlet_id', $request->outlet_id)->where('mobile', 'LIKE', '%00000%')->update($customerdetails);
             }
         } else {
 
@@ -114,6 +124,7 @@ class OutletInvoiceController extends Controller
                     'name' => $input['name'],
                     'mobile' => $input['mobile'],
                     'address' => $input['address'],
+                    'birth_date' => Carbon::parse($input['birth_date'])->toDateString(),
                     'outlet_id' => $input['outlet_id'],
                     'due_balance' => $input['due_amount'],
                     'points' => round(($input['grand_total'] / 100), 2),
@@ -130,6 +141,7 @@ class OutletInvoiceController extends Controller
                 $customerdetails = array(
                     'name' => $input['name'],
                     'mobile' => $input['mobile'],
+                    'birth_date' => Carbon::parse($input['birth_date'])->toDateString(),
                     'due_balance' =>  round($customer->due_balance + $input['due_amount']),
                     'address' => $input['address'],
                     'points' => round(($input['grand_total'] / 100), 2) + $points,

@@ -65,6 +65,13 @@
                                     <div class="invalid-feedback2"> {{ $message }}</div>
                                 @enderror
 	                            </div>
+                                <div class="mb-6 mt-3">
+                                    {!! Form::label('birth_date', 'Customer Birth Date', array('class' => 'form-label')) !!}
+                                    <input class="datepicker-here form-control digits" type="text" data-language="en"
+                                           data-bs-original-title="" title="" name="birth_date"
+                                           value="{{ $customerManagement->birth_date }}" tabindex="2" required placeholder="dd-mm-yyyy">
+                                    {{-- <input type="text" name="purchase_date" class="form-control datepicker" id="purdate" placeholder="Purchase Date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required> --}}
+                                </div>
 	                            <div class="mb-3 mt-3">
                                     {!! Form::label('points', 'Customer Points', array('class' => 'form-label')) !!}
                                     {!! Form::number('points',$customerManagement->points,['class'=>'form-control', 'placeholder'=>'Enter Customer Points', 'id' => 'points' ]) !!}
