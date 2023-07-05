@@ -1,5 +1,5 @@
 @extends('layouts.admin.master')
-@section('title')Edit Purchase
+@section('title')Edit Add Product To Warehouse
 @endsection
 @push('css')
 <style>

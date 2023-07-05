@@ -29,7 +29,7 @@
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('medicine-purchase.index')}}"
                                href="{{route('product-purchase.index')}}"><i
-                                    data-feather="shopping-bag"></i><span>Purchase</span></a>
+                                    data-feather="shopping-bag"></i><span>Add Product To Warehouse </span></a>
                         </li>
                     @endcan
 

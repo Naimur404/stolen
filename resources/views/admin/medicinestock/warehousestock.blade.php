@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title','Warehouse Medicine Stock')
+@section('title','Warehouse Product Stock')
 
 
 
