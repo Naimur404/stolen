@@ -53,7 +53,7 @@
                     </div>
                     {!! Form::close() !!}
                     @endcan
-                    @can('sale_return_report')
+                    {{-- @can('sale_return_report')
 
                     {!! Form::open(array('url'=> 'report2/sale-return-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
@@ -67,7 +67,7 @@
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                     </div>
                     {!! Form::close() !!}
-                    @endcan
+                    @endcan --}}
 
 
                     @can('category-wise-report-outlet')
@@ -87,7 +87,7 @@
                     {!! Form::close() !!}
                     @endcan
 
-                    @can('due-payment-report')
+                    {{-- @can('due-payment-report')
 
                     {!! Form::open(array('url'=> 'report2/due-payment-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
@@ -102,7 +102,7 @@
                         <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                     </div>
                     {!! Form::close() !!}
-                    @endcan
+                    @endcan --}}
 
                     @can('category-wise-report-warehouse')
 
@@ -176,7 +176,7 @@
                     {!! Form::open(array('url'=> 'report2/sale-report-medicine-submit', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                     <div class="row form-group">
                         <div class="col-md-3 mt-4">
-                            <b>Sales Report By Medicne</b>
+                            <b>Sales Report By Product</b>
                         </div>
                          <div class="col-md-2">Start Date <strong class="text-danger">*</strong> {{ Form::text('start_date', null, ['class'=>'datepicker-here form-control digits', 'required','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
                         <div class="col-md-2">End Date {{ Form::text('end_date', \Carbon\Carbon::today()->format('d-m-Y'), ['class'=>'datepicker-here form-control digits','data-language'=>'en','placeholder'=>'dd-mm-yyyy']) }}</div>
@@ -334,7 +334,7 @@
                      {!! Form::close() !!}
                      @endcan
 
-
+{{--
   @can('stock_request_report_for_outlet')
 
                      {!! Form::open(array('url'=> 'report2/stock-request-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
@@ -351,7 +351,7 @@
                          <div class="col-md-2"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                      </div>
                      {!! Form::close() !!}
-                     @endcan
+                     @endcan --}}
 
                      @can('redeem_point_report')
 
@@ -371,7 +371,7 @@
                      @endcan
 {{-- for warehouse manager --}}
 
-                     @can('return_medicine_report_for_outlet')
+                     {{-- @can('return_medicine_report_for_outlet')
 
                      {!! Form::open(array('url'=> 'report2/return-meidicine-report', 'method' => 'POST', 'class'=>'form-horizontal', 'target' => '_blank')) !!}
                      <div class="row form-group">
@@ -387,7 +387,7 @@
                          <div class="col-md-1"><br>{{ Form::submit('Search', array('class' => 'btn btn-primary')) }}</div>
                      </div>
                      {!! Form::close() !!}
-                     @endcan
+                     @endcan --}}
                 </div>
             </div>
         </div>

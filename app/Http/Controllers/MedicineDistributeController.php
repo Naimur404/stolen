@@ -83,9 +83,7 @@ class MedicineDistributeController extends Controller
         try {
 
             $medicinedistribute = MedicineDistribute::create($purchase_input);
-
             $medicines = $input['product_name'];
-
             for ($i = 0; $i < sizeof($medicines); $i++) {
                 $purchase_details = array(
                     'medicine_distribute_id' => $medicinedistribute->id,
@@ -95,7 +93,7 @@ class MedicineDistributeController extends Controller
                     'warehouse_stock_id' => $input['stock_id'][$i],
                     'barcode_text' => $input['barcode'][$i],
                     'size' => $input['size'][$i],
-                    'create_date' => $input['create_date'][$i],
+                    'create_date' => rand(0, 99999),
                     'rate' => ($input['box_mrp'][$i] * $input['quantity'][$i]) / $input['quantity'][$i],
                 );
                 MedicineDistributeDetail::create($purchase_details);
@@ -106,7 +104,6 @@ class MedicineDistributeController extends Controller
             return redirect()->route('distribute-medicine.index')->with('error', $e->getMessage());
         }
     }
-
     /**
      * Display the specified resource.
      *

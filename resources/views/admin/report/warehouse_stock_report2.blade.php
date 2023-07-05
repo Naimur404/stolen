@@ -41,17 +41,12 @@
 
 <div class="row all-content">
     <p align="center"><b> Warehouse Stock Report
-        {{-- @if ($start_date && $end_date !=null )
-           From {{Carbon\Carbon::parse($start_date)->format('d-m-Y')}}
-           To {{Carbon\Carbon::parse($end_date)->format('d-m-Y') }}
-       @endif --}}
    </b></p>
     <div class="col-md-12">
         <table class="table table-hover table-bordered">
             <thead class="">
                 <tr>
                     <th>SL</th>
-
                                 <th>Warehouse Name</th>
                                 <th>Product Name</th>
                                 <th>Size</th>
@@ -71,45 +66,28 @@
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
                         @if ( $productPurchase->warehouse_id == null)
-
-
                             <td> N/A </td>
                         @elseif ($productPurchase->warehouse_id != null)
-
                             <td>{{ $productPurchase->warehouse->warehouse_name }}</td>
                         @endif
-
-
                         <td>{{ $productPurchase->medicine->medicine_name }}</td>
                         <td>{{ $productPurchase->size }}
                         </td>
-
-
-
-
-
                         <td>{{ $productPurchase->price }}</td>
                         <td>{{ $productPurchase->quantity }}</td>
                         <td>{{ $productPurchase->price * $productPurchase->quantity }}</td>
-
                     </tr>
                     @php
                     $grand_quantity = $grand_quantity + $productPurchase->quantity;
-
                     $total_price = $total_price + $productPurchase->price * $productPurchase->quantity;
                     @endphp
                 @endforeach
-
-
             </tbody>
         </table>
-
         <p class="text-center">Total Quantity {{ $grand_quantity }} | Total Price {{ $total_price }}</p>
         <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
-
     </div>
 </div>
-
 @section('custom-js')
 @if ($app_setting->print == 1)
 <script>

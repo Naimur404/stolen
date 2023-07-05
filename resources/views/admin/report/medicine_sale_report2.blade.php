@@ -1,5 +1,5 @@
 @extends('layouts.admin.public_layouts')
-@section('title','Medicine Sales Report')
+@section('title','Product Sales Report')
 @section('main-content')
     <style>
         .space {
@@ -107,7 +107,7 @@
 
             <p class="text-center">Sub Total {{ round($sub_total) }} | Total Discount {{ $total_discount }} | Redeem Point {{ $redeem_points }} | Grand Total {{ $grand_total }} | Total Pay {{ $total_pay }} | Total
                 Due {{ $total_due }}</p>
-                <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
+                <p class="text-center" style="font-size: 12px">Thank You ❤</p>
         </div>
     </div>
     @section('custom-js')

@@ -1,5 +1,5 @@
 @extends('layouts.admin.public_layouts')
-@section('title','Distribute Medicines Report')
+@section('title','Distribute Product Report')
 @section('main-content')
 <style>
     .space{

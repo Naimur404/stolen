@@ -1,5 +1,5 @@
 @extends('layouts.admin.public_layouts')
-@section('title','Invoice Report Details')
+@section('title','Best Report Details')
 @section('main-content')
 <style>
     .space{
@@ -101,7 +101,7 @@
         </table>
 
         <p class="text-center">Grand Total {{ $total_price }} | Total Quantity {{ $grand_quantity }} </p>
-        <p class="text-center" style="font-size: 12px">Thank You ❤ Software by Pigeon Soft</p>
+        <p class="text-center" style="font-size: 12px">Thank You ❤</p>
 
     </div>
 </div>
