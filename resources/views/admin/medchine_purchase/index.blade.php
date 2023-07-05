@@ -3,7 +3,7 @@
 
 @extends('layouts.admin.master')
 
-@section('title',' All Purchase')
+@section('title',' All Add Product To Warehouse')
 
 @push('css')
 <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">

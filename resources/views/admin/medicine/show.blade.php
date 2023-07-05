@@ -37,7 +37,7 @@
                                 @foreach($purchases as $purchase)
                                     <tr>
                                         <td>{{ \Carbon\Carbon::parse($purchase->created_at)->format('d-m-Y') }}</td>
-                                        <td><a href="{{ route('medicine-purchase.show', $purchase->medicine_purchase_id) }}" target="_blank">{{ $purchase->medicine_purchase_id }}</a></td>
+                                        <td><a href="{{ route('product-purchase.show', $purchase->medicine_purchase_id) }}" target="_blank">{{ $purchase->medicine_purchase_id }}</a></td>
                                         <td>{{ $purchase->warehouse->warehouse_name ?? '' }}</td>
                                         <td>{{ $purchase->rate }}</td>
                                         <td>{{ $purchase->box_mrp }}</td>

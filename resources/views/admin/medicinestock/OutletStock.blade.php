@@ -1,6 +1,6 @@
 @extends('layouts.admin.master')
 
-@section('title','Outlet Medicine Stock')
+@section('title','Outlet Product Stock')
 
 @push('css')
     <link rel="stylesheet" type="text/css" href="{{asset('assets/css/datatables.css')}}">
