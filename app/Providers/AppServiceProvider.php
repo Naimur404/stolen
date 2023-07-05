@@ -28,7 +28,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot()
     {
         Paginator::useBootstrap();
-        $project_title = '| Pharmassist';
+        $project_title = '| Stolen Pos';
         View::share('title', $project_title);
 
         if (Schema::hasTable('settings')) {

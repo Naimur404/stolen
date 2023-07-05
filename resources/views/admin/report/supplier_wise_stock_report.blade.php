@@ -1,5 +1,5 @@
 @extends('layouts.admin.public_layouts')
-@section('title','Supplier Wise Medicine Stock Report')
+@section('title','Supplier Wise Product Stock Report')
 @section('main-content')
 <style>
     .space{

@@ -96,7 +96,7 @@ class OutletStockController extends Controller
                 'has_received' => '1',
 
             );
-            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($has_received2);
+            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->where('create_date', '=', $request->create_date)->update($has_received2);
             OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($stock2);
 
         } else {
@@ -105,7 +105,7 @@ class OutletStockController extends Controller
                 'has_received' => '1',
 
             );
-            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($has_received2);
+            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->where('create_date', '=', $request->create_date)->update($has_received2);
             $check = OutletStock::create($data);
 
         }

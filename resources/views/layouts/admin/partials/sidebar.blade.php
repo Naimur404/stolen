@@ -54,13 +54,13 @@
                         </li>
                     @endcan
 
-                    @can('warehouse-return.management')
+                    {{-- @can('warehouse-return.management')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('warehouse-return.index')}}"
                                href="{{route('warehouse-return.index')}}"><i
                                     data-feather="box"></i><span>Product Return</span></a>
                         </li>
-                    @endcan
+                    @endcan --}}
 
                     @can('customer.management')
                     @php
@@ -77,12 +77,12 @@
                         </li>
                     @endcan
 
-                    @can('sent_stock_request')
+                    {{-- @can('sent_stock_request')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('stock-request.index')}}"
                                href="{{route('stock-request.index')}}"><i data-feather="box"></i><span>Stock Request</span></a>
                         </li>
-                    @endcan
+                    @endcan --}}
 
                     @can('invoice.management')
                         <li class="dropdown">
@@ -90,24 +90,24 @@
                                href="{{route('invoice.index')}}"><i data-feather="box"></i><span>All Invoice</span></a>
                         </li>
                     @endcan
-                    @can('pay-due.payment')
+                    {{-- @can('pay-due.payment')
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('duelist')}}"
                            href="{{route('duelist')}}"><i data-feather="box"></i><span>Sales Due</span></a>
                     </li>
-                    @endcan
-                    @can('sale-return.management')
+                    @endcan --}}
+                    {{-- @can('sale-return.management')
                     <li class="dropdown">
                         <a class="nav-link menu-title {{routeActive('sale-return.index')}}"
                            href="{{route('sale-return.index')}}"><i data-feather="box"></i><span>Sales Return</span></a>
                     </li>
-                    @endcan
-                    @can('stock_request')
+                    @endcan --}}
+                    {{-- @can('stock_request')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{routeActive('warehouseRequest')}}"
                                href="{{route('warehouseRequest')}}"><i data-feather="box"></i><span>Stock Request</span></a>
                         </li>
-                    @endcan
+                    @endcan --}}
                     {{-- @can('medicine.management')
                         <li class="dropdown">
                             <a class="nav-link menu-title {{ prefixActive('/alert') }} "

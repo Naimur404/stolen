@@ -1,7 +1,6 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use App\Models\BarcodeLog;
 use App\Models\Category;
 use App\Models\Manufacturer;
@@ -146,11 +145,11 @@ class WarehouseStockController extends Controller
                     'has_sent' => '1',
 
                 );
-                MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($has_received2);
+                MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->where('create_date', '=', $request->create_date)->update($has_received2);
 
                 WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($new_stock);
             }
-            $check = MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('has_sent', '0')->get();
+            $check = MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('has_sent', '0')->where('create_date', '=', $request->create_date)->get();
             if (count($check) < 1) {
                 $has_received = array(
                     'has_sent' => '1',
