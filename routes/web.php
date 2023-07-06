@@ -315,11 +315,11 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'], function () {
     Route::post('sale-report-manufacturer-submit', [ReportController2::class, 'sale_report_manufacturer_submit'])->name('sale-report-manufacturer-submit');
     Route::post('not-sold-medicine', [ReportController2::class, 'notSoldMedicine'])->name('not-sold-medicine');
 });
-Route::group(['middleware' => ['auth'], 'prefix' => 'writeoff'], function () {
-    Route::resource('outlet-writeoff', OutletWriteoffController::class);
-    Route::resource('warehouse-writeoff', WarehouseWriteoffController::class);
-});
-Route::group(['middleware' => ['auth'], 'prefix' => 'summary'], function () {
-    Route::get('outlet', [DashBoardController::class, 'summaryOutlet'])->name('outlet');
-    Route::get('warehouse', [DashBoardController::class, 'summaryWarehouse'])->name('warehouse');
-});
+// Route::group(['middleware' => ['auth'], 'prefix' => 'writeoff'], function () {
+//     Route::resource('outlet-writeoff', OutletWriteoffController::class);
+//     Route::resource('warehouse-writeoff', WarehouseWriteoffController::class);
+// });
+// Route::group(['middleware' => ['auth'], 'prefix' => 'summary'], function () {
+//     Route::get('outlet', [DashBoardController::class, 'summaryOutlet'])->name('outlet');
+//     Route::get('warehouse', [DashBoardController::class, 'summaryWarehouse'])->name('warehouse');
+// });

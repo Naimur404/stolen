@@ -56,7 +56,7 @@
                     </div>
                 </div>
             </div>
-            @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
+            {{-- @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
             <div class="col-sm-6 col-xl-3 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
@@ -71,8 +71,8 @@
                     </div>
                 </div>
             </div>
-            @endif
-            <div class="col-sm-6 col-xl-2 col-lg-6">
+            @endif --}}
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-secondary b-r-4 card-body">
                         <div class="media static-top-widget">
@@ -86,7 +86,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-secondary b-r-4 card-body">
                         <div class="media static-top-widget">
@@ -114,7 +114,7 @@
                     </div>
                 </div>
             </div>
-            @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
+            {{-- @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
             <div class="col-sm-6 col-xl-3 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
@@ -129,8 +129,8 @@
                     </div>
                 </div>
             </div>
-            @endif
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            @endif --}}
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-secondary b-r-4 card-body">
                         <div class="media static-top-widget">
@@ -144,7 +144,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
                         <div class="media static-top-widget">
@@ -158,7 +158,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-primary b-r-4 card-body">
                         <div class="media static-top-widget">
@@ -173,11 +173,11 @@
                 </div>
             </div>
 
-            @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
+            {{-- @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
                 <div class="col-xl-7 xl-100 box-col-12">
-                    @else
+                    @else --}}
                         <div class="col-xl-7 xl-100 box-col-12">
-                            @endif
+                            {{-- @endif --}}
                             <div class="card">
                                 <div class="card-header pb-0 d-flex justify-content-center align-items-center">
                                     <h6 class="mt-3">Top 10 Products This Month(Sale)</h6>
@@ -209,7 +209,7 @@
                                 </div>
                             </div>
                         </div>
-                        @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
+                        {{-- @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
                             <div class="col-xl-5 xl-100 box-col-12">
                                 <div class="card">
                                     <div class="card-header pb-0 d-flex justify-content-center align-items-center">
@@ -241,12 +241,12 @@
                                     </div>
                                 </div>
                             </div>
-                        @endif
-                        @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
+                        @endif --}}
+                        {{-- @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
                             <div class="col-xl-12 xl-100 box-col-12">
-                                @else
+                                @else --}}
                                     <div class="col-xl-5 xl-100 box-col-12">
-                                        @endif
+                                        {{-- @endif --}}
                                         <div class="card">
                                             <div
                                                 class="card-header pb-0 d-flex justify-content-center align-items-center">
