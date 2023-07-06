@@ -37,6 +37,7 @@
                             <table class="display data-table">
                                 <thead>
                                 <tr>
+                                    <th class="date">ID</th>
                                     <th class="date">Date</th>
                                     <th>Outlet Name</th>
                                     <th>Warehouse Name</th>
@@ -49,6 +50,7 @@
                                 @foreach ($medicinedistributes as $productPurchase)
 
                                     <tr>
+                                        <td> {{ $productPurchase->id }}</td>
                                         <td>
                                             {{ \Carbon\Carbon::parse($productPurchase->date)->format('d-m-Y')}}</td>
                                         @if ( $productPurchase->outlet_id == null)
@@ -142,7 +144,7 @@
             $(document).ready(function () {
                 $('.data-table').DataTable(
                     {
-                        order: [[1, 'desc']],
+                        order: [[0, 'desc']],
 });
             });
 

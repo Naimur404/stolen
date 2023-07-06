@@ -503,13 +503,17 @@
                         'warning'
                     )
                 }
-                else {
+                else if(pay < amount) {
+                    Swal.fire(
+                        'Payment Required',
+                        'This customer is not allowed for due',
+                        'warning'
+                    )
+                }
+                else{
                     let alert_text = '';
-                    if (pay < amount){
-                        alert_text = "This invoice will remain due";
-                    }else{
+
                         alert_text = "You won't be able to revert this!";
-                    }
 
                     Swal.fire({
                         title: 'Are you sure?',
