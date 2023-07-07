@@ -73,10 +73,7 @@ class OutletInvoiceController extends Controller
 
 
         $input = $request->all();
-
         $request->validate([
-
-
             'outlet_id' => 'required',
             'product_id' => 'required',
             'product_name' => 'required',
@@ -85,11 +82,9 @@ class OutletInvoiceController extends Controller
             'box_mrp' => 'required',
             'grand_total' => 'required',
             'payment_method_id' => 'required',
-
-
         ]);
 
-        if ($request->mobile == '' || $request->mobile == null) {
+        if ($request->mobile == '' || $request->mobile == null  || $request->mobile == '0000000000' ) {
             $customer = Customer::where('outlet_id', $request->outlet_id)->where('mobile', 'LIKE', '%00000%')->first();
             if (is_null($customer)) {
 
@@ -456,7 +451,7 @@ class OutletInvoiceController extends Controller
 
         if (auth()->user()->hasrole('Super Admin')) {
             $totalRecords = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->orderBy('id', 'desc')->select('count(*) as allcount')->count();
-            $invoices = DB::table('outlet_invoices')->whereDate('sale_date', '>=', Carbon::now()->month())
+            $invoicess = DB::table('outlet_invoices')->whereDate('sale_date', '>=', Carbon::now()->month())
                 ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->orWhereDate('outlet_invoices.sale_date', 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
                 ->orderBy($columnName, $columnSortOrder)
                 ->skip($start)
@@ -464,11 +459,12 @@ class OutletInvoiceController extends Controller
                 ->get();
         } else {
             $totalRecords = OutletInvoice::where('outlet_id', '=', $outlet_id)->whereDate('sale_date', '>=', Carbon::now()->month())->select('count(*) as allcount')->count();
-            $invoices = DB::table('outlet_invoices')->orderBy($columnName, $columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())->where('outlet_invoices.outlet_id', $outlet_id)
-                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->orWhereDate('outlet_invoices.sale_date', 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
+            $invoices = DB::table('outlet_invoices')->orderBy($columnName, $columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())
+                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
                 ->skip($start)
                 ->take($row_per_page)
                 ->get();
+                $invoicess = $invoices->where('outlet_id','=', Auth::user()->outlet_id);
         }
 
         $total_record_switch_filter = $totalRecords;
@@ -478,7 +474,7 @@ class OutletInvoiceController extends Controller
         $data_arr = array();
 
         $total = 0;
-        foreach ($invoices as $invoice) {
+        foreach ($invoicess as $invoice) {
 
             $print = route('print-invoice', $invoice->id);
             $return = route('sale-return.show', $invoice->id);
