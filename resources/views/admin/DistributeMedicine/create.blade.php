@@ -104,10 +104,10 @@
                         <div class="row">
 
                             <div class="col-md-3">
-                                <h2>Add Medicine</h2>
+                                <h2>Add Product</h2>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id','required']) }}
                                 <div class="invalid-feedback">Please Add Product</div>
 

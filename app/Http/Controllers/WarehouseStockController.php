@@ -337,11 +337,44 @@ class WarehouseStockController extends Controller
         $data = array(
             'purchase_price' => $request->purchase_price,
             'price' => $request->price,
-            'size' => Carbon::parse($request->size)->toDateString(),
-
+            'size' =>$request->size,
+            'quantity' => $request->quantity,
         );
 
         WarehouseStock::where('id', $request->id)->where('medicine_id', $request->medicine_id)->update($data);
         return redirect()->back()->with('success', ' Successfully Medicine Price Update.');
     }
+
+    
+public function allInOne(Request $request){
+ $datas = MedicineDistributeDetail::where('medicine_distribute_id', $request->disid)->get();
+foreach($datas as $data){
+    $warehousetock = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $data->medicine_id)->where('size', '=', $data->size)->first();
+
+    if ($warehousetock != null) {
+        $new_stock = array(
+            'quantity' => (int) $warehousetock->quantity - (int) $data->quantity,
+
+        );
+        $has_received2 = array(
+
+            'has_sent' => '1',
+
+        );
+        MedicineDistributeDetail::where('medicine_distribute_id', $request->disid)->where('medicine_id', $data->medicine_id)->where('size', '=', $data->size)->where('create_date', '=', $data->create_date)->update($has_received2);
+
+        WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $data->medicine_id)->where('size', '=', $data->size)->update($new_stock);
+    }
+    $check = MedicineDistributeDetail::where('medicine_distribute_id', $request->disid)->where('has_sent', '0')->where('create_date', '=', $data->create_date)->get();
+    if (count($check) < 1) {
+        $has_received = array(
+            'has_sent' => '1',
+        );
+        MedicineDistribute::where('id', $request->disid)->update($has_received);
+    }
+
+}
+return redirect()->back()->with('success', ' Successfully Distribute All This Product.');
+
+}
 }

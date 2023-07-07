@@ -138,7 +138,7 @@
                                 <h3>Purchase</h3>
                             </div>
 
-                            <div class="col-md-4">
+                            <div class="col-md-5">
                                 {{ Form::select('', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id','required']) }}
                                 <div class="invalid-feedback">Please Add Product</div>
 

@@ -130,6 +130,7 @@
                 </div>
             </div>
             @endif --}}
+              @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
             <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0">
                     <div class="bg-secondary b-r-4 card-body">
@@ -172,7 +173,7 @@
                     </div>
                 </div>
             </div>
-
+@endif
             {{-- @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
                 <div class="col-xl-7 xl-100 box-col-12">
                     @else --}}

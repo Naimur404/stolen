@@ -190,7 +190,7 @@
                             {!! Form::text('address',null,['class'=>'form-control', 'id' => 'address','placeholder'=>'Enter Address' ]) !!}
                         </div>
                         <div class="col-md-2">
-                            {!! Form::label('birth_date', 'Customer Birth Date', array('class' => 'form-label')) !!}
+                            {!! Form::label('birth_date', 'Birth Date', array('class' => 'form-label')) !!}
                             <input class="datepicker-here form-control digits" type="text" data-language="en"
                                    data-bs-original-title="" title="" id="birth_date" name="birth_date"
                                    value="" tabindex="2" required placeholder="dd-mm-yyyy">

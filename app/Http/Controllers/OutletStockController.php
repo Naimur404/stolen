@@ -287,7 +287,7 @@ class OutletStockController extends Controller
                     "category" => $category,
                     "manufacturer_name" => $manufacturer_name,
                     "price" => $price,
-                    "manufacturer_price" => $manufacturer_price,
+                    "manufacturer_price" => 'N/A',
                     "quantity" => $stocks,
                     "size" => $size,
                     "action" => $url,
@@ -389,5 +389,77 @@ class OutletStockController extends Controller
 
         // $product_details = Medicine::where('id', $id)->select('id','medicine_name','price','manufacturer_price')->first();
         return json_encode($product_details);
+    }
+
+    public function allInOne(Request $request){
+        $datas = MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->get();
+        foreach($datas as $data1){
+
+            $manu_price = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $data1->medicine_id)->where('size', '=', $data1->size)->first();
+            $data = array(
+                'quantity' => (int) $data1->quantity,
+                'price' => $data1->rate,
+                'outlet_id' => $request->outlet_id,
+                'medicine_id' => $data1->medicine_id,
+                'size' => $data1->size,
+                'create_date' => $data1->create_date,
+                'barcode_text' => $data1->barcode,
+                'warehouse_stock_id' => $data1->stock_id ?? null,
+                'purchase_price' => $manu_price->purchase_price,
+
+            );
+
+            $check = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $data1->medicine_id)->where('size', '=', $data1->size)->first();
+
+            if ($check != null) {
+                $stock2 = array(
+
+                    'quantity' => (int) $check->quantity + (int) $data1->quantity,
+                    'price' => $data1->rate,
+                    'purchase_price' => $manu_price->purchase_price,
+                );
+                $has_received2 = array(
+
+                    'has_received' => '1',
+
+                );
+                MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $data1->medicine_id)->where('size', '=', $data1->size)->where('create_date', '=', $data1->create_date)->update($has_received2);
+                OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $data1->medicine_id)->where('size', '=', $data1->size)->update($stock2);
+
+            } else {
+                $has_received2 = array(
+
+                    'has_received' => '1',
+
+                );
+                MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $data1->medicine_id)->where('size', '=', $data1->size)->where('create_date', '=', $data1->create_date)->update($has_received2);
+                $check = OutletStock::create($data);
+
+            }
+            $check2 = MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('has_received', '0')->get();
+            if (count($check2) < 1) {
+                $has_received = array(
+                    'has_received' => '1',
+
+                );
+                MedicineDistribute::where('id', $request->medicine_distribute_id)->update($has_received);
+            }
+
+                $data3 = array(
+                    'outlet_id' => $request->outlet_id,
+                    'medicine_distribute_id' => $request->medicine_distribute_id,
+                    'medicine_id' => $data1->medicine_id,
+                    'size' => $data1->size,
+                    'create_date' => $data1->create_date,
+                    'quantity' => $data1->quantity,
+                    'checked_by' => Auth::user()->id,
+                    'remarks' => 'added',
+
+                );
+                OutletCheckIn::create($data3);
+    //            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->update([''])
+
+        }
+        return redirect()->back()->with('success', ' Successfully Received All This Product.');
     }
 }

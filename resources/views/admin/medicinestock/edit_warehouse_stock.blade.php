@@ -74,7 +74,7 @@
                         </td>
                         <td><input class="" type="text" name="size" value="{{  $warehouseStock->size }}" tabindex="2" required>
                         </td>
-                        <td> <input class="form-control" type="number" name="quantity" id="qty" value="{{ $warehouseStock->quantity }}" required readonly></td>
+                        <td> <input class="form-control" type="number" name="quantity" id="qty" value="{{ $warehouseStock->quantity }}" required></td>
                         <td><input type="number" name="purchase_price" id="price" value="{{ $warehouseStock->purchase_price }}" step="any" class="form-control" required>
                            </td>
                            <td><input type="number" name="price" id="box_mrp" value="{{ $warehouseStock->price }}" step="any" class="form-control" required>

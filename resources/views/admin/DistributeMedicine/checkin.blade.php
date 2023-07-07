@@ -26,8 +26,41 @@
 
         @endslot
 
-        @slot('button')
 
+        @slot('button')
+        @if (Auth::user()->hasRole(['Super Admin', 'Admin']))
+        @if($productPurchase->has_sent == 1)
+        <a href="javscript:void()"
+        class="btn btn-danger btn-xs" title="Recived"
+        style="margin-right:5px"><i class="fa fa-check"
+        aria-hidden="true"></i>All This Product Distribute Done</a>
+        @else
+        {!! Form::open(['route' => 'all-in-one' ,'class' => 'needs-validation testform2', 'novalidate'=> '']) !!}
+        <input type="hidden" name="disid" value="{{ $productPurchase->id }}">
+        <input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
+        <button type="submit" class="btn btn-success dristribute" tabindex="19" id="dristribute">
+            All Dristribute
+        </button>
+        {!! Form::close() !!}
+        @endif
+@else
+
+@if($productPurchase->has_received == 1)
+<a href="javscript:void()"
+class="btn btn-danger btn-xs" title="Recived"
+style="margin-right:5px"><i class="fa fa-check"
+aria-hidden="true"></i>All This Product Recieved Done</a>
+@else
+{!! Form::open(['route' => 'all-in-one-outlet' ,'class' => 'needs-validation testform3', 'novalidate'=> '']) !!}
+<input type="hidden" name="medicine_distribute_id" value="{{ $productPurchase->id }}">
+<input type="hidden" name="warehouse_id" value="{{ $productPurchase->warehouse_id }}">
+<input type="hidden" name="outlet_id" value="{{ $productPurchase->outlet_id }}">
+<button type="submit" class="btn btn-success received" tabindex="19" id="received">
+    All Recieved
+</button>
+{!! Form::close() !!}
+@endif
+@endif
         @endslot
     @endcomponent
     <div class="col-md-12 col-lg-12">
@@ -169,10 +202,27 @@
     </div>
 
     @push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
         $(document).ready(function() {
           $('.save_purchase_btn').on('click', function() {
             var $form = $(this).closest('.testform');
+            if (confirm("Are you sure you want to Click ?")) {
+              $form.submit(); // Submit the form
+            }else{
+              return false;
+            }
+          });
+          $('.dristribute').on('click', function() {
+            var $form = $(this).closest('.testform2');
+            if (confirm("Are you sure you want to Click ?")) {
+              $form.submit(); // Submit the form
+            }else{
+              return false;
+            }
+             });
+          $('.received').on('click', function() {
+            var $form = $(this).closest('.testform3');
             if (confirm("Are you sure you want to Click ?")) {
               $form.submit(); // Submit the form
             }else{

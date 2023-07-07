@@ -139,7 +139,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('medicine-purchase/{id}/check-in', [MedicinePurchaseController::class, 'checkIn'])->name('medicine-purchase.checkIn');
     Route::get('distribute-medicine/{id}/check-in', [MedicineDistributeController::class, 'checkIn'])->name('distribute-medicine.checkIn');
     Route::get('medicine-return/{id}/check-in', [WarehouseReturnController::class, 'checkIn'])->name('medicine-return.checkIn');
-
+    Route::Post('all-in-one', [WarehouseStockController::class, 'allInOne'])->name('all-in-one');
+    Route::Post('all-in-one-outlet', [OutletStockController::class, 'allInOne'])->name('all-in-one-outlet');
 //medicine route
     Route::get('all-medicines-lists', [MedicineController::class, 'get_all_medicines'])->name('medicine.all-medicines');
 
