@@ -217,7 +217,6 @@ class OutletStockController extends Controller
 
             $medicine_stock_query = DB::table('outlet_stocks')
                 ->orderBy($columnName, $columnSortOrder)
-                ->where('outlet_stocks.quantity', '>', 0)
                 ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                 ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
                 ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
@@ -230,7 +229,6 @@ class OutletStockController extends Controller
                 $medicine_stock_query = DB::table('outlet_stocks')
                     ->orderBy($columnName, $columnSortOrder)
                     ->where('outlet_stocks.outlet_id', '=' , $id)
-                    ->where('outlet_stocks.quantity', '>', 0)
                     ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                     ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
                     ->select('outlet_stocks.*', 'medicines.medicine_name');
@@ -238,7 +236,6 @@ class OutletStockController extends Controller
                 $medicine_stock_query = DB::table('outlet_stocks')
                     ->orderBy($columnName, $columnSortOrder)
                     ->where('outlet_id', Auth::user()->outlet_id)
-                    ->where('quantity', '>', 0)
                     ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
                     ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
                     ->select('outlet_stocks.*', 'medicines.medicine_name');
@@ -268,7 +265,11 @@ class OutletStockController extends Controller
 
                 $s_no = $sl++;
                 $medicine_name = Medicine::get_medicine_name($stock->medicine_id);
-                $manufacturer_price = '৳&nbsp;' . $stock->purchase_price;
+                if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
+                    $manufacturer_price = '৳&nbsp;' . $stock->purchase_price;
+                }else{
+                    $manufacturer_price = 'N/A';
+                }
                 $medicine = Medicine::where('id', $stock->medicine_id)->first();
                 $category = Category::get_category_name($medicine->category_id);
                 $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);
@@ -287,7 +288,7 @@ class OutletStockController extends Controller
                     "category" => $category,
                     "manufacturer_name" => $manufacturer_name,
                     "price" => $price,
-                    "manufacturer_price" => 'N/A',
+                    "manufacturer_price" => $manufacturer_price,
                     "quantity" => $stocks,
                     "size" => $size,
                     "action" => $url,
