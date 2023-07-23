@@ -80,6 +80,7 @@
                 <tr>
                     <th>SL</th>
                     <th>Name Of Product</th>
+                    <th>Size</th>
                     <th>Purchase Quantity</th>
                     <th>Return Quantity</th>
                     <th>Price</th>
@@ -89,7 +90,9 @@
                 @foreach ($salesreturndetails as $data)
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
+
                         <td>{{ $data->medicine_name }}</td>
+                        <td>{{ $data->size }}</td>
                         <td>{{ $data->quantity }}</td>
                         @php
                             $data1 = App\Models\SalesReturn::where('invoice_id', $data->outlet_invoice_id ?? false)->first();
