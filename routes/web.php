@@ -217,6 +217,7 @@ Route::group(['middleware' => ['auth']], function () {
 //invoice print
     Route::post('/last-invoice', [OutletInvoiceController::class, 'print'])->name('last-invoice.print');
     Route::get('/print-invoice/{id}', [OutletInvoiceController::class, 'printInvoice'])->name('print-invoice');
+    Route::get('/print-invoice-exchange/{id}', [\App\Http\Controllers\ExchnageController::class, 'printInvoice'])->name('print-invoice-exchange');
 
 //sales return route
 
@@ -230,7 +231,11 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/pay-due/{id}', [OutletInvoiceController::class, 'payDue'])->name('payDue');
     Route::post('/pay-due', [OutletInvoiceController::class, 'paymentDue'])->name('paymentDue');
 
-
+    Route::get('/exchanges/create', [\App\Http\Controllers\ExchnageController::class,'create'])->name('exchanges.create');
+    Route::get('/exchanges', [\App\Http\Controllers\ExchnageController::class,'index'])->name('exchange.index');
+    Route::get('/exchanges-details/{id}', [\App\Http\Controllers\ExchnageController::class,'exchangeDetails'])->name('exchange.details');
+    Route::get('/get-products/{invoiceId}', [\App\Http\Controllers\ExchnageController::class,'getProducts']);
+    Route::post('/exchange', [\App\Http\Controllers\ExchnageController::class,'exchange']);
 });
 
 Route::group(['middleware' => ['auth'], 'prefix' => 'alert'], function () {
@@ -324,3 +329,5 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'], function () {
 //     Route::get('outlet', [DashBoardController::class, 'summaryOutlet'])->name('outlet');
 //     Route::get('warehouse', [DashBoardController::class, 'summaryWarehouse'])->name('warehouse');
 // });
+
+
