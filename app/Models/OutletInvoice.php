@@ -28,6 +28,7 @@ class OutletInvoice extends Model
         'redeem_point',
         'payment_method_id',
         'added_by',
+        'is_exchange'
     ];
 
     public function outlet()

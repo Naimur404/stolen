@@ -213,7 +213,7 @@ class OutletInvoiceController extends Controller
                     'medicine_name' => $input['product_name'][$i],
                     'size' => $input['size'][$i],
 
-                    'available_qty' => $input['stockquantity'][$i],
+                    'available_qty' => $input['stockquantity'][$i] - $input['quantity'][$i],
 
                     'quantity' => $input['quantity'][$i],
                     'rate' => $input['box_mrp'][$i],

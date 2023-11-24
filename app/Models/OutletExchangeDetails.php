@@ -6,23 +6,19 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
-class OutletInvoiceDetails extends Model
+class OutletExchangeDetails extends Model
 {
     use HasFactory;
     use SoftDeletes;
-
-    protected $table = 'outlet_invoice_details';
+    protected $table = 'outlet_exchange_details';
     protected $fillable = [
-        'outlet_invoice_id',
-        'stock_id',
+        'outlet_exchange_id',
         'medicine_id',
         'medicine_name',
         'size',
-        'create_date',
         'available_qty',
         'quantity',
         'rate',
-        'discount',
         'total_price',
         'is_exchange'
     ];
@@ -32,9 +28,9 @@ class OutletInvoiceDetails extends Model
         return $this->belongsTo(Medicine::class, 'medicine_id', 'id');
     }
 
-    public function invoice()
+    public function outletEchange()
     {
-        return $this->belongsTo(OutletInvoice::class, 'outlet_invoice_id', 'id');
+        return $this->belongsTo(OutletExchange::class, 'outlet_exchange_id', 'id');
     }
 
     public function outletStock()
