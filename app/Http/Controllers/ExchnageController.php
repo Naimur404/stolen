@@ -65,12 +65,12 @@ class ExchnageController extends Controller
             }
         }
 
-        return view('admin.pos.exchange_index');
+        return view('admin.Pos.exchange_index');
     }
 
     public function create()
     {
-        return view('admin.pos.exchange');
+        return view('admin.Pos.exchange');
     }
 
     public function getProducts($invoiceId)
@@ -233,7 +233,7 @@ class ExchnageController extends Controller
         $exchange = OutletExchange::where('id',$id)->first();
         $exchangeDetails = OutletExchangeDetails::where('outlet_exchange_id', $id)->get();
 
-        return view('admin.pos.exchange_details', compact('exchange','exchangeDetails'));
+        return view('admin.Pos.exchange_details', compact('exchange','exchangeDetails'));
     }
 
 }
