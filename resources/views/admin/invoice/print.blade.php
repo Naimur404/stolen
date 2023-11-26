@@ -237,7 +237,7 @@
     </table>
     <br>
     <div class="row justify-content-center mt-3">
-        <img style="margin-left: 130px"
+        <img style="margin-left: 95px"
              src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$outletInvoice->id", 'C39', 2) !!}" alt="barcode"/>
     </div>
 
@@ -245,6 +245,8 @@
         <h4>A Concern of Stolen Group</h4>
         <h4>Thank You ❤</h4>
         <h5>Developed By: Tyrodevs.com</h5>
+        <h5 class="">চার দিনের মধ্যে এক্সচেঞ্জ সম্ভব (T&C)</h5>
+        <h5>ইনভয়েস অবশ্যই সাথে নিয়ে আসতে হবে</h5>
 {{--        <h6>Software by Pigeon Soft</h6>--}}
     </div>
 
