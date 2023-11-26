@@ -66,7 +66,7 @@
     <input type="hidden" name="outlet_id" value="{{ $outlet_id }}">
     <div class="row item-row-add">
 
-        <div class="col-md-9 col-lg-9">
+        <div class="col-md-8 col-lg-8">
             <div class="card ">
 
 
@@ -76,7 +76,7 @@
                     <div class="form-group row">
 
 
-                        <div class="col-md-3">
+                        <div class="col-md-4">
                             {{ Form::select('medicine_id', [], null, ['class' => 'form-control', 'placeholder' => 'Select Product', 'id' => 'medicine_id']) }}
 
 
@@ -98,8 +98,8 @@
 
                             {!! Form::text('medicine',null,['class'=>'form-control' ,'placeholder'=>'Barcode','id' => 'barcode']) !!}
                         </div>
-                        <div class="col-md-5">
-                            <p class="btn btn-air-info">{{ Auth::user()->name }}</p>
+                        <div class="col-md-4">
+{{--                            <p class="btn btn-air-info">{{ Auth::user()->name }}</p>--}}
 
                             <p class="btn btn-air-info mb-3"
                                style="margin-left:5PX">{{ Carbon\Carbon::today()->format('d M Y') }}</p>
@@ -198,7 +198,7 @@
                         </div>
                         <div class="col-md-2">
                             {!! Form::label('points', 'Points', array('class' => 'form-label')) !!}
-                            {!! Form::number('points',null,['class'=>'form-control', 'id' => 'points','placeholder'=>'Points','step' => '0.1' ]) !!}
+                            {!! Form::number('points',null,['class'=>'form-control', 'id' => 'points','placeholder'=>'Points','step' => '0.1', 'readonly' ]) !!}
                         </div>
                     </div>
 
@@ -212,7 +212,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-3 col-lg-3">
+        <div class="col-md-4 col-lg-4">
 
             <div class="card ">
 
@@ -278,24 +278,28 @@
                                                class="form-control text-right afterdis fw-bold text-primary"
                                                name="afterdis"
                                                id="afterdis" readonly>
-                                    </td>
+                                        <input type="hidden" id="vat_percent" max="100" class="text-right form-control"/>
 
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="6"><b>Vat:</b></td>
-                                    <td></td>
-                                    <td class="text-right">
-
-                                        <input type="number" id="vat_percent" max="100" class="text-right form-control"
-                                               placeholder="%"/>
-
-                                    </td>
-                                    <td>
-                                        <input type="number" id="vat" class="text-right form-control clearVat"
+                                        <input type="hidden" id="vat" class="text-right form-control clearVat"
                                                name="vat" value="0" step="any" placeholder="Tk"/>
                                     </td>
 
                                 </tr>
+{{--                                <tr>--}}
+{{--                                    <td class="text-right" colspan="6"><b>Vat:</b></td>--}}
+{{--                                    <td></td>--}}
+{{--                                    <td class="text-right">--}}
+
+{{--                                        <input type="number" id="vat_percent" max="100" class="text-right form-control"--}}
+{{--                                               placeholder="%"/>--}}
+
+{{--                                    </td>--}}
+{{--                                    <td>--}}
+{{--                                        <input type="number" id="vat" class="text-right form-control clearVat"--}}
+{{--                                               name="vat" value="0" step="any" placeholder="Tk"/>--}}
+{{--                                    </td>--}}
+
+{{--                                </tr>--}}
 
                                 <tr>
                                     <td class="text-right" colspan="8"><b>Grand Total:</b></td>
@@ -350,18 +354,20 @@
                                     <td class="text-right">
                                         <input type="number" id="back" class="text-right form-control back"
                                                name="back_amount" value="0" readonly="readonly"/>
-                                    </td>
-
-                                </tr>
-                                <tr>
-                                    <td class="text-right" colspan="8"><b>Due Amount :</b></td>
-
-                                    <td class="text-right">
-                                        <input type="number" id="due" class="text-right form-control" name="due_amount"
+                                        <input type="hidden" id="due" class="text-right form-control" name="due_amount"
                                                value="0" readonly="readonly"/>
                                     </td>
 
                                 </tr>
+{{--                                <tr>--}}
+{{--                                    <td class="text-right" colspan="8"><b>Due Amount :</b></td>--}}
+
+{{--                                    <td class="text-right">--}}
+{{--                                        <input type="hidden" id="due" class="text-right form-control" name="due_amount"--}}
+{{--                                               value="0" readonly="readonly"/>--}}
+{{--                                    </td>--}}
+
+{{--                                </tr>--}}
 
 
                                 <tr>
@@ -380,18 +386,18 @@
 
 
                             <div class="col-md-12">
-                                <label for="payment_type" class="text-right col-form-label mt-3">Payment Method</label>
+                                <label for="payment_type" class="text-right col-form-label">Payment Method</label>
 
                                 {{ Form::select( 'payment_method_id', $payment_methods, null, ['class' => 'form-control', 'required' ,'required'], ) }}
                                 <div class="invalid-feedback">Please Add Payment Type</div>
 
                                 <div class="card-footer text-end">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-info" onclick="lastprint()">Recent
+                                        <button type="button" class="btn btn-info btn-sm" onclick="lastprint()">Recent
                                             Invoice
                                         </button>
                                         &nbsp;
-                                        <button type="button" class="btn btn-primary" onclick="submitForm()">Save &
+                                        <button type="button" class="btn btn-primary btn-sm" onclick="submitForm()">Save &
                                             Print
                                         </button>
                                     </div>
