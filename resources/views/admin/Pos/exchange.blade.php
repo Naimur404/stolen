@@ -89,7 +89,7 @@
                     success: function (data) {
                         var options = "";
                         data.forEach(function (product) {
-                            options += `<option value="${product.medicine_id}" data-name="${product.medicine_name}" data-size="${product.size}" data-qty ="${product.quantity}" data-rate="${product.rate}" data-available="${product.available_qty}">${product.medicine_name} - ${product.size}</option>`;
+                            options += `<option value="${product.medicine_id}" data-name="${product.medicine_name}" data-size="${product.size}" data-qty ="${product.quantity}" data-rate="${product.rate}" data-available="${product.available_qty}" data-purchase="${product.quantity}">${product.medicine_name} - ${product.size}</option>`;
                         });
                         $("#product_select").html(options);
                     },
@@ -147,37 +147,6 @@
                 e.preventDefault();
             });
 
-            // Add new product based on selected medicine_id
-            {{--$("#addProductRow").click(function () {--}}
-            {{--    if (medicine_id) {--}}
-            {{--        $.ajax({--}}
-            {{--            url: "{!! url('get-medicine-details-for-sale') !!}" + "/" + medicine_id,--}}
-            {{--            type: "GET",--}}
-            {{--            dataType: "json",--}}
-            {{--            beforeSend: function () {--}}
-            {{--                // You can add loading indicators or other UI changes here--}}
-            {{--            },--}}
-            {{--            success: function (data) {--}}
-            {{--                // Populate the medicine_details div with fetched data--}}
-            {{--                $("#medicine_details").html(`--}}
-            {{--                <p>Product ID: ${data.id}</p>--}}
-            {{--                <p>Name: ${data.name}</p>--}}
-            {{--                <p>Size: ${data.size}</p>--}}
-            {{--                <!-- Add more details as needed -->--}}
-            {{--            `);--}}
-            {{--            },--}}
-            {{--            error: function () {--}}
-            {{--                alert('Data not found!');--}}
-            {{--            },--}}
-            {{--            complete: function () {--}}
-            {{--                // You can perform cleanup or other actions here--}}
-            {{--            }--}}
-            {{--        });--}}
-            {{--    } else {--}}
-            {{--        alert("Please Select Medicine Name");--}}
-            {{--    }--}}
-            {{--});--}}
-
                 // Add selected product to the table
                 function addSelectedProduct() {
                     var selectedProductId = $("#product_select").val();
@@ -187,6 +156,7 @@
                     var avaiableQty = selectedProduct.data("available");
                     var productQty = selectedProduct.data("qty");
                     var productPrice = selectedProduct.data("rate")
+                    var productPurchase = selectedProduct.data("purchase")
 
                     console.log(avaiableQty);
 
@@ -204,7 +174,11 @@
                                                                placeholder="Enter unit" value="${productQty}" required></td>
                     <td><input type="number" class="form-control newtest" id="testprice2"
                                                                name="qty"
-                                                               placeholder="Enter unit" value="${productPrice}" required readonly></td>
+                                                               placeholder="Enter unit" value="${productPrice}" required readonly>
+<input type="hidden" class="form-control newtest" id="pruchase2"
+                                                               name="purchase2"
+                                                               value="${productPurchase}" required readonly>
+</td>
 <td><button type="button" class="btn btn-danger" onclick="deleteProduct1(this)">Delete</button></td>
                 </tr>
             `);
@@ -272,28 +246,88 @@
                     new_products: getNewProducts(),
                 };
 
-            if (exchangeData.exchange_products.length === 0 || exchangeData.new_products.length === 0){
 
-                    Swal.fire('No Exchange or New Product Selected, Please Select First');
-                }
-              else  if (exchangeData.exchange_products.length > 1 || exchangeData.new_products.length > 1){
 
-                    Swal.fire('Only one Product can exchange at a time');
+                var newProducts = exchangeData.new_products;
+                var exchangeProducts = exchangeData.exchange_products;
+
+                var hasZeroQty1 = newProducts.some(function(product) {
+                    return parseInt(product.qty) === 0;
+                });
+
+                var hasZeroQty2 = exchangeProducts.some(function(product) {
+                    return parseInt(product.qty) === 0;
+                });
+
+                const existingItem1  = new Set(exchangeProducts.map(item => `${item.name}_${item.size}`)).size !== exchangeProducts.length;
+
+                var existingItem2 = new Set(newProducts.map(item => `${item.name}_${item.size}`)).size !== newProducts.length;
+
+                var hasgreaterQty1 = newProducts.some(function(product) {
+                    return parseInt(product.avalqty) < parseInt(product.qty);
+                });
+
+                var hasgreaterQty2 = exchangeProducts.some(function(product) {
+                    return parseInt(product.avalqty) < parseInt(product.qty);
+                });
+
+                // console.log(hasZeroQty1);console.log(hasZeroQty2);
+                //
+                // console.log(newProducts.length);
+                // console.log(exchangeProducts);
+
+                var exchangeGrandTotal;
+
+// Iterate through the exchangeProducts array to find the object with grandTotal key
+                exchangeData.exchange_products.forEach(function (product) {
+                    if (product.hasOwnProperty('grandTotal')) {
+                        exchangeGrandTotal = product.grandTotal;
+                    }
+                });
+
+                var newGrandTotal;
+
+// Iterate through the exchangeProducts array to find the object with grandTotal key
+                exchangeData.new_products.forEach(function (product) {
+                    if (product.hasOwnProperty('grandTotal')) {
+                        newGrandTotal = product.grandTotal;
+                    }
+                });
+
+                // console.log(exchangeGrandTotal);
+                // console.log(newGrandTotal);
+
+
+                // console.log(exchangeData.exchange_products);
+                if (newProducts.length < 2  || exchangeProducts.length < 2){
+                    Swal.fire('No Product Selected, Please Select It');
                 }
-            else  if(exchangeData.new_products[0].qty < 1 ){
-                    Swal.fire('New Product Quantity Can not be Empty');
-                }else if(exchangeData.exchange_products[0].avalqty < exchangeData.exchange_products[0].qty || exchangeData.new_products[0].avalqty < exchangeData.new_products[0].qty)  {
-                    Swal.fire('Product Quantity not more then Available Quantity');
+
+                else if (existingItem1 || existingItem2){
+
+                    Swal.fire('Same Product have double entry, Please delete One');
                 }
-               else if (exchangeData.exchange_products[0].total_price > exchangeData.new_products[0].total_price){
+           else if (hasgreaterQty1 || hasgreaterQty2){
+
+                    Swal.fire('Product not be greater than available QTY');
+                }
+              // else  if (exchangeData.exchange_products.length > 1 || exchangeData.new_products.length > 1){
+              //
+              //       Swal.fire('Only one Product can exchange at a time');
+              //   }
+            else  if(hasZeroQty1 || hasZeroQty2){
+                    Swal.fire('Product Quantity Can not be Empty');
+                }
+               else if (newGrandTotal < exchangeGrandTotal){
                     Swal.fire('Exchange price not Less then new Product price');
                 }
 
+
                else {
 
-                   if(exchangeData.new_products[0].total_price > exchangeData.exchange_products[0].total_price){
+                   if(newGrandTotal > exchangeGrandTotal){
 
-                       const price = exchangeData.new_products[0].total_price - exchangeData.exchange_products[0].total_price
+                       const price = parseInt(newGrandTotal - exchangeGrandTotal)
                        let alert_text = '';
 
                        alert_text = "Please Take TK " +price+ " from customer, "+"You won't be able to revert this!";
@@ -314,6 +348,8 @@
                                    },
                                    dataType: "json",
                                    success: function (response) {
+
+                                       console.log(response);
                                        var datas = response.data;
                                        var url = "{{ route('print-invoice-exchange', ':id') }}";
                                        url = url.replace(':id', datas);
@@ -364,6 +400,8 @@
                                    },
                                    dataType: "json",
                                    success: function (response) {
+
+                                       console.log(response);
                                        var datas = response.data;
                                        var url = "{{ route('print-invoice-exchange', ':id') }}";
                                        url = url.replace(':id', datas);
@@ -412,8 +450,11 @@
                     var productName = $(this).find("td:nth-child(2)").text();
                     var productSize = $(this).find("td:nth-child(3)").text();
                     var availableqty = $(this).find("td:nth-child(4)").text();
-                    var productQty = $("#qtytest2").val();
-                    var productPrice = $("#testprice2").val();
+                    var productQty = $(this).find("#qtytest2").val();
+                    var productPrice = $(this).find("#testprice2").val();
+                    var productPurchase = $(this).find("#pruchase2").val();
+
+                    var total_price = productPrice * productQty;
 
                     exchangeProducts.push({
                         id: productId,
@@ -422,10 +463,22 @@
                         avalqty: availableqty,
                         qty: productQty,
                         price: productPrice,
-                        total_price: productPrice*productQty
+                        total_price: total_price,
+                        purchase : productPurchase
                     });
+
+                    // Assuming exchangeProducts is defined outside this loop
                 });
 
+// Calculate the grand total price
+                var grandTotal = exchangeProducts.reduce(function (acc, product) {
+                    return acc + product.total_price;
+                }, 0);
+
+// Add the grand total to the exchangeProducts array
+                exchangeProducts.push({
+                    grandTotal: grandTotal
+                });
 
                 return exchangeProducts;
             }
@@ -436,8 +489,10 @@
                     var productName = $(this).find("td:nth-child(2)").text();
                     var productSize = $(this).find("td:nth-child(3)").text();
                     var availableqty = $(this).find("td:nth-child(4)").text();
-                    var productQty = $("#qtytest").val();
-                     var productPrice = $("#testprice").val();
+                    var productQty = $(this).find("#qtytest").val();
+                    var productPrice = $(this).find("#testprice").val();
+
+                    var total_price = productPrice * productQty;
 
                     newProducts.push({
                         id: productId,
@@ -446,11 +501,23 @@
                         avalqty: availableqty,
                         qty: productQty,
                         price: productPrice,
-                        total_price: productPrice*productQty
+                        total_price: total_price
                     });
 
+                    // Assuming exchangeProducts is defined outside this loop
                 });
 
+// Calculate the grand total price
+                var grandTotal = newProducts.reduce(function (acc, product) {
+                    return acc + product.total_price;
+                }, 0);
+
+// Add the grand total to the exchangeProducts array
+                newProducts.push({
+                    grandTotal: grandTotal
+                });
+
+// Now, exchangeProducts array contains individual product details and the grand total
                 return newProducts;
             }
             function deleteProduct2(button) {
