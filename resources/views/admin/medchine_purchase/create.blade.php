@@ -185,16 +185,16 @@
                                         <nobr>QTY <i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Manufacturer Price<i class="text-danger">*</i></nobr>
+                                        <nobr>MSRP<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>MRP<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Product Type <i class="text-danger">*</i></nobr>
+                                        <nobr>Type <i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Total_Price</nobr>
+                                        <nobr>Total Price</nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Action</nobr>
