@@ -102,7 +102,7 @@
 {{--                            <p class="btn btn-air-info">{{ Auth::user()->name }}</p>--}}
 
                             <p class="btn btn-air-info mb-3"
-                               style="margin-left:1PX">{{ Carbon\Carbon::today()->format('d M Y') }}</p>
+                               style="margin-left:1PX">{{ Carbon\Carbon::today()->format('d M y') }}</p>
                             <p class="btn btn-air-info mb-3" style="margin-left:4PX" id="time"></p>
                         </div>
 
