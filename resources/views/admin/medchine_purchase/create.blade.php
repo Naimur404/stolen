@@ -188,7 +188,7 @@
                                         <nobr>MSRP<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>MRP<i class="text-danger">*</i></nobr>
+                                        <nobr>MRP    <i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Type <i class="text-danger">*</i></nobr>
