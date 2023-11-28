@@ -102,8 +102,8 @@
 {{--                            <p class="btn btn-air-info">{{ Auth::user()->name }}</p>--}}
 
                             <p class="btn btn-air-info mb-3"
-                               style="margin-left:5PX">{{ Carbon\Carbon::today()->format('d M Y') }}</p>
-                            <p class="btn btn-air-info mb-3" style="margin-left:5PX" id="time"></p>
+                               style="margin-left:1PX">{{ Carbon\Carbon::today()->format('d M Y') }}</p>
+                            <p class="btn btn-air-info mb-3" style="margin-left:4PX" id="time"></p>
                         </div>
 
 
@@ -425,11 +425,16 @@
 
             let a;
             let time;
+
             setInterval(() => {
                 a = new Date();
-                time = a.getHours() + ':' + a.getMinutes() + ':' + a.getSeconds();
+                time = a.getHours() % 12 || 12; // Get the 12-hour format of the hour
+                time += ':' + a.getMinutes(); // Add minutes
+                time += ':' + a.getSeconds(); // Add seconds
+                time += ' ' + (a.getHours() >= 12 ? 'PM' : 'AM'); // Append AM or PM
                 document.getElementById('time').innerHTML = time;
             }, 1000);
+
 
             $("#purchaseTable").on("change", "#saleRow", function() {
                 let tr_index = $(this).index();

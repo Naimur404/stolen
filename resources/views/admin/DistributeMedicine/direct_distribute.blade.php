@@ -176,7 +176,7 @@
                                         <nobr>Quantity <i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Manufacturer Price<i class="text-danger">*</i></nobr>
+                                        <nobr>MSRP <i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Box MRP<i class="text-danger">*</i></nobr>

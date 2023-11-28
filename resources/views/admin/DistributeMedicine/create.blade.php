@@ -132,7 +132,7 @@
                                 <thead>
                                 <tr class="item-row">
                                     <th class="text-center">
-                                        <nobr>Product Info<i class="text-danger">*</i></nobr>
+                                        <nobr>Product<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
                                         <nobr>Barcode<i class="text-danger">*</i></nobr>
@@ -147,10 +147,10 @@
                                         <nobr>Stock<i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>Manufacturer Price<i class="text-danger">*</i></nobr>
+                                        <nobr>MSRP <i class="text-danger">*</i></nobr>
                                     </th>
                                     <th class="text-center">
-                                        <nobr>MRP<i class="text-danger">*</i></nobr>
+                                        <nobr>MRP <i class="text-danger">*</i></nobr>
                                     </th>
 
                                     <th class="text-center">
