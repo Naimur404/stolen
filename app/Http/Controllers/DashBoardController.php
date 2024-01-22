@@ -33,7 +33,7 @@ class DashBoardController extends Controller
         if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
             $customers = Customer::count();
             $products = OutletStock::where('quantity', '>', 0)->count();
-            $stocks = OutletStock::where('quantity', '<', 10)->count();
+            $stocks = OutletStock::where('quantity', '<', 3)->count();
             $purchases = MedicinePurchase::whereDate('purchase_date', Carbon::now())->sum('grand_total');
             $sales = OutletInvoice::whereDate('sale_date', Carbon::now())->sum('payable_amount');
             $returns = SalesReturn::whereDate('return_date', Carbon::now())->count();
@@ -68,7 +68,7 @@ class DashBoardController extends Controller
             $sales = OutletInvoice::where('outlet_id', $outlet_id)->whereDate('sale_date', Carbon::now())->sum('grand_total');
             $returns = SalesReturn::where('outlet_id', $outlet_id)->whereDate('return_date', Carbon::now())->count();
             $products = OutletStock::where('outlet_id', $outlet_id)->where('quantity', '>', 0)->count();
-            $stocks = OutletStock::where('outlet_id', $outlet_id)->where('quantity', '<', 10)->count();
+            $stocks = OutletStock::where('outlet_id', $outlet_id)->where('quantity', '<', 3)->count();
             $invoices = OutletInvoice::where('outlet_id', $outlet_id)->whereDate('sale_date', Carbon::now())->count();
             $lastdaysales = OutletInvoice::where('outlet_id', $outlet_id)->whereDate('sale_date', today()->subDay())->sum('payable_amount');
 
