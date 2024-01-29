@@ -215,6 +215,20 @@
             <td colspan="3" style="border: none;" style=""><b>{{ $outletInvoice->customer->name }} </b></td>
 
         </tr>
+        @if ($outletInvoice->outlet->id == 4)
+        <tr>
+
+            <td style="text-align: left; border: none;">Customer Phone:</td>
+            <td colspan="3" style="border: none;" style=""><b>{{ $outletInvoice->customer->mobile }} </b></td>
+
+        </tr>
+        <tr>
+
+            <td style="text-align: left; border: none;">Customer Address:</td>
+            <td colspan="3" style="border: none;" style=""><b>{{ $outletInvoice->customer->address }} </b></td>
+
+        </tr>
+        @endif
         @if($outletInvoice->customer->name != 'Walking Customer')
         <tr>
             <td style="text-align: left; border: none;">Earned Points:</td>
@@ -245,8 +259,11 @@
         <h4>A Concern of Stolen Group</h4>
         <h4>Thank You ❤</h4>
         <h5>Developed By: Tyrodevs.com</h5>
+        @if ($outletInvoice->outlet->id != 4)
         <h5 class="">চার দিনের মধ্যে এক্সচেঞ্জ সম্ভব (T&C)</h5>
         <h5>ইনভয়েস অবশ্যই সাথে নিয়ে আসতে হবে</h5>
+        @endif
+
 {{--        <h6>Software by Pigeon Soft</h6>--}}
     </div>
 
