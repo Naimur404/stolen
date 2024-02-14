@@ -81,11 +81,11 @@ Invoice.prototype = {
                 total = self.roundNumber(total, 2);
                 discount = 0;
                 row.find($.opt.totaldis).val(discount);
-                row.find($.opt.total).val(total);
+                final = total;
+                row.find($.opt.total).val(self.roundNumber(final, 2));
             } else {
                 total = self.roundNumber(total, 2);
                 discount = ((discount / 100) * total);
-                row.find($.opt.totaldis).val(discount);
                 final = total - discount;
                 row.find($.opt.total).val(self.roundNumber(final, 2));
             }
@@ -179,19 +179,19 @@ Invoice.prototype = {
         let grandTotal = 0;
         let payable_amount = 0;
 
-        if (Number(jQuery($.opt.afterdis).val()) === 0 || jQuery($.opt.afterdis).val() === '') {
-            if (Number(jQuery($.opt.vat).val()) !== 0 || jQuery($.opt.vat).val() !== '') {
+        if (Number(jQuery($.opt.afterdis).val()) === 0 || jQuery($.opt.afterdis).val() === '' ) {
+            if (Number(jQuery($.opt.vat).val()) !== 0 || jQuery($.opt.vat).val() !== '' || jQuery($.opt.deliveryCharge).val() !== 0 || jQuery($.opt.deliveryCharge).val() !== '') {
                 grandTotal = Number(jQuery($.opt.subtotal).val()) +
-                    Number(jQuery($.opt.vat).val());
+                    Number(jQuery($.opt.vat).val()) + Number(jQuery($.opt.deliveryCharge).val());
             } else {
-                grandTotal = Number(jQuery($.opt.subtotal).val());
+                grandTotal = Number(jQuery($.opt.subtotal).val())
             }
 
         } else {
 
-            if (Number(jQuery($.opt.vat).val()) !== 0 || jQuery($.opt.vat).val() !== '') {
+            if (Number(jQuery($.opt.vat).val()) !== 0 || jQuery($.opt.vat).val() !== '' || jQuery($.opt.deliveryCharge).val() !== 0 || jQuery($.opt.deliveryCharge).val() !== '') {
                 grandTotal = Number(jQuery($.opt.afterdis).val()) +
-                    Number(jQuery($.opt.vat).val());
+                    Number(jQuery($.opt.vat).val()) + Number(jQuery($.opt.deliveryCharge).val());
             } else {
                 grandTotal = Number(jQuery($.opt.afterdis).val());
             }
@@ -377,6 +377,7 @@ jQuery.fn.invoice.defaults = {
     discount: "#discount",
     discountt: "#discountt",
     flatdiscount: "#flatdiscount",
+    deliveryCharge: "#delivery",
     // shipping: "#shipping",
     vat: "#vat",
     grandTotal: "#grandTotal",

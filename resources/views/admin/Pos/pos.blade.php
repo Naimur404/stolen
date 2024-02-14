@@ -282,25 +282,28 @@
 
                                         <input type="hidden" id="vat" class="text-right form-control clearVat"
                                                name="vat" value="0" step="any" placeholder="Tk"/>
+                                               @if($outlet_id != 4)
+                                               <input type="hidden" class="form-control text-right text-success fw-bold"
+                                               name="delivery"
+                                               id="delivery" value="0" step="any" placeholder="Tk"
+                                               required>
+                                               @endif
                                     </td>
 
                                 </tr>
-{{--                                <tr>--}}
-{{--                                    <td class="text-right" colspan="6"><b>Vat:</b></td>--}}
-{{--                                    <td></td>--}}
-{{--                                    <td class="text-right">--}}
+                              @if($outlet_id == 4)
+                                <tr>
+                                    <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
 
-{{--                                        <input type="number" id="vat_percent" max="100" class="text-right form-control"--}}
-{{--                                               placeholder="%"/>--}}
+                                    <td class="text-right">
+                                        <input type="number" class="form-control text-right text-success fw-bold"
+                                               name="delivery"
+                                               id="delivery" value="0" step="any" placeholder="Tk"
+                                               required> {{-- <span id="grandTotal">0</span> --}}
+                                    </td>
 
-{{--                                    </td>--}}
-{{--                                    <td>--}}
-{{--                                        <input type="number" id="vat" class="text-right form-control clearVat"--}}
-{{--                                               name="vat" value="0" step="any" placeholder="Tk"/>--}}
-{{--                                    </td>--}}
-
-{{--                                </tr>--}}
-
+                                </tr>
+                                @endif
                                 <tr>
                                     <td class="text-right" colspan="8"><b>Grand Total:</b></td>
 
@@ -507,20 +510,20 @@
 
 })
                 }else{
-                    if ((customer_name === 'walking customer' || customer_name === '') && pay < amount){
+                    if ((customer_name === 'walking customer' || customer_name === '')){
                     Swal.fire(
                         'Payment Required',
                         'This customer is not allowed for due',
                         'warning'
                     )
                 }
-                else if(pay < amount) {
-                    Swal.fire(
-                        'Payment Required',
-                        'This customer is not allowed for due',
-                        'warning'
-                    )
-                }
+                // else if(pay < amount) {
+                //     Swal.fire(
+                //         'Payment Required',
+                //         'This customer is not allowed for due',
+                //         'warning'
+                //     )
+                // }
                 else{
                     let alert_text = '';
 
@@ -870,6 +873,7 @@
                     Quantity: "#Quantity",
                     total: ".total",
                     totaldis: ".totaldis",
+                    deliveryCharge: "#delivery",
                     // totalQty: "#totalQty",
 
                     subtotal: "#subtotal",

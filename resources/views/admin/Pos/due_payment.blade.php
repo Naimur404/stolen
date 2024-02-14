@@ -76,6 +76,7 @@
                 <tr>
                     <th>SL</th>
                     <th>Name Of Medicine</th>
+                    <th>Size</th>
                     <th>Quantity</th>
                     <th>Price</th>
                     <th>Discount</th>
@@ -86,6 +87,7 @@
                     <tr>
                         <td>{{ $loop->index + 1 }}</td>
                         <td>{{ $data->medicine->medicine_name }}</td>
+                        <td>{{ $data->size }}</td>
                         <td>{{ $data->quantity }}</td>
                         <td>{{ $data->rate }}</td>
                         <td>{{ $data->discount }}</td>
@@ -209,12 +211,16 @@
                             <td>{{ $outletInvoice->total_discount }}</td>
                         </tr>
                         <tr>
+                            <td>Delivery Charge</td>
+                            <td>{{ $outletInvoice->delivery_charge }}</td>
+                        </tr>
+                        <tr>
                             <td>Grand Total</td>
                             <td>{{ $outletInvoice->grand_total }}</td>
                         </tr>
                         <tr>
                             <td>Paid Amount</td>
-                            <td>{{ $outletInvoice->grand_total - $outletInvoice->due_amount }}</td>
+                            <td>{{$outletInvoice->delivery_charge > 0 ?  ($outletInvoice->total_with_charge - $outletInvoice->due_amount) : ($outletInvoice->grand_total - $outletInvoice->due_amount)}}</td>
                         </tr>
                         <tr>
                             <td>Due Amount</td>

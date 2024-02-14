@@ -71,7 +71,7 @@ class OutletInvoiceController extends Controller
     public function store(Request $request)
     {
 
-
+// dump($request->all());
         $input = $request->all();
         $request->validate([
             'outlet_id' => 'required',
@@ -161,7 +161,13 @@ class OutletInvoiceController extends Controller
                 $discount = $request->flatdiscount;
             }
         }
-
+if(round($input['delivery']) > 0){
+$grandtolal =  round($input['grand_total']) - round($input['delivery']);
+$totalWithDelevery = round($input['grand_total']);
+}else{
+    $grandtolal =  round($input['grand_total']);
+    $totalWithDelevery = round($input['grand_total']);
+}
 
         $invoice = array(
 
@@ -170,8 +176,10 @@ class OutletInvoiceController extends Controller
             'sale_date' => Carbon::now(),
             'sub_total' => $input['sub_total'] + round($request->discount),
             'vat' => round($input['vat']),
+            'delivery_charge' => round($input['delivery']),
             'total_discount' => round($discount),
-            'grand_total' => round($input['grand_total']),
+            'grand_total' => $grandtolal,
+            'total_with_charge' => $totalWithDelevery,
             'given_amount' => round($input['paid_amount']),
             'payable_amount' => round($input['payable_amount']),
             'paid_amount' => $input['paid_amount'] > $input['payable_amount'] ? round($input['payable_amount']) : $input['paid_amount'],
@@ -477,7 +485,7 @@ class OutletInvoiceController extends Controller
         foreach ($invoicess as $invoice) {
 
             $print = route('print-invoice', $invoice->id);
-            $return = route('sale-return.show', $invoice->id);
+            $return = route('payDue', $invoice->id);
             $details = route('sale.details', $invoice->id);
 
             $s_no = $invoice->id;
@@ -488,8 +496,14 @@ class OutletInvoiceController extends Controller
             $total = $invoice->grand_total;
             $pay = $invoice->paid_amount;
             $sold_by = User::getUser($invoice->added_by);
-            $action = '<a href="' . $print . '" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
-<a href="' . $return . '"class="btn btn-success btn-xs" title="Return" style="margin-right:3px"><i class="fa fa-retweet" aria-hidden="true"></i></a><a href="' . $details . '"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>';
+            if($invoice->paid_amount == 0){
+                $action = '<a href="' . $print . '" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
+                <a href="' . $details . '"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a> <a href="' . $return . '"class="btn btn-success btn-xs" title="Return" style="margin-right:3px"><i class="fa fa-paypal" aria-hidden="true"></i></a>';
+            }else{
+                $action = '<a href="' . $print . '" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
+               <a href="' . $details . '"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>';
+            }
+
 
 
             $data_arr[] = array(
