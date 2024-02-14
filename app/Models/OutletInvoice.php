@@ -18,6 +18,8 @@ class OutletInvoice extends Model
         'sale_date',
         'sub_total',
         'vat',
+        'delivery_charge',
+        'total_with_charge',
         'total_discount',
         'grand_total',
         'payable_amount',

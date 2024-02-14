@@ -84,7 +84,7 @@
                         <td>{{ $productSale->user->name ?? '' }}</td>
 
 
-                        <td>{{ $productSale->payable_amount }}</td>
+                        <td>{{ $productSale->payable_amount  - $productSale->delivery_charge }}</td>
                         <td>{{ $productSale->paid_amount }}</td>
                         <td>
                             {{ $productSale->due_amount > 0.5 ? $productSale->due_amount : 'Paid' }}
@@ -93,7 +93,7 @@
                     </tr>
                     @php
                         $sub_total = $sub_total + $productSale->sub_total;
-                        $grand_total = $grand_total + $productSale->payable_amount;
+                        $grand_total = $grand_total + ($productSale->payable_amount  - $productSale->delivery_charge) ;
                         $total_due = $total_due + $productSale->due_amount > 0.5 ? $productSale->due_amount : 0;
                         $total_pay = $total_pay + $productSale->paid_amount;
                         $total_discount = $total_discount + $productSale->total_discount;
