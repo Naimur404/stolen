@@ -510,7 +510,7 @@
 
 })
                 }else{
-                    if ((customer_name === 'walking customer' || customer_name === '')){
+                    if ((customer_name === 'walking customer' || customer_name === '') && pay < amount){
                     Swal.fire(
                         'Payment Required',
                         'This customer is not allowed for due',
