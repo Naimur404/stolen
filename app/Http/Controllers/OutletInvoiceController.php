@@ -139,7 +139,7 @@ class OutletInvoiceController extends Controller
                     'birth_date' => Carbon::parse($input['birth_date'])->toDateString(),
                     'due_balance' =>  round($customer->due_balance + $input['due_amount']),
                     'address' => $input['address'],
-                    'points' => round(($input['grand_total'] / 100), 2) + $points,
+                    'points' => round(($input['sub_total'] / 100), 2) + $points,
 
                 );
 
