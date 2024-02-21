@@ -144,11 +144,15 @@
                                         </th>
 
 
+
                                         <th class="text-center">
                                             <nobr>Discount<i class="text-danger">*</i></nobr>
                                         </th>
                                         <th class="text-center">
                                             <nobr>Total Price</nobr>
+                                        </th>
+                                        <th class="text-center">
+                                            <nobr>Remarks<i class="text-danger"></i></nobr>
                                         </th>
 
                                     </tr>
@@ -282,7 +286,7 @@
 
                                         <input type="hidden" id="vat" class="text-right form-control clearVat"
                                                name="vat" value="0" step="any" placeholder="Tk"/>
-                                               @if($outlet_id != '4')
+                                               @if($outlet_id != 1)
                                                <input type="hidden" class="form-control text-right text-success fw-bold"
                                                name="delivery"
                                                id="delivery" value="0" step="any" placeholder="Tk"
@@ -291,7 +295,7 @@
                                     </td>
 
                                 </tr>
-                              @if($outlet_id == '4')
+                              @if($outlet_id == 1)
                                 <tr>
                                     <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
 
