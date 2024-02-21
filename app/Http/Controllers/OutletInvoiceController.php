@@ -227,6 +227,7 @@ $totalWithDelevery = round($input['grand_total']);
                     'rate' => $input['box_mrp'][$i],
                     'discount' => round($input['totaldis'][$i]),
                     'total_price' => round($input['total'][$i]) + round($input['totaldis'][$i]),
+                    'remarks' => strtoupper($input['remarks'][$i]),
 
                 );
                 OutletInvoiceDetails::create($invoicedetails);

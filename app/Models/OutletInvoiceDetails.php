@@ -24,7 +24,8 @@ class OutletInvoiceDetails extends Model
         'rate',
         'discount',
         'total_price',
-        'is_exchange'
+        'is_exchange',
+        'remarks'
     ];
 
     public function medicine()

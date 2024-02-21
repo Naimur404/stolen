@@ -154,7 +154,7 @@
 
             <tr>
 
-                <td class="product"> {{ $loop->index+1 }}. {{ $item->medicine_name }} </td>
+                <td class="product"> {{ $loop->index+1 }}. {{ $item->medicine_name }} @if($item->remarks != '')  ({{$item->remarks}}) @endif </td>
                 <td>{{ $item->size }} </td>
                 <td>{{ $item->rate }} </td>
                 <td>{{ $item->quantity }} </td>
