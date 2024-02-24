@@ -185,7 +185,7 @@ $totalWithDelevery = round($input['grand_total']);
             'paid_amount' => $input['paid_amount'] > $input['payable_amount'] ? round($input['payable_amount']) : $input['paid_amount'],
             'due_amount' => round($input['due_amount']),
             'redeem_point' => $input['redeem_points'],
-            'earn_point' => round(($input['grand_total'] / 100), 2),
+            'earn_point' => round(($input['sub_total'] / 100), 2),
             'payment_method_id' => $input['payment_method_id'],
             'added_by' => Auth::user()->id,
 
