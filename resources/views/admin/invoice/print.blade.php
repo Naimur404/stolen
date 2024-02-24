@@ -227,8 +227,8 @@
         @if ($outletInvoice->outlet->id == 4)
         <tr>
 
-            <td style="text-align: left; border: none;">Customer Phone:</td>
-            <td colspan="3" style="border: none;" style=""><b>{{ $outletInvoice->customer->mobile }} </b></td>
+            <td style="text-align: left; border: none; ">Customer Phone:</td>
+            <td colspan="3" style="border: none;" style=""><b style="font-size: 18px">{{ $outletInvoice->customer->mobile }} </b></td>
 
         </tr>
         <tr>
