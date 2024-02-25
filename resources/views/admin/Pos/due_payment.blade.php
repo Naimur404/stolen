@@ -216,7 +216,7 @@
                         </tr>
                         <tr>
                             <td>Grand Total</td>
-                            <td>{{ $outletInvoice->grand_total }}</td>
+                            <td>{{ $outletInvoice->grand_total + $outletInvoice->delivery_charge }}</td>
                         </tr>
                         <tr>
                             <td>Paid Amount</td>
