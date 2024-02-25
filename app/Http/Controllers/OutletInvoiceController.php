@@ -494,10 +494,10 @@ $totalWithDelevery = round($input['grand_total']);
             $outlet_name = Outlet::getOutletName($invoice->outlet_id);
             $customer = $invoice->mobile;
             $payment = PaymentMethod::getPayment($invoice->payment_method_id);
-            $total = $invoice->grand_total;
+            $total = $invoice->total_with_charge;
             $pay = $invoice->paid_amount;
             $sold_by = User::getUser($invoice->added_by);
-            if($invoice->paid_amount == 0){
+            if($invoice->paid_amount <  $invoice->grand_total){
                 $action = '<a href="' . $print . '" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
                 <a href="' . $details . '"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a> <a href="' . $return . '"class="btn btn-success btn-xs" title="Return" style="margin-right:3px"><i class="fa fa-paypal" aria-hidden="true"></i></a>';
             }else{
