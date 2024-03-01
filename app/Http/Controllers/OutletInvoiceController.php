@@ -136,8 +136,7 @@ class OutletInvoiceController extends Controller
 
                 $customerName = ucfirst($input['name']);
                 if($input['outlet_id'] == 4){
-                    $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way!
-                    stolen.com.bd";
+                    $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way! Feel free to visit: https://stolen.com.bd";
 
                 }else{
                     $outlet_name = Outlet::where('id', $input['outlet_id'])->value('outlet_name');
@@ -171,8 +170,7 @@ class OutletInvoiceController extends Controller
                 $phone_number = $request->mobile;
                 $customerName = ucfirst($input['name']);
             if($input['outlet_id'] == 4){
-                $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way!
-                stolen.com.bd";
+                $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way! Feel free to visit: https://stolen.com.bd";
 
             }else{
                 $outlet_name = Outlet::where('id', $input['outlet_id'])->value('outlet_name');
