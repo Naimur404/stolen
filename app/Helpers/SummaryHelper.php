@@ -17,6 +17,7 @@ use App\Models\Warehouse;
 use App\Models\WarehouseStock;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\DB;
+use GuzzleHttp\Client;
 
 class SummaryHelper
 {
@@ -90,6 +91,32 @@ class SummaryHelper
         }
 
         return $data_arr;
+    }
+
+
+    public static function sendSMS($number, $text)
+    {
+
+
+        $url = "http://services.smsnet24.com/sendSms";
+
+        $payload = [
+            'sms_receiver' =>  $number,
+            'sms_text' => $text,
+            'campaignType' => 'T',
+            'user_password' => 'stolen.com.bd2@',
+            'user_id' => 'farsemac@gmail.com'
+        ];
+
+        $client = new Client();
+
+
+
+            $client->post($url, [
+                'form_params' => $payload
+            ]);
+
+
     }
 
 }
