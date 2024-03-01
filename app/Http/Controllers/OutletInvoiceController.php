@@ -22,8 +22,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Session;
-use App\Helpers\SummaryHelper;
-
+use App\Jobs\SendSMSJob;
 
 class OutletInvoiceController extends Controller
 {
@@ -133,19 +132,22 @@ class OutletInvoiceController extends Controller
                 $phone_number = $input['mobile'];
 
                 // Convert the phone number to the desired format
-                $formatted_phone_number = '880' . substr($phone_number, 1);
+                $number = '880' . substr($phone_number, 1);
 
                 $customerName = ucfirst($input['name']);
                 if($input['outlet_id'] == 4){
-                    $smsText = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way!
+                    $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way!
                     stolen.com.bd";
 
                 }else{
                     $outlet_name = Outlet::where('id', $input['outlet_id'])->value('outlet_name');
-                    $smsText = "Thanks for shopping $outlet_name, We hope to see you again soon! See what's new: stolen.com.bd";
+                    $text = "Thanks for shopping $outlet_name, We hope to see you again soon! See what's new: https://stolen.com.bd";
                 }
+//payload for send sms
 
-                SummaryHelper::sendSMS($formatted_phone_number, $smsText);
+               SendSMSJob::dispatch($number, $text);
+
+
 
             } else {
                 $points = $customerCheck->points;
@@ -169,16 +171,16 @@ class OutletInvoiceController extends Controller
                 $phone_number = $request->mobile;
                 $customerName = ucfirst($input['name']);
             if($input['outlet_id'] == 4){
-                $smsText = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way!
+                $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way!
                 stolen.com.bd";
 
             }else{
                 $outlet_name = Outlet::where('id', $input['outlet_id'])->value('outlet_name');
-                $smsText = "Thanks for shopping $outlet_name, We hope to see you again soon! See what's new: stolen.com.bd";
+                $text = "Thanks for shopping $outlet_name, We hope to see you again soon! See what's new: https://stolen.com.bd";
             }
-            $formatted_phone_number = '880' . substr($phone_number, 1);
+            $number = '880' . substr($phone_number, 1);
 
-            SummaryHelper::sendSMS($formatted_phone_number, $smsText);
+            SendSMSJob::dispatch($number, $text);
 
 
             }

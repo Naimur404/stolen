@@ -94,29 +94,4 @@ class SummaryHelper
     }
 
 
-    public static function sendSMS($number, $text)
-    {
-
-
-        $url = "http://services.smsnet24.com/sendSms";
-
-        $payload = [
-            'sms_receiver' =>  $number,
-            'sms_text' => $text,
-            'campaignType' => 'T',
-            'user_password' => 'stolen.com.bd2@',
-            'user_id' => 'farsemac@gmail.com'
-        ];
-
-        $client = new Client();
-
-
-
-            $client->post($url, [
-                'form_params' => $payload
-            ]);
-
-
-    }
-
 }
