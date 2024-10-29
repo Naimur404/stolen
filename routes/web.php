@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddressController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerManagementController;
 use App\Http\Controllers\DashBoardController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\Select2Controller;
 use App\Http\Controllers\SettingController;
+use App\Http\Controllers\ShortLinkController;
 use App\Http\Controllers\StockRequestController;
 use App\Http\Controllers\SupplierController;
 use App\Http\Controllers\UnitController;
@@ -41,6 +43,9 @@ use Illuminate\Support\Facades\Route;
  */
 require __DIR__ . '/auth.php';
 Route::get('/', [SettingController::class, 'index']);
+
+Route::get('/track/{code}', [ShortLinkController::class, 'redirect']);
+
 
 Route::get('/dashboard', [DashBoardController::class, 'index'])->middleware(['auth'])->name('index');
 
@@ -102,6 +107,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('/top-sale', [DashBoardController::class, 'totalSale'])->name('top-sale');
     Route::get('/top-purchase', [DashBoardController::class, 'totalPurchase'])->name('top-purchase');
     Route::get('/top-customer', [DashBoardController::class, 'topCustomer'])->name('top-customer');
+    Route::post('/parse-address', [AddressController::class, 'parseAddress'])->name('parse.address');
+    Route::get('/pathao/create-order', [AddressController::class, 'createOrder']);
 //resource route
     Route::resource('payment-method', PaymentMethodController::class);
     Route::resource('supplier', SupplierController::class);
@@ -320,6 +327,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'report2'], function () {
     Route::post('sale-report-medicine-submit', [ReportController2::class, 'sale_report_medicine_submit'])->name('sale-report-medicine-submit');
     Route::post('sale-report-manufacturer-submit', [ReportController2::class, 'sale_report_manufacturer_submit'])->name('sale-report-manufacturer-submit');
     Route::post('not-sold-medicine', [ReportController2::class, 'notSoldMedicine'])->name('not-sold-medicine');
+
 });
 // Route::group(['middleware' => ['auth'], 'prefix' => 'writeoff'], function () {
 //     Route::resource('outlet-writeoff', OutletWriteoffController::class);

@@ -184,15 +184,15 @@
                                     type="button"><i data-feather="arrow-right-circle" class="mt-1"></i></button>
                         </div>
 
-
+                        <div class="col-md-2">
+                            {!! Form::label('address', 'Address', array('class' => 'form-label')) !!}
+                            {!! Form::text('address', null, ['class' => 'form-control', 'id' => 'address', 'placeholder' => 'Enter Address']) !!}
+                        </div>
                         <div class="col-md-2">
                             {!! Form::label('name', 'Customer Name', array('class' => 'form-label')) !!}
                             {!! Form::text('name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Customer Name' ,'required']) !!}
                         </div>
-                        <div class="col-md-2">
-                            {!! Form::label('address', 'Address', array('class' => 'form-label')) !!}
-                            {!! Form::text('address',null,['class'=>'form-control', 'id' => 'address','placeholder'=>'Enter Address' ]) !!}
-                        </div>
+
                         <div class="col-md-2">
                             {!! Form::label('birth_date', 'Birth Date', array('class' => 'form-label')) !!}
                             <input class="datepicker-here form-control digits" type="text" data-language="en"
@@ -204,6 +204,12 @@
                             {!! Form::label('points', 'Points', array('class' => 'form-label')) !!}
                             {!! Form::number('points',null,['class'=>'form-control', 'id' => 'points','placeholder'=>'Points','step' => '0.1', 'readonly' ]) !!}
                         </div>
+                        @if($outlet_id == 4)
+                       <div class="col-md-6">
+    {!! Form::label('address', 'Address', array('class' => 'form-label')) !!}
+    {!! Form::textarea('address', null, ['class' => 'form-control', 'id' => 'address', 'placeholder' => 'Enter Address']) !!}
+</div>
+@endif
                     </div>
 
                     <div class="row">
@@ -500,6 +506,69 @@
                     target.value = "";
                 }
             }
+
+
+            // Debounce function
+function debounce(func, delay) {
+    let debounceTimer;
+    return function() {
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func.apply(this, arguments), delay);
+    };
+}
+
+// Event listener for address input field
+document.getElementById('address').addEventListener('input', debounce(function() {
+    const address = this.value.trim();
+
+    if (address) {
+        fetchAddressData(address);
+    }
+}, 1000)); // 1-second delay
+
+// Function to fetch address data
+function fetchAddressData(address) {
+    fetch('/parse-address', {  // Call your Laravel endpoint
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify({ address: address })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.type === 'success') {
+            const city = data.data.district_name;
+            const zone = data.data.zone_name;
+            const area = data.data.area_name;
+
+            Swal.fire({
+                title: 'Delevery Address In Pathao',
+                text: `${city} > ${zone} > ${area}`,
+                icon: 'info',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: 'Could not fetch address data. Please try again.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching address data:', error);
+        Swal.fire({
+            title: 'Error',
+            text: 'There was an error processing your request.',
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    });
+}
 
             function submitForm() {
                 var pay = parseInt($("#pay").val()) || 0;
