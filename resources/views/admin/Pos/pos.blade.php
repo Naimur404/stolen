@@ -183,11 +183,12 @@
                             <button class="btn btn-primary btn-xs adduser" style="margin-top: 32px" id="adduser"
                                     type="button"><i data-feather="arrow-right-circle" class="mt-1"></i></button>
                         </div>
-
+                        @if($outlet_id != 4)
                         <div class="col-md-2">
                             {!! Form::label('address', 'Address', array('class' => 'form-label')) !!}
                             {!! Form::text('address', null, ['class' => 'form-control', 'id' => 'address', 'placeholder' => 'Enter Address']) !!}
                         </div>
+                        @endif
                         <div class="col-md-2">
                             {!! Form::label('name', 'Customer Name', array('class' => 'form-label')) !!}
                             {!! Form::text('name',null,['class'=>'form-control', 'id' => 'name','placeholder'=>'Enter Customer Name' ,'required']) !!}
@@ -207,7 +208,7 @@
                         @if($outlet_id == 4)
                        <div class="col-md-6">
     {!! Form::label('address', 'Address', array('class' => 'form-label')) !!}
-    {!! Form::textarea('address', null, ['class' => 'form-control', 'id' => 'address', 'placeholder' => 'Enter Address']) !!}
+    {!! Form::textarea('address', null, ['class' => 'form-control hello24', 'id' => 'address', 'placeholder' => 'Enter Address']) !!}
 </div>
 @endif
                     </div>
@@ -518,7 +519,7 @@ function debounce(func, delay) {
 }
 
 // Event listener for address input field
-document.getElementById('address').addEventListener('input', debounce(function() {
+document.querySelector('.hello24').addEventListener('input', debounce(function() {
     const address = this.value.trim();
 
     if (address) {
