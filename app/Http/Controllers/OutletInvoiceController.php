@@ -164,13 +164,15 @@ class OutletInvoiceController extends Controller
                 Customer::where('mobile', $request->mobile)->update($customerdetails);
                 //for send sms
                 $phone_number = $request->mobile;
+                $number = '880' . substr($phone_number, 1);
                 $customerName = ucfirst($input['name']);
                 if ($input['outlet_id'] != 4) {
                     $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way! Feel free to visit: https://stolen.com.bd";
+                        SendSMSJob::dispatch($number, $text);
                 }
-                $number = '880' . substr($phone_number, 1);
 
-                SendSMSJob::dispatch($number, $text);
+
+
             }
         }
         $discount = 0;
