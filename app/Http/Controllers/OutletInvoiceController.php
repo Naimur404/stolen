@@ -20,9 +20,9 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Session;
+use App\Services\PathaoApiService;
 use App\Jobs\SendSMSJob;
+use App\Models\ShortLink;
 
 class OutletInvoiceController extends Controller
 {
@@ -31,9 +31,11 @@ class OutletInvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    private $pathaoApiService;
 
-    function __construct()
+    public function __construct(PathaoApiService $pathaoApiService)
     {
+        $this->pathaoApiService = $pathaoApiService;
         $this->middleware('permission:invoice.management|invoice.create|invoice.edit|invoice.delete', ['only' => ['index', 'store']]);
         $this->middleware('permission:invoice.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:invoice.edit', ['only' => ['edit', 'update']]);
@@ -73,7 +75,7 @@ class OutletInvoiceController extends Controller
     public function store(Request $request)
     {
 
-// dump($request->all());
+        // dump($request->all());
         $input = $request->all();
         $request->validate([
             'outlet_id' => 'required',
@@ -86,7 +88,7 @@ class OutletInvoiceController extends Controller
             'payment_method_id' => 'required',
         ]);
 
-        if ($request->mobile == '' || $request->mobile == null  || $request->mobile == '0000000000' ) {
+        if ($request->mobile == '' || $request->mobile == null  || $request->mobile == '0000000000') {
             $customer = Customer::where('outlet_id', $request->outlet_id)->where('mobile', 'LIKE', '%00000%')->first();
             if (is_null($customer)) {
 
@@ -99,7 +101,7 @@ class OutletInvoiceController extends Controller
 
                 );
                 $customer = Customer::create($customerdetails);
-            }else{
+            } else {
                 $customerdetails = array(
                     'name' => 'Walking Customer',
                     'mobile' => '00000000000',
@@ -128,25 +130,19 @@ class OutletInvoiceController extends Controller
 
                 );
                 $customer = Customer::create($customerdetails);
-//for send sms
+                //for send sms
                 $phone_number = $input['mobile'];
 
                 // Convert the phone number to the desired format
                 $number = '880' . substr($phone_number, 1);
 
                 $customerName = ucfirst($input['name']);
-                if($input['outlet_id'] == 4){
-                    $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way! Feel free to visit: https://stolen.com.bd";
-
-                }else{
+                if ($input['outlet_id'] != 4) {
                     $outlet_name = Outlet::where('id', $input['outlet_id'])->value('outlet_name');
                     $text = "Thanks for shopping $outlet_name, We hope to see you again soon! See what's new: https://stolen.com.bd";
                 }
-//payload for send sms
-
-               SendSMSJob::dispatch($number, $text);
-
-
+                //payload for send sms
+                SendSMSJob::dispatch($number, $text);
 
             } else {
                 $points = $customerCheck->points;
@@ -166,21 +162,15 @@ class OutletInvoiceController extends Controller
                 );
 
                 Customer::where('mobile', $request->mobile)->update($customerdetails);
-//for send sms
+                //for send sms
                 $phone_number = $request->mobile;
                 $customerName = ucfirst($input['name']);
-            if($input['outlet_id'] == 4){
-                $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way! Feel free to visit: https://stolen.com.bd";
+                if ($input['outlet_id'] != 4) {
+                    $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way! Feel free to visit: https://stolen.com.bd";
+                }
+                $number = '880' . substr($phone_number, 1);
 
-            }else{
-                $outlet_name = Outlet::where('id', $input['outlet_id'])->value('outlet_name');
-                $text = "Thanks for shopping $outlet_name, We hope to see you again soon! See what's new: https://stolen.com.bd";
-            }
-            $number = '880' . substr($phone_number, 1);
-
-            SendSMSJob::dispatch($number, $text);
-
-
+                SendSMSJob::dispatch($number, $text);
             }
         }
         $discount = 0;
@@ -198,13 +188,13 @@ class OutletInvoiceController extends Controller
                 $discount = $request->flatdiscount;
             }
         }
-if(round($input['delivery']) > 0){
-$grandtolal =  round($input['grand_total']) - round($input['delivery']);
-$totalWithDelevery = round($input['grand_total']);
-}else{
-    $grandtolal =  round($input['grand_total']);
-    $totalWithDelevery = round($input['grand_total']);
-}
+        if (round($input['delivery']) > 0) {
+            $grandtolal =  round($input['grand_total']) - round($input['delivery']);
+            $totalWithDelevery = round($input['grand_total']);
+        } else {
+            $grandtolal =  round($input['grand_total']);
+            $totalWithDelevery = round($input['grand_total']);
+        }
 
         $invoice = array(
 
@@ -227,10 +217,52 @@ $totalWithDelevery = round($input['grand_total']);
             'added_by' => Auth::user()->id,
 
         );
+
         try {
 
 
             $outletinvoice = OutletInvoice::create($invoice);
+
+            if ($input['outlet_id'] == 4 && $input['address'] != '') {
+                // Parse address to get city and zone details
+                $parsedData = $this->pathaoApiService->parseAddress($input['address']);
+                // dump($parsedData);
+                $cityId = $parsedData['district_id'];
+                $zoneId = $parsedData['zone_id'];
+
+                // Create order with dynamic city and zone
+                $orderData = [
+                    "store_id" => 6173,
+                    // "merchant_order_id" => $outletinvoice->id,
+                    "recipient_name" => $input['name'],
+                    "recipient_phone" =>  $phone_number,
+                    "recipient_address" => $input['address'],
+                    "recipient_city" => $cityId,
+                    "recipient_zone" => $zoneId,
+                    "delivery_type" => 48,
+                    "item_type" => 2,
+                    "item_quantity" => 1,
+                    "item_weight" => 0.5,
+                    "amount_to_collect" => (int)$totalWithDelevery,
+                ];
+
+                $response = $this->pathaoApiService->createOrder($orderData);
+                // dump($response);
+
+
+
+                // Save to database
+                $shortLink = ShortLink::create([
+                    'original_url' =>  "https://merchant.pathao.com/tracking?consignment_id=" . $response['data']['consignment_id'] . "&phone=" . $phone_number,
+                    'short_code' => $outletinvoice->id,
+                ]);
+
+
+                $shortLinkUrl = url("/track/{$outletinvoice->id}");
+                $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way! Feel free to visit: https://stolen.com.bd Tracking: $shortLinkUrl";
+                SendSMSJob::dispatch($number, $text);
+                // return response()->json($response);
+            }
 
 
             if (isset($request->redeem_points) && ($request->redeem_points > 0)) {
@@ -510,7 +542,7 @@ $totalWithDelevery = round($input['grand_total']);
                 ->skip($start)
                 ->take($row_per_page)
                 ->get();
-                $invoicess = $invoices->where('outlet_id','=', Auth::user()->outlet_id);
+            $invoicess = $invoices->where('outlet_id', '=', Auth::user()->outlet_id);
         }
 
         $total_record_switch_filter = $totalRecords;
@@ -534,10 +566,10 @@ $totalWithDelevery = round($input['grand_total']);
             $total = $invoice->total_with_charge;
             $pay = $invoice->paid_amount;
             $sold_by = User::getUser($invoice->added_by);
-            if($invoice->paid_amount <  $invoice->grand_total){
+            if ($invoice->paid_amount <  $invoice->grand_total) {
                 $action = '<a href="' . $print . '" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
                 <a href="' . $details . '"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a> <a href="' . $return . '"class="btn btn-success btn-xs" title="Return" style="margin-right:3px"><i class="fa fa-paypal" aria-hidden="true"></i></a>';
-            }else{
+            } else {
                 $action = '<a href="' . $print . '" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
                <a href="' . $details . '"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>';
             }
