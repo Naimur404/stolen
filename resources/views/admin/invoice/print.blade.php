@@ -225,20 +225,20 @@
     <table class="payment-table">
         <tr>
 
-            <td style="text-align: left; border: none;">Customer Name:</td>
+            <td style="text-align: left; border: none;">Name:</td>
             <td colspan="3" style="border: none;" style=""><b>{{ $outletInvoice->customer->name }} </b></td>
 
         </tr>
         @if ($outletInvoice->outlet->id == 4)
         <tr>
 
-            <td style="text-align: left; border: none; ">Customer Phone:</td>
+            <td style="text-align: left; border: none; ">Phone:</td>
             <td colspan="3" style="border: none;" style=""><b style="font-size: 20px">{{ $outletInvoice->customer->mobile }} </b></td>
 
         </tr>
         <tr>
 
-            <td style="text-align: left; border: none;">Customer Address:</td>
+            <td style="text-align: left; border: none;">Address:</td>
             <td colspan="3" style="border: none;" style=""><b>{{ $outletInvoice->customer->address }} </b></td>
 
         </tr>
@@ -251,13 +251,13 @@
         </tr>
         @if($outletInvoice->redeem_point > 0)
         <tr>
-            <td style="text-align: left; border: none;">Your Redeem Points:</td>
+            <td style="text-align: left; border: none;">Redeem Points:</td>
             <td colspan="3" style="border: none;"><b> {{ $outletInvoice->redeem_point }} </b></td>
 
         </tr>
         @endif
         <tr>
-            <td style="text-align: left; border: none;">Your Total Points:</td>
+            <td style="text-align: left; border: none;">Total Points:</td>
             <td colspan="3" style="border: none;"><b> {{ $outletInvoice->customer->points }} </b></td>
 
         </tr>
