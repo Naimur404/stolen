@@ -222,6 +222,7 @@ class OutletInvoiceController extends Controller
         $parsedData = $this->pathaoApiService->parseAddress($input['address']);
         $orderData = [
             "store_id" => 6173,
+            "merchant_order_id" =>$outletInvoice->id,
             "recipient_name" => $input['name'],
             "recipient_phone" => $input['mobile'],
             "recipient_address" => $input['address'],
