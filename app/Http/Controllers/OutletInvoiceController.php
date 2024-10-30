@@ -503,98 +503,80 @@ class OutletInvoiceController extends Controller
 
     public function ajaxInvoice(Request $request)
     {
-
-
         $draw = $request->get('draw');
         $start = $request->get("start");
-        $row_per_page = $request->get("length"); // rows display per page
+        $row_per_page = $request->get("length"); // Rows display per page
 
         $columnIndex_arr = $request->get('order');
         $columnName_arr = $request->get('columns');
         $order_arr = $request->get('order');
         $search_arr = $request->get('search');
 
-        $columnIndex = (isset($columnIndex_arr[0]['column'])) ? $columnIndex_arr[0]['column'] : false; // column index
-        $columnName = (isset($columnName_arr[$columnIndex]['data'])) ? $columnName_arr[$columnIndex]['data'] : false; // column name
-        $columnSortOrder = (isset($order_arr[0]['dir'])) ? $order_arr[0]['dir'] : false; // asc or desc
-        $searchValue = (isset($search_arr['value'])) ? $search_arr['value'] : false; // Search value
+        $columnIndex = $columnIndex_arr[0]['column'] ?? 0; // Default to the first column
+        $columnName = $columnName_arr[$columnIndex]['data'] ?? 'id'; // Default column if not set
+        $columnSortOrder = $order_arr[0]['dir'] ?? 'asc'; // Default sort order
+        $searchValue = $search_arr['value'] ?? ''; // Search value
 
-        $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+        $outlet_id = Auth::user()->outlet_id ?? Outlet::orderBy('id', 'desc')->first()->id;
 
-        // total records count
+        // Base query with search conditions
+        $query = OutletInvoice::with('customer')
+            ->when(auth()->user()->hasRole('Super Admin'), function ($q) {
+                return $q->whereDate('sale_date', '>=', Carbon::now()->startOfMonth());
+            }, function ($q) use ($outlet_id) {
+                return $q->where('outlet_id', $outlet_id)->whereDate('sale_date', '>=', Carbon::now()->startOfMonth());
+            })
+            ->when($searchValue, function ($q) use ($searchValue) {
+                $q->whereHas('customer', function ($q) use ($searchValue) {
+                    $q->where('mobile', 'like', "%$searchValue%");
+                })
+                ->orWhere('id', 'like', "%$searchValue%")
+                ->orWhereDate('sale_date', 'like', "%$searchValue%");
+            });
 
-        if (auth()->user()->hasrole('Super Admin')) {
-            $totalRecords = OutletInvoice::whereDate('sale_date', '>=', Carbon::now()->month())->orderBy('id', 'desc')->select('count(*) as allcount')->count();
-            $invoicess = DB::table('outlet_invoices')->whereDate('sale_date', '>=', Carbon::now()->month())
-                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->orWhereDate('outlet_invoices.sale_date', 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
-                ->orderBy($columnName, $columnSortOrder)
-                ->skip($start)
-                ->take($row_per_page)
-                ->get();
-        } else {
-            $totalRecords = OutletInvoice::where('outlet_id', '=', $outlet_id)->whereDate('sale_date', '>=', Carbon::now()->month())->select('count(*) as allcount')->count();
-            $invoices = DB::table('outlet_invoices')->orderBy($columnName, $columnSortOrder)->whereDate('sale_date', '>=', Carbon::now()->month())
-                ->leftJoin('customers', 'outlet_invoices.customer_id', '=', 'customers.id')->where('customers.mobile', 'like', '%' . $searchValue . '%')->orWhere('outlet_invoices.id', 'like', '%' . $searchValue . '%')->select('outlet_invoices.*', 'customers.mobile')
-                ->skip($start)
-                ->take($row_per_page)
-                ->get();
-            $invoicess = $invoices->where('outlet_id', '=', Auth::user()->outlet_id);
-        }
+        // Count total records
+        $totalRecords = $query->count();
 
-        $total_record_switch_filter = $totalRecords;
+        // Apply sorting, pagination, and retrieve data
+        $invoices = $query->orderBy($columnName, $columnSortOrder)
+            ->skip($start)
+            ->take($row_per_page)
+            ->get();
 
-        // fetch records with search
-
-        $data_arr = array();
-
-        $total = 0;
-        foreach ($invoicess as $invoice) {
-
+        // Prepare data for JSON response
+        $data_arr = [];
+        foreach ($invoices as $invoice) {
             $print = route('print-invoice', $invoice->id);
             $return = route('payDue', $invoice->id);
             $details = route('sale.details', $invoice->id);
 
-            $s_no = $invoice->id;
-            $sale_date = Carbon::parse($invoice->sale_date)->format('d-m-Y');
-            $outlet_name = Outlet::getOutletName($invoice->outlet_id);
-            $customer = $invoice->mobile;
-            $payment = PaymentMethod::getPayment($invoice->payment_method_id);
-            $total = $invoice->total_with_charge;
-            $pay = $invoice->paid_amount;
-            $sold_by = User::getUser($invoice->added_by);
-            if ($invoice->paid_amount <  $invoice->grand_total) {
-                $action = '<a href="' . $print . '" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
-                <a href="' . $details . '"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a> <a href="' . $return . '"class="btn btn-success btn-xs" title="Return" style="margin-right:3px"><i class="fa fa-paypal" aria-hidden="true"></i></a>';
-            } else {
-                $action = '<a href="' . $print . '" target="_blank"class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
-               <a href="' . $details . '"class="btn btn-primary btn-xs" title="Details"style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>';
-            }
-
-
-
-            $data_arr[] = array(
-                "id" => $s_no,
-                "sale_date" => $sale_date,
-
-                "outlet_name" => $outlet_name,
-                "mobile" => $customer,
-                "payment_method_id" => $payment,
-                "grand_total" => $total,
-                "paid_amount" => $pay,
-                "sold_by" => $sold_by,
-                "action" => $action,
-
-            );
+            $data_arr[] = [
+                "id" => $invoice->id,
+                "sale_date" => Carbon::parse($invoice->sale_date)->format('d-m-Y'),
+                "outlet_name" => Outlet::getOutletName($invoice->outlet_id),
+                "mobile" => $invoice->customer->mobile ?? '',
+                "payment_method_id" => PaymentMethod::getPayment($invoice->payment_method_id),
+                "grand_total" => $invoice->total_with_charge,
+                "paid_amount" => $invoice->paid_amount,
+                "sold_by" => User::getUser($invoice->added_by),
+                "action" => $invoice->paid_amount < $invoice->grand_total
+                    ? '<a href="' . $print . '" target="_blank" class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
+                       <a href="' . $details . '" class="btn btn-primary btn-xs" title="Details" style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>
+                       <a href="' . $return . '" class="btn btn-success btn-xs" title="Return" style="margin-right:3px"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
+                    : '<a href="' . $print . '" target="_blank" class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
+                       <a href="' . $details . '" class="btn btn-primary btn-xs" title="Details" style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>',
+            ];
         }
 
-        $response = array(
+        // Response structure
+        $response = [
             "draw" => intval($draw),
             "iTotalRecords" => $totalRecords,
-            "iTotalDisplayRecords" => $total_record_switch_filter,
+            "iTotalDisplayRecords" => $totalRecords,
             "aaData" => $data_arr,
-
-        );
+        ];
 
         return response()->json($response);
     }
+
 }
