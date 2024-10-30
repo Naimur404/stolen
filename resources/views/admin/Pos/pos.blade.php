@@ -218,16 +218,18 @@
                                 tabindex="2" required placeholder="dd-mm-yyyy">
                             {{-- <input type="text" name="purchase_date" class="form-control datepicker" id="purdate" placeholder="Purchase Date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required> --}}
                         </div>
-                        <div class="col-md-1">
+                        
+                        <div class="col-md-2">
                             {!! Form::label('points', 'Points', ['class' => 'form-label']) !!}
                             {!! Form::number('points', null, [
                                 'class' => 'form-control',
                                 'id' => 'points',
-                                'placeholder' => 'Points',
+                                'placeholder' => '0',
                                 'step' => '0.1',
                                 'readonly',
                             ]) !!}
                         </div>
+
                         @if ($outlet_id == 4)
                             <div class="col-md-6">
                                 {!! Form::label('address', 'Address', ['class' => 'form-label']) !!}
