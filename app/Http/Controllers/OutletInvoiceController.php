@@ -74,9 +74,38 @@ class OutletInvoiceController extends Controller
      */
     public function store(Request $request)
     {
-
-        // dump($request->all());
         $input = $request->all();
+
+        // Validate the incoming request data
+        $this->validateRequest($request);
+
+        // Get or create customer
+        $customer = $this->getOrCreateCustomer($input);
+
+        // Calculate discounts and delivery charges
+        $discount = $this->calculateDiscount($request);
+        [$grandTotal, $totalWithDelivery] = $this->calculateTotalWithDelivery($input);
+
+        // Prepare and create the invoice
+        $outletInvoice = $this->createInvoice($input, $customer, $discount, $grandTotal, $totalWithDelivery);
+
+        // Handle Pathao API integration if needed
+        if ($input['outlet_id'] == 4 && $input['address'] != '') {
+            $this->handlePathaoOrderCreation($input, $customer, $outletInvoice, $totalWithDelivery);
+        }
+
+        // Log redeem points if applicable
+        $this->logRedeemPoints($request, $customer, $outletInvoice);
+
+        // Process and save invoice details and update stock
+        $this->processInvoiceDetails($input, $outletInvoice);
+
+        return response()->json(['data' => $outletInvoice]);
+    }
+
+    // Validates the incoming request data
+    private function validateRequest($request)
+    {
         $request->validate([
             'outlet_id' => 'required',
             'product_id' => 'required',
@@ -87,128 +116,93 @@ class OutletInvoiceController extends Controller
             'grand_total' => 'required',
             'payment_method_id' => 'required',
         ]);
+    }
 
-        if ($request->mobile == '' || $request->mobile == null  || $request->mobile == '0000000000') {
-            $customer = Customer::where('outlet_id', $request->outlet_id)->where('mobile', 'LIKE', '%00000%')->first();
-            if (is_null($customer)) {
-
-                $customerdetails = array(
-                    'name' => 'Walking Customer',
-                    'mobile' => '00000000000',
-                    'address' => '',
-                    'outlet_id' => $input['outlet_id'],
-                    'points' => '0',
-
-                );
-                $customer = Customer::create($customerdetails);
-            } else {
-                $customerdetails = array(
-                    'name' => 'Walking Customer',
-                    'mobile' => '00000000000',
-                    'address' => '',
-                    'outlet_id' => $input['outlet_id'],
-                    'points' => '0',
-
-                );
-                Customer::where('outlet_id', $request->outlet_id)->where('mobile', 'LIKE', '%00000%')->update($customerdetails);
-            }
-        } else {
-
-
-            $customerCheck = Customer::where('mobile', $request->mobile)->first();
-
-
-            if (is_null($customerCheck)) {
-                $customerdetails = array(
-                    'name' => ucfirst($input['name']),
-                    'mobile' => $input['mobile'],
-                    'address' => $input['address'],
-                    'birth_date' => Carbon::parse($input['birth_date'])->toDateString(),
-                    'outlet_id' => $input['outlet_id'],
-                    'due_balance' => $input['due_amount'],
-                    'points' => round(($input['sub_total'] / 100), 2),
-
-                );
-                $customer = Customer::create($customerdetails);
-                //for send sms
-                $phone_number = $input['mobile'];
-
-                // Convert the phone number to the desired format
-                $number = '880' . substr($phone_number, 1);
-
-                $customerName = ucfirst($input['name']);
-                if ($input['outlet_id'] != 4) {
-                    $outlet_name = Outlet::where('id', $input['outlet_id'])->value('outlet_name');
-                    $text = "Thanks for shopping $outlet_name, We hope to see you again soon! See what's new: https://stolen.com.bd";
-                }
-                //payload for send sms
-                SendSMSJob::dispatch($number, $text);
-
-            } else {
-                $points = $customerCheck->points;
-                if ($request->redeem_points > 0) {
-
-                    $points = $customerCheck->points - $request->redeem_points;
-                }
-                $customer = Customer::where('mobile', $request->mobile)->first();
-                $customerdetails = array(
-                    'name' => ucfirst($input['name']),
-                    'mobile' => $input['mobile'],
-                    'birth_date' => Carbon::parse($input['birth_date'])->toDateString(),
-                    'due_balance' =>  round($customer->due_balance + $input['due_amount']),
-                    'address' => $input['address'],
-                    'points' => round(($input['sub_total'] / 100), 2) + $points,
-
-                );
-
-                Customer::where('mobile', $request->mobile)->update($customerdetails);
-                //for send sms
-                $phone_number = $request->mobile;
-                $number = '880' . substr($phone_number, 1);
-                $customerName = ucfirst($input['name']);
-                if ($input['outlet_id'] != 4) {
-                    $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way! Feel free to visit: https://stolen.com.bd";
-                        SendSMSJob::dispatch($number, $text);
-                }
-
-
-
-            }
+    // Retrieves or creates a customer
+    private function getOrCreateCustomer($input)
+    {
+        if (empty($input['mobile']) || $input['mobile'] == '0000000000') {
+            return $this->getOrCreateDefaultCustomer($input['outlet_id']);
         }
-        $discount = 0;
+
+        return $this->getOrCreateNamedCustomer($input);
+    }
+
+    // Handles default 'walking customer' case
+    private function getOrCreateDefaultCustomer($outletId)
+    {
+        $customer = Customer::where('outlet_id', $outletId)->where('mobile', 'LIKE', '%00000%')->first();
+        $customerDetails = [
+            'name' => 'Walking Customer',
+            'mobile' => '0000000000',
+            'address' => '',
+            'outlet_id' => $outletId,
+            'points' => 0,
+        ];
+
+        return $customer ?? Customer::create($customerDetails);
+    }
+
+    // Handles named customer creation or updating
+    private function getOrCreateNamedCustomer($input)
+    {
+        $customer = Customer::where('mobile', $input['mobile'])->first();
+        $customerDetails = [
+            'name' => ucfirst($input['name']),
+            'mobile' => $input['mobile'],
+            'address' => $input['address'],
+            'birth_date' => Carbon::parse($input['birth_date'])->toDateString(),
+            'outlet_id' => $input['outlet_id'],
+            'due_balance' => $input['due_amount'],
+            'points' => round(($input['sub_total'] / 100), 2),
+        ];
+
+        if (!$customer) {
+            $customer = Customer::create($customerDetails);
+            $this->sendWelcomeSMS($input['mobile'], ucfirst($input['name']), $input['outlet_id']);
+        } else {
+            $customer->update($customerDetails);
+        }
+
+        return $customer;
+    }
+
+    // Calculates total discount
+    private function calculateDiscount($request)
+    {
         if ($request->discount > 0 && $request->flatdiscount > 0) {
-            $discount = $request->discount + $request->flatdiscount;
-        } elseif ($request->discount == 0 && $request->flatdiscount == 0) {
-
-            $discount = 0;
-        } else {
-            if ($request->discount > 0) {
-                $discount = $request->discount;
-            } else {
-            }
-            if ($request->flatdiscount > 0) {
-                $discount = $request->flatdiscount;
-            }
+            return $request->discount + $request->flatdiscount;
         }
+
+        return max($request->discount, $request->flatdiscount);
+    }
+
+    // Calculates total with or without delivery charges
+    private function calculateTotalWithDelivery($input)
+    {
+        $grandTotal = round($input['grand_total']);
+        $totalWithDelivery = $grandTotal;
+
         if (round($input['delivery']) > 0) {
-            $grandtolal =  round($input['grand_total']) - round($input['delivery']);
-            $totalWithDelevery = round($input['grand_total']);
-        } else {
-            $grandtolal =  round($input['grand_total']);
-            $totalWithDelevery = round($input['grand_total']);
+            $grandTotal -= round($input['delivery']);
         }
 
-        $invoice = array(
+        return [$grandTotal, $totalWithDelivery];
+    }
 
+    // Creates the invoice
+    private function createInvoice($input, $customer, $discount, $grandTotal, $totalWithDelivery)
+    {
+        $invoiceData = [
             'outlet_id' => $input['outlet_id'],
             'customer_id' => $customer->id,
             'sale_date' => Carbon::now(),
-            'sub_total' => $input['sub_total'] + round($request->discount),
+            'sub_total' => $input['sub_total'] + round($discount),
             'vat' => round($input['vat']),
             'delivery_charge' => round($input['delivery']),
             'total_discount' => round($discount),
-            'grand_total' => $grandtolal,
-            'total_with_charge' => $totalWithDelevery,
+            'grand_total' => $grandTotal,
+            'total_with_charge' => $totalWithDelivery,
             'given_amount' => round($input['paid_amount']),
             'payable_amount' => round($input['payable_amount']),
             'paid_amount' => $input['paid_amount'] > $input['payable_amount'] ? round($input['payable_amount']) : $input['paid_amount'],
@@ -217,111 +211,110 @@ class OutletInvoiceController extends Controller
             'earn_point' => round(($input['sub_total'] / 100), 2),
             'payment_method_id' => $input['payment_method_id'],
             'added_by' => Auth::user()->id,
+        ];
 
-        );
+        return OutletInvoice::create($invoiceData);
+    }
 
-        try {
+    // Handles Pathao order creation and SMS notifications
+    private function handlePathaoOrderCreation($input, $customer, $outletInvoice, $totalWithDelivery)
+    {
+        $parsedData = $this->pathaoApiService->parseAddress($input['address']);
+        $orderData = [
+            "store_id" => 6173,
+            "recipient_name" => $input['name'],
+            "recipient_phone" => $input['mobile'],
+            "recipient_address" => $input['address'],
+            "recipient_city" => $parsedData['district_id'],
+            "recipient_zone" => $parsedData['zone_id'],
+            "delivery_type" => 48,
+            "item_type" => 2,
+            "item_quantity" => 1,
+            "item_weight" => 0.5,
+            "amount_to_collect" => (int)$totalWithDelivery,
+        ];
 
+        $response = $this->pathaoApiService->createOrder($orderData);
+        $shortLinkUrl = $this->generateShortTrackingLink($response, $outletInvoice);
 
-            $outletinvoice = OutletInvoice::create($invoice);
+        $this->sendOrderTrackingSMS($input['mobile'], ucfirst($input['name']), $shortLinkUrl);
+    }
 
-            if ($input['outlet_id'] == 4 && $input['address'] != '') {
-                // Parse address to get city and zone details
-                $parsedData = $this->pathaoApiService->parseAddress($input['address']);
-                // dump($parsedData);
-                $cityId = $parsedData['district_id'];
-                $zoneId = $parsedData['zone_id'];
+    // Generates a short tracking link for the Pathao order
+    private function generateShortTrackingLink($response, $outletInvoice)
+    {
+        $shortLink = ShortLink::create([
+            'original_url' => "https://merchant.pathao.com/tracking?consignment_id=" . $response['data']['consignment_id'] . "&phone=" . $outletInvoice->phone,
+            'short_code' => $outletInvoice->id,
+        ]);
 
-                // Create order with dynamic city and zone
-                $orderData = [
-                    "store_id" => 6173,
-                    // "merchant_order_id" => $outletinvoice->id,
-                    "recipient_name" => $input['name'],
-                    "recipient_phone" =>  $phone_number,
-                    "recipient_address" => $input['address'],
-                    "recipient_city" => $cityId,
-                    "recipient_zone" => $zoneId,
-                    "delivery_type" => 48,
-                    "item_type" => 2,
-                    "item_quantity" => 1,
-                    "item_weight" => 0.5,
-                    "amount_to_collect" => (int)$totalWithDelevery,
-                ];
+        return url("/track/{$outletInvoice->id}");
+    }
 
-                $response = $this->pathaoApiService->createOrder($orderData);
-                // dump($response);
-
-
-
-                // Save to database
-                $shortLink = ShortLink::create([
-                    'original_url' =>  "https://merchant.pathao.com/tracking?consignment_id=" . $response['data']['consignment_id'] . "&phone=" . $phone_number,
-                    'short_code' => $outletinvoice->id,
-                ]);
-
-
-                $shortLinkUrl = url("/track/{$outletinvoice->id}");
-                $text = "Hey $customerName, thanks for shopping at stolen.! Your order is on its way! Feel free to visit: https://stolen.com.bd Tracking: $shortLinkUrl";
-                SendSMSJob::dispatch($number, $text);
-                // return response()->json($response);
-            }
-
-
-            if (isset($request->redeem_points) && ($request->redeem_points > 0)) {
-
-                $redeem = array(
-
-                    'outlet_id' => $input['outlet_id'],
-                    'customer_id' => $customer->id,
-                    'invoice_id' => $outletinvoice->id,
-                    'previous_point' => $customerCheck->points,
-                    'redeem_point' => $request->redeem_points,
-
-                );
-
-                RedeemPointLog::create($redeem);
-            }
-            $medicines = $input['product_name'];
-
-            for ($i = 0; $i < sizeof($medicines); $i++) {
-                $invoicedetails = array(
-
-                    'outlet_invoice_id' => $outletinvoice->id,
-                    'stock_id' => $input['stock_id'][$i],
-                    'medicine_id' => $input['product_id'][$i],
-                    'medicine_name' => $input['product_name'][$i],
-                    'size' => $input['size'][$i],
-
-                    'available_qty' => $input['stockquantity'][$i] - $input['quantity'][$i],
-
-                    'quantity' => $input['quantity'][$i],
-                    'rate' => $input['box_mrp'][$i],
-                    'discount' => round($input['totaldis'][$i]),
-                    'total_price' => round($input['total'][$i]) + round($input['totaldis'][$i]),
-                    'remarks' => strtoupper($input['remarks'][$i]),
-
-                );
-                OutletInvoiceDetails::create($invoicedetails);
-
-
-                $findquantity = OutletStock::where('outlet_id', $input['outlet_id'])->where('medicine_id', $input['product_id'][$i])->where('size', '=', $input['size'][$i])->first();
-
-
-                $stock2 = array(
-
-                    'quantity' => (int)$findquantity->quantity - (int)$input['quantity'][$i],
-                );
-
-                OutletStock::where('outlet_id', $input['outlet_id'])->where('medicine_id', $input['product_id'][$i])->where('size', '=', $input['size'][$i])->update($stock2);
-            }
-
-            return response()->json([
-                'data' => $outletinvoice
+    // Logs redeem points if applicable
+    private function logRedeemPoints($request, $customer, $outletInvoice)
+    {
+        if (isset($request->redeem_points) && ($request->redeem_points > 0)) {
+            RedeemPointLog::create([
+                'outlet_id' => $customer->outlet_id,
+                'customer_id' => $customer->id,
+                'invoice_id' => $outletInvoice->id,
+                'previous_point' => $customer->points,
+                'redeem_point' => $request->redeem_points,
             ]);
-        } catch (Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
         }
     }
+
+    // Processes each invoice detail item and updates stock
+    private function processInvoiceDetails($input, $outletInvoice)
+    {
+        $medicines = $input['product_name'];
+        for ($i = 0; $i < sizeof($medicines); $i++) {
+            OutletInvoiceDetails::create([
+                'outlet_invoice_id' => $outletInvoice->id,
+                'stock_id' => $input['stock_id'][$i],
+                'medicine_id' => $input['product_id'][$i],
+                'medicine_name' => $input['product_name'][$i],
+                'size' => $input['size'][$i],
+                'available_qty' => $input['stockquantity'][$i] - $input['quantity'][$i],
+                'quantity' => $input['quantity'][$i],
+                'rate' => $input['box_mrp'][$i],
+                'discount' => round($input['totaldis'][$i]),
+                'total_price' => round($input['total'][$i]) + round($input['totaldis'][$i]),
+                'remarks' => strtoupper($input['remarks'][$i]),
+            ]);
+
+            // Update stock quantity
+            $this->updateStockQuantity($input, $i);
+        }
+    }
+
+    // Updates stock quantity for a specific product
+    private function updateStockQuantity($input, $index)
+    {
+        OutletStock::where('outlet_id', $input['outlet_id'])
+            ->where('medicine_id', $input['product_id'][$index])
+            ->where('size', '=', $input['size'][$index])
+            ->decrement('quantity', $input['quantity'][$index]);
+    }
+
+    // Sends a welcome SMS
+    private function sendWelcomeSMS($mobile, $customerName, $outletId)
+    {
+        if ($outletId != 4) {
+            $outletName = Outlet::where('id', $outletId)->value('outlet_name');
+            $text = "Thanks for shopping $outletName, We hope to see you again soon! See what's new: https://stolen.com.bd";
+            SendSMSJob::dispatch('880' . substr($mobile, 1), $text);
+        }
+    }
+
+    // Sends an order tracking SMS
+    private function sendOrderTrackingSMS($mobile, $customerName, $trackingUrl)
+    {
+        $text = "Hey $customerName, thanks for shopping at Stolen! Your order is on its way! Tracking: $trackingUrl";
+        SendSMSJob::dispatch('880' . substr($mobile, 1), $text);
+    }
+
 
     /**
      * Display the specified resource.
