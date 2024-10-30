@@ -192,7 +192,7 @@
                                 type="button"><i data-feather="arrow-right-circle" class="mt-1"></i></button>
                         </div>
                         @if ($outlet_id != 4)
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 {!! Form::label('address', 'Address', ['class' => 'form-label']) !!}
                                 {!! Form::text('address', null, [
                                     'class' => 'form-control',
@@ -201,7 +201,7 @@
                                 ]) !!}
                             </div>
                         @endif
-                        <div class="col-md-2">
+                        <div class="col-md-3">
                             {!! Form::label('name', 'Customer Name', ['class' => 'form-label']) !!}
                             {!! Form::text('name', null, [
                                 'class' => 'form-control',
@@ -218,7 +218,7 @@
                                 tabindex="2" required placeholder="dd-mm-yyyy">
                             {{-- <input type="text" name="purchase_date" class="form-control datepicker" id="purdate" placeholder="Purchase Date" value="{{ Carbon\Carbon::today()->toDateString() }}" tabindex="2" required> --}}
                         </div>
-                        <div class="col-md-2">
+                        <div class="col-md-1">
                             {!! Form::label('points', 'Points', ['class' => 'form-label']) !!}
                             {!! Form::number('points', null, [
                                 'class' => 'form-control',
