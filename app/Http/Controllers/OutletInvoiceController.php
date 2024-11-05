@@ -74,6 +74,7 @@ class OutletInvoiceController extends Controller
      */
     public function store(Request $request)
     {
+        // dump($request->all());
         $input = $request->all();
 
         // Validate the incoming request data
@@ -578,5 +579,8 @@ class OutletInvoiceController extends Controller
 
         return response()->json($response);
     }
+
+
+
 
 }

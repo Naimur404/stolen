@@ -12,6 +12,16 @@ class OutletInvoice extends Model
     use SoftDeletes;
 
     protected $table = 'outlet_invoices';
+    protected $guarded = ['id'];
+    protected $hidden = [
+        'pivot',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
     protected $fillable = [
         'outlet_id',
         'customer_id',
@@ -55,5 +65,11 @@ class OutletInvoice extends Model
     {
         return $this->hasOne(User::class, 'id', 'added_by');
     }
+
+    public function invoiceDetails()
+    {
+        return $this->hasMany(OutletInvoiceDetails::class);
+    }
+
 
 }

@@ -12,6 +12,16 @@ class OutletInvoiceDetails extends Model
     use SoftDeletes;
 
     protected $table = 'outlet_invoice_details';
+    protected $guarded = ['id'];
+    protected $hidden = [
+        'pivot',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
     protected $fillable = [
         'outlet_invoice_id',
         'stock_id',
