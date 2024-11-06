@@ -71,4 +71,24 @@ class ApiAuthController extends Controller
             ], 500);
         }
     }
+
+    public function verifyToken(Request $request)
+    {
+        try {
+            // Since we're using auth middleware, if we reach here,
+            // the token is already valid
+            return response()->json([
+                'status' => true,
+                'message' => 'Token is valid',
+                 // Get authenticated user details
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Token verification failed',
+                
+            ], 500);
+        }
+    }
 }

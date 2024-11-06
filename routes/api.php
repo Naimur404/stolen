@@ -29,6 +29,7 @@ Route::get('api-dashbaord', [ApiDataController::class, 'apiDashboard']);
 Route::post('customer', [ApiDataController::class, 'createCustomer']);
 Route::get('payment-method', [ApiDataController::class, 'getPosData']);
 Route::post('invoice-create', [ApiInvoiceController::class, 'store']);
+Route::post('verify', [ApiAuthController::class, 'verifyToken']);
 
 });
 
