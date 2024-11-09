@@ -53,18 +53,18 @@ class ApiInvoiceController extends Controller
             $this->updateCustomerPoints($customer, $input, $outletInvoice);
 
             // Send SMS notifications
-            // $this->sendInvoiceSMS($customer, $outletInvoice, $input);
-            $text = "Hey  thanks for shopping at Stolen! Your order is on its way! Tracking";
+            $this->sendInvoiceSMS($customer, $outletInvoice, $input);
+            // $text = "Hey  thanks for shopping at Stolen! Your order is on its way! Tracking";
 
 
-            SendSMSJob::dispatch('880' . substr($customer->mobile, 1), $text);
+            // SendSMSJob::dispatch('880' . substr($customer->mobile, 1), $text);
 
             DB::commit();
 
             return response()->json([
                 'status' => 'success',
                 'message' => 'Invoice created successfully',
-                'data' => $outletInvoice->load('invoiceDetails', 'customer')
+                'data' => $outletInvoice->load('invoiceDetails', 'customer', 'outlet')
             ], 200);
 
         } catch (Exception $e) {
@@ -170,6 +170,7 @@ class ApiInvoiceController extends Controller
                 'outlet_invoice_id' => $outletInvoice->id,
                 'stock_id' => $product['stock_id'],
                 'medicine_id' => $product['product_id'],
+                'medicine_name' => $product['name'],
                 'size' => $product['size'],
                 'quantity' => $product['quantity'],
                 'rate' => $product['price'],
@@ -221,7 +222,7 @@ class ApiInvoiceController extends Controller
     private function sendInvoiceSMS($customer, $outletInvoice, $input)
     {
         // // Get outlet details
-        // $outlet = Outlet::find($input['outlet_id']);
+        $outlet = Outlet::find($input['outlet_id']);
 
         // Format mobile number (remove leading zero and add country code)
         $mobileNumber = '880' . substr($customer->mobile, 1);
@@ -229,13 +230,13 @@ class ApiInvoiceController extends Controller
         // Different SMS templates based on scenarios
 
 
-        //     $this->sendRegularPurchaseSMS($mobileNumber, $customer, $outletInvoice, $outlet);
+            $this->sendRegularPurchaseSMS($mobileNumber, $customer, $outletInvoice, $outlet);
 
 
-        // // Send special promotions or welcome message for first-time customers
-        // if ($this->isFirstPurchase($customer)) {
-        //     $this->sendWelcomeSMS($mobileNumber, $customer, $outlet);
-        // }
+        // Send special promotions or welcome message for first-time customers
+        if ($this->isFirstPurchase($customer)) {
+            $this->sendWelcomeSMS($mobileNumber, $customer, $outlet);
+        }
     }
 
     private function sendRedeemPointsSMS($mobile, $customer, $outletInvoice, $outlet)
@@ -268,7 +269,7 @@ class ApiInvoiceController extends Controller
 
     private function sendRegularPurchaseSMS($mobile, $customer, $outletInvoice, $outlet)
     {
-        $message = "Hey  thanks for shopping at Stolen! Your order is on its way! Tracking";
+        $message = "Hey  thanks for shopping at Stolen!";
 
 
         SendSMSJob::dispatch($mobile, $message);
@@ -277,7 +278,7 @@ class ApiInvoiceController extends Controller
     private function sendWelcomeSMS($mobile, $customer, $outlet)
     {
         $message = sprintf(
-            "Welcome to %s! Dear %s, thank you for your first purchase. Earn points on every purchase and enjoy exclusive benefits. Visit: https://example.com",
+            "Welcome to %s! Dear %s, thank you for your first purchase. Earn points on every purchase and enjoy exclusive benefits. Visit: https://stolen.com.bd",
             $outlet->outlet_name,
             $customer->name
         );

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\API\ApiAuthController;
 use App\Http\Controllers\API\ApiDataController;
+use App\Http\Controllers\API\ApiExchnageController;
 use App\Http\Controllers\API\ApiInvoiceController;
 use Illuminate\Support\Facades\Route;
 
@@ -30,7 +31,13 @@ Route::post('customer', [ApiDataController::class, 'createCustomer']);
 Route::get('payment-method', [ApiDataController::class, 'getPosData']);
 Route::post('invoice-create', [ApiInvoiceController::class, 'store']);
 Route::post('verify', [ApiAuthController::class, 'verifyToken']);
+Route::get('top-sale', [ApiDataController::class, 'topSale']);
+Route::get('exchanges', [ApiDataController::class, 'apiExchangeData']);
+Route::get('/exchange-details/{id}', [ApiDataController::class,'apiExchangeDetails']);
+Route::get('/exchange-products/{id}', [ApiDataController::class,'getExcahangeProducts']);
+Route::Post('/submit-exchange', [ApiExchnageController::class,'apiExchange']);
 
 });
+
 
 
