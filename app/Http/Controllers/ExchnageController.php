@@ -114,7 +114,9 @@ class ExchnageController extends Controller
 
 
     public function exchange(Request $request)
+
     {
+        dump($request->all());
         // $request->validate([
         //     'exchangeData.invoice_id' => 'required|numeric',
         //     'exchangeData.exchange_products' => 'required|array',

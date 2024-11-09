@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Customer;
 use App\Models\Outlet;
+use App\Models\OutletExchange;
+use App\Models\OutletExchangeDetails;
 use App\Models\OutletInvoice;
 use App\Models\OutletInvoiceDetails;
 use App\Models\OutletPayment;
@@ -132,7 +134,7 @@ class ApiDataController extends Controller
                 ->orWhereDate('sale_date', 'like', "%$searchValue%");
             })
             ->when($paymentMethod, function ($q) use ($paymentMethod) {
-                $q->where('payment_method_id', $paymentMethod);
+                $q->where('payment_method_id', PaymentMethod::where('method_name', $paymentMethod)->first()->id);
             });
 
         // Count total records for pagination
@@ -248,7 +250,7 @@ public function apiDashboard()
 
             'last_day_sales' => $getSum(OutletInvoice::class, 'payable_amount',
                 $isAdmin ? [['sale_date', $today->copy()->subDay()]] :
-                    [['outlet_id', $outlet_id], ['sale_date', $today->copy()->subDay()]]),
+                    [['outlet_id', $outlet_id], ['sale_date', $today->copy()->subDay()->format('Y-m-d')]]),
 
             'this_month_sales' => $getSum(OutletInvoice::class, 'payable_amount',
                 $isAdmin ? [
@@ -352,5 +354,174 @@ public function getPosData()
             ], 500);
         }
     }
+
+
+    public function topSale(Request $request)
+    {
+        if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
+
+            $topSalesProducts = DB::table('outlet_invoice_details')->
+                whereBetween('outlet_invoice_details.created_at',
+                [
+                    Carbon::now()->startOfMonth(),
+                    Carbon::now()->endOfMonth(),
+                ])
+                ->leftJoin('medicines', 'medicines.id', '=', 'outlet_invoice_details.medicine_id')
+                ->select('medicines.id', 'medicines.medicine_name', 'outlet_invoice_details.medicine_id',
+                    DB::raw('SUM(outlet_invoice_details.quantity) as total'), DB::raw('COUNT(outlet_invoice_details.medicine_id) as count'))
+                ->groupBy('medicines.id', 'medicines.medicine_name', 'outlet_invoice_details.medicine_id')
+                ->orderBy('total', 'desc')
+                ->limit(5)
+                ->get();
+        } else {
+            $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+            $get_invoice = OutletInvoice::whereBetween('sale_date',
+                [
+                    Carbon::now()->startOfMonth(),
+                    Carbon::now()->endOfMonth(),
+                ])->where('outlet_id', $outlet_id)->pluck('id');
+            $topSalesProducts = DB::table('outlet_invoice_details')->
+                whereBetween('outlet_invoice_details.created_at',
+                [
+                    Carbon::now()->startOfMonth(),
+                    Carbon::now()->endOfMonth(),
+                ])->whereIn('outlet_invoice_details.outlet_invoice_id', $get_invoice)
+                ->leftJoin('medicines', 'medicines.id', '=', 'outlet_invoice_details.medicine_id')
+                ->select('medicines.id', 'medicines.medicine_name', 'outlet_invoice_details.medicine_id',
+                    DB::raw('SUM(outlet_invoice_details.quantity) as total'), DB::raw('COUNT(outlet_invoice_details.medicine_id) as count'))
+                ->groupBy('medicines.id', 'medicines.medicine_name', 'outlet_invoice_details.medicine_id')
+                ->orderBy('total', 'desc')
+                ->limit(5)
+                ->get();
+
+        }
+
+        return response()->json($topSalesProducts);
+
+    }
+
+
+
+    public function apiExchangeData(Request $request)
+{
+    $perPage = $request->input('per_page', 10); // Default 10 items per page
+    $outlet_id = Auth::user()->outlet_id ?? Outlet::orderBy('id', 'desc')->first('id');
+
+    try {
+        $query = OutletExchange::with(['customer'])
+            ->orderBy('id', 'desc');
+
+        // Apply outlet filter if not Super Admin
+        if (!auth()->user()->hasRole('Super Admin')) {
+            $query->where('outlet_id', $outlet_id);
+        }
+
+        // Get paginated results
+        $exchanges = $query->paginate($perPage);
+
+        return response()->json([
+            'status' => 'success',
+            'data' => [
+                'exchanges' => $exchanges->items(),
+                'pagination' => [
+                    'current_page' => $exchanges->currentPage(),
+                    'last_page' => $exchanges->lastPage(),
+                    'per_page' => $exchanges->perPage(),
+                    'total' => $exchanges->total()
+                ]
+            ]
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'An error occurred while fetching exchanges',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+
+public function apiExchangeDetails($id)
+{
+    try {
+        $exchange = OutletExchange::with('outlet:id,outlet_name')->where('id', $id)->first();
+
+        if (!$exchange) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Exchange not found',
+                'data' => null
+            ], 404);
+        }
+
+        $exchangeDetails = OutletExchangeDetails::where('outlet_exchange_id', $id)->get();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Exchange details retrieved successfully',
+            'data' => [
+                'exchange' => $exchange,
+                'exchange_details' => $exchangeDetails
+            ]
+        ], 200);
+
+    } catch (\Exception $e) {
+        return response()->json([
+            'status' => false,
+            'message' => 'An error occurred while retrieving exchange details',
+            'error' => $e->getMessage()
+        ], 500);
+    }
+}
+
+
+public function getExcahangeProducts($invoiceId)
+{
+    $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+    $invoiceCheck = OutletInvoice::where('id', $invoiceId)->where('outlet_id', $outlet_id)->first();
+
+    if ($invoiceCheck == null) {
+        return response()->json([
+            'status' => 'error',
+            'message' => 'Exchange is Not Possible, in this store',
+            'data' => null
+        ], 404);
+    } else {
+        if ($invoiceCheck->is_exchange == 1) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Already one time exchange, So no more Exchange Possible',
+                'data' => null
+            ], 404);
+        } else {
+            $invoiceDate = Carbon::parse($invoiceCheck->created_at);
+
+            // Get the current date and time
+            $currentDate = Carbon::now();
+
+            // Calculate the difference in days
+            $daysDifference = $currentDate->diffInDays($invoiceDate);
+
+            if ($daysDifference > 4) {
+                // Invoice is greater than 4 days old
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Exchange Not Possible, Purchase Date More than 4 days',
+                    'data' => null
+                ], 404);
+            } else {
+                // Invoice is not greater than 4 days old
+                $products = OutletInvoiceDetails::where('outlet_invoice_id', $invoiceId)->get();
+
+                return response()->json([
+                    'status' => 'success',
+                    'message' => 'Products fetched successfully',
+                    'data' => $products
+                ], 200);
+            }
+        }
+    }
+}
+
 
 }

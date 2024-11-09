@@ -11,6 +11,16 @@ class OutletExchangeDetails extends Model
     use HasFactory;
     use SoftDeletes;
     protected $table = 'outlet_exchange_details';
+    protected $guarded = ['id'];
+    protected $hidden = [
+        'pivot',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'created_by',
+        'updated_by',
+        'deleted_by',
+    ];
     protected $fillable = [
         'outlet_exchange_id',
         'medicine_id',
