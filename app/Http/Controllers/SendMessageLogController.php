@@ -44,14 +44,15 @@ class SendMessageLogController extends Controller
         $memberNumbers = Customer::whereNotNull('mobile')
         ->pluck('mobile')
         ->filter(function ($phone) {
-            // Check if the phone number is valid (11 digits and starts with '0')
-            return strlen($phone) === 11 && $phone[0] === '0';
+            // Check if the phone number is valid (11 digits, starts with '0', second digit is '1')
+            return strlen($phone) === 11 && $phone[0] === '0' && $phone[1] === '1';
         })
         ->map(function ($phone) {
             // Add country code '88' to valid numbers
             return '88' . $phone;
         })
         ->toArray();
+
 
 
         if (empty($memberNumbers)) {
