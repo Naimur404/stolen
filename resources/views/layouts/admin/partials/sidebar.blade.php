@@ -255,7 +255,10 @@
 
 
                     @hasrole('Super Admin')
-
+                    <li class="dropdown">
+                        <a class="nav-link menu-title {{ prefixActive('/message') }}" href="{{route('sendMessageLogs.index')}}"><i
+                                data-feather="mail"></i><span>Send Message</span></a>
+                    </li>
 
                     <li class="dropdown">
                         <a class="nav-link menu-title {{ prefixActive('/admin') }}" href="javascript:void(0)"><i
