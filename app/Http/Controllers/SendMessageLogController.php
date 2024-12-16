@@ -28,7 +28,8 @@ class SendMessageLogController extends Controller
         return view('admin.message.sendMessageLog');
     }
 
-    public function sendMeessageeView(){
+    public function sendMeessageeView()
+    {
         return view('admin.message.message');
     }
 
@@ -42,16 +43,16 @@ class SendMessageLogController extends Controller
 
         // Retrieve phone numbers and prepare them for SMS
         $memberNumbers = Customer::whereNotNull('mobile')
-        ->pluck('mobile')
-        ->filter(function ($phone) {
-            // Check if the phone number is valid (11 digits, starts with '0', second digit is '1')
-            return strlen($phone) === 11 && $phone[0] === '0' && $phone[1] === '1';
-        })
-        ->map(function ($phone) {
-            // Add country code '88' to valid numbers
-            return '88' . $phone;
-        })
-        ->toArray();
+            ->pluck('mobile')
+            ->filter(function ($phone) {
+                // Check if the phone number is valid (11 digits, starts with '0', and is not "00000000000")
+                return strlen($phone) === 11 && $phone[0] === '0' && $phone !== '00000000000';
+            })
+            ->map(function ($phone) {
+                // Add country code '88' to valid numbers
+                return '88' . $phone;
+            })
+            ->toArray();
 
 
 
@@ -133,5 +134,4 @@ class SendMessageLogController extends Controller
             ], 500);
         }
     }
-
 }
