@@ -42,13 +42,17 @@ class SendMessageLogController extends Controller
 
         // Retrieve phone numbers and prepare them for SMS
         $memberNumbers = Customer::whereNotNull('mobile')
-            ->pluck('mobile')
-            ->map(function ($phone) {
-                // Validate and format phone numbers to include country code (88)
-                return (strlen($phone) === 11 && $phone[0] === '0') ? '88' . $phone : null;
-            })
-            ->filter() // Remove invalid or null numbers
-            ->toArray();
+        ->pluck('mobile')
+        ->filter(function ($phone) {
+            // Check if the phone number is valid (11 digits and starts with '0')
+            return strlen($phone) === 11 && $phone[0] === '0';
+        })
+        ->map(function ($phone) {
+            // Add country code '88' to valid numbers
+            return '88' . $phone;
+        })
+        ->toArray();
+
 
         if (empty($memberNumbers)) {
             return response()->json(['status' => 'error', 'message' => 'No valid phone numbers found.'], 400);
