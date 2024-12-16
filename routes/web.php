@@ -19,6 +19,7 @@ use App\Http\Controllers\ReportController2;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\SalesReturnController;
 use App\Http\Controllers\Select2Controller;
+use App\Http\Controllers\SendMessageLogController;
 use App\Http\Controllers\SettingController;
 use App\Http\Controllers\ShortLinkController;
 use App\Http\Controllers\StockRequestController;
@@ -57,6 +58,7 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
     Route::view('/role', 'admin.role.role')->name('role');
 
     //user route
+
 
     Route::get('/user', [UserRoleController::class, 'users'])->name('user');
     Route::get('/add_user', [UserRoleController::class, 'addUsers'])->name('add_user');
@@ -100,6 +102,10 @@ Route::group(['middleware' => ['auth'], 'prefix' => 'admin'], function () {
 
     Route::get('/site/setting', [SettingController::class, 'setting'])->name('setting');
     Route::post('/update/setting', [SettingController::class, 'updateSetting'])->name('updatesetting');
+    //message
+    Route::post('send-message-submit', [SendMessageLogController::class, 'sendMessage'])->name('message.sendMessage');
+    Route::get('send-message', [SendMessageLogController::class, 'sendMeessageeView'])->name('sendMessageView');
+    Route::get('/send-message-logs', [SendMessageLogController::class, 'index'])->name('sendMessageLogs.index');
 
 });
 
