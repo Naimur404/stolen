@@ -25,11 +25,11 @@ class SendMessageLogController extends Controller
                 ->make(true);
         }
 
-        return view('admin.Message.sendMessageLog');
+        return view('admin.message.sendMessageLog');
     }
 
     public function sendMeessageeView(){
-        return view('admin.Message.message');
+        return view('admin.message.message');
     }
 
 
