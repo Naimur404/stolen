@@ -45,8 +45,9 @@ class SendMessageLogController extends Controller
         $memberNumbers = Customer::whereNotNull('mobile')
             ->pluck('mobile')
             ->filter(function ($phone) {
-                // Check if the phone number is valid (11 digits, starts with '0', and is not "00000000000")
-                return strlen($phone) === 11 && $phone[0] === '0' && $phone !== '00000000000';
+                // Check if the phone number is valid (11 digits, starts with '0', and the first 3 digits match one of the allowed prefixes)
+                $validPrefixes = ['014', '013', '016', '015', '019', '018', '017'];
+                return strlen($phone) === 11 && $phone[0] === '0' && in_array(substr($phone, 0, 3), $validPrefixes);
             })
             ->map(function ($phone) {
                 // Add country code '88' to valid numbers
@@ -54,84 +55,75 @@ class SendMessageLogController extends Controller
             })
             ->toArray();
 
-
-
         if (empty($memberNumbers)) {
             return response()->json(['status' => 'error', 'message' => 'No valid phone numbers found.'], 400);
         }
 
-        $receiverNumbers = implode(',', $memberNumbers);
+        // Split the phone numbers into chunks of 100
+        $chunks = array_chunk($memberNumbers, 100);
 
         // SMS API configuration
         $url = "http://services.smsnet24.com/sendSms";
-
         $payload = [
-            'sms_receiver' => $receiverNumbers,
             'sms_text' => $request->input('message'),
             'campaignType' => 'T',
             'user_password' => 'stolen.com.bd2@',
-            'user_id' => 'farsemac@gmail.com'
+            'user_id' => 'farsemac@gmail.com',
         ];
 
-        // Send the request using Guzzle HTTP client
-        try {
-            // Send the SMS request
-            $client = new Client();
-            $response = $client->post($url, ['form_params' => $payload]);
+        foreach ($chunks as $chunk) {
+            $receiverNumbers = implode(',', $chunk);
+            $payload['sms_receiver'] = $receiverNumbers;
 
-            // Parse the response
-            $responseBody = json_decode($response->getBody(), true);
+            try {
+                // Send the SMS request using Guzzle HTTP client
+                $client = new Client();
+                $response = $client->post($url, ['form_params' => $payload]);
 
-            // If the response is null, consider it as success
-            if ($responseBody === null) {
-                // Log the success (null response means no error)
+                // Parse the response
+                $responseBody = json_decode($response->getBody(), true);
+
+                // If the response is null, consider it as success
+                if ($responseBody === null) {
+                    // Log the success (null response means no error)
+                    SendMessageLog::create([
+                        'message'  => $validatedData['message'],
+                        'response' => json_encode(['status' => 'success', 'message' => 'No response from API']),
+                    ]);
+                }
+
+                // If the response is not null, check if there's an error in it
+                if ($responseBody !== null) {
+                    // Log the error response
+                    SendMessageLog::create([
+                        'message'  => $validatedData['message'],
+                        'response' => json_encode(['error' => $responseBody]),
+                    ]);
+                    // Optionally, you could return after the first failed chunk
+                    return response()->json([
+                        'status'  => 'error',
+                        'message' => 'Failed to send SMS. Error details: ' . json_encode($responseBody),
+                    ], 500);
+                }
+
+            } catch (\Exception $e) {
+                // Catch any other exceptions (network issues, etc.)
                 SendMessageLog::create([
                     'message'  => $validatedData['message'],
-                    'response' => json_encode(['status' => 'success', 'message' => 'No response from API']),
-                ]);
-
-                return response()->json([
-                    'status' => 'success',
-                    'data'   => ['status' => 'success', 'message' => 'No response from API'],
-                ], 200);
-            }
-
-            // If the response is not null, check if there's an error in it
-            if ($responseBody !== null) {
-                // Log the error response
-                SendMessageLog::create([
-                    'message'  => $validatedData['message'],
-                    'response' => json_encode(['error' => $responseBody]),
+                    'response' => json_encode(['error' => $e->getMessage()]),
                 ]);
 
                 return response()->json([
                     'status'  => 'error',
-                    'message' => 'Failed to send SMS. Error details: ' . json_encode($responseBody),
+                    'message' => 'Failed to send SMS. ' . $e->getMessage(),
                 ], 500);
             }
-
-            // // Log successful response if no errors were found
-            // SendMessageLog::create([
-            //     'message'  => $validatedData['message'],
-            //     'response' => json_encode($responseBody),
-            // ]);
-
-            // return response()->json([
-            //     'status' => 'success',
-            //     'data'   => $responseBody,
-            // ], 200);
-
-        } catch (\Exception $e) {
-            // Catch any other exceptions (network issues, etc.)
-            SendMessageLog::create([
-                'message'  => $validatedData['message'],
-                'response' => json_encode(['error' => $e->getMessage()]),
-            ]);
-
-            return response()->json([
-                'status'  => 'error',
-                'message' => 'Failed to send SMS. ' . $e->getMessage(),
-            ], 500);
         }
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'SMS sent successfully to all users in batches.',
+        ], 200);
     }
+
 }
