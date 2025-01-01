@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\SendMessageLog;
 use GuzzleHttp\Client;
+use Illuminate\Support\Facades\Http;
 
 class SendMessageLogController extends Controller
 {
@@ -41,89 +42,89 @@ class SendMessageLogController extends Controller
             'message' => 'required|string|min:5',
         ]);
 
-        // Retrieve phone numbers and prepare them for SMS
+        // Retrieve and prepare phone numbers
         $memberNumbers = Customer::whereNotNull('mobile')
             ->pluck('mobile')
             ->filter(function ($phone) {
-                // Check if the phone number is valid (11 digits, starts with '0', and the first 3 digits match one of the allowed prefixes)
+                // Validate phone number format
                 $validPrefixes = ['014', '013', '016', '015', '019', '018', '017'];
-                return strlen($phone) === 11 && $phone[0] === '0' && in_array(substr($phone, 0, 3), $validPrefixes);
+                return strlen($phone) === 11 &&
+                       $phone[0] === '0' &&
+                       in_array(substr($phone, 0, 3), $validPrefixes);
             })
-            ->map(function ($phone) {
-                // Add country code '88' to valid numbers
-                return '88' . $phone;
-            })
+            ->take(10)
             ->toArray();
+            dump(   $memberNumbers);
 
+        // Check if there are any valid phone numbers
         if (empty($memberNumbers)) {
-            return response()->json(['status' => 'error', 'message' => 'No valid phone numbers found.'], 400);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'No valid phone numbers found.'
+            ], 400);
         }
 
-        // Split the phone numbers into chunks of 100
-        $chunks = array_chunk($memberNumbers, 100);
+        // SMS API Configuration
+        $baseUrl = 'https://sms.apinet.club/sendSms';
+        $userId = config('services.sms.user_id', 'farsemac@gmail.com');
+        $userPassword = config('services.sms.user_password', 'stolen.com.bd2@');
 
-        // SMS API configuration
-        $url = "http://services.smsnet24.com/sendSms";
-        $payload = [
-            'sms_text' => $request->input('message'),
-            'campaignType' => 'T',
-            'user_password' => 'stolen.com.bd2@',
-            'user_id' => 'farsemac@gmail.com',
-        ];
+        try {
+            // Prepare query parameters
+            $params = [
+                'user_id' => $userId,
+                'user_password' => $userPassword,
+                'route_id' => 1,
+                'sms_type_id' => 1, // Plain Text
+                'sms_sender' => 'DigitalLab',
+                'sms_receiver' => implode(',', $memberNumbers), // All numbers in one string
+                'sms_text' => $validatedData['message'],
+                // 'sms_category_name' => 'Notification',
+                'campaignType' => 'T', // Transactional
+                'return_type' => 'JSON',
+                'refOrderNo' => 'Order_' . uniqid()
+            ];
 
-        foreach ($chunks as $chunk) {
-            $receiverNumbers = implode(',', $chunk);
-            $payload['sms_receiver'] = $receiverNumbers;
+            // Send SMS using HTTP client
+            $response = Http::asForm()->post($baseUrl, $params);
 
-            try {
-                // Send the SMS request using Guzzle HTTP client
-                $client = new Client();
-                $response = $client->post($url, ['form_params' => $payload]);
+            // Log the attempt
+            SendMessageLog::create([
+                'message' => $validatedData['message'],
+                'response' => $response->body(),
+                'recipients_count' => count($memberNumbers)
+            ]);
 
-                // Parse the response
-                $responseBody = json_decode($response->getBody(), true);
-
-                // If the response is null, consider it as success
-                if ($responseBody === null) {
-                    // Log the success (null response means no error)
-                    SendMessageLog::create([
-                        'message'  => $validatedData['message'],
-                        'response' => json_encode(['status' => 'success', 'message' => 'No response from API']),
-                    ]);
-                }
-
-                // If the response is not null, check if there's an error in it
-                if ($responseBody !== null) {
-                    // Log the error response
-                    SendMessageLog::create([
-                        'message'  => $validatedData['message'],
-                        'response' => json_encode(['error' => $responseBody]),
-                    ]);
-                    // Optionally, you could return after the first failed chunk
-                    return response()->json([
-                        'status'  => 'error',
-                        'message' => 'Failed to send SMS. Error details: ' . json_encode($responseBody),
-                    ], 500);
-                }
-
-            } catch (\Exception $e) {
-                // Catch any other exceptions (network issues, etc.)
-                SendMessageLog::create([
-                    'message'  => $validatedData['message'],
-                    'response' => json_encode(['error' => $e->getMessage()]),
-                ]);
-
+            // Check response status
+            if ($response->successful()) {
                 return response()->json([
-                    'status'  => 'error',
-                    'message' => 'Failed to send SMS. ' . $e->getMessage(),
+                    'status' => 'success',
+                    'message' => 'SMS sent successfully',
+                    'total_recipients' => count($memberNumbers),
+                    'response' => $response->json()
+                ], 200);
+            } else {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Failed to send SMS',
+                    'total_recipients' => count($memberNumbers),
+                    'response' => $response->body()
                 ], 500);
             }
-        }
+        } catch (\Exception $e) {
+            // Log the exception
+            SendMessageLog::create([
+                'message' => $validatedData['message'],
+                'response' => json_encode(['error' => $e->getMessage()]),
+                'recipients_count' => count($memberNumbers)
+            ]);
 
-        return response()->json([
-            'status' => 'success',
-            'message' => 'SMS sent successfully to all users in batches.',
-        ], 200);
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Exception occurred while sending SMS',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
 }
