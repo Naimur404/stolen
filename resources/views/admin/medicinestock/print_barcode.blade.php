@@ -49,10 +49,10 @@
 <div class="receipt">
     <p align="center">{{ $app_setting->app_name }}</p>
     <img
-         src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$warehouseStock->barcode_text", 'C39', 1, 35) !!}"
+         src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$outletStock->barcode_text", 'C39', 1, 35) !!}"
          alt="barcode"/>
-    <p>{{ $warehouseStock->medicine->medicine_name ?? '' }}</p>
-    <p>Tk <b>{{ $warehouseStock->price }}/-</b></p>
+    <p>{{ $outletStock->medicine->medicine_name ?? '' }}</p>
+    <p>Tk <b>{{ $outletStock->price }}/-</b></p>
 </div>
 
 

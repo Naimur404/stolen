@@ -147,8 +147,8 @@ class OutletStockController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $warehouseStock = OutletStock::find($id);
-        return view('admin.medicinestock.print_barcode', compact('warehouseStock'));
+        $outletStock = OutletStock::find($id);
+        return view('admin.medicinestock.print_barcode', compact('outletStock'));
     }
 
     /**
@@ -195,120 +195,130 @@ class OutletStockController extends Controller
     {
         //
     }
+
+
     public function outletStock(Request $request, $id)
     {
-
-        $draw = $request->get('draw');
-        $start = $request->get("start");
-        $row_per_page = $request->get("length"); // rows display per page
-
-        $columnIndex_arr = $request->get('order');
-        $columnName_arr = $request->get('columns');
-        $order_arr = $request->get('order');
-        $search_arr = $request->get('search');
-
-        $columnIndex = (isset($columnIndex_arr[0]['column'])) ? $columnIndex_arr[0]['column'] : false; // column index
-        $columnName = (isset($columnName_arr[$columnIndex]['data'])) ? $columnName_arr[$columnIndex]['data'] : false; // column name
-        $columnSortOrder = (isset($order_arr[0]['dir'])) ? $order_arr[0]['dir'] : false; // asc or desc
-        $searchValue = (isset($search_arr['value'])) ? $search_arr['value'] : false; // Search value
-
-        // total records count
-        if ($id == 'all') {
-
-            $medicine_stock_query = DB::table('outlet_stocks')
-                ->orderBy($columnName, $columnSortOrder)
-                ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                ->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
-                ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
-                ->orWhere('categories.category_name', 'like', '%' . $searchValue . '%')
-                ->select('outlet_stocks.*', 'medicines.medicine_name');
-
-
-        } else {
-            if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
-                $medicine_stock_query = DB::table('outlet_stocks')
-                    ->orderBy($columnName, $columnSortOrder)
-                    ->where('outlet_stocks.outlet_id', '=' , $id)
-                    ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                    ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
-                    ->select('outlet_stocks.*', 'medicines.medicine_name');
-            } else {
-                $medicine_stock_query = DB::table('outlet_stocks')
-                    ->orderBy($columnName, $columnSortOrder)
-                    ->where('outlet_id', Auth::user()->outlet_id)
-                    ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id')
-                    ->Where('medicines.medicine_name', 'like', '%' . $searchValue . '%')
-                    ->select('outlet_stocks.*', 'medicines.medicine_name');
-            }
-
-        }
-        $totalRecords = $medicine_stock_query->count();
-        $medicine_stock = $medicine_stock_query
-            ->skip($start)
-            ->take($row_per_page)
+        $searchParams = $this->getSearchParameters($request);
+        
+        // Build the base query with all necessary joins and conditions
+        $query = $this->buildBaseQuery($id, $searchParams);
+        
+        // Get the total records before applying quantity filter
+        $totalRecords = $query->count();
+        
+        // Apply quantity filter and get filtered records
+        $filteredQuery = clone $query;
+        $filteredQuery->whereRaw('outlet_stocks.quantity >= 1');
+        
+        // Get the total filtered records
+        $totalFilteredRecords = $filteredQuery->count();
+        
+        // Get paginated results
+        $stocks = $filteredQuery
+            ->skip($searchParams['start'])
+            ->take($searchParams['rowsPerPage'])
             ->get();
-        $total_record_switch_filter = $totalRecords;
-
-        // fetch records with search
-
-        $data_arr = array();
-
-        $sl = 1;
-        $total = 0;
-
-        foreach ($medicine_stock as $stock) {
-            if ($stock->quantity < 1){
-
-                continue;
-
-            }else{
-
-                $s_no = $sl++;
-                $medicine_name = Medicine::get_medicine_name($stock->medicine_id);
-                if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
-                    $manufacturer_price = '৳&nbsp;' . $stock->purchase_price;
-                }else{
-                    $manufacturer_price = 'N/A';
-                }
-                $medicine = Medicine::where('id', $stock->medicine_id)->first();
-                $category = Category::get_category_name($medicine->category_id);
-                $manufacturer_name = Manufacturer::get_manufacturer_name($medicine->manufacturer_id);
-                $price = '৳&nbsp;' . $stock->price;
-                $size = $stock->size;
-
-                $stocks = $stock->quantity;
-                $ul = route('outlet-stock.edit', $stock->id);
-                $barcode_url = route('outlet-stock.show', $stock->id);
-                $url = '<a href="' . $ul . '"class="btn btn-success btn-xs" title="Edit" style="margin-right:3px"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>';
-                $url .= '<a href="' . $barcode_url . '"class="btn btn-primary btn-xs" title="Print Barcode" style="margin-right:3px" target="_blank"><i class="fa fa-barcode" aria-hidden="true"></i></a>';
-                $total = $total + $stock->price * $stock->quantity;
-                $data_arr[] = array(
-                    "id" => $s_no,
-                    "medicine_name" => $medicine_name,
-                    "category" => $category,
-                    "manufacturer_name" => $manufacturer_name,
-                    "price" => $price,
-                    "manufacturer_price" => $manufacturer_price,
-                    "quantity" => $stocks,
-                    "size" => $size,
-                    "action" => $url,
-
-                );
-
+        
+        $formattedData = $this->formatStockData($stocks);
+        
+        return response()->json([
+            'draw' => intval($searchParams['draw']),
+            'iTotalRecords' => $totalRecords,
+            'iTotalDisplayRecords' => $totalFilteredRecords,
+            'aaData' => $formattedData['data'],
+            'total' => $formattedData['total']
+        ]);
+    }
+    
+    private function getSearchParameters(Request $request)
+    {
+        $columnIndex = $request->get('order')[0]['column'] ?? false;
+        
+        return [
+            'draw' => $request->get('draw'),
+            'start' => $request->get('start'),
+            'rowsPerPage' => $request->get('length'),
+            'columnName' => $request->get('columns')[$columnIndex]['data'] ?? 'id',
+            'sortOrder' => $request->get('order')[0]['dir'] ?? 'asc',
+            'searchValue' => $request->get('search')['value'] ?? ''
+        ];
+    }
+    
+    private function buildBaseQuery($id, array $params)
+    {
+        $baseQuery = DB::table('outlet_stocks')
+            ->orderBy($params['columnName'], $params['sortOrder'])
+            ->leftJoin('medicines', 'outlet_stocks.medicine_id', '=', 'medicines.id');
+    
+        if ($id === 'all') {
+            $baseQuery->leftJoin('categories', 'medicines.category_id', '=', 'categories.id')
+                ->where(function($q) use ($params) {
+                    $q->where('medicines.medicine_name', 'like', '%' . $params['searchValue'] . '%')
+                      ->orWhere('categories.category_name', 'like', '%' . $params['searchValue'] . '%');
+                });
+        } else {
+            if (auth()->user()->hasRole(['Super Admin', 'Admin'])) {
+                $baseQuery->where('outlet_stocks.outlet_id', $id);
+            } else {
+                $baseQuery->where('outlet_stocks.outlet_id', auth()->user()->outlet_id);
             }
-
+            
+            if (!empty($params['searchValue'])) {
+                $baseQuery->where('medicines.medicine_name', 'like', '%' . $params['searchValue'] . '%');
+            }
         }
-
-        $response = array(
-            "draw" => intval($draw),
-            "iTotalRecords" => $totalRecords,
-            "iTotalDisplayRecords" => $total_record_switch_filter,
-            "aaData" => $data_arr,
-            "total" => $total,
+    
+        return $baseQuery->select('outlet_stocks.*', 'medicines.medicine_name', 'medicines.category_id', 'medicines.manufacturer_id');
+    }
+    
+    private function formatStockData($stocks)
+    {
+        $formattedData = ['data' => [], 'total' => 0];
+        $serialNumber = 1;
+    
+        foreach ($stocks as $stock) {
+            $formattedData['data'][] = [
+                'id' => $serialNumber++,
+                'medicine_name' => Medicine::get_medicine_name($stock->medicine_id),
+                'category' => Category::get_category_name($stock->category_id),
+                'manufacturer_name' => Manufacturer::get_manufacturer_name($stock->manufacturer_id),
+                'price' => '৳ ' . $stock->price,
+                'manufacturer_price' => $this->formatManufacturerPrice($stock->purchase_price),
+                'quantity' => $stock->quantity,
+                'size' => $stock->size,
+                'action' => $this->generateActionButtons($stock->id)
+            ];
+    
+            $formattedData['total'] += $stock->price * $stock->quantity;
+        }
+    
+        return $formattedData;
+    }
+    
+    private function formatManufacturerPrice($price)
+    {
+        if (auth()->user()->hasRole(['Super Admin', 'Admin'])) {
+            return '৳ ' . $price;
+        }
+        return 'N/A';
+    }
+    
+    private function generateActionButtons($stockId)
+    {
+        $editUrl = route('outlet-stock.edit', $stockId);
+        $barcodeUrl = route('outlet-stock.show', $stockId);
+        
+        return sprintf(
+            '<a href="%s" class="btn btn-success btn-xs" title="Edit" style="margin-right:3px">
+                <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+            </a>
+            <a href="%s" class="btn btn-primary btn-xs" title="Print Barcode" style="margin-right:3px" target="_blank">
+                <i class="fa fa-barcode" aria-hidden="true"></i>
+            </a>',
+            $editUrl,
+            $barcodeUrl
         );
-
-        return response()->json($response);
-
     }
 
     public function outletStock2(Request $request, $id)

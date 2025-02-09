@@ -65,7 +65,7 @@ class DashBoardController extends Controller
             $warehouse_id = Auth::user()->warehouse_id != null ? Auth::user()->warehouse_id : Warehouse::orderby('id', 'desc')->first('id');
             $customers = Customer::where('outlet_id', $outlet_id)->count();
             $purchases = MedicinePurchase::where('warehouse_id', $warehouse_id)->whereDate('purchase_date', Carbon::now())->sum('grand_total');
-            $sales = OutletInvoice::where('outlet_id', $outlet_id)->whereDate('sale_date', Carbon::now())->sum('grand_total');
+            $sales = OutletInvoice::where('outlet_id', $outlet_id)->whereDate('sale_date', Carbon::now())->sum('payable_amount');
             $returns = SalesReturn::where('outlet_id', $outlet_id)->whereDate('return_date', Carbon::now())->count();
             $products = OutletStock::where('outlet_id', $outlet_id)->where('quantity', '>', 0)->count();
             $stocks = OutletStock::where('outlet_id', $outlet_id)->where('quantity', '<', 3)->count();
@@ -82,7 +82,7 @@ class DashBoardController extends Controller
                 [
                     Carbon::now()->startOfMonth(),
                     Carbon::now()->endOfMonth(),
-                ])->sum('grand_total');
+                ])->sum('payable_amount');
             $thisMonthReturns = SalesReturn::where('outlet_id', $outlet_id)->whereBetween('return_date',
                 [
                     Carbon::now()->startOfMonth(),
