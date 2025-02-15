@@ -40,6 +40,7 @@
                                     <th>Phone</th>
                                     <th>Address</th>
                                     <th>Is Active</th>
+                                    <th>Courier Gateway</th>
                                     <th>Action</th>
                                 </tr>
                                 </thead>
@@ -77,6 +78,12 @@
                         {data: 'mobile', name: 'phone'},
                         {data: 'address', name: 'address'},
                         {data: 'active', name: 'is active', orderable: false, searchable: false},
+                        {data: 'is_active_courier_gateway', name: 'is_active_courier_gateway', orderable: false, searchable: false, 
+            render: function(data, type, row) {
+                return data == 1 
+                    ? '<span class="badge bg-success">Active</span>' 
+                    : '<span class="badge bg-danger">Inactive</span>';
+            }},
                         {data: 'action', name: 'action', orderable: false, searchable: false},
                     ]
                 });

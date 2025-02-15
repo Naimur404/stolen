@@ -29,6 +29,8 @@ class SettingController extends Controller
             'phone_no' => 'required|min:11',
             'address' => 'required|string',
             'website' => 'required',
+            'courier_gateway' => 'string|nullable',
+            'sms_gateway' => 'string|nullable',
         ]);
 
         $data = Settings::latest()->first();
@@ -39,6 +41,8 @@ class SettingController extends Controller
         $data->website = $request->website;
         $data->footer_text = $request->footer_text;
         $data->print = $request->print;
+        $data->courier_gateway = $request->courier_gateway;
+        $data->sms_gateway = $request->sms_gateway;
 
         //for upload logo
 

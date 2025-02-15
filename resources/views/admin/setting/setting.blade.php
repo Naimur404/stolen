@@ -167,6 +167,44 @@
 									</div>
 								</div>
 							</div>
+
+							<div class="row">
+								<div class="col-md-3">
+									<div class="mb-3">
+										{{ Form::label('courier_gateway', 'Courier Gateway') }}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="mb-3">
+										@foreach(['pathao' => 'Pathao', 'steadfast' => 'Steadfast'] as $value => $label)
+											<div class="form-check">
+												{{ Form::checkbox('courier_gateway[]', $value, in_array($value, (array) $data->courier_gateway), ['class' => 'form-check-input', 'id' => 'courier_'.$value]) }}
+												{{ Form::label('courier_'.$value, $label, ['class' => 'form-check-label']) }}
+											</div>
+										@endforeach
+									</div>
+								</div>
+							</div>
+							
+
+							<div class="row">
+								<div class="col-md-3">
+									<div class="mb-3">
+										{{ Form::label('sms', 'SMS Gateway') }}
+									</div>
+								</div>
+								<div class="col-md-3">
+									<div class="mb-3">
+										@foreach(['twilio' => 'Twilio', 'nexmo' => 'Nexmo'] as $value => $label)
+											<div class="form-check">
+												{{ Form::checkbox('sms[]', $value, in_array($value, (array) $data->sms), ['class' => 'form-check-input', 'id' => 'sms_'.$value]) }}
+												{{ Form::label('sms_'.$value, $label, ['class' => 'form-check-label']) }}
+											</div>
+										@endforeach
+									</div>
+								</div>
+							</div>
+							
                             <div class="row">
                                 <div class="col-md-3">
                                     <div class="mb-3">

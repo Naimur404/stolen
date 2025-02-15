@@ -22,7 +22,9 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use App\Services\PathaoApiService;
 use App\Jobs\SendSMSJob;
+use App\Models\Settings;
 use App\Models\ShortLink;
+use SteadFast\SteadFastCourierLaravelPackage\Facades\SteadfastCourier;
 
 class OutletInvoiceController extends Controller
 {
@@ -31,10 +33,11 @@ class OutletInvoiceController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    private $pathaoApiService;
+    private $pathaoApiService, $setting;
 
     public function __construct(PathaoApiService $pathaoApiService)
     {
+        $this->setting = Settings::first() ?? new Settings();
         $this->pathaoApiService = $pathaoApiService;
         $this->middleware('permission:invoice.management|invoice.create|invoice.edit|invoice.delete', ['only' => ['index', 'store']]);
         $this->middleware('permission:invoice.create', ['only' => ['create', 'store']]);
@@ -60,10 +63,12 @@ class OutletInvoiceController extends Controller
     {
         $payment_methods = PaymentMethod::pluck('method_name', 'id');
 
-        $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+        $outlet_id = Auth::user()->outlet_id ?? Outlet::orderBy('id', 'desc')->value('id');
+
+        $outlet = Outlet::where('id', $outlet_id)->first();
         // $outlet_id = OutletHasUser::where('user_id', Auth::user()->id)->first();
 
-        return view('admin.Pos.pos', compact('outlet_id', 'payment_methods'));
+        return view('admin.Pos.pos', compact('outlet_id', 'payment_methods', 'outlet'));
     }
 
     /**
@@ -91,8 +96,13 @@ class OutletInvoiceController extends Controller
         $outletInvoice = $this->createInvoice($input, $customer, $discount, $grandTotal, $totalWithDelivery);
 
         // Handle Pathao API integration if needed
-        if ($input['outlet_id'] == 4 && $input['address'] != '') {
-            $this->handlePathaoOrderCreation($input, $customer, $outletInvoice, $totalWithDelivery);
+        $checkOutletCourierActive = Outlet::where('id', $input['outlet_id'])->first();
+        if ($checkOutletCourierActive->is_active_courier_gateway == 1) {
+            if ($this->setting->courier_gateway != null && $this->setting->courier_gateway == 'pathao') {
+                $this->handlePathaoOrderCreation($input, $customer, $outletInvoice, $totalWithDelivery);
+            } else if ($this->setting->courier_gateway != null && $this->setting->courier_gateway == 'steadfast') {
+                $this->handleSteadfastOrderCreation($input, $customer, $outletInvoice, $totalWithDelivery);
+            }
         }
 
         // Log redeem points if applicable
@@ -160,7 +170,9 @@ class OutletInvoiceController extends Controller
 
         if (!$customer) {
             $customer = Customer::create($customerDetails);
-            $this->sendWelcomeSMS($input['mobile'], ucfirst($input['name']), $input['outlet_id']);
+            if ($this->setting->sms_gateway == 'twilio' && $this->setting->sms_gateway != null) {
+                $this->sendWelcomeSMS($input['mobile'], ucfirst($input['name']), $input['outlet_id']);
+            }
         } else {
             $customer->update($customerDetails);
         }
@@ -223,7 +235,7 @@ class OutletInvoiceController extends Controller
         $parsedData = $this->pathaoApiService->parseAddress($input['address']);
         $orderData = [
             "store_id" => 6173,
-            "merchant_order_id" =>$outletInvoice->id,
+            "merchant_order_id" => $outletInvoice->id,
             "recipient_name" => $input['name'],
             "recipient_phone" => $input['mobile'],
             "recipient_address" => $input['address'],
@@ -239,7 +251,34 @@ class OutletInvoiceController extends Controller
         $response = $this->pathaoApiService->createOrder($orderData);
         $shortLinkUrl = $this->generateShortTrackingLink($response, $outletInvoice);
 
-        $this->sendOrderTrackingSMS($input['mobile'], ucfirst($input['name']), $shortLinkUrl);
+        if ($this->setting->sms_gateway == 'twilio' && $this->setting->sms_gateway != null) {
+            $this->sendOrderTrackingSMS($input['mobile'], ucfirst($input['name']), $shortLinkUrl);
+        }
+    }
+
+    private function handleSteadfastOrderCreation($input, $customer, $outletInvoice, $totalWithDelivery)
+    {
+    
+        $orderData =
+
+            [
+
+                'invoice' => $outletInvoice->id,
+
+                'recipient_name' => $input['name'],
+
+                'recipient_phone' => $input['mobile'],
+
+                'recipient_address' => $input['address'],
+
+                'cod_amount' => (int)$totalWithDelivery,
+
+                'note' => 'Order from Shop Bah BD',
+
+            ];
+
+        $response = SteadfastCourier::placeOrder($orderData);
+
     }
 
     // Generates a short tracking link for the Pathao order
@@ -513,47 +552,56 @@ class OutletInvoiceController extends Controller
             'column' => $request->get('columns')[$request->get('order')[0]['column'] ?? 0]['data'] ?? 'id',
             'direction' => $request->get('order')[0]['dir'] ?? 'asc'
         ];
-    
+
         // Build base query with eager loading
         $query = OutletInvoice::with(['customer:id,mobile', 'outlet:id,outlet_name'])
-            ->select(['id', 'sale_date', 'outlet_id', 'customer_id', 'payment_method_id', 
-                     'total_with_charge', 'paid_amount', 'added_by', 'grand_total'])
-            ->when(!auth()->user()->hasRole(['Super Admin', 'Admin']), function($query) {
+            ->select([
+                'id',
+                'sale_date',
+                'outlet_id',
+                'customer_id',
+                'payment_method_id',
+                'total_with_charge',
+                'paid_amount',
+                'added_by',
+                'grand_total'
+            ])
+            ->when(!auth()->user()->hasRole(['Super Admin', 'Admin']), function ($query) {
                 return $query->where('outlet_id', auth()->user()->outlet_id);
             });
-    
+
         // Apply search if provided
         if ($params['search']) {
-            $query->where(function($q) use ($params) {
+            $query->where(function ($q) use ($params) {
                 $search = $params['search'];
                 $q->whereHas('customer', fn($q) => $q->where('mobile', 'like', "%{$search}%"))
-                  ->orWhere('id', 'like', "%{$search}%")
-                  ->orWhereDate('sale_date', 'like', "%{$search}%");
+                    ->orWhere('id', 'like', "%{$search}%")
+                    ->orWhereDate('sale_date', 'like', "%{$search}%");
             });
         }
-    
+
         // Get total records count
         $totalRecords = $query->count();
-    
+
         // Get paginated and sorted data
         $invoices = $query->orderBy($params['column'], $params['direction'])
             ->offset($params['start'])
             ->limit($params['length'])
             ->get();
-    
+
         // Transform data for response
-        $data = $invoices->map(function($invoice) {
+        $data = $invoices->map(function ($invoice) {
             $print = route('print-invoice', $invoice->id);
             $details = route('sale.details', $invoice->id);
             $return = route('payDue', $invoice->id);
-    
+
             $action = $invoice->paid_amount < $invoice->grand_total
                 ? '<a href="' . $print . '" target="_blank" class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
                    <a href="' . $details . '" class="btn btn-primary btn-xs" title="Details" style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>
                    <a href="' . $return . '" class="btn btn-success btn-xs" title="Return" style="margin-right:3px"><i class="fa fa-paypal" aria-hidden="true"></i></a>'
                 : '<a href="' . $print . '" target="_blank" class="btn btn-danger btn-xs" title="Print" style="margin-right:3px"><i class="fa fa-print" aria-hidden="true"></i></a>
                    <a href="' . $details . '" class="btn btn-primary btn-xs" title="Details" style="margin-right:3px"><i class="fa fa-info" aria-hidden="true"></i></a>';
-    
+
             return [
                 'id' => $invoice->id,
                 'sale_date' => $invoice->sale_date,
@@ -566,13 +614,12 @@ class OutletInvoiceController extends Controller
                 'action' => $action
             ];
         });
-    
+
         return response()->json([
             'draw' => (int) $params['draw'],
             'iTotalRecords' => $totalRecords,
             'iTotalDisplayRecords' => $totalRecords,
             'aaData' => $data
         ]);
-
-}
+    }
 }

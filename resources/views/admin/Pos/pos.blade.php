@@ -191,7 +191,7 @@
                             <button class="btn btn-primary btn-xs adduser" style="margin-top: 32px" id="adduser"
                                 type="button"><i data-feather="arrow-right-circle" class="mt-1"></i></button>
                         </div>
-                        @if ($outlet_id != 4)
+                        {{-- @if ($outlet_id != 4)
                             <div class="col-md-3">
                                 {!! Form::label('address', 'Address', ['class' => 'form-label']) !!}
                                 {!! Form::text('address', null, [
@@ -200,7 +200,7 @@
                                     'placeholder' => 'Enter Address',
                                 ]) !!}
                             </div>
-                        @endif
+                        @endif --}}
                         <div class="col-md-3">
                             {!! Form::label('name', 'Customer Name', ['class' => 'form-label']) !!}
                             {!! Form::text('name', null, [
@@ -230,16 +230,16 @@
                             ]) !!}
                         </div>
 
-                        @if ($outlet_id == 4)
-                            <div class="col-md-6">
-                                {!! Form::label('address', 'Address', ['class' => 'form-label']) !!}
-                                {!! Form::textarea('address', null, [
-                                    'class' => 'form-control hello24',
-                                    'id' => 'address',
-                                    'placeholder' => 'Enter Address',
-                                ]) !!}
-                            </div>
-                        @endif
+                        <div class="col-md-6">
+                            {!! Form::label('address', 'Address', ['class' => 'form-label']) !!}
+                            {!! Form::textarea('address', old('address', $outlet->address ?? ''), [
+                                'class' => 'form-control' . (($outlet->is_active_courier_gateway ?? 0) == 1 && ($app_setting->courier_gateway ?? '') == 'pathao' ? ' hello24' : ''),
+                                'id' => 'address',
+                                'placeholder' => 'Enter Address',
+                            ]) !!}
+                        </div>
+                        
+                        
                     </div>
 
                     <div class="row">
@@ -321,7 +321,7 @@
 
                                             <input type="hidden" id="vat" class="text-right form-control clearVat"
                                                 name="vat" value="0" step="any" placeholder="Tk" />
-                                            @if ($outlet_id != 4)
+                                            @if ($outlet->is_active_courier_gateway == 1)
                                                 <input type="hidden" class="form-control text-right text-success fw-bold"
                                                     name="delivery" id="delivery" value="0" step="any"
                                                     placeholder="Tk" required>
@@ -329,7 +329,7 @@
                                         </td>
 
                                     </tr>
-                                    @if ($outlet_id == 4)
+                                    @if ($outlet->is_active_courier_gateway == 1)
                                         <tr>
                                             <td class="text-right" colspan="8"><b>Delivery Charge:</b></td>
 

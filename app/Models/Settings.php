@@ -19,7 +19,9 @@ class Settings extends Model
           'description',
           'website',
           'print',
-          'footer_text'
+          'footer_text',
+          'courier_gateway',
+          'sms_gateway',
 
 
     ];
