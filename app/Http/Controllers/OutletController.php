@@ -36,7 +36,7 @@ class OutletController extends Controller
                     $inactive = route('outlet.active', [$row->id, 1]);
                     return view('admin.action.active', compact('active', 'inactive', 'row'));
                 })
-
+                        
                 ->addColumn('action', function ($row) {
                     $id = $row->id;
                     $edit = route('outlet.edit', $id);

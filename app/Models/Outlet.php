@@ -16,6 +16,7 @@ class Outlet extends Model
         'address',
         'mobile',
         'details',
+        'is_active_courier_gateway',
         'is_active',
     ];
 
