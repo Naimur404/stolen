@@ -178,7 +178,7 @@
 									<div class="mb-3">
 										@foreach(['pathao' => 'Pathao', 'steadfast' => 'Steadfast'] as $value => $label)
 											<div class="form-check">
-												{{ Form::checkbox('courier_gateway[]', $value, in_array($value, (array) $data->courier_gateway), ['class' => 'form-check-input', 'id' => 'courier_'.$value]) }}
+												{{ Form::radio('courier_gateway', $value, $data->courier_gateway == $value, ['class' => 'form-check-input', 'id' => 'courier_'.$value]) }}
 												{{ Form::label('courier_'.$value, $label, ['class' => 'form-check-label']) }}
 											</div>
 										@endforeach
@@ -197,7 +197,7 @@
 									<div class="mb-3">
 										@foreach(['twilio' => 'Twilio', 'nexmo' => 'Nexmo'] as $value => $label)
 											<div class="form-check">
-												{{ Form::checkbox('sms[]', $value, in_array($value, (array) $data->sms), ['class' => 'form-check-input', 'id' => 'sms_'.$value]) }}
+												{{ Form::radio('sms', $value, $data->sms == $value, ['class' => 'form-check-input', 'id' => 'sms_'.$value]) }}
 												{{ Form::label('sms_'.$value, $label, ['class' => 'form-check-label']) }}
 											</div>
 										@endforeach
