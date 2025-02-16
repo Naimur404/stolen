@@ -197,7 +197,7 @@
 									<div class="mb-3">
 										@foreach(['twilio' => 'Twilio', 'nexmo' => 'Nexmo'] as $value => $label)
 											<div class="form-check">
-												{{ Form::radio('sms', $value, $data->sms == $value, ['class' => 'form-check-input', 'id' => 'sms_'.$value]) }}
+												{{ Form::radio('sms_gateway', $value, $data->sms_gateway == $value, ['class' => 'form-check-input', 'id' => 'sms_'.$value]) }}
 												{{ Form::label('sms_'.$value, $label, ['class' => 'form-check-label']) }}
 											</div>
 										@endforeach
