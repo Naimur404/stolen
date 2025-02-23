@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\BarcodeLog;
 
 class OutletStockController extends Controller
 {
@@ -68,8 +69,12 @@ class OutletStockController extends Controller
     public function store(Request $request)
     {
 
-        $manu_price = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->first();
-        $data = array(
+        $manuPrice = WarehouseStock::where('warehouse_id', $request->warehouse_id)
+            ->where('medicine_id', $request->medicine_id)
+            ->where('size', $request->size)
+            ->first();
+    
+        $stockData = [
             'quantity' => (int) $request->quantity,
             'price' => $request->price,
             'outlet_id' => $request->outlet_id,
@@ -78,48 +83,57 @@ class OutletStockController extends Controller
             'create_date' => $request->create_date,
             'barcode_text' => $request->barcode,
             'warehouse_stock_id' => $request->stock_id ?? null,
-            'purchase_price' => $manu_price->purchase_price,
+            'purchase_price' => $manuPrice->purchase_price,
+        ];
 
-        );
-
-        $check = OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->first();
-
-        if ($check != null) {
-            $stock2 = array(
-
-                'quantity' => (int) $check->quantity + (int) $request->quantity,
+    
+    
+        $existingStock = OutletStock::where('outlet_id', $request->outlet_id)
+            ->where('medicine_id', $request->medicine_id)
+            ->where('size', $request->size)
+            ->first();
+    
+        $receivedUpdate = ['has_received' => '1'];
+    
+        if ($existingStock) {
+            $updatedStock = [
+                'quantity' => (int) $existingStock->quantity + (int) $request->quantity,
                 'price' => $request->price,
-                'purchase_price' => $manu_price->purchase_price,
-            );
-            $has_received2 = array(
-
-                'has_received' => '1',
-
-            );
-            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->where('create_date', '=', $request->create_date)->update($has_received2);
-            OutletStock::where('outlet_id', $request->outlet_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($stock2);
-
+                'purchase_price' => $manuPrice->purchase_price,
+                'barcode_text' => $request->barcode,
+            ];
+    
+            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)
+                ->where('medicine_id', $request->medicine_id)
+                ->where('size', $request->size)
+                ->where('create_date', $request->create_date)
+                ->update($receivedUpdate);
+    
+            OutletStock::where('outlet_id', $request->outlet_id)
+                ->where('medicine_id', $request->medicine_id)
+                ->where('size', $request->size)
+                ->update($updatedStock);
         } else {
-            $has_received2 = array(
-
-                'has_received' => '1',
-
-            );
-            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->where('create_date', '=', $request->create_date)->update($has_received2);
-            $check = OutletStock::create($data);
-
+            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)
+                ->where('medicine_id', $request->medicine_id)
+                ->where('size', $request->size)
+                ->where('create_date', $request->create_date)
+                ->update($receivedUpdate);
+    
+            OutletStock::create($stockData);
         }
-        $check2 = MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('has_received', '0')->get();
-        if (count($check2) < 1) {
-            $has_received = array(
-                'has_received' => '1',
-
-            );
-            MedicineDistribute::where('id', $request->medicine_distribute_id)->update($has_received);
+    
+        $pendingItems = MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)
+            ->where('has_received', '0')
+            ->get();
+    
+        if ($pendingItems->isEmpty()) {
+            MedicineDistribute::where('id', $request->medicine_distribute_id)
+                ->update($receivedUpdate);
         }
-
+    
         try {
-            $data = array(
+            $checkInData = [
                 'outlet_id' => $request->outlet_id,
                 'medicine_distribute_id' => $request->medicine_distribute_id,
                 'medicine_id' => $request->medicine_id,
@@ -128,14 +142,14 @@ class OutletStockController extends Controller
                 'quantity' => $request->quantity,
                 'checked_by' => Auth::user()->id,
                 'remarks' => 'added',
-
-            );
-            OutletCheckIn::create($data);
-//            MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->update([''])
-
-            return redirect()->back()->with('success', ' Successfully Recieved This Product.');
+            ];
+    
+            OutletCheckIn::create($checkInData);
+    
+            return redirect()->back()->with('success', 'Product successfully received.');
         } catch (Exception $e) {
-            return redirect()->route('distribute-medicine.index')->with('success', $e->getMessage());
+            return redirect()->route('distribute-medicine.index')
+                ->with('success', $e->getMessage());
         }
     }
 
