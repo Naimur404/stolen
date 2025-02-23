@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class WarehouseStockController extends Controller
 {
@@ -132,35 +133,37 @@ class WarehouseStockController extends Controller
     public function update(Request $request, $id)
     {
 
-        try {
-            $warehousetock = WarehouseStock::where('warehouse_id', $id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->first();
+        dump($request->all());
 
-            if ($warehousetock != null) {
-                $new_stock = array(
-                    'quantity' => (int) $warehousetock->quantity - (int) $request->quantity,
+        // try {
+        //     $warehousetock = WarehouseStock::where('warehouse_id', $id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->first();
 
-                );
-                $has_received2 = array(
+        //     if ($warehousetock != null) {
+        //         $new_stock = array(
+        //             'quantity' => (int) $warehousetock->quantity - (int) $request->quantity,
 
-                    'has_sent' => '1',
+        //         );
+        //         $has_received2 = array(
 
-                );
-                MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->where('create_date', '=', $request->create_date)->update($has_received2);
+        //             'has_sent' => '1',
 
-                WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($new_stock);
-            }
-            $check = MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('has_sent', '0')->where('create_date', '=', $request->create_date)->get();
-            if (count($check) < 1) {
-                $has_received = array(
-                    'has_sent' => '1',
-                );
-                MedicineDistribute::where('id', $request->medicine_distribute_id)->update($has_received);
-            }
+        //         );
+        //         MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->where('create_date', '=', $request->create_date)->update($has_received2);
 
-            return redirect()->back()->with('success', ' Successfully Distribute This Product.');
-        } catch (Exception $e) {
-            return redirect()->route('distribute-medicine.index')->with('success', $e->getMessage());
-        }
+        //         WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $request->medicine_id)->where('size', '=', $request->size)->update($new_stock);
+        //     }
+        //     $check = MedicineDistributeDetail::where('medicine_distribute_id', $request->medicine_distribute_id)->where('has_sent', '0')->where('create_date', '=', $request->create_date)->get();
+        //     if (count($check) < 1) {
+        //         $has_received = array(
+        //             'has_sent' => '1',
+        //         );
+        //         MedicineDistribute::where('id', $request->medicine_distribute_id)->update($has_received);
+        //     }
+
+        //     return redirect()->back()->with('success', ' Successfully Distribute This Product.');
+        // } catch (Exception $e) {
+        //     return redirect()->route('distribute-medicine.index')->with('success', $e->getMessage());
+        // }
     }
 
     /**
@@ -345,36 +348,81 @@ class WarehouseStockController extends Controller
         return redirect()->back()->with('success', ' Successfully Medicine Price Update.');
     }
 
+    public function allInOne(Request $request)
+    {
+        // Validate incoming request data
+        $request->validate([
+            'disid' => 'required|integer|exists:medicine_distributes,id',
+            'warehouse_id' => 'required|integer|exists:warehouses,id'
+        ]);
     
-public function allInOne(Request $request){
- $datas = MedicineDistributeDetail::where('medicine_distribute_id', $request->disid)->get();
-foreach($datas as $data){
-    $warehousetock = WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $data->medicine_id)->where('size', '=', $data->size)->first();
-
-    if ($warehousetock != null) {
-        $new_stock = array(
-            'quantity' => (int) $warehousetock->quantity - (int) $data->quantity,
-
-        );
-        $has_received2 = array(
-
-            'has_sent' => '1',
-
-        );
-        MedicineDistributeDetail::where('medicine_distribute_id', $request->disid)->where('medicine_id', $data->medicine_id)->where('size', '=', $data->size)->where('create_date', '=', $data->create_date)->update($has_received2);
-
-        WarehouseStock::where('warehouse_id', $request->warehouse_id)->where('medicine_id', $data->medicine_id)->where('size', '=', $data->size)->update($new_stock);
+        try {
+            // Fetch all distribution details at once
+            $distributeDetails = MedicineDistributeDetail::where('medicine_distribute_id', $request->disid)
+                ->where('has_sent', '0') // Only process unsent items
+                ->get();
+    
+            if ($distributeDetails->isEmpty()) {
+                return redirect()->back()->with('info', 'No items available to distribute.');
+            }
+    
+            // Begin database transaction
+            DB::beginTransaction();
+    
+            foreach ($distributeDetails as $detail) {
+                // Find warehouse stock
+                $warehouseStock = WarehouseStock::where('warehouse_id', $request->warehouse_id)
+                    ->where('medicine_id', $detail->medicine_id)
+                    ->where('size', $detail->size)
+                    ->lockForUpdate() // Prevent race conditions
+                    ->first();
+    
+                // Check if stock exists and has sufficient quantity
+                if (!$warehouseStock) {
+                    throw new Exception("Stock not found for medicine ID: {$detail->medicine_id}");
+                }
+    
+                $newQuantity = (int)$warehouseStock->quantity - (int)$detail->quantity;
+                if ($newQuantity < 0) {
+                    throw new Exception("Insufficient stock for medicine ID: {$detail->medicine_id}");
+                }
+    
+                // Update warehouse stock
+                $warehouseStock->update([
+                    'quantity' => $newQuantity,
+                    'updated_at' => now()
+                ]);
+    
+                // Update distribution detail
+                $detail->update([
+                    'has_sent' => '1'
+                ]);
+            }
+    
+            // Check if all items in distribution are sent
+            $pendingItems = MedicineDistributeDetail::where('medicine_distribute_id', $request->disid)
+                ->where('has_sent', '0')
+                ->count();
+    
+            if ($pendingItems === 0) {
+                MedicineDistribute::where('id', $request->disid)
+                    ->update([
+                        'has_sent' => '1'
+                    ]);
+            }
+    
+            DB::commit();
+            
+            return redirect()->back()->with('success', 'Successfully distributed all products.');
+    
+        } catch (Exception $e) {
+            DB::rollBack();
+            
+            Log::error('Distribution failed: ' . $e->getMessage());
+            
+            return redirect()->back()
+                ->with('error', 'Failed to distribute products: ' . $e->getMessage())
+                ->withInput();
+        }
     }
-    $check = MedicineDistributeDetail::where('medicine_distribute_id', $request->disid)->where('has_sent', '0')->where('create_date', '=', $data->create_date)->get();
-    if (count($check) < 1) {
-        $has_received = array(
-            'has_sent' => '1',
-        );
-        MedicineDistribute::where('id', $request->disid)->update($has_received);
-    }
-
-}
-return redirect()->back()->with('success', ' Successfully Distribute All This Product.');
-
-}
 }
