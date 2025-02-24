@@ -51,7 +51,7 @@
     <img
          src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$outletStock->barcode_text", 'C39', 1, 35) !!}"
          alt="barcode"/>
-    <p>{{ $outletStock->medicine->medicine_name ?? '' }} ({{$outletStock->medicine->size}})</p>
+    <p>{{ $outletStock->medicine->medicine_name ?? '' }} ({{$outletStock->size}})</p>
     <p>Tk <b>{{ $outletStock->price }}/-</b></p>
 </div>
 
