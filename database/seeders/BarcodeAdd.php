@@ -19,7 +19,7 @@ class BarcodeAdd extends Seeder
             ->groupBy(fn($item) => $item->medicine_id . '-' . $item->size);
 
         // Process outlet stocks in chunks for memory efficiency
-        OutletStock::whereNull('barcode_text')->chunk(500, function ($outletStocks) use ($warehouseStocks) {
+        OutletStock::whereNull('barcode_text')->chunk(1000, function ($outletStocks) use ($warehouseStocks) {
             foreach ($outletStocks as $outletStock) {
                 $key = $outletStock->medicine_id . '-' . $outletStock->size;
                 $warehouseStock = $warehouseStocks->get($key)?->first();
