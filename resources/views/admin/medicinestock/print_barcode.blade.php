@@ -17,14 +17,16 @@
             width: 38mm;
             height: 25mm;
             overflow: hidden;
+            font-family: Arial, sans-serif;
+            transform: rotate(180deg); /* Rotate content to fix upside-down printing */
         }
 
         .receipt {
             width: 38mm;
             height: 25mm;
-            padding: 1mm;
+            padding: 0;
             box-sizing: border-box;
-            page-break-after: avoid;
+            page-break-after: always;
             page-break-inside: avoid;
             display: flex;
             flex-direction: column;
@@ -51,20 +53,24 @@
 
         .app-name {
             font-size: 6pt;
-            margin-bottom: 0.5mm;
-        }
-
-        .medicine-name {
-            margin-top: 0.5mm;
-            white-space: nowrap;
+            margin-bottom: 0;
+            width: 100%;
             overflow: hidden;
             text-overflow: ellipsis;
+            white-space: nowrap;
             max-width: 36mm;
         }
 
         .price {
             font-size: 9pt;
             font-weight: bold;
+            margin-top: 0.5mm;
+        }
+
+        .app-name {
+            font-size: 6pt;
+            font-weight: bold;
+            margin-top: 0.5mm;
         }
     </style>
 </head>
@@ -78,19 +84,19 @@
         <p class="price">Tk {{ $outletStock->price }}/-</p>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-    {{-- @if ($app_setting->print == 1) --}}
-        <script>
-            window.print();
-
-            $(window).on('afterprint', function () {
-                // Redirect back to the original page
-                setTimeout(function () {
+    <script>
+        window.onload = function() {
+            // Set a short delay before printing to ensure everything is loaded
+            setTimeout(function() {
+                window.print();
+            }, 100);
+            
+            window.addEventListener('afterprint', function() {
+                setTimeout(function() {
                     window.close();
                 }, 250);
             });
-        </script>
-    {{-- @endif --}}
+        };
+    </script>
 </body>
 </html>
