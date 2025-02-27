@@ -179,7 +179,7 @@
     </div>
 
     <div class="footer">
-        <h4>A Concern of Stolen Group</h4>
+        <h4>A Concern of {{$app_setting->app_name}} Group</h4>
         <h4>Thank You ❤</h4>
         <h5>Developed By: Tyrodevs.com</h5>
         {{--        <h6>Software by Pigeon Soft</h6>--}}

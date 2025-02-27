@@ -48,11 +48,11 @@
                 <div class="mb-3">
                     {!! Form::label('is_active_courier_gateway', 'Courier Gateway Status', ['class' => 'form-label']) !!}
                     <div class="form-check">
-                        {{ Form::radio('is_active_courier_gateway', 1, $outlet->is_active_courier_gateway == 1, ['class' => 'form-check-input', 'id' => 'active']) }}
+                        {{ Form::radio('is_active_courier_gateway',1,null, ['class' => 'form-check-input', 'id' => 'active']) }}
                         {{ Form::label('active', 'Active', ['class' => 'form-check-label']) }}
                     </div>
                     <div class="form-check">
-                        {{ Form::radio('is_active_courier_gateway', 0, $outlet->is_active_courier_gateway == 0, ['class' => 'form-check-input', 'id' => 'inactive']) }}
+                        {{ Form::radio('is_active_courier_gateway',0,null, ['class' => 'form-check-input', 'id' => 'inactive']) }}
                         {{ Form::label('inactive', 'Inactive', ['class' => 'form-check-label']) }}
                     </div>
                 </div>

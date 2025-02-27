@@ -1,24 +1,12 @@
 <!DOCTYPE html>
-
-<!--
-    ========================================
-    PharmAssist - Pharmacy Management Application
-    Developed by Pigeon Soft
-    Website : www.pigeon-soft.com
-    Mobile  : +8801737569833
-
-    All rights reserved. © Pigeon Soft 2016 - {{ date('Y') }}
-    ========================================
--->
-
 <html lang="en">
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="description" content="Pharmacy POS" />
-        <meta name="keywords" content="pharmacy POS, Pigeon Soft" />
-        <meta name="author" content="Pigeon Soft" />
+        <meta name="description" content="{{$app_setting->app_name}}" />
+        <meta name="keywords" content="{{$app_setting->app_name}} POS, Tyrodevs" />
+        <meta name="author" content="Tyrodevs"/>
         <link rel="icon" href="{{asset('uploads/'.$app_setting->logo)}}" type="image/x-icon" />
         <link rel="shortcut icon" href="{{asset('uploads/'.$app_setting->logo)}}" type="image/x-icon" />
         <title>@yield('title')</title>
