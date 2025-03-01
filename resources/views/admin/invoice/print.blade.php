@@ -187,7 +187,7 @@
             </td>
 
         </tr>
-        @if ($outletInvoice->outlet->id == 4)
+        @if ($outletInvoice->outlet->is_active_courier_gateway == 1)
         <tr>
             <td colspan="3" style="text-align: right; border: none;"><b> Delivery Charge: </b></td>
             <td style="width: 50px; border: none; text-align: right;"><b> {{ round($outletInvoice->delivery_charge) }} </b>
@@ -210,7 +210,7 @@
             <td style="width: 50px; border: none; text-align: right;"> {{ round($outletInvoice->payable_amount - $outletInvoice->given_amount ) }} </td>
         </tr>
     @endif
-        @if ($outletInvoice->outlet->id != 4)
+        @if ($outletInvoice->outlet->is_active_courier_gateway != 1)
         @if($outletInvoice->given_amount > $outletInvoice->payable_amount)
             <tr>
                 <td colspan="3" style="text-align: right; border: none;">Change Amount:</td>
@@ -229,7 +229,7 @@
             <td colspan="3" style="border: none;" style=""><b>{{ $outletInvoice->customer->name }} </b></td>
 
         </tr>
-        @if ($outletInvoice->outlet->id == 4)
+        @if ($outletInvoice->outlet->is_active_courier_gateway == 1)
         <tr>
 
             <td style="text-align: left; border: none; ">Phone:</td>
@@ -265,8 +265,9 @@
     </table>
     <br>
     <div class="row justify-content-center mt-3">
-        <img style="margin-left: 95px"
-             src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$outletInvoice->id", 'C39', 2) !!}" alt="barcode"/>
+        <img style="margin-left: 160px"
+        src="data:image/png;base64, {!! DNS2D::getBarcodePNG("$outletInvoice->id", 'QRCODE', 3, 3) !!}"
+        alt="qrcode"/>
     </div>
 
     <div class="footer">
