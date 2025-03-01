@@ -109,7 +109,8 @@ class WarehouseStockController extends Controller
      */
     public function show(WarehouseStock $warehouseStock)
     {
-        return view('admin.medicinestock.print_barcode', compact('warehouseStock'));
+        $stock = $warehouseStock;
+        return view('admin.medicinestock.print_barcode', compact('stock'));
     }
 
     /**
