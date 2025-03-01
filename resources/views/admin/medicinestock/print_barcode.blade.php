@@ -77,11 +77,11 @@
 
 <body>
     <div class="receipt">
-        <p class="app-name">{{ $outletStock->medicine->medicine_name ?? '' }} ({{$outletStock->size}})</p>
+        <p class="app-name">{{ $stock->medicine->medicine_name ?? '' }} ({{$stock->size}})</p>
         <img
-            src="data:image/png;base64, {!! DNS2D::getBarcodePNG("$outletStock->barcode_text", 'QRCODE', 3, 3) !!}"
+            src="data:image/png;base64, {!! DNS2D::getBarcodePNG("$stock->barcode_text", 'QRCODE', 3, 3) !!}"
             alt="qrcode"/>
-        <p class="price">Tk {{ $outletStock->price }}/-</p>
+        <p class="price">Tk {{ $stock->price }}/-</p>
     </div>
 
     <script>

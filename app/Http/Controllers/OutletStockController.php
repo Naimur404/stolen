@@ -161,8 +161,8 @@ class OutletStockController extends Controller
      */
     public function show(Request $request, $id)
     {
-        $outletStock = OutletStock::find($id);
-        return view('admin.medicinestock.print_barcode', compact('outletStock'));
+        $stock = OutletStock::find($id);
+        return view('admin.medicinestock.print_barcode', compact('stock'));
     }
 
     /**
