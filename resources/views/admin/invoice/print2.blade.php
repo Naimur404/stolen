@@ -174,8 +174,9 @@
     </table>
     <br>
     <div class="row justify-content-center mt-3">
-        <img style="margin-left: 130px"
-             src="data:image/png;base64, {!! DNS1D::getBarcodePNG("$outletInvoice->id", 'C39', 2) !!}" alt="barcode"/>
+       <img style="margin-left: 160px"
+        src="data:image/png;base64, {!! DNS2D::getBarcodePNG("$outletInvoice->id", 'QRCODE', 3, 3) !!}"
+        alt="qrcode"/>
     </div>
 
     <div class="footer">
