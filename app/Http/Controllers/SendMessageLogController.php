@@ -41,21 +41,24 @@ class SendMessageLogController extends Controller
         $validatedData = $request->validate([
             'message' => 'required|string|min:5',
         ]);
-
+    
         // Retrieve and prepare phone numbers
         $memberNumbers = Customer::whereNotNull('mobile')
-            ->pluck('mobile')
-            ->filter(function ($phone) {
-                // Validate phone number format
-                $validPrefixes = ['014', '013', '016', '015', '019', '018', '017'];
-                return strlen($phone) === 11 &&
-                       $phone[0] === '0' &&
-                       in_array(substr($phone, 0, 3), $validPrefixes);
-            })
-            ->take(10)
-            ->toArray();
-            dump(   $memberNumbers);
-
+        ->pluck('mobile')
+        ->filter(function ($phone) {
+            // Validate phone number format
+            $validPrefixes = ['014', '013', '016', '015', '019', '018', '017'];
+            return strlen($phone) === 11 &&
+                   $phone[0] === '0' &&
+                   in_array(substr($phone, 0, 3), $validPrefixes);
+        })
+        ->map(function ($phone) {
+            // Add 880 prefix and remove the leading 0
+            return '880' . substr($phone, 1);
+        })
+        ->unique()  // Add this to remove duplicates
+        ->toArray(); // Keep as array for now
+    
         // Check if there are any valid phone numbers
         if (empty($memberNumbers)) {
             return response()->json([
@@ -63,38 +66,52 @@ class SendMessageLogController extends Controller
                 'message' => 'No valid phone numbers found.'
             ], 400);
         }
-
+    
+        // Convert numbers array to comma-separated string
+        $phoneNumbersStr = implode(',', $memberNumbers);
+    
         // SMS API Configuration
-        $baseUrl = 'https://sms.apinet.club/sendSms';
+        $baseUrl = 'https://sms.apinet.club';
+        $endpoint = '/services/sms/sendbulksms'; // Correct endpoint for bulk SMS
         $userId = config('services.sms.user_id', 'farsemac@gmail.com');
         $userPassword = config('services.sms.user_password', 'stolen.com.bd2@');
-
+    
         try {
-            // Prepare query parameters
-            $params = [
-                'user_id' => $userId,
-                'user_password' => $userPassword,
-                'route_id' => 1,
-                'sms_type_id' => 1, // Plain Text
-                'sms_sender' => 'DigitalLab',
-                'sms_receiver' => implode(',', $memberNumbers), // All numbers in one string
-                'sms_text' => $validatedData['message'],
-                // 'sms_category_name' => 'Notification',
-                'campaignType' => 'T', // Transactional
-                'return_type' => 'JSON',
-                'refOrderNo' => 'Order_' . uniqid()
+            // Create authorization header with Base64 encoding
+            $authorization = 'Basic ' . base64_encode($userId . ':' . $userPassword);
+    
+            // Check if the message contains Unicode characters (e.g., Bengali)
+            $smsTypeId = preg_match('/[^\x20-\x7E]/', $validatedData['message']) ? 5 : 1;
+
+            $payload = [
+                'campaignName' => 'General',
+                // 'routeId' => 1,
+                'messages' => [
+                    [
+                        'to' => $phoneNumbersStr,
+                        'text' => $validatedData['message'],
+                        'smsTypeId' => $smsTypeId
+                    ]
+                ],
+                'refOrderNo' => 'FarseOrder_' . uniqid(),
+                'responseType' => 0 // Full response
             ];
+    
+            // Send SMS using HTTP client with correct content type and auth
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'Authorization' => $authorization
+            ])->post($baseUrl . $endpoint, $payload);
 
-            // Send SMS using HTTP client
-            $response = Http::asForm()->post($baseUrl, $params);
-
+    
             // Log the attempt
             SendMessageLog::create([
                 'message' => $validatedData['message'],
                 'response' => $response->body(),
                 'recipients_count' => count($memberNumbers)
             ]);
-
+    
             // Check response status
             if ($response->successful()) {
                 return response()->json([
@@ -118,7 +135,7 @@ class SendMessageLogController extends Controller
                 'response' => json_encode(['error' => $e->getMessage()]),
                 'recipients_count' => count($memberNumbers)
             ]);
-
+    
             return response()->json([
                 'status' => 'error',
                 'message' => 'Exception occurred while sending SMS',
