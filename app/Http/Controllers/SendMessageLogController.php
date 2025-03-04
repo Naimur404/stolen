@@ -94,7 +94,7 @@ class SendMessageLogController extends Controller
                     ]
                 ],
                 'refOrderNo' => 'FarseOrder_' . uniqid(),
-                'responseType' => 0 // Full response
+                'responseType' => 1 // Full response
             ];
     
             // Send SMS using HTTP client with correct content type and auth
