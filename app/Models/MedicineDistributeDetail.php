@@ -23,4 +23,14 @@ class MedicineDistributeDetail extends Model
         'has_sent',
         'has_received',
     ];
+
+    public function medicine()
+    {
+        return $this->belongsTo(Medicine::class, 'medicine_id', 'id');
+    }
+
+    public function warehouseStock()
+    {
+        return $this->belongsTo(WarehouseStock::class, 'warehouse_stock_id', 'id');
+    }
 }
