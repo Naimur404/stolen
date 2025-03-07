@@ -424,11 +424,12 @@ class OutletStockController extends Controller
             $data = array(
                 'quantity' => (int) $data1->quantity,
                 'price' => $data1->rate,
+                'warehouse_id' => $request->warehouse_id,
                 'outlet_id' => $request->outlet_id,
                 'medicine_id' => $data1->medicine_id,
                 'size' => $data1->size,
                 'create_date' => $data1->create_date,
-                'barcode_text' => $data1->barcode,
+                'barcode_text' => $data1->warehouseStock->barcode_text,
                 'warehouse_stock_id' => $data1->stock_id ?? null,
                 'purchase_price' => $manu_price->purchase_price,
 
@@ -442,6 +443,7 @@ class OutletStockController extends Controller
                     'quantity' => (int) $check->quantity + (int) $data1->quantity,
                     'price' => $data1->rate,
                     'purchase_price' => $manu_price->purchase_price,
+                    'barcode_text' => $data1->warehouseStock->barcode_text,
                 );
                 $has_received2 = array(
 
