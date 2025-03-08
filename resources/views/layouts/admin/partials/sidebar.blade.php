@@ -255,7 +255,7 @@
 
 
                     @hasrole('Super Admin')
-                    @if($appSetting->sms_gateway != null)
+                    @if($app_setting->sms_gateway != null)
                     <li class="dropdown">
                         <a class="nav-link menu-title {{ prefixActive('/message') }}" href="{{route('sendMessageLogs.index')}}"><i
                                 data-feather="mail"></i><span>Send Message</span></a>
