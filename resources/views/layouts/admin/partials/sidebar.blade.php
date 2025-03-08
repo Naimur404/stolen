@@ -255,11 +255,12 @@
 
 
                     @hasrole('Super Admin')
+                    @if($appSetting->sms_gateway != null)
                     <li class="dropdown">
                         <a class="nav-link menu-title {{ prefixActive('/message') }}" href="{{route('sendMessageLogs.index')}}"><i
                                 data-feather="mail"></i><span>Send Message</span></a>
                     </li>
-
+                    @endif
                     <li class="dropdown">
                         <a class="nav-link menu-title {{ prefixActive('/admin') }}" href="javascript:void(0)"><i
                                 data-feather="anchor"></i><span>Admin Area</span></a>
