@@ -12,6 +12,9 @@ use App\Models\OutletStock;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\Facades\DataTables;
 
 
@@ -114,70 +117,129 @@ class ExchnageController extends Controller
 
 
     public function exchange(Request $request)
-
     {
-        dump($request->all());
-        // $request->validate([
-        //     'exchangeData.invoice_id' => 'required|numeric',
-        //     'exchangeData.exchange_products' => 'required|array',
-        //     'exchangeData.exchange_products.*.id' => 'required|numeric',
-        //     'exchangeData.exchange_products.*.name' => 'required|string',
-        //     'exchangeData.exchange_products.*.size' => 'required|string',
-        //     'exchangeData.exchange_products.*.qty' => 'required|numeric',
-        //     'exchangeData.new_products' => 'required|array',
-        //     'exchangeData.new_products.*.id' => 'required|numeric',
-        //     'exchangeData.new_products.*.name' => 'required|string',
-        //     'exchangeData.new_products.*.size' => 'required|string',
-        //     'exchangeData.new_products.*.qty' => 'required|numeric',
-        // ]);
-
-
-        //      try{
-        $invoiceId = $request->input('exchangeData.invoice_id');
-        $exchangeProducts = $request->input('exchangeData.exchange_products');
-        $newProducts = $request->input('exchangeData.new_products');
-        $originalInvoice = OutletInvoice::where('id', $invoiceId)->first();
-
-        $exchangeGrandTotal = null;
-
-if (is_array($exchangeProducts)) {
-    foreach ($exchangeProducts as $product) {
-        if (is_array($product) && array_key_exists('grandTotal', $product)) {
-            $exchangeGrandTotal = $product['grandTotal'];
-            break;
+        // Validate the incoming request data
+        $validator = Validator::make($request->all(), [
+            'exchangeData.invoice_id' => 'required',
+            'exchangeData.exchange_products' => 'required|array',
+            'exchangeData.new_products' => 'required|array',
+            'exchangeData.balance' => 'numeric',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'error' => $validator->errors()->first()
+            ], 422);
+        }
+    
+        try {
+            // Begin database transaction to ensure data integrity
+            DB::beginTransaction();
+    
+            // Extract request data
+            $invoiceId = $request->input('exchangeData.invoice_id');
+            $exchangeProducts = $request->input('exchangeData.exchange_products');
+            $newProducts = $request->input('exchangeData.new_products');
+            
+            // Find the original invoice
+            $originalInvoice = OutletInvoice::findOrFail($invoiceId);
+            
+            // Extract grand totals from product arrays
+            $exchangeGrandTotal = $this->extractGrandTotal($exchangeProducts);
+            $newGrandTotal = $this->extractGrandTotal($newProducts);
+            
+            // Ensure we have valid grand totals
+            if ($exchangeGrandTotal === null || $newGrandTotal === null) {
+                throw new \Exception('Invalid grand total values in exchange data');
+            }
+            
+            // Calculate the payment amount (if new products cost more than returned products)
+            $paidAmount = $newGrandTotal > $exchangeGrandTotal ? $newGrandTotal - $exchangeGrandTotal : 0;
+            
+            // Create the exchange record
+            $outletExchange = OutletExchange::create([
+                'outlet_id' => $originalInvoice->outlet_id,
+                'original_invoice_id' => $invoiceId,
+                'customer_id' => $originalInvoice->customer_id,
+                'grand_total' => $exchangeGrandTotal,
+                'paid_amount' => $paidAmount,
+                'added_by' => Auth::id()
+            ]);
+            
+            // Process returned products
+            $this->processReturnedProducts($exchangeProducts, $outletExchange, $originalInvoice);
+            
+            // Process new products
+            $this->processNewProducts($newProducts, $outletExchange, $originalInvoice);
+            
+            // Update the original invoice totals
+            $this->updateOriginalInvoice($originalInvoice, $exchangeGrandTotal, $newGrandTotal);
+            
+            // Commit the transaction
+            DB::commit();
+            
+            return response()->json([
+                'success' => true,
+                'data' => $invoiceId
+            ]);
+            
+        } catch (\Exception $e) {
+            // Rollback transaction on error
+            DB::rollBack();
+            
+            // Log the error for debugging
+            Log::error('Exchange error: ' . $e->getMessage(), [
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all()
+            ]);
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Error processing exchange: ' . $e->getMessage()
+            ], 500);
         }
     }
-}
-$newGrandTotal = null;
-
-if (is_array($newProducts)) {
-    foreach ($newProducts as $product) {
-        if (is_array($product) && array_key_exists('grandTotal', $product)) {
-            $newGrandTotal = $product['grandTotal'];
-            break;
+    
+    /**
+     * Extract the grand total from a products array
+     * 
+     * @param array $products Array of products
+     * @return float|null The grand total or null if not found
+     */
+    private function extractGrandTotal($products)
+    {
+        if (!is_array($products)) {
+            return null;
         }
+        
+        foreach ($products as $product) {
+            if (is_array($product) && isset($product['grandTotal'])) {
+                return floatval($product['grandTotal']);
+            }
+        }
+        
+        return null;
     }
-}
-        // $newGrandTotal = collect($newProducts)->pluck('grandTotal')->first();
-        $data = array(
-            "outlet_id" => $originalInvoice->outlet_id,
-            "original_invoice_id" => $invoiceId,
-            "customer_id" =>  $originalInvoice->customer_id,
-            "grand_total" => $exchangeGrandTotal,
-            "paid_amount" => $exchangeGrandTotal < $newGrandTotal ? $newGrandTotal - $exchangeGrandTotal : '0',
-            "added_by" => Auth::user()->id
-
-        );
-        $outletExchange = OutletExchange::create($data);
-
-
-        foreach ($exchangeProducts as $product) {
+    
+    /**
+     * Process returned products from an exchange
+     * 
+     * @param array $products Products being returned
+     * @param OutletExchange $exchange The exchange record
+     * @param OutletInvoice $invoice The original invoice
+     */
+    private function processReturnedProducts($products, $exchange, $invoice)
+    {
+        foreach ($products as $product) {
+            // Skip the grand total entry
             if (isset($product['grandTotal'])) {
-
-            break;
-        }else{
-            $exchange = array(
-                'outlet_exchange_id' => $outletExchange->id,
+                continue;
+            }
+            
+            // Create exchange detail record for returned product
+            $exchangeDetail = OutletExchangeDetails::create([
+                'outlet_exchange_id' => $exchange->id,
                 'medicine_id' => $product['id'],
                 'medicine_name' => $product['name'],
                 'size' => $product['size'],
@@ -185,46 +247,68 @@ if (is_array($newProducts)) {
                 'available_qty' => $product['avalqty'] + $product['qty'],
                 'rate' => $product['price'],
                 'total_price' => $product['total_price'],
-                'is_exchange' => 1
-            );
-
-            $outletExchangeAdd = OutletExchangeDetails::create($exchange);
-            if ($outletExchangeAdd->id) {
-                $updateStock2 = OutletStock::where('outlet_id', $originalInvoice->outlet_id)->where('medicine_id', $product['id'])->where('size', $product['size'])->first();
-                $updateStock2->update([
-                    'quantity' => (int)$updateStock2->quantity + (int)$product['qty']
+                'is_exchange' => 1 // 1 for returned products
+            ]);
+            
+            // Update outlet stock (add back the returned quantity)
+            $stock = OutletStock::where('outlet_id', $invoice->outlet_id)
+                ->where('medicine_id', $product['id'])
+                ->where('size', $product['size'])
+                ->first();
+                
+            if ($stock) {
+                $stock->update([
+                    'quantity' => (int)$stock->quantity + (int)$product['qty']
                 ]);
             }
-
-            $originalInvoiceDetails = OutletInvoiceDetails::where('outlet_invoice_id', $originalInvoice->id)->where('medicine_id', $product['id'])->where('size', $product['size'])->first();
-
-            if($originalInvoiceDetails != null){
-                if($product['purchase'] == $product['qty']){
-                    $originalInvoiceDetails->delete();
-                }
-
-                 if($product['purchase'] < $product['qty']){
-                    $originalInvoiceDetails->update([
-                        'quantity' => (int)$originalInvoiceDetails->quantity - (int)$product['qty'],
-                        'available_qty' => $product['avalqty'] + $product['qty'],
+            
+            // Update or delete the original invoice details
+            $originalInvoiceDetail = OutletInvoiceDetails::where('outlet_invoice_id', $invoice->id)
+                ->where('medicine_id', $product['id'])
+                ->where('size', $product['size'])
+                ->first();
+            
+            if ($originalInvoiceDetail) {
+                $purchaseQty = isset($product['purchase']) && !is_nan($product['purchase']) 
+                    ? (int)$product['purchase'] 
+                    : 0;
+                    
+                // If all purchased quantity is returned, delete the record
+                if ($purchaseQty == (int)$product['qty']) {
+                    $originalInvoiceDetail->delete();
+                } 
+                // Otherwise update the quantity
+                else if ($purchaseQty < (int)$product['qty']) {
+                    $originalInvoiceDetail->update([
+                        'quantity' => (int)$originalInvoiceDetail->quantity - (int)$product['qty'],
+                        'available_qty' => $product['avalqty'] + (int)$product['qty'],
                         'rate' => $product['price'],
                         'total_price' => $product['total_price'],
                         'is_exchange' => 1
                     ]);
                 }
-
             }
         }
-        }
-
-
-        foreach ($newProducts as $product) {
+    }
+    
+    /**
+     * Process new products for an exchange
+     * 
+     * @param array $products New products being added
+     * @param OutletExchange $exchange The exchange record
+     * @param OutletInvoice $invoice The original invoice
+     */
+    private function processNewProducts($products, $exchange, $invoice)
+    {
+        foreach ($products as $product) {
+            // Skip the grand total entry
             if (isset($product['grandTotal'])) {
-
-            break;
-        }else{
-            $new = array(
-                'outlet_exchange_id' => $outletExchange->id,
+                continue;
+            }
+            
+            // Create exchange detail record for new product
+            $exchangeDetail = OutletExchangeDetails::create([
+                'outlet_exchange_id' => $exchange->id,
                 'medicine_id' => $product['id'],
                 'medicine_name' => $product['name'],
                 'size' => $product['size'],
@@ -232,74 +316,75 @@ if (is_array($newProducts)) {
                 'available_qty' => $product['avalqty'] - $product['qty'],
                 'rate' => $product['price'],
                 'total_price' => $product['total_price'],
-                'is_exchange' => 0
-            );
-
-            $outletExchangeSub = OutletExchangeDetails::create($new);
-            if ($outletExchangeSub->id) {
-                $updateStock = OutletStock::where('outlet_id', $originalInvoice->outlet_id)->where('medicine_id', $product['id'])->where('size', $product['size'])->first();
-                $updateStock->update([
-                    'quantity' => (int)$updateStock->quantity - (int)$product['qty']
+                'is_exchange' => 0 // 0 for new products
+            ]);
+            
+            // Update outlet stock (decrease the quantity)
+            $stock = OutletStock::where('outlet_id', $invoice->outlet_id)
+                ->where('medicine_id', $product['id'])
+                ->where('size', $product['size'])
+                ->first();
+                
+            if ($stock) {
+                $stock->update([
+                    'quantity' => (int)$stock->quantity - (int)$product['qty']
                 ]);
             }
-
-
-            $originalInvoiceDetails = OutletInvoiceDetails::where('outlet_invoice_id', $originalInvoice->id)->where('medicine_id', $product['id'])->where('size', $product['size'])->first();
-
-            if($originalInvoiceDetails != null){
-
-                    $originalInvoiceDetails->update([
-                        'quantity' => (int)$originalInvoiceDetails->quantity + (int)$product['qty'],
-                        'available_qty' => $product['avalqty'] - $newProducts['qty'],
-                        'rate' => $product['price'],
-                        'total_price' => $product['total_price'],
-                        'is_exchange' => 1
-                    ]);
-                }
-
-        else {
-                $invoicedetails = array(
-
-                    'outlet_invoice_id' => $originalInvoice ->id,
+            
+            // Update or create the invoice details for this product
+            $originalInvoiceDetail = OutletInvoiceDetails::where('outlet_invoice_id', $invoice->id)
+                ->where('medicine_id', $product['id'])
+                ->where('size', $product['size'])
+                ->first();
+            
+            if ($originalInvoiceDetail) {
+                // Update existing product in the invoice
+                $originalInvoiceDetail->update([
+                    'quantity' => (int)$originalInvoiceDetail->quantity + (int)$product['qty'],
+                    'available_qty' => $product['avalqty'] - (int)$product['qty'],
+                    'rate' => $product['price'],
+                    'total_price' => $product['total_price'],
+                    'is_exchange' => 1
+                ]);
+            } else {
+                // Add new product to the invoice
+                OutletInvoiceDetails::create([
+                    'outlet_invoice_id' => $invoice->id,
                     'stock_id' => 1,
                     'medicine_id' => $product['id'],
                     'medicine_name' => $product['name'],
                     'size' => $product['size'],
-
-                    'available_qty' => $product['avalqty'] - $product['qty'],
-
+                    'available_qty' => $product['avalqty'] - (int)$product['qty'],
                     'quantity' => $product['qty'],
                     'rate' => $product['price'],
                     'discount' => 0,
                     'total_price' => round($product['total_price']),
                     'is_exchange' => 1
-
-                );
-                OutletInvoiceDetails::create($invoicedetails);
-
+                ]);
             }
         }
-        }
-
-        $subTotal = round($originalInvoice->sub_total - $exchangeGrandTotal) + round($newGrandTotal);
-        $grandTotal = round($subTotal) - round($originalInvoice->total_discount);
-        $paidAmount = round($grandTotal);
-        $updateInvoice = $originalInvoice->update([
+    }
+    
+    /**
+     * Update the original invoice with new totals
+     * 
+     * @param OutletInvoice $invoice The invoice to update
+     * @param float $exchangeTotal Total value of returned products
+     * @param float $newTotal Total value of new products
+     */
+    private function updateOriginalInvoice($invoice, $exchangeTotal, $newTotal)
+    {
+        // Calculate new totals
+        $subTotal = round($invoice->sub_total - $exchangeTotal) + round($newTotal);
+        $grandTotal = round($subTotal) - round($invoice->total_discount);
+        
+        // Update the invoice
+        $invoice->update([
             'sub_total' => $subTotal,
             'grand_total' => $grandTotal,
-            'paid_amount' => $paidAmount,
+            'paid_amount' => $grandTotal,
             'is_exchange' => 1
         ]);
-
-
-
-        return response()->json([
-            'data' => $invoiceId
-        ]);
-
-        //      } catch (\Exception $e) {
-        //return redirect()->back()->with('error', $e->getMessage());
-        //}
     }
 
     public function printInvoice($id)
