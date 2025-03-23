@@ -218,7 +218,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::Post('/my-profile/update', [ProfileController::class, 'updateMyProfile'])->name('updatemyprofile');
 
     //monthly report
-    Route::get('/monthly-sales', 'DashBoardController@getMonthlySales')->name('monthly-sales');
+    Route::get('/monthly-sales', [DashBoardController::class,'getMonthlySales'])->name('monthly-sales');
 
 //medicine return  route
     Route::get('/delete/{medicineid}/{returnid}/return', [WarehouseReturnController::class, 'medicineReturnlDelete'])->name('delete.medicineReturnlDelete');
