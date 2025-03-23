@@ -194,7 +194,7 @@ class OutletInvoiceController extends Controller
     private function calculateTotalWithDelivery($input)
     {
         $grandTotal = round($input['grand_total']);
-        $totalWithDelivery = $grandTotal - round($input['paid_amount']);
+        $totalWithDelivery = $grandTotal + round($input['sub_total']) - round($input['totaldis']);
 
         if (round($input['delivery']) > 0) {
             $grandTotal -= round($input['delivery']);

@@ -98,6 +98,51 @@ class DashBoardController extends Controller
         return view('admin.color-version.index', compact('customers', 'products', 'stocks', 'purchases', 'sales', 'returns', 'invoices','thisMonthPurchases','thisMonthSales','thisMonthReturns','thisMonthInvoices','lastdaysales'));
     }
 
+    /**
+     * Get monthly sales data for the past 12 months
+     * 
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getMonthlySales()
+    {
+        // Get current date
+        $currentDate = Carbon::now();
+        
+        // Initialize array to hold 12 months of data
+        $monthlySales = [];
+        
+        // Get sales for each of the last 12 months
+        for ($i = 0; $i < 12; $i++) {
+            $month = $currentDate->copy()->subMonths($i);
+            
+            $startOfMonth = $month->copy()->startOfMonth();
+            $endOfMonth = $month->copy()->endOfMonth();
+            
+            // Query for this month's sales
+            if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
+                $sales = OutletInvoice::whereBetween('sale_date', [$startOfMonth, $endOfMonth])
+                    ->sum('payable_amount');
+            } else {
+                $outlet_id = Auth::user()->outlet_id != null ? Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');
+                $sales = OutletInvoice::where('outlet_id', $outlet_id)
+                    ->whereBetween('sale_date', [$startOfMonth, $endOfMonth])
+                    ->sum('payable_amount');
+            }
+            
+            // Add to array (most recent month first)
+            $monthlySales[] = [
+                'month' => $month->format('M'),
+                'year' => $month->format('Y'),
+                'sales' => $sales
+            ];
+        }
+        
+        // Reverse array so oldest month is first
+        $monthlySales = array_reverse($monthlySales);
+        
+        return response()->json($monthlySales);
+    }
+
     public function totalSale(Request $request)
     {
         if (auth()->user()->hasrole(['Super Admin', 'Admin'])) {
