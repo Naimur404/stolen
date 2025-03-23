@@ -199,7 +199,7 @@ class OutletInvoiceController extends Controller
         $totalDiscount = is_array($input['totaldis']) ? round(floatval($input['totaldis'][0])) : round(floatval($input['totaldis']));
         $delivery = is_array($input['delivery']) ? round(floatval($input['delivery'][0])) : round(floatval($input['delivery']));
     
-        $totalWithDelivery = $grandTotal + $subTotal - $totalDiscount;
+        $totalWithDelivery = $delivery + $subTotal - $totalDiscount;
     
         if ($delivery > 0) {
             $grandTotal -= $delivery;
