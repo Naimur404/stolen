@@ -193,13 +193,18 @@ class OutletInvoiceController extends Controller
     // Calculates total with or without delivery charges
     private function calculateTotalWithDelivery($input)
     {
-        $grandTotal = round($input['grand_total']);
-        $totalWithDelivery = $grandTotal + round($input['sub_total']) - round($input['totaldis']);
-
-        if (round($input['delivery']) > 0) {
-            $grandTotal -= round($input['delivery']);
+        // Make sure we're working with numeric values
+        $grandTotal = is_array($input['grand_total']) ? round(floatval($input['grand_total'][0])) : round(floatval($input['grand_total']));
+        $subTotal = is_array($input['sub_total']) ? round(floatval($input['sub_total'][0])) : round(floatval($input['sub_total']));
+        $totalDiscount = is_array($input['totaldis']) ? round(floatval($input['totaldis'][0])) : round(floatval($input['totaldis']));
+        $delivery = is_array($input['delivery']) ? round(floatval($input['delivery'][0])) : round(floatval($input['delivery']));
+    
+        $totalWithDelivery = $grandTotal + $subTotal - $totalDiscount;
+    
+        if ($delivery > 0) {
+            $grandTotal -= $delivery;
         }
-
+    
         return [$grandTotal, $totalWithDelivery];
     }
 
