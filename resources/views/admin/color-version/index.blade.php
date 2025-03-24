@@ -110,7 +110,7 @@
 @section('content')
     <div class="container-fluid mt-3">
         <div class="row">
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0 dashboard-card">
                     <div class="bg-primary b-r-4 card-body p-3">
                         <div class="media static-top-widget">
@@ -124,7 +124,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0 dashboard-card">
                     <div class="bg-secondary b-r-4 card-body p-3">
                         <div class="media static-top-widget">
@@ -138,7 +138,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0 dashboard-card">
                     <div class="bg-primary b-r-4 card-body p-3">
                         <div class="media static-top-widget">
@@ -152,7 +152,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0 dashboard-card">
                     <div class="bg-secondary b-r-4 card-body p-3">
                         <div class="media static-top-widget">
@@ -166,7 +166,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0 dashboard-card">
                     <div class="bg-secondary b-r-4 card-body p-3">
                         <div class="media static-top-widget">
@@ -180,7 +180,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0 dashboard-card">
                     <div class="bg-primary b-r-4 card-body p-3">
                         <div class="media static-top-widget">
@@ -196,7 +196,7 @@
             </div>
             
             @if(auth()->user()->hasrole(['Super Admin', 'Admin']))
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0 dashboard-card">
                     <div class="bg-secondary b-r-4 card-body p-3">
                         <div class="media static-top-widget">
@@ -210,7 +210,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0 dashboard-card">
                     <div class="bg-primary b-r-4 card-body p-3">
                         <div class="media static-top-widget">
@@ -224,7 +224,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-6 col-xl-3 col-lg-6">
+            <div class="col-sm-6 col-xl-4 col-lg-6">
                 <div class="card o-hidden border-0 dashboard-card">
                     <div class="bg-primary b-r-4 card-body p-3">
                         <div class="media static-top-widget">
@@ -240,7 +240,7 @@
             </div>
             @endif
 
-            <div class="col-xl-7 xl-100 box-col-12">
+            <div class="col-xl-6 xl-100 box-col-12">
                 <div class="card dashboard-card">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Monthly Sales Trend</h5>
@@ -264,7 +264,7 @@
                 </div>
             </div>
 
-            <div class="col-xl-5 xl-100 box-col-12">
+            <div class="col-xl-6 xl-100 box-col-12">
                 <div class="card dashboard-card">
                     <div class="card-header pb-0 d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Inventory Status</h5>
