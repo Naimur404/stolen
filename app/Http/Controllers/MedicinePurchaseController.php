@@ -156,6 +156,8 @@ class MedicinePurchaseController extends Controller
      */
     public function store(Request $request)
     {
+
+        // dump($request->all());
         $request->validate([
             'invoice_image' => 'mimes:jpeg,jpg,png,ico,JPG|max:2048',
         ]);
@@ -222,7 +224,7 @@ class MedicinePurchaseController extends Controller
                         'medicine_name' => $input['product_name'][$i],
                         'product_type' => $input['product_type'][$i],
                         'quantity' => (int) $input['quantity'][$i],
-                        'rack_no' => $input['rack_no'][$i],
+                        'rack_no' => rand(0, 99999),
                         'size' => strtoupper($input['size'][$i]),
                         'create_date' => rand(0, 99999),
                         'manufacturer_price' => (double)($manuprice),
@@ -247,7 +249,7 @@ class MedicinePurchaseController extends Controller
                         'medicine_name' => $input['product_name'][$i],
                         'product_type' => $input['product_type'][$i],
                         'quantity' => (int) $input['quantity'][$i],
-                        'rack_no' => $input['rack_no'][$i],
+                        'rack_no' => rand(0, 99999),
                         'size' => strtoupper($input['size'][$i]),
                         'create_date' => rand(0, 99999),
                         'manufacturer_price' => (double) $input['manufacturer_price'][$i],
