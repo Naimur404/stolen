@@ -250,7 +250,7 @@ class OutletInvoiceController extends Controller
             "item_type" => 2,
             "item_quantity" => 1,
             "item_weight" => 0.5,
-            "amount_to_collect" => (int)$outletInvoice->payable_amount,
+            "amount_to_collect" => (int)$outletInvoice->due_amount,
         ];
 
         $response = $this->pathaoApiService->createOrder($orderData);
