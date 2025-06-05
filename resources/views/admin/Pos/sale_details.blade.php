@@ -287,7 +287,7 @@
                         <table class="table summary-table">
                             <tr>
                                 <td>Sub Total:</td>
-                                <td>{{ number_format($salesReturn->sub_total, 2) }}</td>
+                                <td>{{ number_format($salesReturn->total_with_charge, 2) }}</td>
                             </tr>
                             <tr>
                                 <td>VAT:</td>

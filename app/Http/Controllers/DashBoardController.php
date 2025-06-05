@@ -48,7 +48,7 @@ class DashBoardController extends Controller
                 [
                     Carbon::now()->startOfMonth(),
                     Carbon::now()->endOfMonth(),
-                ])->sum('grand_total');
+                ])->sum('payable_amount');
             $thisMonthReturns = SalesReturn::whereBetween('return_date',
                 [
                     Carbon::now()->startOfMonth(),
