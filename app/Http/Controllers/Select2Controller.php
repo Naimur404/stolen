@@ -144,6 +144,51 @@ class Select2Controller extends Controller
         }
         return response()->json($response);
     }
+    public function getAllCustomerCount(Request $request)
+    {
+        // Count all valid customers with valid phone numbers
+        $count = Customer::whereNotNull('mobile')
+            ->where(function ($query) {
+                $validPrefixes = ['014', '013', '016', '015', '019', '018', '017'];
+                foreach ($validPrefixes as $prefix) {
+                    $query->orWhere('mobile', 'like', $prefix . '%');
+                }
+            })
+            ->where(function ($query) {
+                // Ensure phone number is exactly 11 digits
+                $query->whereRaw('LENGTH(mobile) = 11');
+            })
+            ->count();
+            
+        return response()->json(['count' => $count]);
+    }
+
+    public function getOutletCustomerCount(Request $request)
+    {
+        $outletId = $request->outlet_id;
+        
+        if (!$outletId) {
+            return response()->json(['count' => 0]);
+        }
+        
+        // Count valid customers for the outlet with valid phone numbers
+        $count = Customer::where('outlet_id', $outletId)
+            ->whereNotNull('mobile')
+            ->where(function ($query) {
+                $validPrefixes = ['014', '013', '016', '015', '019', '018', '017'];
+                foreach ($validPrefixes as $prefix) {
+                    $query->orWhere('mobile', 'like', $prefix . '%');
+                }
+            })
+            ->where(function ($query) {
+                // Ensure phone number is exactly 11 digits
+                $query->whereRaw('LENGTH(mobile) = 11');
+            })
+            ->count();
+            
+        return response()->json(['count' => $count]);
+    }
+
     public function getOutlet(Request $request)
     {
         $outlet_id = Auth::user()->outlet_id != null  ?  Auth::user()->outlet_id : Outlet::orderby('id', 'desc')->first('id');

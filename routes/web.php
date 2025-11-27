@@ -200,6 +200,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::post('/get-manufacturer', [Select2Controller::class, 'getManufacturer'])->name('get-manufacturer');
     Route::get('get-supplier', [Select2Controller::class, 'get_supplier']);
     Route::get('/get-outlet', [Select2Controller::class, 'getOutlet'])->name('get-outlet');
+    Route::get('/get-outlet-customer-count', [Select2Controller::class, 'getOutletCustomerCount'])->name('get-outlet-customer-count');
+    Route::get('/get-all-customer-count', [Select2Controller::class, 'getAllCustomerCount'])->name('get-all-customer-count');
 
     Route::get('/get-all-medicine', [Select2Controller::class, 'get_all_medicine'])->name('get-all-medicine');
     Route::get('get-user', [Select2Controller::class, 'get_user']);

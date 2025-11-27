@@ -10,6 +10,11 @@ class SendMessageLog extends Model
     use HasFactory;
     protected $table = 'send_message_logs';
     protected $fillable = [
-        'message', 'response',
+        'message', 'response', 'recipient_type', 'outlet_id', 'outlet_name', 'recipients_count',
     ];
+
+    public function outlet()
+    {
+        return $this->belongsTo(Outlet::class);
+    }
 }

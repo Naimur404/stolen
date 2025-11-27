@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customer;
+use App\Models\Outlet;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\SendMessageLog;
@@ -14,15 +15,27 @@ class SendMessageLogController extends Controller
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = SendMessageLog::latest()->get();
+            $data = SendMessageLog::with('outlet')
+                ->orderBy('created_at', 'desc')
+                ->get();
+                
             return Datatables::of($data)
+                ->editColumn('recipient_info', function ($row) {
+                    if ($row->recipient_type === 'all') {
+                        return '<span class="badge bg-primary">All Customers (' . $row->recipients_count . ')</span>';
+                    } else {
+                        $outletName = $row->outlet_name ?? ($row->outlet ? $row->outlet->outlet_name : 'Unknown Outlet');
+                        return '<span class="badge bg-info">Outlet: ' . $outletName . ' (' . $row->recipients_count . ')</span>';
+                    }
+                })
                 ->editColumn('response', function ($row) {
-                    return '<pre>' . json_encode($row->response, JSON_PRETTY_PRINT) . '</pre>';
+                    $response = is_string($row->response) ? json_decode($row->response, true) : $row->response;
+                    return '<pre style="font-size: 10px; max-height: 100px; overflow-y: auto;">' . json_encode($response, JSON_PRETTY_PRINT) . '</pre>';
                 })
                 ->editColumn('created_at', function ($row) {
-                    return $row->created_at ? $row->created_at->format('Y-m-d H:i') : '';
+                    return $row->created_at ? $row->created_at->format('Y-m-d H:i:s') : '';
                 })
-                ->rawColumns(['action', 'response'])
+                ->rawColumns(['recipient_info', 'response'])
                 ->make(true);
         }
 
@@ -40,24 +53,35 @@ class SendMessageLogController extends Controller
         // Validate the incoming request
         $validatedData = $request->validate([
             'message' => 'required|string|min:5',
+            'recipient_type' => 'required|in:all,outlet',
+            'outlet_id' => 'required_if:recipient_type,outlet|exists:outlets,id',
         ]);
     
-        // Retrieve and prepare phone numbers
-        $memberNumbers = Customer::whereNotNull('mobile')
-        ->pluck('mobile')
-        ->filter(function ($phone) {
-            // Validate phone number format
-            $validPrefixes = ['014', '013', '016', '015', '019', '018', '017'];
-            return strlen($phone) === 11 &&
-                   $phone[0] === '0' &&
-                   in_array(substr($phone, 0, 3), $validPrefixes);
-        })
-        ->map(function ($phone) {
-            // Add 880 prefix and remove the leading 0
-            return '880' . substr($phone, 1);
-        })
-        ->unique()  // Add this to remove duplicates
-        ->toArray(); // Keep as array for now
+        // Retrieve and prepare phone numbers based on recipient type
+        $customerQuery = Customer::whereNotNull('mobile');
+        
+        // Filter by outlet if specified
+        $outlet = null;
+        if ($validatedData['recipient_type'] === 'outlet') {
+            $outlet = Outlet::findOrFail($validatedData['outlet_id']);
+            // Filter customers by outlet (assuming customers have outlet_id field)
+            $customerQuery->where('outlet_id', $validatedData['outlet_id']);
+        }
+        
+        $memberNumbers = $customerQuery->pluck('mobile')
+            ->filter(function ($phone) {
+                // Validate phone number format
+                $validPrefixes = ['014', '013', '016', '015', '019', '018', '017'];
+                return strlen($phone) === 11 &&
+                       $phone[0] === '0' &&
+                       in_array(substr($phone, 0, 3), $validPrefixes);
+            })
+            ->map(function ($phone) {
+                // Add 880 prefix and remove the leading 0
+                return '880' . substr($phone, 1);
+            })
+            ->unique()  // Remove duplicates
+            ->toArray();
     
         // Check if there are any valid phone numbers
         if (empty($memberNumbers)) {
@@ -109,6 +133,9 @@ class SendMessageLogController extends Controller
             SendMessageLog::create([
                 'message' => $validatedData['message'],
                 'response' => $response->body(),
+                'recipient_type' => $validatedData['recipient_type'],
+                'outlet_id' => $validatedData['recipient_type'] === 'outlet' ? $validatedData['outlet_id'] : null,
+                'outlet_name' => $outlet ? $outlet->outlet_name : null,
                 'recipients_count' => count($memberNumbers)
             ]);
     
@@ -133,6 +160,9 @@ class SendMessageLogController extends Controller
             SendMessageLog::create([
                 'message' => $validatedData['message'],
                 'response' => json_encode(['error' => $e->getMessage()]),
+                'recipient_type' => $validatedData['recipient_type'],
+                'outlet_id' => $validatedData['recipient_type'] === 'outlet' ? $validatedData['outlet_id'] : null,
+                'outlet_name' => $outlet ? $outlet->outlet_name : null,
                 'recipients_count' => count($memberNumbers)
             ]);
     

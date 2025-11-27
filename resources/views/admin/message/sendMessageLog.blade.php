@@ -26,6 +26,7 @@
                                 <thead>
                                     <tr>
                                         <th>Message</th>
+                                        <th>Sent To</th>
                                         <th>Response</th>
                                         <th>Created At</th>
                                     </tr>
@@ -51,9 +52,11 @@
             ajax: "{{ route('sendMessageLogs.index') }}",
             columns: [
                 {data: 'message', name: 'message'},
+                {data: 'recipient_info', name: 'recipient_info', orderable: false, searchable: false},
                 {data: 'response', name: 'response', orderable: false, searchable: false},
                 {data: 'created_at', name: 'created_at'}
-            ]
+            ],
+            order: [[3, 'desc']] // Sort by created_at column in descending order
         });
     });
 </script>
