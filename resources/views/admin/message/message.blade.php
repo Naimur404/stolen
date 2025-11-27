@@ -91,8 +91,9 @@
             loadOutlets();
         } else {
             $('#outlet_selection').hide();
-            $('#outlet_id').val('');
+            $('#outlet_id').val('').trigger('change'); // Clear and trigger change event
             $('#customerCount').hide().text('');
+            $('#allCustomersCount').show();
             loadAllCustomersCount();
         }
     });
@@ -148,9 +149,17 @@
             method: "GET",
             success: function(data) {
                 $('#outlet_id').empty().append('<option value="">Select an outlet...</option>');
-                $.each(data.results, function(key, value) {
-                    $('#outlet_id').append('<option value="' + value.id + '">' + value.text + '</option>');
-                });
+                // Handle direct array response
+                if (Array.isArray(data)) {
+                    $.each(data, function(key, value) {
+                        $('#outlet_id').append('<option value="' + value.id + '">' + value.text + '</option>');
+                    });
+                } else if (data.results) {
+                    // Handle results property if it exists
+                    $.each(data.results, function(key, value) {
+                        $('#outlet_id').append('<option value="' + value.id + '">' + value.text + '</option>');
+                    });
+                }
             },
             error: function() {
                 toastr.error('Failed to load outlets');
@@ -187,13 +196,19 @@
             return false;
         }
 
+        // Clear outlet_id if recipient_type is 'all' to prevent validation errors
+        let formData = $(this).serializeArray();
+        if ($('#recipient_type').val() === 'all') {
+            formData = formData.filter(item => item.name !== 'outlet_id');
+        }
+
         // Disable button to prevent multiple submissions
         $('#sendMessageButton').prop('disabled', true).text('Sending...');
 
         $.ajax({
             url: "{{ route('message.sendMessage') }}",
             method: "POST",
-            data: $(this).serialize(),
+            data: $.param(formData),
             success: function (response) {
                 if (response.status === "success") {
                     // Display the success message from the API response

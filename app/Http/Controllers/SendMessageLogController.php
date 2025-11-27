@@ -54,7 +54,7 @@ class SendMessageLogController extends Controller
         $validatedData = $request->validate([
             'message' => 'required|string|min:5',
             'recipient_type' => 'required|in:all,outlet',
-            'outlet_id' => 'required_if:recipient_type,outlet|exists:outlets,id',
+            'outlet_id' => 'nullable|required_if:recipient_type,outlet|exists:outlets,id',
         ]);
     
         // Retrieve and prepare phone numbers based on recipient type
