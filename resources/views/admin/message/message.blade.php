@@ -50,6 +50,29 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row" id="range_selection" style="display: none;">
+                                <div class="col-md-12">
+                                    <div class="mb-3">
+                                        <label class="form-label">Customer Range (Optional)</label>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <input type="number" name="customer_from" id="customer_from" class="form-control" placeholder="From (e.g., 1)" min="1">
+                                                <span class="text-danger" id="customerFromError"></span>
+                                            </div>
+                                            <div class="col-md-1 text-center pt-2">
+                                                <span>to</span>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <input type="number" name="customer_to" id="customer_to" class="form-control" placeholder="To (e.g., 1000)" min="1">
+                                                <span class="text-danger" id="customerToError"></span>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <small class="text-muted">Leave empty to send to all customers in the selected category</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row">
                                 <div class="col-md-12">
                                     <div class="mb-3">
@@ -87,11 +110,13 @@
     $('#recipient_type').on('change', function() {
         if ($(this).val() === 'outlet') {
             $('#outlet_selection').show();
+            $('#range_selection').show();
             $('#allCustomersCount').hide();
             loadOutlets();
         } else {
             $('#outlet_selection').hide();
-            $('#outlet_id').val('').trigger('change'); // Clear and trigger change event
+            $('#range_selection').show(); // Show range for all customers too
+            $('#outlet_id').val('').trigger('change');
             $('#customerCount').hide().text('');
             $('#allCustomersCount').show();
             loadAllCustomersCount();
@@ -115,6 +140,51 @@
 
     // Initialize customer count on page load
     loadAllCustomersCount();
+
+    // Handle range validation
+    $('#customer_from, #customer_to').on('input', function() {
+        validateRange();
+        updateRangeCount();
+    });
+
+    // Validate customer range
+    function validateRange() {
+        const from = parseInt($('#customer_from').val()) || 0;
+        const to = parseInt($('#customer_to').val()) || 0;
+        
+        $('#customerFromError').text('');
+        $('#customerToError').text('');
+        
+        if (from && to && from > to) {
+            $('#customerToError').text('"To" value must be greater than or equal to "From" value');
+            return false;
+        }
+        
+        if (from && from < 1) {
+            $('#customerFromError').text('"From" value must be at least 1');
+            return false;
+        }
+        
+        if (to && to < 1) {
+            $('#customerToError').text('"To" value must be at least 1');
+            return false;
+        }
+        
+        return true;
+    }
+
+    // Update count display based on range
+    function updateRangeCount() {
+        const from = parseInt($('#customer_from').val()) || 0;
+        const to = parseInt($('#customer_to').val()) || 0;
+        
+        if (from && to) {
+            const rangeCount = to - from + 1;
+            const currentCountElement = $('#recipient_type').val() === 'all' ? $('#allCustomersCount') : $('#customerCount');
+            const originalText = currentCountElement.text().split(' (')[0];
+            currentCountElement.text(`${originalText} (Selected range: ${rangeCount} customers)`);
+        }
+    }
 
     // Handle outlet selection change
     $('#outlet_id').on('change', function() {
@@ -189,10 +259,17 @@
         $('#messageError').text('');
         $('#recipientTypeError').text('');
         $('#outletError').text('');
+        $('#customerFromError').text('');
+        $('#customerToError').text('');
 
         // Validate outlet selection when required
         if ($('#recipient_type').val() === 'outlet' && !$('#outlet_id').val()) {
             $('#outletError').text('Please select an outlet');
+            return false;
+        }
+
+        // Validate range if provided
+        if (!validateRange()) {
             return false;
         }
 
@@ -231,6 +308,12 @@
                     }
                     if (xhr.responseJSON.errors.outlet_id) {
                         $('#outletError').text(xhr.responseJSON.errors.outlet_id);
+                    }
+                    if (xhr.responseJSON.errors.customer_from) {
+                        $('#customerFromError').text(xhr.responseJSON.errors.customer_from);
+                    }
+                    if (xhr.responseJSON.errors.customer_to) {
+                        $('#customerToError').text(xhr.responseJSON.errors.customer_to);
                     }
                 } else if (xhr.responseJSON && xhr.responseJSON.message) {
                     // Display error message returned by the server

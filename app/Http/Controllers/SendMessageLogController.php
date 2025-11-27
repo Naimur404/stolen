@@ -55,6 +55,8 @@ class SendMessageLogController extends Controller
             'message' => 'required|string|min:5',
             'recipient_type' => 'required|in:all,outlet',
             'outlet_id' => 'nullable|required_if:recipient_type,outlet|exists:outlets,id',
+            'customer_from' => 'nullable|integer|min:1',
+            'customer_to' => 'nullable|integer|min:1|gte:customer_from',
         ]);
     
         // Retrieve and prepare phone numbers based on recipient type
@@ -66,6 +68,18 @@ class SendMessageLogController extends Controller
             $outlet = Outlet::findOrFail($validatedData['outlet_id']);
             // Filter customers by outlet (assuming customers have outlet_id field)
             $customerQuery->where('outlet_id', $validatedData['outlet_id']);
+        }
+        
+        // Apply customer range filtering if specified
+        $customerFrom = $validatedData['customer_from'] ?? null;
+        $customerTo = $validatedData['customer_to'] ?? null;
+        
+        if ($customerFrom && $customerTo) {
+            $customerQuery->skip($customerFrom - 1)->take($customerTo - $customerFrom + 1);
+        } elseif ($customerFrom) {
+            $customerQuery->skip($customerFrom - 1);
+        } elseif ($customerTo) {
+            $customerQuery->take($customerTo);
         }
         
         $memberNumbers = $customerQuery->pluck('mobile')
@@ -129,13 +143,23 @@ class SendMessageLogController extends Controller
             ])->post($baseUrl . $endpoint, $payload);
 
     
+            // Create range info for logging
+            $rangeInfo = '';
+            if ($customerFrom && $customerTo) {
+                $rangeInfo = " (Range: {$customerFrom}-{$customerTo})";
+            } elseif ($customerFrom) {
+                $rangeInfo = " (From: {$customerFrom})";
+            } elseif ($customerTo) {
+                $rangeInfo = " (First: {$customerTo})";
+            }
+            
             // Log the attempt
             SendMessageLog::create([
                 'message' => $validatedData['message'],
                 'response' => $response->body(),
                 'recipient_type' => $validatedData['recipient_type'],
                 'outlet_id' => $validatedData['recipient_type'] === 'outlet' ? $validatedData['outlet_id'] : null,
-                'outlet_name' => $outlet ? $outlet->outlet_name : null,
+                'outlet_name' => $outlet ? $outlet->outlet_name . $rangeInfo : ($rangeInfo ?: null),
                 'recipients_count' => count($memberNumbers)
             ]);
     
@@ -156,13 +180,19 @@ class SendMessageLogController extends Controller
                 ], 500);
             }
         } catch (\Exception $e) {
+            // Create range info for logging
+            $rangeInfo = '';
+            if ($validatedData['customer_from'] ?? null && $validatedData['customer_to'] ?? null) {
+                $rangeInfo = " (Range: {$validatedData['customer_from']}-{$validatedData['customer_to']})";
+            }
+            
             // Log the exception
             SendMessageLog::create([
                 'message' => $validatedData['message'],
                 'response' => json_encode(['error' => $e->getMessage()]),
                 'recipient_type' => $validatedData['recipient_type'],
                 'outlet_id' => $validatedData['recipient_type'] === 'outlet' ? $validatedData['outlet_id'] : null,
-                'outlet_name' => $outlet ? $outlet->outlet_name : null,
+                'outlet_name' => $outlet ? $outlet->outlet_name . $rangeInfo : ($rangeInfo ?: null),
                 'recipients_count' => count($memberNumbers)
             ]);
     
