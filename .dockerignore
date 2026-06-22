@@ -1,0 +1,36 @@
+.git
+.gitignore
+.gitattributes
+.idea
+.vscode
+.editorconfig
+.styleci.yml
+
+# Dependencies (rebuilt inside the image)
+vendor
+node_modules
+
+# Built assets (rebuilt inside the image)
+public/build
+public/hot
+
+# Local env / secrets — provide these via Coolify env vars instead
+.env
+.env.*
+!.env.example
+
+# Logs & caches
+storage/logs/*
+storage/framework/cache/*
+storage/framework/sessions/*
+storage/framework/views/*
+bootstrap/cache/*
+
+# Misc
+README.md
+readme.md
+phpunit.xml
+tests
+webpack.mix.js
+*.log
+.DS_Store
