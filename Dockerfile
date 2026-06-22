@@ -20,8 +20,22 @@ RUN npm run build
 
 ##########################################################################
 # Stage 2: Install PHP dependencies with Composer
+#
+# We run Composer under PHP 8.2 (not the rolling `composer:2` image, which
+# now bundles PHP 8.5 and is incompatible with the locked dependencies).
+# Platform requirements are ignored here because the real PHP extensions are
+# installed in the runtime stage below.
 ##########################################################################
-FROM composer:2 AS vendor
+FROM php:8.2-cli AS vendor
+
+# Composer needs git + unzip to fetch/extract packages
+RUN apt-get update && apt-get install -y --no-install-recommends \
+        git \
+        unzip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Pull the Composer binary from the official image
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /app
 
@@ -34,11 +48,12 @@ RUN composer install \
         --no-autoloader \
         --prefer-dist \
         --no-interaction \
-        --no-progress
+        --no-progress \
+        --ignore-platform-reqs
 
 # Copy the rest of the application and finish the autoloader
 COPY . .
-RUN composer dump-autoload --optimize --no-dev --no-interaction
+RUN composer dump-autoload --optimize --no-dev --no-interaction --ignore-platform-reqs
 
 
 ##########################################################################
