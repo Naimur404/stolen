@@ -51,9 +51,11 @@ RUN composer install \
         --no-progress \
         --ignore-platform-reqs
 
-# Copy the rest of the application and finish the autoloader
+# Copy the rest of the application and finish the autoloader.
+# --no-scripts avoids running `artisan package:discover` here: this stage has
+# no DB driver and no app env, so discovery is deferred to the entrypoint.
 COPY . .
-RUN composer dump-autoload --optimize --no-dev --no-interaction --ignore-platform-reqs
+RUN composer dump-autoload --optimize --no-dev --no-interaction --no-scripts --ignore-platform-reqs
 
 
 ##########################################################################

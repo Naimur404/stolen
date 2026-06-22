@@ -3,6 +3,9 @@ set -e
 
 cd /var/www/html
 
+# Discover packages now that the full runtime (with DB driver + env) is ready.
+php artisan package:discover --ansi || true
+
 # Make sure storage symlink exists (ignore if already linked)
 php artisan storage:link 2>/dev/null || true
 
