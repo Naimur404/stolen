@@ -10,9 +10,13 @@ class TrustProxies extends Middleware
     /**
      * The trusted proxies for this application.
      *
+     * Set to '*' so Laravel honors the X-Forwarded-Proto header sent by
+     * Coolify's reverse proxy (Traefik). Without this, HTTPS requests are
+     * seen as HTTP and url()/route() generate insecure links (mixed content).
+     *
      * @var array|string|null
      */
-    protected $proxies;
+    protected $proxies = '*';
 
     /**
      * The headers that should be used to detect proxies.
